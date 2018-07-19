@@ -25,6 +25,7 @@
 ##############################################################################
 from django.contrib import admin
 from django.db import models
+from base.models import education_group
 from base.models import offer
 from base.models import offer_year
 from . import adviser
@@ -40,6 +41,7 @@ class FacultyAdviserAdmin(admin.ModelAdmin):
 class FacultyAdviser(models.Model):
     adviser = models.ForeignKey(adviser.Adviser)
     offer = models.ForeignKey(offer.Offer)
+    education_group = models.ForeignKey(education_group.EducationGroup)
 
     def __str__(self):
         return "{} - Offer {}".format(str(self.adviser), str(self.offer.id))
