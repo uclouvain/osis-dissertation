@@ -26,7 +26,7 @@
 from django.db import models
 
 
-class PropositionDissertationEducationGroup(models.Model):
+class TopicsEducationGroup(models.Model):
     proposition_dissertation = models.ForeignKey('PropositionDissertation')
     education_group = models.ForeignKey('base.EducationGroup')
 
