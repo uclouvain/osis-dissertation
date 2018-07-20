@@ -28,9 +28,9 @@ from base.tests.factories.education_group import EducationGroupFactory
 from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
 
 
-class TopicsEducationGroupFactory(factory.DjangoModelFactory):
+class TopicEducationGroupFactory(factory.DjangoModelFactory):
     class Meta:
-        model = 'dissertation.TopicsEducationGroup'
+        model = 'dissertation.TopicEducationGroup'
 
     proposition_dissertation = factory.SubFactory(PropositionDissertationFactory)
     education_group = factory.SubFactory(EducationGroupFactory)

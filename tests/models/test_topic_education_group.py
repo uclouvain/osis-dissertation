@@ -25,18 +25,18 @@
 ##############################################################################
 from django.test import TestCase
 
-from dissertation.tests.factories.topics_education_group import TopicsEducationGroupFactory
+from dissertation.tests.factories.topic_education_group import TopicEducationGroupFactory
 from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 
 
-class TestTopicsEducationGroupFactory(TestCase):
+class TestTopicEducationGroupFactory(TestCase):
 
     def setUp(self):
 
         self.education_group = EducationGroupFactory()
         self.education_group_year = EducationGroupYearFactory(education_group=self.education_group)
-        self.topic_education_group = TopicsEducationGroupFactory(education_group=self.education_group)
+        self.topic_education_group = TopicEducationGroupFactory(education_group=self.education_group)
 
 
     def test_str_self(self):
