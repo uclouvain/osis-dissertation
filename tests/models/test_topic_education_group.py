@@ -38,7 +38,6 @@ class TestTopicEducationGroupFactory(TestCase):
         self.education_group_year = EducationGroupYearFactory(education_group=self.education_group)
         self.topic_education_group = TopicEducationGroupFactory(education_group=self.education_group)
 
-
     def test_str_self(self):
         self.assertEqual(self.topic_education_group.name, u"%s - %s" % (
             self.topic_education_group.proposition_dissertation.title,
