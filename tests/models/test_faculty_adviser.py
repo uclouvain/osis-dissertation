@@ -23,10 +23,29 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from base.tests.factories.offer import OfferFactory
 from dissertation.models.faculty_adviser import FacultyAdviser
+from dissertation.tests.factories.adviser import AdviserManagerFactory
+from dissertation.tests.factories.faculty_adviser import FacultyAdviserFactory
+from django.test import TestCase
 
 
 def create_faculty_adviser(adviser, offer):
     faculty_adviser = FacultyAdviser(adviser=adviser, offer=offer)
     faculty_adviser.save()
     return faculty_adviser
+
+
+class FacultyManagerTest(TestCase):
+
+    def setUp(self):
+        self.adviser_manager = AdviserManagerFactory()
+        self.offer = OfferFactory()
+
+    def test_str_self(self):
+        faculty_adviser = FacultyAdviserFactory(adviser=self.adviser_manager, offer=self.offer)
+        self.assertEqual(str(faculty_adviser), "{} - Offer {}".format(str(self.adviser_manager), str(self.offer.id)))
+
+    def test_get_adviser_type(self):
+        faculty_adviser = FacultyAdviserFactory(adviser=self.adviser_manager)
+        self.assertEqual(faculty_adviser.get_adviser_type(), self.adviser_manager.type)
