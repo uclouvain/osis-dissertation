@@ -79,7 +79,7 @@ class Dissertation(SerializableModel):
     defend_year = models.IntegerField(blank=True, null=True)
     offer_year_start = models.ForeignKey(offer_year.OfferYear)
     education_group_year_start = models.ForeignKey(
-        education_group_year.EducationGroupYear, null=True, on_delete=models.CASCADE)
+        education_group_year.EducationGroupYear, null=True, on_delete=models.CASCADE, related_name='dissertations')
     proposition_dissertation = models.ForeignKey(proposition_dissertation.PropositionDissertation)
     description = models.TextField(blank=True, null=True)
     active = models.BooleanField(default=True)
