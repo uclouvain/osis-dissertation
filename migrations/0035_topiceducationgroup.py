@@ -22,15 +22,4 @@ class Migration(migrations.Migration):
                 ('proposition_dissertation', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='dissertation.PropositionDissertation')),
             ],
         ),
-        migrations.AlterField(
-            model_name='topiceducationgroup',
-            name='education_group',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to='base.EducationGroup'),
-        ),
-        migrations.AlterField(
-            model_name='topiceducationgroup',
-            name='proposition_dissertation',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT,
-                                    to='dissertation.PropositionDissertation'),
-        ),
     ]
