@@ -27,7 +27,7 @@ from django.db import models
 
 
 class TopicEducationGroup(models.Model):
-    proposition_dissertation = models.ForeignKey('PropositionDissertation', null=True, on_delete=models.CASCADE)
+    proposition_dissertation = models.ForeignKey('PropositionDissertation', null=True, on_delete=models.PROTECT)
     education_group = models.ForeignKey('base.EducationGroup', null=True, on_delete=models.CASCADE)
 
     @property
