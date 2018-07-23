@@ -29,7 +29,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
-from base.models import academic_year
+from base.models import academic_year, education_group_year
 from base.models import offer_year, student
 from dissertation.models import proposition_dissertation, offer_proposition, dissertation_location
 from dissertation.utils import emails_dissert
@@ -78,6 +78,8 @@ class Dissertation(SerializableModel):
     defend_periode = models.CharField(max_length=12, choices=DEFEND_PERIODE_CHOICES, blank=True, null=True)
     defend_year = models.IntegerField(blank=True, null=True)
     offer_year_start = models.ForeignKey(offer_year.OfferYear)
+    education_group_year_start = models.ForeignKey(
+        education_group_year.EducationGroupYear, null=True, on_delete=models.CASCADE)
     proposition_dissertation = models.ForeignKey(proposition_dissertation.PropositionDissertation)
     description = models.TextField(blank=True, null=True)
     active = models.BooleanField(default=True)
