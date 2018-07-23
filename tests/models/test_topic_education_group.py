@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,18 +23,23 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from dissertation.models import adviser
-from dissertation.models import dissertation
-from dissertation.models import dissertation_document_file
-from dissertation.models import dissertation_group
-from dissertation.models import dissertation_location
-from dissertation.models import dissertation_role
-from dissertation.models import dissertation_update
-from dissertation.models import faculty_adviser
-from dissertation.models import offer_proposition
-from dissertation.models import proposition_dissertation
-from dissertation.models import topic_education_group
-from dissertation.models import proposition_document_file
-from dissertation.models import proposition_offer
-from dissertation.models import proposition_role
-from dissertation.models import offer_proposition_group
+from django.test import TestCase
+
+from dissertation.tests.factories.topic_education_group import TopicEducationGroupFactory
+from base.tests.factories.education_group import EducationGroupFactory
+from base.tests.factories.education_group_year import EducationGroupYearFactory
+
+
+class TestTopicEducationGroupFactory(TestCase):
+
+    def setUp(self):
+
+        self.education_group = EducationGroupFactory()
+        self.education_group_year = EducationGroupYearFactory(education_group=self.education_group)
+        self.topic_education_group = TopicEducationGroupFactory(education_group=self.education_group)
+
+    def test_str_self(self):
+        self.assertEqual(self.topic_education_group.name, u"%s - %s" % (
+            self.topic_education_group.proposition_dissertation.title,
+            self.topic_education_group.education_group.most_recent_acronym
+        ))

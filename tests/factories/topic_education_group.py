@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,18 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from dissertation.models import adviser
-from dissertation.models import dissertation
-from dissertation.models import dissertation_document_file
-from dissertation.models import dissertation_group
-from dissertation.models import dissertation_location
-from dissertation.models import dissertation_role
-from dissertation.models import dissertation_update
-from dissertation.models import faculty_adviser
-from dissertation.models import offer_proposition
-from dissertation.models import proposition_dissertation
-from dissertation.models import topic_education_group
-from dissertation.models import proposition_document_file
-from dissertation.models import proposition_offer
-from dissertation.models import proposition_role
-from dissertation.models import offer_proposition_group
+import factory.fuzzy
+from base.tests.factories.education_group import EducationGroupFactory
+from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
+
+
+class TopicEducationGroupFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = 'dissertation.TopicEducationGroup'
+
+    proposition_dissertation = factory.SubFactory(PropositionDissertationFactory)
+    education_group = factory.SubFactory(EducationGroupFactory)
