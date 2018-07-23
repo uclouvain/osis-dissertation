@@ -42,7 +42,7 @@ class FacultyManagerTest(TestCase):
         self.adviser_manager = AdviserManagerFactory()
         self.offer = OfferFactory()
 
-    def test_entity_to_string(self):
+    def test_str_self(self):
         faculty_adviser = FacultyAdviserFactory(adviser=self.adviser_manager, offer=self.offer)
         self.assertEqual(str(faculty_adviser), "{} - Offer {}".format(str(self.adviser_manager), str(self.offer.id)))
 
