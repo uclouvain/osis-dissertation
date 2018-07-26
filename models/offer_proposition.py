@@ -57,7 +57,6 @@ class OfferProposition(SerializableModel):
     offer_proposition_group = models.ForeignKey(OfferPropositionGroup, null=True, blank=True)
     global_email_to_commission = models.BooleanField(default=False)
 
-
     @property
     def in_periode_visibility_proposition(self):
         start = self.start_visibility_proposition
