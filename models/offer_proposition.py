@@ -41,6 +41,7 @@ class OfferPropositionAdmin(SerializableModelAdmin):
 class OfferProposition(SerializableModel):
     acronym = models.CharField(max_length=200)
     offer = models.ForeignKey(offer.Offer)
+    education_group = models.ForeignKey('base.EducationGroup', null=True, on_delete=models.CASCADE)
     student_can_manage_readers = models.BooleanField(default=True)
     adviser_can_suggest_reader = models.BooleanField(default=False)
     evaluation_first_year = models.BooleanField(default=False)
@@ -55,6 +56,7 @@ class OfferProposition(SerializableModel):
     end_edit_title = models.DateField(default=timezone.now)
     offer_proposition_group = models.ForeignKey(OfferPropositionGroup, null=True, blank=True)
     global_email_to_commission = models.BooleanField(default=False)
+
 
     @property
     def in_periode_visibility_proposition(self):

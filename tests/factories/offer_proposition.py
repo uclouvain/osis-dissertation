@@ -39,11 +39,11 @@ class OfferPropositionFactory(factory.DjangoModelFactory):
     adviser_can_suggest_reader = True
     evaluation_first_year = True
     validation_commission_exists = True
-    start_visibility_proposition = factory.Faker('date_time_this_year', before_now=True, after_now=False, tzinfo=None)
-    end_visibility_proposition = factory.Faker('date_time_this_year', before_now=False, after_now=True, tzinfo=None)
-    start_visibility_dissertation = factory.Faker('date_time_this_year', before_now=True, after_now=False, tzinfo=None)
-    end_visibility_dissertation = factory.Faker('date_time_this_year', before_now=False, after_now=True, tzinfo=None)
-    start_jury_visibility = factory.Faker('date_time_this_year', before_now=True, after_now=False, tzinfo=None)
-    end_jury_visibility = factory.Faker('date_time_this_year', before_now=False, after_now=True, tzinfo=None)
-    start_edit_title = factory.Faker('date_time_this_year', before_now=True, after_now=False, tzinfo=None)
-    end_edit_title = factory.Faker('date_time_this_year', before_now=False, after_now=True, tzinfo=None)
+    start_visibility_proposition = factory.Faker('date_this_year', before_today=True, after_today=False)
+    end_visibility_proposition = factory.Faker('date_this_year', before_today=False, after_today=True)
+    start_visibility_dissertation = factory.Faker('date_this_year', before_today=True, after_today=False)
+    end_visibility_dissertation = factory.Faker('date_this_year', before_today=False, after_today=True)
+    start_jury_visibility = factory.Faker('date_this_year', before_today=True, after_today=False)
+    end_jury_visibility = factory.Faker('date_this_year', before_today=False, after_today=True)
+    start_edit_title = factory.Faker('date_this_year', before_today=True, after_today=False)
+    end_edit_title = factory.Faker('date_this_year', before_today=False, after_today=True)
