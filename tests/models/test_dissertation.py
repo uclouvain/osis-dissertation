@@ -33,3 +33,8 @@ class DissertationModelTestCase(TestCase):
         self.dissertation = DissertationFactory(active=True)
         self.dissertation.deactivate()
         self.assertEqual(self.dissertation.active,False)
+
+    def test_str(self):
+        self.dissertation = DissertationFactory(title="dissert1")
+        self.assertEqual(self.dissertation.title, str(self.dissertation))
+
