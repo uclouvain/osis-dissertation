@@ -1,3 +1,8 @@
+env:
+  global:
+    - CC_TEST_REPORTER_ID=6a77439ce12ce968feae755e39a015a5e3597a361881c5c88d35eaf30bdceb6c
+   
+
 language: python
 python: "3.5.2"
 services:
@@ -24,10 +29,14 @@ before_script:
   - echo "POSTGRES_PASSWORD = ''" >> .env
   - python3 manage.py compilemessages
   - psql -c 'create database osis_local;' -U postgres
+  - "curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter"
+  - "chmod +x ./cc-test-reporter"
+  - "./cc-test-reporter before-build"
 
 script:
   - python3 manage.py compilemessages && coverage run manage.py test --exclude-tag=selenium
 
-after_success:
- - pip install coveralls
- - coveralls
+after_script:
+  - "coverage xml"
+  - "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
+
