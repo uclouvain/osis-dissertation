@@ -18,7 +18,6 @@ install:
 
 before_script:
   - cp .env.example .env
-  - echo 'INSTALLED_APPS += ("dissertation",)' >> backoffice/settings/local.py
   - echo 'APPS_TO_TEST += ("dissertation",)' >> backoffice/settings/local.py
   - echo >> .env
   - echo "POSTGRES_USER = 'postgres'" >> .env
