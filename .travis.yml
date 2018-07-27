@@ -26,7 +26,7 @@ before_script:
   - psql -c 'create database osis_local;' -U postgres
 
 script:
-  - coverage run manage.py test --exclude-tag=selenium dissertation
+  - python3 manage.py compilemessages && coverage run manage.py test --exclude-tag=selenium
 
 after_success:
  - pip install coveralls
