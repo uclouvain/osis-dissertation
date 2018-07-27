@@ -23,14 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from dissertation.models.dissertation import Dissertation
-from dissertation.tests.models import test_dissertation_role
+
+from django.test import TestCase
+from dissertation.tests.factories.dissertation import DissertationFactory
 
 
-def create_dissertation(adviser, dissertation_role, **kwargs):
-    dissertation = Dissertation.objects.create(**kwargs)
-    test_dissertation_role.create_dissertation_role(dissertation=dissertation,
-                                                    adviser=adviser,
-                                                    status=dissertation_role)
-
-    return dissertation
+class DissertationModelTestCase(TestCase):
+    def test_deactivate(self):
+        self.dissertation = DissertationFactory(active=True)
+        self.dissertation.deactivate()
+        self.assertEqual(self.dissertation.active,False)
