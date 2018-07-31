@@ -31,7 +31,7 @@ before_script:
   - "curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter"
   - "chmod +x ./cc-test-reporter"
   - "./cc-test-reporter before-build"
-  - cc-test-reporter-format-coverage --prefix /tmp/osis
+  - "cc-test-reporter-format-coverage --prefix /tmp/osis"
 
 script:
   - python3 manage.py compilemessages && coverage run manage.py test --exclude-tag=selenium
