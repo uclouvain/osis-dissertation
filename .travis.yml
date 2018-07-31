@@ -28,14 +28,14 @@ before_script:
   - echo "POSTGRES_USER = 'postgres'" >> .env
   - echo "POSTGRES_PASSWORD = ''" >> .env
   - psql -c 'create database osis_local;' -U postgres
-  - "curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > tmp/osis/cc-test-reporter"
-  - "chmod +x tmp/osis/cc-test-reporter"
-  - "tmp/osis/cc-test-reporter before-build"
+  - "curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter"
+  - "chmod +x ./cc-test-reporter"
+  - "./cc-test-reporter before-build"
 
 script:
   - python3 manage.py compilemessages && coverage run manage.py test --exclude-tag=selenium
 
 after_script:
   - "coverage xml"
-  - "tmp/osis/cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
+  - "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT --prefix /tmp/osis"
 
