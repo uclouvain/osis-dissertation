@@ -135,15 +135,16 @@ class DissertationModelTestCase(TestCase):
         self.dissertation1.manager_accept()
         self.assertEqual(self.dissertation1.status, 'COM_SUBMIT')
 
-    def test_manager_accept_commission_exist(self):
+    def test_manager_accept_commission_exist_2(self):
         self.offer2 = OfferFactory()
         self.offer_prop2= OfferPropositionFactory(offer=self.offer2,
-                                                  validation_commission_exists=True)
+                                                  validation_commission_exists=True,
+                                                  evaluation_first_year = True)
         self.offer_year_start2 = OfferYearFactory(offer=self.offer2,
                                                   academic_year=self.academic_year1)
         self.dissertation1 = DissertationFactory(status='COM_KO', offer_year_start=self.offer_year_start2)
         self.dissertation1.manager_accept()
-        self.assertEqual(self.dissertation1.status, 'COM_SUBMIT')
+        self.assertEqual(self.dissertation1.status, 'EVA_SUBMIT')
 
     def test_manager_accept_not_commission_exist(self):
         self.offer2 = OfferFactory()
@@ -166,3 +167,25 @@ class DissertationModelTestCase(TestCase):
         self.dissertation1 = DissertationFactory(status='DIR_SUBMIT', offer_year_start=self.offer_year_start2)
         self.dissertation1.manager_accept()
         self.assertEqual(self.dissertation1.status, 'EVA_SUBMIT')
+
+    def test_manager_accept_eval_submit(self):
+        self.offer2 = OfferFactory()
+        self.offer_prop2= OfferPropositionFactory(offer=self.offer2,
+                                                  validation_commission_exists=False,
+                                                  evaluation_first_year = True)
+        self.offer_year_start2 = OfferYearFactory(offer=self.offer2,
+                                                  academic_year=self.academic_year1)
+        self.dissertation1 = DissertationFactory(status='EVA_SUBMIT', offer_year_start=self.offer_year_start2)
+        self.dissertation1.manager_accept()
+        self.assertEqual(self.dissertation1.status, 'TO_RECEIVE')
+
+    def test_manager_accept_eval_KO(self):
+        self.offer2 = OfferFactory()
+        self.offer_prop2= OfferPropositionFactory(offer=self.offer2,
+                                                  validation_commission_exists=False,
+                                                  evaluation_first_year = True)
+        self.offer_year_start2 = OfferYearFactory(offer=self.offer2,
+                                                  academic_year=self.academic_year1)
+        self.dissertation1 = DissertationFactory(status='EVA_KO', offer_year_start=self.offer_year_start2)
+        self.dissertation1.manager_accept()
+        self.assertEqual(self.dissertation1.status, 'TO_RECEIVE')
