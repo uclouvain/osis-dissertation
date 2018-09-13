@@ -30,6 +30,7 @@ from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
 from base.tests.factories.student import StudentFactory
 from base.tests.factories.offer import OfferFactory
+from dissertation.models import dissertation
 from dissertation.tests.factories.adviser import AdviserTeacherFactory
 from dissertation.tests.factories.offer_proposition import OfferPropositionFactory
 from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
@@ -45,13 +46,14 @@ class DissertationModelTestCase(TestCase):
                                                 last_name='Dupont',
                                                 email='laurent.dermine@uclouvain.be')
         self.teacher = AdviserTeacherFactory(person=a_person_teacher)
-        a_person_student = PersonWithoutUserFactory.create(last_name="Durant",
+        a_person_student = PersonWithoutUserFactory.create(last_name="Durant", first_name='jean',
                                                            email='laurent@uclouvain.be')
         self.student = StudentFactory.create(person=a_person_student)
         self.offer1 = OfferFactory(title="test_offer1")
         self.offer_prop = OfferPropositionFactory(offer=self.offer1, acronym="test_offer1",
                                                   validation_commission_exists=True)
         self.proposition_dissertation = PropositionDissertationFactory(author=self.teacher,
+                                                                       title='proposition_x',
                                                                        creator=a_person_teacher)
 
         self.academic_year1 = AcademicYearFactory()
@@ -68,6 +70,16 @@ class DissertationModelTestCase(TestCase):
                                                            dissertation_role__adviser=self.teacher,
                                                            dissertation_role__status='PROMOTEUR'
                                                            )
+        self.dissertation = DissertationFactory(author=self.student,
+                                                title='Dissertation_1',
+                                                offer_year_start=self.offer_year_start1,
+                                                proposition_dissertation=self.proposition_dissertation,
+                                                status='DIR_SUBMIT',
+                                                active=True,
+                                                description='les phobies',
+                                                dissertation_role__adviser=self.teacher,
+                                                dissertation_role__status='PROMOTEUR')
+
 
     def test_deactivate(self):
         self.dissertation = DissertationFactory(active=True)
@@ -220,7 +232,8 @@ class DissertationModelTestCase(TestCase):
         message_history_result = message_history.find_my_messages(self.student.person.id)
         self.assertEqual(count_messages_before_status_change + 1, len(message_history_result))
         self.assertEqual(self.dissertation1.status, 'DIR_KO')
-        self.assertIn('Votre projet de mémoire n\'a pas été validé par votre promoteur', message_history_result.last().subject)
+        self.assertIn('Votre projet de mémoire n\'a pas été validé par votre promoteur',
+                      message_history_result.last().subject)
 
     def test_refuse_COM_SUBMIT(self):
         self.offer2 = OfferFactory()
@@ -260,3 +273,45 @@ class DissertationModelTestCase(TestCase):
         self.assertEqual(self.dissertation1.status, 'COM_KO')
         self.assertIn('n\'a pas validé le projet de mémoire',
                       message_history_result.last().subject)
+
+    def test_search_1(self):
+        result = dissertation.search('Dissertation_1')
+        self.assertEqual(result.count(), 1)
+        self.assertEqual(result[0], self.dissertation)
+        result = dissertation.search('DIR_SUBMIT')
+        self.assertEqual(result.count(), 1)
+        self.assertEqual(result[0], self.dissertation)
+        result = dissertation.search('jean')
+        self.assertEqual(result.count(), 2)
+        result = dissertation.search('Durant')
+        self.assertEqual(result.count(), 2)
+        result = dissertation.search('Pierre')
+        self.assertEqual(result.count(), 2)
+
+    def test_search_2(self):
+        result = dissertation.search('les phobies')
+        self.assertEqual(result.count(), 1)
+        self.assertEqual(result[0], self.dissertation)
+        result = dissertation.search('Dissertation_1')
+        self.assertEqual(result.count(), 1)
+        self.assertEqual(result[0], self.dissertation)
+        result = dissertation.search('proposition_x')
+        self.assertEqual(result.count(), 2)
+        self.assertEqual(result[0], self.dissertation)
+        result = dissertation.search('proposition_x')
+        self.assertEqual(result.count(), 2)
+        result = dissertation.search('test_offer1')
+        self.assertEqual(result.count(), 2)
+
+    def test_search_by_proposition_author(self):
+        result = dissertation.search_by_proposition_author(None,True,self.teacher)
+        self.assertEqual(result.count(), 2)
+
+    def test_search_by_offer(self):
+        result = dissertation.search_by_offer([self.offer1])
+        self.assertEqual(result.count(), 2)
+
+    def test_search_by_offer_and_status(self):
+        result = dissertation.search_by_offer_and_status([self.offer1], 'DIR_SUBMIT')
+        self.assertEqual(result.count(), 1)
+        self.assertEqual(result[0], self.dissertation)
