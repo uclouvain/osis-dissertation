@@ -33,15 +33,18 @@ from datetime import date
 
 
 class OfferPropositionAdmin(SerializableModelAdmin):
-    list_display = ('acronym', 'offer', 'offer_proposition_group')
-    raw_id_fields = ('offer',)
+    list_display = ('acronym', 'offer', 'offer_proposition_group','education_group')
+    raw_id_fields = ('offer', 'education_group')
     search_fields = ('uuid',)
 
 
 class OfferProposition(SerializableModel):
     acronym = models.CharField(max_length=200)
     offer = models.ForeignKey(offer.Offer)
-    education_group = models.ForeignKey('base.EducationGroup', null=True, on_delete=models.CASCADE)
+    education_group = models.ForeignKey('base.EducationGroup',
+                                        null=True,
+                                        blank=True,
+                                        on_delete=models.SET_NULL)
     student_can_manage_readers = models.BooleanField(default=True)
     adviser_can_suggest_reader = models.BooleanField(default=False)
     evaluation_first_year = models.BooleanField(default=False)
