@@ -23,17 +23,19 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+
 from dissertation.models.offer_proposition_group import OfferPropositionGroup
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils import timezone
 from base.models import offer
+from base.models.education_group_year import EducationGroupYear
 from datetime import date
 
 
 class OfferPropositionAdmin(SerializableModelAdmin):
-    list_display = ('acronym', 'offer', 'offer_proposition_group','education_group')
+    list_display = ('acronym', 'offer', 'offer_proposition_group', 'most_recent_acronym_education_group')
     raw_id_fields = ('offer', 'education_group')
     search_fields = ('uuid',)
 
@@ -59,6 +61,12 @@ class OfferProposition(SerializableModel):
     end_edit_title = models.DateField(default=timezone.now)
     offer_proposition_group = models.ForeignKey(OfferPropositionGroup, null=True, blank=True)
     global_email_to_commission = models.BooleanField(default=False)
+
+    @property
+    def most_recent_acronym_education_group(self):
+        most_recent_education_group_year = EducationGroupYear.objects.filter(education_group=self.education_group) \
+            .latest('academic_year__year')
+        return most_recent_education_group_year.acronym
 
     @property
     def in_periode_visibility_proposition(self):
