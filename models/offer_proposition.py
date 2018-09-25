@@ -35,7 +35,7 @@ from datetime import date
 
 
 class OfferPropositionAdmin(SerializableModelAdmin):
-    list_display = ('acronym', 'offer', 'offer_proposition_group', 'most_recent_acronym_education_group')
+    list_display = ('acronym', 'offer', 'offer_proposition_group', 'recent_acronym_education_group')
     raw_id_fields = ('offer', 'education_group')
     search_fields = ('uuid',)
 
@@ -63,7 +63,7 @@ class OfferProposition(SerializableModel):
     global_email_to_commission = models.BooleanField(default=False)
 
     @property
-    def most_recent_acronym_education_group(self):
+    def recent_acronym_education_group(self):
         most_recent_education_group_year = EducationGroupYear.objects.filter(education_group=self.education_group) \
             .latest('academic_year__year')
         return most_recent_education_group_year.acronym

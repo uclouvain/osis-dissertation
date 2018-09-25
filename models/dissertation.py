@@ -38,7 +38,11 @@ from osis_common.models.serializable_model import SerializableModel, Serializabl
 
 class DissertationAdmin(SerializableModelAdmin):
     list_display = ('uuid', 'title', 'author', 'status', 'active', 'proposition_dissertation', 'modification_date')
-    raw_id_fields = ('author', 'offer_year_start', 'proposition_dissertation', 'location','education_group_year_start')
+    raw_id_fields = ('author',
+                     'offer_year_start',
+                     'proposition_dissertation',
+                     'location',
+                     'education_group_year_start')
     search_fields = ('uuid', 'title', 'author__person__last_name', 'author__person__first_name',
                      'proposition_dissertation__title', 'proposition_dissertation__author__person__last_name',
                      'proposition_dissertation__author__person__first_name')
