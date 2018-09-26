@@ -17,6 +17,21 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='offerproposition',
             name='education_group',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='base.EducationGroup'),
+            field=models.ForeignKey(blank=True,
+                                    null=True,
+                                    on_delete=django.db.models.deletion.SET_NULL,
+                                    to='base.EducationGroup'),
+        ),
+        migrations.AlterField(
+            model_name='dissertation',
+            name='education_group_year_start',
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL,
+                                    related_name='dissertations', to='base.EducationGroupYear'),
+        ),
+        migrations.AlterField(
+            model_name='facultyadviser',
+            name='education_group',
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                    to='base.EducationGroup'),
         ),
     ]
