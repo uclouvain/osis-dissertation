@@ -201,7 +201,7 @@ class DissertationModelTestCase(TestCase):
         self.dissertation1.manager_accept()
         self.assertEqual(self.dissertation1.status, 'TO_RECEIVE')
 
-    def test_teacher_accept(self):
+    def test_teacher_accept_1(self):
         self.offer2 = OfferFactory()
         count_messages_before_status_change = message_history.find_my_messages(self.student.person.id).count()
         self.offer_prop2 = OfferPropositionFactory(offer=self.offer2,
@@ -212,11 +212,15 @@ class DissertationModelTestCase(TestCase):
         self.dissertation1 = DissertationFactory(status='DIR_SUBMIT',
                                                  offer_year_start=self.offer_year_start2,
                                                  author=self.student)
-        self.dissertation1.manager_accept()
+        self.dissertation1.teacher_accept()
         message_history_result = message_history.find_my_messages(self.student.person.id)
         self.assertEqual(count_messages_before_status_change + 1, len(message_history_result))
         self.assertEqual(self.dissertation1.status, 'COM_SUBMIT')
         self.assertIn('Votre projet de mémoire est validé par votre promoteur', message_history_result.last().subject)
+
+    def test_teacher_accept_2(self):
+        self.dissertation1 = DissertationFactory(status='DRAFT')
+        self.assertEqual(self.dissertation1.teacher_accept(), None)
 
     def test_refuse_DIR_SUBMIT(self):
         self.offer2 = OfferFactory()
@@ -383,6 +387,8 @@ class DissertationModelTestCase(TestCase):
                                                   offer_year_start=self.offer_year_start2)
         self.dissertation_x.status = 'DIR_SUBMIT'
         self.assertEqual(dissertation.get_next_status(self.dissertation_x, "accept"), 'TO_RECEIVE')
+        self.dissertation_x.status = 'DIR_SUBMIT'
+        self.assertEqual(dissertation.get_next_status(self.dissertation_x, "go"), 'DIR_SUBMIT')
 
     def test_get_next_status_refuse(self):
         self.dissertation_a = DissertationFactory(status='DIR_SUBMIT')
