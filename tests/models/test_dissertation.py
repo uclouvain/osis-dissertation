@@ -363,10 +363,44 @@ class DissertationModelTestCase(TestCase):
                                                    evaluation_first_year=True)
         self.offer_year_start2 = OfferYearFactory(offer=self.offer2,
                                                   academic_year=self.academic_year1)
+        self.dissertation_x = DissertationFactory(status='EVA_SUBMIT',
+                                                  offer_year_start=self.offer_year_start2)
+        self.assertEqual(dissertation.get_next_status(self.dissertation_x, "accept"), 'TO_RECEIVE')
+        self.dissertation_x.status = 'DEFENDED'
+        self.assertEqual(dissertation.get_next_status(self.dissertation_x, "accept"), 'ENDED_WIN')
+
+        self.dissertation_x.status = 'DIR_SUBMIT'
+        self.assertEqual(dissertation.get_next_status(self.dissertation_x, "accept"), 'EVA_SUBMIT')
+
+    def test_get_next_status_accept_4(self):
+        self.offer2 = OfferFactory()
+        self.offer_prop2 = OfferPropositionFactory(offer=self.offer2,
+                                                   validation_commission_exists=False,
+                                                   evaluation_first_year=False)
+        self.offer_year_start2 = OfferYearFactory(offer=self.offer2,
+                                                  academic_year=self.academic_year1)
         self.dissertation_x = DissertationFactory(status='DIR_SUBMIT',
                                                   offer_year_start=self.offer_year_start2)
-        self.assertEqual(dissertation.get_next_status(self.dissertation_x, "accept"), 'EVA_SUBMIT')
-        self.dissertation_x.status = 'COM_SUBMIT'
-        self.assertEqual(dissertation.get_next_status(self.dissertation_x, "accept"), 'EVA_SUBMIT')
-        self.dissertation_x.status = 'COM_KO'
-        self.assertEqual(dissertation.get_next_status(self.dissertation_x, "accept"), 'EVA_SUBMIT')
+        self.dissertation_x.status = 'DIR_SUBMIT'
+        self.assertEqual(dissertation.get_next_status(self.dissertation_x, "accept"), 'TO_RECEIVE')
+
+    def test_get_next_status_refuse(self):
+        self.dissertation_a = DissertationFactory(status='DIR_SUBMIT')
+        self.assertEqual(dissertation.get_next_status(self.dissertation_a, "refuse"), 'DIR_KO')
+        self.dissertation_a.status = 'COM_SUBMIT'
+        self.assertEqual(dissertation.get_next_status(self.dissertation_a, "refuse"), 'COM_KO')
+        self.dissertation_a.status = 'EVA_SUBMIT'
+        self.assertEqual(dissertation.get_next_status(self.dissertation_a, "refuse"), 'EVA_KO')
+        self.dissertation_a.status = 'DEFENDED'
+        self.assertEqual(dissertation.get_next_status(self.dissertation_a, "refuse"), 'ENDED_LOS')
+        self.dissertation_a.status = 'DRAFT'
+        self.assertEqual(dissertation.get_next_status(self.dissertation_a, "refuse"), 'DRAFT')
+        self.dissertation_a.status = 'TO_DEFEND'
+        self.assertEqual(dissertation.get_next_status(self.dissertation_a, "refuse"), 'TO_DEFEND')
+
+    def test_find_by_id(self):
+        self.dissertation_a = DissertationFactory(id=666)
+        result = dissertation.find_by_id(666)
+        self.assertEqual(self.dissertation_a, result)
+        result = dissertation.find_by_id(999)
+        self.assertEqual(None, result)
