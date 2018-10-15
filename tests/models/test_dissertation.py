@@ -26,9 +26,6 @@
 
 from django.test import TestCase
 import datetime
-
-from base.models import academic_year
-from base.models.academic_year import current_academic_year
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
@@ -42,6 +39,7 @@ from osis_common.models import message_history, message_template
 from dissertation.tests.factories.dissertation import DissertationFactory
 
 NOW = datetime.datetime.now()
+
 
 class DissertationModelTestCase(TestCase):
     fixtures = ['dissertation/fixtures/message_template.json', ]
@@ -431,4 +429,4 @@ class DissertationModelTestCase(TestCase):
         self.dissertation_active_draft = DissertationFactory(active=True,
                                                              status='DIR_KO',
                                                              proposition_dissertation=self.proposition_dissertation_x)
-        self.assertEqual(dissertation.count_by_proposition(self.proposition_dissertation_x),1)
+        self.assertEqual(dissertation.count_by_proposition(self.proposition_dissertation_x), 1)
