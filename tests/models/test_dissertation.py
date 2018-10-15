@@ -25,6 +25,10 @@
 ##############################################################################
 
 from django.test import TestCase
+import datetime
+
+from base.models import academic_year
+from base.models.academic_year import current_academic_year
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
@@ -37,6 +41,7 @@ from dissertation.tests.factories.proposition_dissertation import PropositionDis
 from osis_common.models import message_history, message_template
 from dissertation.tests.factories.dissertation import DissertationFactory
 
+NOW = datetime.datetime.now()
 
 class DissertationModelTestCase(TestCase):
     fixtures = ['dissertation/fixtures/message_template.json', ]
@@ -340,9 +345,7 @@ class DissertationModelTestCase(TestCase):
                                                   academic_year=self.academic_year1)
         self.dissertation_x = DissertationFactory(status='DIR_SUBMIT',
                                                   offer_year_start=self.offer_year_start2)
-
         self.assertEqual(dissertation.get_next_status(self.dissertation_x, "accept"), 'COM_SUBMIT')
-
         self.dissertation_x.status = 'DIR_SUBMIT'
 
     def test_get_next_status_accept_2(self):
@@ -410,3 +413,22 @@ class DissertationModelTestCase(TestCase):
         self.assertEqual(self.dissertation_a, result)
         result = dissertation.find_by_id(999)
         self.assertEqual(None, result)
+
+    def test_count_by_proposition(self):
+        self.proposition_dissertation_x = PropositionDissertationFactory()
+        self.current_academic_yr = AcademicYearFactory(year=NOW.year,
+                                                       start_date=datetime.datetime(NOW.year, NOW.month, 1),
+                                                       end_date=datetime.datetime(NOW.year + 1, NOW.month, 28))
+        self.dissertation_active = DissertationFactory(active=True,
+                                                       status='COM_SUBMIT',
+                                                       proposition_dissertation=self.proposition_dissertation_x,
+                                                       offer_year_start__academic_year=self.current_academic_yr)
+        self.dissertation_false = DissertationFactory(active=False,
+                                                      proposition_dissertation=self.proposition_dissertation_x)
+        self.dissertation_active_draft = DissertationFactory(active=True,
+                                                             status='DRAFT',
+                                                             proposition_dissertation=self.proposition_dissertation_x)
+        self.dissertation_active_draft = DissertationFactory(active=True,
+                                                             status='DIR_KO',
+                                                             proposition_dissertation=self.proposition_dissertation_x)
+        self.assertEqual(dissertation.count_by_proposition(self.proposition_dissertation_x),1)
