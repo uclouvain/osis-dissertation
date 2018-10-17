@@ -86,11 +86,10 @@
                       {% endif %}
                   </td>
                   <td>
-                      {% for prop_offer in proposition_dissertation.propositionoffer_set.all %}
-                        {% if forloop.last %}
-                            {{ prop_offer.offer_proposition.acronym }}
-                        {% else %}
-                            {{ prop_offer.offer_proposition.acronym }} -
+                      {% for prop_diss_education_group in proposition_dissertation.topic_education_group_set.all %}
+                            {{ prop_diss_education_group.education_group.most_recent_acronym }}
+                        {% if !forloop.last %}
+                            -
                         {% endif %}
                       {% endfor %}
                   </td>
