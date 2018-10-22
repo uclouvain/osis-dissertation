@@ -98,15 +98,15 @@ class DissertationModelTestCase(TestCase):
         self.assertEqual(self.dissertation.status, 'DIR_SUBMIT')
 
     def test_go_forward_status(self):
-        self.dissertation = DissertationFactory(status='DRAFT')
+        self.dissertation = DissertationFactory(status='DRAFT', active=True)
         self.dissertation.go_forward()
-        self.dissertation.status = 'DIR_SUBMIT'
+        self.assertEqual('DIR_SUBMIT',self.dissertation.status)
         self.dissertation = DissertationFactory(status='DIR_KO')
         self.dissertation.go_forward()
-        self.dissertation.status = 'DIR_SUBMIT'
+        self.assertEqual('DIR_SUBMIT',self.dissertation.status)
         self.dissertation = DissertationFactory(status='TO_RECEIVE')
         self.dissertation.go_forward()
-        self.dissertation = DissertationFactory(status='TO_DEFEND')
+        self.assertEqual('TO_DEFEND',self.dissertation.status)
 
     def test_go_forward_emails_acknowledge(self):
         self.dissertation_test_email.status = 'TO_RECEIVE'
