@@ -34,6 +34,7 @@ from base.models import offer_year, student
 from dissertation.models import proposition_dissertation, offer_proposition, dissertation_location
 from dissertation.utils import emails_dissert
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
+from dissertation.models.enums import dissertation_status
 
 
 class DissertationAdmin(SerializableModelAdmin):
@@ -43,25 +44,6 @@ class DissertationAdmin(SerializableModelAdmin):
                      'proposition_dissertation__title', 'proposition_dissertation__author__person__last_name',
                      'proposition_dissertation__author__person__first_name')
 
-
-STATUS_CHOICES = (
-    ('DRAFT', _('draft')),
-    ('DIR_SUBMIT', _('submitted_to_director')),
-    ('DIR_OK', _('accepted_by_director')),
-    ('DIR_KO', _('refused_by_director')),
-    ('COM_SUBMIT', _('submitted_to_commission')),
-    ('COM_OK', _('accepted_by_commission')),
-    ('COM_KO', _('refused_by_commission')),
-    ('EVA_SUBMIT', _('submitted_to_first_year_evaluation')),
-    ('EVA_OK', _('accepted_by_first_year_evaluation')),
-    ('EVA_KO', _('refused_by_first_year_evaluation')),
-    ('TO_RECEIVE', _('to_be_received')),
-    ('TO_DEFEND', _('to_be_defended')),
-    ('DEFENDED', _('defended')),
-    ('ENDED', _('ended')),
-    ('ENDED_WIN', _('ended_win')),
-    ('ENDED_LOS', _('ended_los')),
-)
 
 DEFEND_PERIODE_CHOICES = (
     ('UNDEFINED', _('undefined')),
@@ -74,7 +56,8 @@ DEFEND_PERIODE_CHOICES = (
 class Dissertation(SerializableModel):
     title = models.CharField(max_length=500)
     author = models.ForeignKey(student.Student)
-    status = models.CharField(max_length=12, choices=STATUS_CHOICES, default='DRAFT')
+    status = models.CharField(max_length=12, choices=dissertation_status.DISSERTATION_STATUS,
+                              default=dissertation_status.DRAFT)
     defend_periode = models.CharField(max_length=12, choices=DEFEND_PERIODE_CHOICES, blank=True, null=True)
     defend_year = models.IntegerField(blank=True, null=True)
     offer_year_start = models.ForeignKey(offer_year.OfferYear)
@@ -100,37 +83,39 @@ class Dissertation(SerializableModel):
 
     def go_forward(self):
         next_status = get_next_status(self, "go_forward")
-        if self.status == 'TO_RECEIVE' and next_status == 'TO_DEFEND':
+        if self.status == dissertation_status.TO_RECEIVE and next_status == dissertation_status.TO_DEFEND:
             emails_dissert.send_email(self, 'dissertation_acknowledgement', [self.author])
-        if (self.status == 'DRAFT' or self.status == 'DIR_KO') and next_status == 'DIR_SUBMIT':
+        if (self.status == dissertation_status.DRAFT or self.status == dissertation_status.DIR_KO) and \
+                next_status == dissertation_status.DIR_SUBMIT:
             emails_dissert.send_email_to_all_promotors(self, 'dissertation_adviser_new_project_dissertation')
 
         self.set_status(next_status)
 
     def manager_accept(self):
-        if self.status == 'DIR_SUBMIT':
+        if self.status == dissertation_status.DIR_SUBMIT:
             self.teacher_accept()
-        elif self.status == 'COM_SUBMIT' or self.status == 'COM_KO':
+        elif self.status == dissertation_status.COM_SUBMIT or self.status == dissertation_status.COM_KO:
             next_status = get_next_status(self, "accept")
             emails_dissert.send_email(self, 'dissertation_accepted_by_com', [self.author])
             if offer_proposition.get_by_offer(self.offer_year_start.offer).global_email_to_commission is True:
                 emails_dissert.send_email_to_jury_members(self)
             self.set_status(next_status)
-        elif self.status == 'EVA_SUBMIT' or self.status == 'EVA_KO' or self.status == 'DEFENDED':
+        elif self.status == dissertation_status.EVA_SUBMIT or \
+                self.status == dissertation_status.EVA_KO or self.status == dissertation_status.DEFENDED:
             next_status = get_next_status(self, "accept")
             self.set_status(next_status)
 
     def teacher_accept(self):
-        if self.status == 'DIR_SUBMIT':
+        if self.status == dissertation_status.DIR_SUBMIT:
             next_status = get_next_status(self, "accept")
             emails_dissert.send_email(self, 'dissertation_accepted_by_teacher', [self.author])
             self.set_status(next_status)
 
     def refuse(self):
         next_status = get_next_status(self, "refuse")
-        if self.status == 'DIR_SUBMIT':
+        if self.status == dissertation_status.DIR_SUBMIT:
             emails_dissert.send_email(self, 'dissertation_refused_by_teacher', [self.author])
-        if self.status == 'COM_SUBMIT':
+        if self.status == dissertation_status.COM_SUBMIT:
             emails_dissert.send_email(self, 'dissertation_refused_by_com_to_student', [self.author])
             emails_dissert.send_email_to_all_promotors(self, 'dissertation_refused_by_com_to_teacher')
         self.set_status(next_status)
@@ -155,7 +140,7 @@ def search(terms=None, active=True):
             Q(title__icontains=terms) |
             Q(offer_year_start__acronym__icontains=terms)
         )
-    queryset = queryset.filter(active=active).exclude(status='ENDED').distinct()
+    queryset = queryset.filter(active=active).exclude(status=dissertation_status.ENDED).distinct()
     return queryset
 
 
@@ -240,6 +225,6 @@ def count_by_proposition(proposition):
     return Dissertation.objects.filter(proposition_dissertation=proposition) \
         .filter(active=True) \
         .filter(offer_year_start__academic_year=current_academic_year) \
-        .exclude(status='DRAFT') \
-        .exclude(status='DIR_KO') \
+        .exclude(status=dissertation_status.DRAFT) \
+        .exclude(status=dissertation_status.DIR_KO) \
         .count()

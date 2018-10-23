@@ -43,6 +43,7 @@ from dissertation.forms import ManagerDissertationForm, ManagerDissertationEditF
 from openpyxl.writer.excel import save_virtual_workbook
 from openpyxl import Workbook
 from openpyxl.utils.exceptions import IllegalCharacterError
+from dissertation.models.enums.dissertation_status import DISSERTATION_STATUS as DISSERTATION_STATUS
 
 ERROR_405_BAD_REQUEST = 405
 ERROR_404_PAGE_NO_FOUND = 404
@@ -549,7 +550,7 @@ def manager_dissertations_to_dir_submit(request, pk):
     if (adviser_can_manage(dissert, adv)):
         old_status = dissert.status
         new_status = dissertation.get_next_status(dissert, "go_forward")
-        status_dict = dict(dissertation.STATUS_CHOICES)
+        status_dict = dict(DISSERTATION_STATUS)
         new_status_display = status_dict[new_status]
 
         if request.method == "POST":
@@ -597,7 +598,7 @@ def manager_dissertations_to_dir_ok(request, pk):
     if (adviser_can_manage(dissert, adv)):
         old_status = dissert.status
         new_status = dissertation.get_next_status(dissert, "accept")
-        status_dict = dict(dissertation.STATUS_CHOICES)
+        status_dict = dict(DISSERTATION_STATUS)
         new_status_display = status_dict[new_status]
 
         if request.method == "POST":
@@ -663,7 +664,7 @@ def manager_dissertations_to_dir_ko(request, pk):
     if (adviser_can_manage(dissert, adv)):
         old_status = dissert.status
         new_status = dissertation.get_next_status(dissert, "refuse")
-        status_dict = dict(dissertation.STATUS_CHOICES)
+        status_dict = dict(DISSERTATION_STATUS)
         new_status_display = status_dict[new_status]
         if request.method == "POST":
             form = ManagerDissertationUpdateForm(request.POST)
@@ -932,7 +933,7 @@ def dissertations_to_dir_ok(request, pk):
     if teacher_is_promotor(adv, dissert):
         old_status = dissert.status
         new_status = dissertation.get_next_status(dissert, "accept")
-        status_dict = dict(dissertation.STATUS_CHOICES)
+        status_dict = dict(DISSERTATION_STATUS)
         new_status_display = status_dict[new_status]
 
         if request.method == "POST":
@@ -966,7 +967,7 @@ def dissertations_to_dir_ko(request, pk):
     if teacher_is_promotor(adv, dissert):
         old_status = dissert.status
         new_status = dissertation.get_next_status(dissert, "refuse")
-        status_dict = dict(dissertation.STATUS_CHOICES)
+        status_dict = dict(DISSERTATION_STATUS)
         new_status_display = status_dict[new_status]
 
         if request.method == "POST":

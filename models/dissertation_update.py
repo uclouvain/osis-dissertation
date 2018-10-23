@@ -28,6 +28,8 @@ from django.db import models
 from base import models as mdl
 from . import adviser
 from . import dissertation
+from dissertation.models.enums import dissertation_status
+
 
 JUSTIFICATION_LINK = "_set_to_"
 
@@ -41,8 +43,10 @@ class DissertationUpdateAdmin(SerializableModelAdmin):
 
 class DissertationUpdate(SerializableModel):
 
-    status_from = models.CharField(max_length=12, choices=dissertation.STATUS_CHOICES, default='DRAFT')
-    status_to = models.CharField(max_length=12, choices=dissertation.STATUS_CHOICES, default='DRAFT')
+    status_from = models.CharField(max_length=12, choices=dissertation_status.DISSERTATION_STATUS,
+                                   default=dissertation_status.DRAFT)
+    status_to = models.CharField(max_length=12, choices=dissertation_status.DISSERTATION_STATUS,
+                                 default=dissertation_status.DRAFT)
     created = models.DateTimeField(auto_now_add=True)
     justification = models.TextField(blank=True)
     person = models.ForeignKey('base.Person')
