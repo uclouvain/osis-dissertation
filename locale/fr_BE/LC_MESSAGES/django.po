@@ -856,6 +856,9 @@ msgstr "Envoyer un email à la commission de lecture à l'acceptation de la comm
 msgid "september"
 msgstr "Septembre"
 
+msgid "settings_by_education_group"
+msgstr "Paramètres par programme"
+
 msgid "specific_subject"
 msgstr "Sujet précis"
 
