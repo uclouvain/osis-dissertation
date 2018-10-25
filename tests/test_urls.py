@@ -39,7 +39,7 @@ class UrlTestCase(TestCase):
     def setUp(self):
         self.manager = AdviserManagerFactory()
 
-    def test_education_groups_parameters_url(self):
+    def test_settings_by_education_group_url(self):
         self.client.force_login(self.manager.person.user)
-        response = self.client.get(reverse('education_group_parameters'), {})
+        response = self.client.get(reverse('settings_by_education_group'), {})
         self.assertEqual(response.status_code, HTTP_OK)

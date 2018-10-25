@@ -133,8 +133,8 @@ urlpatterns = [
     url(r'^manager_offer_parameters/(?P<pk>[0-9]+)/edit/$', offer_proposition.manager_offer_parameters_edit,
         name='manager_offer_parameters_edit'),
 
-    url(r'^education_group_parameters/$', offer_proposition.education_group_parameters,
-        name='education_group_parameters'),
+    url(r'^settings_by_education_group/$', offer_proposition.settings_by_education_group,
+        name='settings_by_education_group'),
 
     url(r'^manager_proposition_dissertations/$', proposition_dissertation.manager_proposition_dissertations,
         name='manager_proposition_dissertations'),
