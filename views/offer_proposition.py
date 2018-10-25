@@ -34,8 +34,15 @@ from dissertation.forms import ManagerOfferPropositionForm
 from django.contrib.auth.decorators import user_passes_test
 from base.views import layout
 
+
+@login_required
+@user_passes_test(adviser.is_manager)
+def education_group_settings(request):
+    return layout.render(request, 'education_group_settings.html', {})
+
+
 ###########################
-#      MANAGER VIEWS      #
+#   OLD MANAGER VIEWS     #
 ###########################
 
 

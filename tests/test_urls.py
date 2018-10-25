@@ -23,6 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+
+from django.core.urlresolvers import reverse
 from django.test import TestCase
 from dissertation.tests.factories.adviser import AdviserManagerFactory
 
@@ -39,5 +41,5 @@ class UrlTestCase(TestCase):
 
     def test_education_groups_settings_url(self):
         self.client.force_login(self.manager.person.user)
-        response = self.client.get('/education_group_settings/', {})
+        response = self.client.get(reverse('education_group_settings'), {})
         self.assertEqual(response.status_code, HTTP_OK)
