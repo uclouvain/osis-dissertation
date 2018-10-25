@@ -23,11 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.core.urlresolvers import resolve
-from django.core.urlresolvers import reverse
 from django.test import TestCase
-
 from dissertation.tests.factories.adviser import AdviserManagerFactory
+
 
 HTTP_OK = 200
 HTTP_ERROR_403_NOT_AUTORIZED = 403
