@@ -37,8 +37,8 @@ from base.views import layout
 
 @login_required
 @user_passes_test(adviser.is_manager)
-def education_group_settings(request):
-    return layout.render(request, 'education_group_settings.html', {})
+def education_group_parameters(request):
+    return layout.render(request, 'education_group_parameters.html', {})
 
 
 ###########################
