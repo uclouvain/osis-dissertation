@@ -23,11 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.test import TestCase
+from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.offer import OfferFactory
-from dissertation.models.faculty_adviser import FacultyAdviser
+from dissertation.models.faculty_adviser import FacultyAdviser, search_education_group_ids_by_user
 from dissertation.tests.factories.adviser import AdviserManagerFactory
 from dissertation.tests.factories.faculty_adviser import FacultyAdviserFactory
-from django.test import TestCase
 
 
 def create_faculty_adviser(adviser, offer):
@@ -41,6 +42,7 @@ class FacultyManagerTest(TestCase):
     def setUp(self):
         self.adviser_manager = AdviserManagerFactory()
         self.offer = OfferFactory()
+        self.eduction_group = EducationGroupFactory()
 
     def test_str_self(self):
         faculty_adviser = FacultyAdviserFactory(adviser=self.adviser_manager, offer=self.offer)
@@ -49,3 +51,12 @@ class FacultyManagerTest(TestCase):
     def test_get_adviser_type(self):
         faculty_adviser = FacultyAdviserFactory(adviser=self.adviser_manager)
         self.assertEqual(faculty_adviser.get_adviser_type(), self.adviser_manager.type)
+
+    def test_search_education_group_ids_by_user(self):
+        education_group2 = EducationGroupFactory()
+        
+        FacultyAdviserFactory(adviser=self.adviser_manager, education_group=self.eduction_group)
+        FacultyAdviserFactory(adviser=self.adviser_manager, education_group=education_group2)
+
+        self.assertSequenceEqual(sorted([self.eduction_group.id, education_group2.id]),
+                                 list(search_education_group_ids_by_user(self.adviser_manager.person.user)))
