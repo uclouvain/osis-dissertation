@@ -59,3 +59,9 @@ def search_by_adviser(a_adviser):
     objects = FacultyAdviser.objects.filter(adviser=a_adviser)
     offers = [obj.offer for obj in list(objects)]
     return offers
+
+
+def search_education_group_ids_by_user(user):
+    education_group_ids = FacultyAdviser.objects.filter(adviser__person__user=user)\
+                                                .values_list('education_group_id', flat=True)
+    return education_group_ids

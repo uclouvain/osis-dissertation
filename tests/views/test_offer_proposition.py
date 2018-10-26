@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -24,18 +24,29 @@
 #
 ##############################################################################
 
-
-from django.http import HttpResponse
 from django.core.urlresolvers import reverse
+from django.http import HttpResponse
 from django.test import TestCase
+
 from dissertation.tests.factories.adviser import AdviserManagerFactory
 
 
-class UrlTestCase(TestCase):
-    def setUp(self):
-        self.manager = AdviserManagerFactory()
+class OfferPropositionTestCase(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = AdviserManagerFactory().person.user
+        cls.url = reverse("settings_by_education_group")
 
-    def test_settings_by_education_group_url(self):
-        self.client.force_login(self.manager.person.user)
-        response = self.client.get(reverse('settings_by_education_group'), {})
+    def setUp(self):
+        self.client.force_login(self.user)
+
+    def test_settings_by_education_group_when_user_not_logged(self):
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertRedirects(response, "/login/?next={}".format(self.url))
+
+    def test_settings_by_education_group(self):
+        response = self.client.get(self.url)
+
+        self.assertTemplateUsed(response, "settings_by_education_group.html")
         self.assertEqual(response.status_code, HttpResponse.status_code)
