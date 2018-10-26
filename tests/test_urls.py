@@ -24,18 +24,14 @@
 #
 ##############################################################################
 
-
-from django.http import HttpResponse
+from django.core.urlresolvers import resolve
 from django.core.urlresolvers import reverse
 from django.test import TestCase
-from dissertation.tests.factories.adviser import AdviserManagerFactory
+from dissertation.views import offer_proposition
 
 
 class UrlTestCase(TestCase):
-    def setUp(self):
-        self.manager = AdviserManagerFactory()
 
     def test_settings_by_education_group_url(self):
-        self.client.force_login(self.manager.person.user)
-        response = self.client.get(reverse('settings_by_education_group'), {})
-        self.assertEqual(response.status_code, HttpResponse.status_code)
+        url_found = resolve(reverse('settings_by_education_group'))
+        self.assertEqual(url_found.func, offer_proposition.settings_by_education_group)
