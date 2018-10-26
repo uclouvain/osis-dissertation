@@ -4,7 +4,10 @@ OSIS stands for **Open Student Information System**. It's an application
 designed to manage the core business of higher education institutions, such as universities, faculties, institutes and professional schools. The core business
 involves the administration of students, teachers, courses, programs and so on.
 
-[![Join the chat at https://gitter.im/uclouvain/OSIS-Louvain](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/uclouvain/OSIS-Louvain?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/uclouvain/osis.svg?branch=dev)](https://travis-ci.org/uclouvain/osis) [![Maintainability](https://api.codeclimate.com/v1/badges/e34d803b0e1c2409e604/maintainability)](https://codeclimate.com/github/uclouvain/osis/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/e34d803b0e1c2409e604/test_coverage)](https://codeclimate.com/github/uclouvain/osis/test_coverage)
+[![Join the chat at https://gitter.im/uclouvain/OSIS-Louvain](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/uclouvain/OSIS-Louvain?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) 
+[![Build Status](https://travis-ci.org/uclouvain/osis-dissertation.png)](https://travis-ci.org/uclouvain/osis-dissertation)
+<a href="https://codeclimate.com/github/uclouvain/osis-dissertation/maintainability"><img src="https://api.codeclimate.com/v1/badges/9545dea7f35f6148ab5a/maintainability" /></a>
+<a href="https://codeclimate.com/github/uclouvain/osis-dissertation/test_coverage"><img src="https://api.codeclimate.com/v1/badges/9545dea7f35f6148ab5a/test_coverage" /></a>
 
 ## Documentation
 
