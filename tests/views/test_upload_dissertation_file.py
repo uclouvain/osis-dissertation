@@ -26,7 +26,7 @@
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.test import TestCase
 
 from dissertation.models import dissertation_document_file
@@ -60,6 +60,13 @@ class UploadDissertationFileTestCase(TestCase):
         response = self.client.get(self.download_url)
 
         self.assertEqual(response.status_code, HttpResponse.status_code)
+
+    def test_download_dissertation_without_document(self):
+        self.client.force_login(self.user)
+        dissertation = DissertationFactory()
+        response = self.client.get(reverse("dissertation_download", args=[dissertation.pk]))
+
+        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
 
     def test_save_uploaded_file_when_user_not_logged(self):
         self.client.logout()
