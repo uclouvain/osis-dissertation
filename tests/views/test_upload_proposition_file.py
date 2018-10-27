@@ -29,22 +29,22 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.test import TestCase
 
-from dissertation.models import dissertation_document_file
+from dissertation.models import proposition_document_file
 
 from dissertation.tests.factories.adviser import AdviserManagerFactory
-from dissertation.tests.factories.dissertation import DissertationFactory
-from dissertation.tests.factories.dissertation_document_file import DissertationDocumentFileFactory
+from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
+from dissertation.tests.factories.proposition_document_file import PropositionDocumentFileFactory
 
 
-class UploadDissertationFileTestCase(TestCase):
+class UploadPropositionFileTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.user = AdviserManagerFactory().person.user
-        cls.dissertation = DissertationFactory()
+        cls.proposition = PropositionDissertationFactory()
         cls.document = SimpleUploadedFile("file.png", b"file_content", content_type="image/png")
-        cls.dissertation_document = DissertationDocumentFileFactory(dissertation=cls.dissertation)
-        cls.download_url = reverse("dissertation_download", args=[cls.dissertation.pk])
-        cls.upload_url = reverse("dissertation_save_upload")
+        cls.proposition_document = PropositionDocumentFileFactory(proposition=cls.proposition)
+        cls.download_url = reverse("proposition_download", args=[cls.proposition.pk])
+        cls.upload_url = reverse("proposition_save_upload")
 
     def setUp(self):
         self.client.force_login(self.user)
@@ -69,8 +69,12 @@ class UploadDissertationFileTestCase(TestCase):
 
     def test_save_uploaded_file(self):
         self.client.force_login(self.user)
-        form_data = {'file': self.document, 'dissertation_id': self.dissertation.id, 'description': 'description'}
+        form_data = {
+            'file': self.document,
+            'proposition_dissertation_id': self.proposition.id,
+            'description': 'description'
+        }
         response = self.client.post(self.upload_url, form_data, follow=True)
 
         self.assertEqual(response.status_code, HttpResponse.status_code)
-        self.assertEqual(1, len(dissertation_document_file.find_by_dissertation(self.dissertation)))
+        self.assertEqual(1, len(proposition_document_file.find_by_proposition(self.proposition)))

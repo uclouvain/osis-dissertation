@@ -23,27 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import factory.fuzzy
+import factory
 
-from django.utils import timezone
-from osis_common.models.enum import storage_duration
-from osis_common.models.document_file import CONTENT_TYPE_CHOICES
-
-
-CONTENT_TYPE_LIST = [x for (x, y) in CONTENT_TYPE_CHOICES]
+from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
+from dissertation.tests.factories.document_file import DocumentFileFactory
 
 
-class DocumentFileFactory(factory.DjangoModelFactory):
+class PropositionDocumentFileFactory(factory.DjangoModelFactory):
     class Meta:
-        model = 'osis_common.DocumentFile'
+        model = 'dissertation.PropositionDocumentFile'
 
-    file_name = factory.Sequence(lambda n: "file %03d" % n)
-    content_type = factory.fuzzy.FuzzyChoice(CONTENT_TYPE_LIST)
-    creation_date = factory.Faker('date_time_this_year', before_now=True, after_now=False,
-                                  tzinfo=timezone.get_current_timezone())
-    storage_duration = storage_duration.FIVE_YEARS
-    file = factory.django.FileField(filename='document_file')
-    description = factory.Sequence(lambda n: "Description %03d" % n)
-    update_by = 'system'
-    application_name = factory.Faker('text', max_nb_chars=100)
-    size = factory.fuzzy.FuzzyInteger(45, 200)
+    proposition = factory.SubFactory(PropositionDissertationFactory)
+    document_file = factory.SubFactory(DocumentFileFactory)
+
