@@ -37,6 +37,7 @@ from datetime import date
 class OfferPropositionAdmin(SerializableModelAdmin):
     list_display = ('acronym',
                     'offer',
+                    'education_group',
                     'offer_proposition_group',
                     'recent_acronym_education_group')
     raw_id_fields = ('offer', 'education_group')
@@ -64,8 +65,10 @@ class OfferProposition(SerializableModel):
 
     @property
     def recent_acronym_education_group(self):
-        return self.education_group.most_recent_acronym
-
+        if self.education_group:
+            return self.education_group.most_recent_acronym
+        else:
+            return self.acronym
     @property
     def in_periode_visibility_proposition(self):
         start = self.start_visibility_proposition
