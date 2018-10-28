@@ -45,11 +45,8 @@ class OfferPropositionAdmin(SerializableModelAdmin):
 
 class OfferProposition(SerializableModel):
     acronym = models.CharField(max_length=200)
-    offer = models.ForeignKey(offer.Offer)
-    education_group = models.ForeignKey('base.EducationGroup',
-                                        null=True,
-                                        blank=True,
-                                        on_delete=models.SET_NULL)
+    offer = models.ForeignKey(offer.Offer, null=True, blank=True, on_delete=models.SET_NULL)
+    education_group = models.OneToOneField('base.EducationGroup', null=True, blank=True, on_delete=models.SET_NULL)
     student_can_manage_readers = models.BooleanField(default=True)
     adviser_can_suggest_reader = models.BooleanField(default=False)
     evaluation_first_year = models.BooleanField(default=False)
@@ -102,6 +99,16 @@ class OfferProposition(SerializableModel):
 
     class Meta:
         ordering = ['offer_proposition_group', 'acronym']
+
+
+def get_by_education_group_id(education_group_id):
+    offer_proposition, created = OfferProposition.objects.get_or_create(education_group_id=education_group_id)
+    return offer_proposition
+
+
+def get_by_education_group_ids(education_group_ids):
+    offers_propositions = [get_by_education_group_id(education_group_id) for education_group_id in education_group_ids]
+    return offers_propositions
 
 
 def get_by_offer(an_offer):

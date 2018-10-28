@@ -23,8 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.db.models import Q
+
+from base.tests.factories.education_group import EducationGroupFactory
 from dissertation.models.offer_proposition import OfferProposition
-from dissertation.models.offer_proposition import get_by_offer, get_by_dissertation, get_by_offer_proposition_group, find_by_id
+from dissertation.models.offer_proposition import get_by_offer, get_by_dissertation, get_by_education_group_id, \
+    get_by_education_group_ids, get_by_offer_proposition_group, find_by_id
 from dissertation.models.offer_proposition_group import OfferPropositionGroup
 from dissertation.tests.factories.offer_proposition import OfferPropositionFactory
 from dissertation.tests.factories.offer_proposition_group import OfferPropositionGroupFactory
@@ -34,12 +38,13 @@ from base.tests.factories.offer_year import OfferYearFactory
 from django.test import TestCase
 
 
-def create_offer_proposition(acronym, offer,offer_proposition_group=None):
+def create_offer_proposition(acronym, offer, offer_proposition_group=None):
     offer_proposition = OfferPropositionFactory.create(
         acronym=acronym,
         offer=offer,
         offer_proposition_group=offer_proposition_group)
     return offer_proposition
+
 
 def create_offer(title):
     offer = OfferFactory.create(title)
@@ -55,20 +60,21 @@ class OfferPropositionTestCase(TestCase):
         self.offer_proposition_group = OfferPropositionGroupFactory()
         self.offer_proposition = OfferPropositionFactory(
             offer=self.offer_with_offer_proposition,
-            offer_proposition_group= self.offer_proposition_group
+            offer_proposition_group=self.offer_proposition_group
         )
         self.offer_year = OfferYearFactory(offer=self.offer_with_offer_proposition)
         self.dissertation = DissertationFactory(offer_year_start=self.offer_year)
+        self.education_group = EducationGroupFactory()
 
     def test_offer_proposition_exist(self):
         OfferPropositionGroupFactory.create(name_short="PSP", name_long="Faculté de Psychologie")
-        offer_proposition_g=OfferPropositionGroup.objects.get(name_short='PSP')
-        offer_PSP2MSG=OfferFactory.create(title='PSP2MSG')
-        OfferProposition.objects.create(acronym="PSP2MSG",
-                                             offer=offer_PSP2MSG,
-                                             offer_proposition_group=offer_proposition_g)
+        offer_proposition_g = OfferPropositionGroup.objects.get(name_short='PSP')
+        offer_psp2msg = OfferFactory.create(title='PSP2MSG')
+        OfferProposition.objects.create(acronym="PSP2MSG", offer=offer_psp2msg,
+                                        offer_proposition_group=offer_proposition_g)
         offer_proposition_psp = OfferProposition.objects.get(acronym='PSP2MSG')
-        self.assertEqual(offer_proposition_psp.offer_proposition_group,OfferPropositionGroup.objects.get(name_short='PSP'))
+        self.assertEqual(offer_proposition_psp.offer_proposition_group,
+                         OfferPropositionGroup.objects.get(name_short='PSP'))
 
     def test_periode_visibility_proposition(self):
         visibility = self.offer_proposition_with_good_dates.in_periode_visibility_proposition
@@ -85,6 +91,25 @@ class OfferPropositionTestCase(TestCase):
     def test_periode_edit_title(self):
         visibility = self.offer_proposition_with_good_dates.in_periode_edit_title
         self.assertTrue(visibility)
+
+    def test_get_by_education_group_id(self):
+        with self.assertRaises(OfferProposition.DoesNotExist):
+            OfferProposition.objects.get(education_group_id=self.education_group.id)
+        offer_prop = get_by_education_group_id(self.education_group.id)
+        self.assertIsNotNone(offer_prop)
+        self.assertEqual(offer_prop.education_group_id, self.education_group.id)
+
+    def test_get_by_education_group_ids(self):
+        educ_group_1 = EducationGroupFactory()
+        educ_group_2 = EducationGroupFactory()
+        OfferPropositionFactory(education_group=educ_group_1)
+        OfferPropositionFactory(education_group=educ_group_2)
+
+        offers_props = OfferProposition.objects.filter(
+            Q(education_group_id=educ_group_1.id) | Q(education_group_id=educ_group_2.id)
+        )
+
+        self.assertEqual(list(offers_props), get_by_education_group_ids([educ_group_1.id, educ_group_2.id]))
 
     def test_get_by_offer(self):
         offer_proposition = get_by_offer(self.offer_with_offer_proposition)
