@@ -6,7 +6,8 @@ from dissertation.models.offer_proposition import OfferProposition
 
 
 def _build_map_offer_with_matching_education_group(offer_ids):
-    education_group_years = EducationGroupYear.objects.all().select_related('education_group').values('education_group_id', 'acronym')
+    education_group_years = EducationGroupYear.objects.all().select_related('education_group')\
+                                              .values('education_group_id', 'acronym')
     map_acronym_with_educ_group_id = {rec['acronym']: rec['education_group_id'] for rec in education_group_years}
     map_offer_id_with_educ_group_id = {}
     for offer in Offer.objects.filter(pk__in=offer_ids).prefetch_related('offeryear_set'):
