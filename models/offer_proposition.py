@@ -30,7 +30,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils import timezone
 from base.models import offer
-from base.models.education_group_year import EducationGroupYear
 from datetime import date
 
 
@@ -69,6 +68,7 @@ class OfferProposition(SerializableModel):
             return self.education_group.most_recent_acronym
         else:
             return self.acronym
+
     @property
     def in_periode_visibility_proposition(self):
         start = self.start_visibility_proposition
