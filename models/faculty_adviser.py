@@ -32,8 +32,8 @@ from . import adviser
 
 
 class FacultyAdviserAdmin(admin.ModelAdmin):
-    list_display = ('adviser', 'offer_most_recent_offer_year', 'get_adviser_type')
-    raw_id_fields = ('adviser', 'offer')
+    list_display = ('adviser', 'offer_most_recent_offer_year', 'get_adviser_type', 'education_group')
+    raw_id_fields = ('adviser', 'offer', 'education_group')
     search_fields = ('adviser__person__last_name', 'adviser__person__first_name', 'offer__id')
     readonly_fields = ('offer_most_recent_offer_year',)
 
@@ -41,7 +41,7 @@ class FacultyAdviserAdmin(admin.ModelAdmin):
 class FacultyAdviser(models.Model):
     adviser = models.ForeignKey(adviser.Adviser)
     offer = models.ForeignKey(offer.Offer)
-    education_group = models.ForeignKey(education_group.EducationGroup, null=True, on_delete=models.CASCADE)
+    education_group = models.ForeignKey(education_group.EducationGroup, null=True, blank=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return "{} - Offer {}".format(str(self.adviser), str(self.offer.id))
