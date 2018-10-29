@@ -35,11 +35,10 @@ from django.test import TestCase
 
 
 def create_offer_proposition(acronym, offer,offer_proposition_group=None):
-    offer_proposition = OfferProposition.objects.create(
+    offer_proposition = OfferPropositionFactory.create(
         acronym=acronym,
         offer=offer,
-        offer_proposition_group=offer_proposition_group
-    )
+        offer_proposition_group=offer_proposition_group)
     return offer_proposition
 
 def create_offer(title):
@@ -89,7 +88,7 @@ class OfferPropositionTestCase(TestCase):
 
     def test_get_by_offer(self):
         offer_proposition = get_by_offer(self.offer_with_offer_proposition)
-        self.assertEqual(offer_proposition,self.offer_proposition)
+        self.assertEqual(offer_proposition, self.offer_proposition)
 
     def test_get_by_offer_with_no_offer(self):
         offer_propositions = get_by_offer(self.offer_without_offer_proposition)
@@ -106,7 +105,6 @@ class OfferPropositionTestCase(TestCase):
     def test_get_by_offer_proposition_group(self):
         self.assertEqual(get_by_offer_proposition_group(self.offer_proposition_group), self.offer_proposition)
 
-    def test_get_by_offer_proposition_group_without_offer_proposition_group(self):
+    def test_get_by_offer_proposition_group_0(self):
         offer_proposition_group = 0
         self.assertEqual(get_by_offer_proposition_group(offer_proposition_group), None)
-    
