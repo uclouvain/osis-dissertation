@@ -56,6 +56,12 @@ def _role_can_be_deleted(dissert, dissert_role):
     return dissert_role.status != 'PROMOTEUR' or promotors_count > 1
 
 
+def _new_status_display(dissert, opperation):
+    new_status = dissertation.get_next_status(dissert, opperation)
+    status_dict = dict(DISSERTATION_STATUS)
+    return status_dict[new_status]
+
+
 #########################
 #      GLOBAL VIEW      #
 #########################
@@ -549,10 +555,7 @@ def manager_dissertations_to_dir_submit(request, pk):
     adv = adviser.search_by_person(person)
     if (adviser_can_manage(dissert, adv)):
         old_status = dissert.status
-        new_status = dissertation.get_next_status(dissert, "go_forward")
-        status_dict = dict(DISSERTATION_STATUS)
-        new_status_display = status_dict[new_status]
-
+        new_status_display = _new_status_display(dissert,"go_forward")
         if request.method == "POST":
             form = ManagerDissertationUpdateForm(request.POST)
             if form.is_valid():
@@ -597,10 +600,7 @@ def manager_dissertations_to_dir_ok(request, pk):
     adv = adviser.search_by_person(person)
     if (adviser_can_manage(dissert, adv)):
         old_status = dissert.status
-        new_status = dissertation.get_next_status(dissert, "accept")
-        status_dict = dict(DISSERTATION_STATUS)
-        new_status_display = status_dict[new_status]
-
+        new_status_display = _new_status_display(dissert,"accept")
         if request.method == "POST":
             form = ManagerDissertationUpdateForm(request.POST)
             if form.is_valid():
@@ -663,9 +663,7 @@ def manager_dissertations_to_dir_ko(request, pk):
     adv = adviser.search_by_person(person)
     if (adviser_can_manage(dissert, adv)):
         old_status = dissert.status
-        new_status = dissertation.get_next_status(dissert, "refuse")
-        status_dict = dict(DISSERTATION_STATUS)
-        new_status_display = status_dict[new_status]
+        new_status_display = _new_status_display(dissert,"refuse")
         if request.method == "POST":
             form = ManagerDissertationUpdateForm(request.POST)
             if form.is_valid():
@@ -932,9 +930,7 @@ def dissertations_to_dir_ok(request, pk):
 
     if teacher_is_promotor(adv, dissert):
         old_status = dissert.status
-        new_status = dissertation.get_next_status(dissert, "accept")
-        status_dict = dict(DISSERTATION_STATUS)
-        new_status_display = status_dict[new_status]
+        new_status_display = _new_status_display(dissert,"accept")
 
         if request.method == "POST":
             form = ManagerDissertationUpdateForm(request.POST)
@@ -949,7 +945,9 @@ def dissertations_to_dir_ok(request, pk):
             form = ManagerDissertationUpdateForm()
 
         return layout.render(request, 'dissertations_add_justification.html',
-                             {'form': form, 'dissert': dissert, 'new_status_display': new_status_display})
+                             {'form': form,
+                              'dissert': dissert,
+                              'new_status_display': new_status_display})
 
     else:
         return redirect('dissertations_detail', pk=pk)
@@ -966,10 +964,7 @@ def dissertations_to_dir_ko(request, pk):
 
     if teacher_is_promotor(adv, dissert):
         old_status = dissert.status
-        new_status = dissertation.get_next_status(dissert, "refuse")
-        status_dict = dict(DISSERTATION_STATUS)
-        new_status_display = status_dict[new_status]
-
+        new_status_display = _new_status_display(dissert,"refuse")
         if request.method == "POST":
             form = ManagerDissertationUpdateForm(request.POST)
             if form.is_valid():

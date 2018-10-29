@@ -27,11 +27,13 @@
 import json
 from django.test import TestCase
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext_lazy as _
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
 from base.tests.factories.offer import OfferFactory
 from base.tests.factories.student import StudentFactory
+from dissertation.models.enums import dissertation_status
 from dissertation.tests.factories.adviser import AdviserManagerFactory, AdviserTeacherFactory
 from dissertation.tests.factories.dissertation import DissertationFactory
 from dissertation.tests.factories.faculty_adviser import FacultyAdviserFactory
@@ -43,7 +45,7 @@ from osis_common.models import message_template
 from dissertation.models import adviser
 from dissertation.models import dissertation_role
 from dissertation.tests.models.test_faculty_adviser import create_faculty_adviser
-from dissertation.views.dissertation import adviser_can_manage
+from dissertation.views.dissertation import adviser_can_manage, _new_status_display
 
 ERROR_405_BAD_REQUEST = 405
 ERROR_404_PAGE_NO_FOUND = 404
@@ -492,3 +494,15 @@ class DissertationViewTestCase(TestCase):
         url = reverse('manager_students_list')
         response = self.client.get(url)
         self.assertEqual(response.status_code, HTTP_OK)
+
+    def test__new_status_display(self):
+        self.offer2 = OfferFactory()
+        self.offer_prop2 = OfferPropositionFactory(offer=self.offer2,
+                                                   validation_commission_exists=False,
+                                                   evaluation_first_year=False)
+        self.offer_year_start2 = OfferYearFactory(offer=self.offer2,
+                                                  academic_year=self.academic_year1)
+        self.dissertation_x = DissertationFactory(status=dissertation_status.DIR_SUBMIT,
+                                                  offer_year_start=self.offer_year_start2)
+        self.dissertation_x.status = dissertation_status.DIR_SUBMIT
+        self.assertEqual(_new_status_display(self.dissertation_x,"accept"), _('to_be_received'))
