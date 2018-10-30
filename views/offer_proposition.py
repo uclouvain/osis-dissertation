@@ -38,10 +38,10 @@ from base.views import layout
 @login_required
 @user_passes_test(adviser.is_manager)
 def settings_by_education_group(request):
-    current_user_education_group_ids = faculty_adviser.search_education_group_ids_by_user(request.user)
-    return layout.render(request, 'settings_by_education_group.html', {
-        'current_user_education_group_ids': current_user_education_group_ids
-    })
+    education_group_ids = faculty_adviser.search_education_group_ids_by_user(request.user)
+    offers_propositions = offer_proposition.get_by_education_group_ids(education_group_ids)
+
+    return layout.render(request, 'settings_by_education_group.html', {'offer_propositions': offers_propositions})
 
 
 ###########################
