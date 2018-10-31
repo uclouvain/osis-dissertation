@@ -28,6 +28,8 @@ from django.core.urlresolvers import reverse
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
 from base.tests.factories.student import StudentFactory
+from dissertation.forms import AdviserForm
+from dissertation.models import dissertation_role
 from dissertation.tests.factories.adviser import AdviserManagerFactory, AdviserTeacherFactory
 from dissertation.tests.factories.dissertation import DissertationFactory
 from dissertation.tests.factories.faculty_adviser import FacultyAdviserFactory
@@ -35,6 +37,8 @@ from dissertation.tests.factories.offer_proposition import OfferPropositionFacto
 from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
 from dissertation.tests.factories.proposition_offer import PropositionOfferFactory
 
+HTTP_OK = 200
+HTTP_FOUND = 302
 
 class InformationViewTestCase(TestCase):
 
@@ -71,6 +75,62 @@ class InformationViewTestCase(TestCase):
                                 dissertation_role__status=roles[x]
                                 )
 
+    def test_informations(self):
+        self.client.force_login(self.teacher.person.user)
+        response = self.client.post('/dissertation/informations/',
+                                    {
+                                        'adviser': self.teacher,
+                                        'first_name': self.teacher.person.first_name.title(),
+                                        'last_name': self.teacher.person.last_name.title()
+                                    }
+                                    )
+        self.assertEqual(response.status_code, HTTP_OK)
+
+    def test_informations_detail_stats(self):
+        self.client.force_login(self.teacher.person.user)
+        advisers_pro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, 'PROMOTEUR')
+        advisers_copro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, 'CO_PROMOTEUR')
+        advisers_reader = dissertation_role.search_by_adviser_and_role_stats(self.teacher, 'READER')
+        response = self.client.post('/dissertation/informations_detail_stats/',
+                                    {
+                                        'adviser': self.teacher,
+                                        'count_advisers_copro': dissertation_role.count_by_adviser_and_role_stats(self.teacher, 'CO_PROMOTEUR'),
+                                        'count_advisers_pro': dissertation_role.count_by_adviser_and_role_stats(self.teacher, 'PROMOTEUR'),
+                                        'count_advisers_reader': dissertation_role.count_by_adviser_and_role_stats(self.teacher, 'READER'),
+                                        'count_advisers_pro_request': dissertation_role.count_by_adviser(self.teacher, 'PROMOTEUR', 'DIR_SUBMIT'),
+                                        'tab_offer_count_pro': dissertation_role.get_tab_count_role_by_offer(advisers_pro),
+                                        'tab_offer_count_read': dissertation_role.get_tab_count_role_by_offer(advisers_reader),
+                                        'tab_offer_count_copro': dissertation_role.get_tab_count_role_by_offer(advisers_copro)
+                                    }
+                                    )
+        self.assertEqual(response.status_code, HTTP_OK)
+
+    def test_informations_edit(self):
+        self.client.force_login(self.teacher.person.user)
+        form = AdviserForm(instance=self.teacher.person.user)
+        response = self.client.post('/dissertation/informations_edit/',
+                                    {
+                                        'form': form,
+                                        'first_name': self.teacher.person.first_name.title(),
+                                        'last_name': self.teacher.person.last_name.title(),
+                                        'email': self.teacher.person.email,
+                                        'phone': self.teacher.person.phone,
+                                        'phone_mobile': self.teacher.person.phone_mobile
+                                    }
+                                    )
+        self.assertEqual(response.status_code, HTTP_FOUND)
+        response = self.client.get('/dissertation/informations_edit/',
+                                    {
+                                        'form': form,
+                                        'first_name': self.teacher.person.first_name.title(),
+                                        'last_name': self.teacher.person.last_name.title(),
+                                        'email': self.teacher.person.email,
+                                        'phone': self.teacher.person.phone,
+                                        'phone_mobile': self.teacher.person.phone_mobile
+                                    }
+                                    )
+        self.assertEqual(response.status_code, HTTP_OK)
+
     def test_manager_informations_detail_list(self):
         self.client.force_login(self.manager.person.user)
         url = reverse('manager_informations_detail_list', kwargs={'pk': self.teacher.id})
@@ -80,3 +140,4 @@ class InformationViewTestCase(TestCase):
         self.assertEqual(response.context[-1].get('adv_list_disserts_reader').count(), 1)
         self.assertEqual(response.context[-1].get('adv_list_disserts_accompanist').count(), 1)
         self.assertEqual(response.context[-1].get('adv_list_disserts_president').count(), 1)
+
