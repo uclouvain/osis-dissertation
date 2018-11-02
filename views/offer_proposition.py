@@ -33,6 +33,7 @@ from dissertation.forms import ManagerOfferPropositionForm
 from dissertation.models import adviser
 from dissertation.models import faculty_adviser
 from dissertation.models import offer_proposition
+from dissertation.views.utils.redirect_if_form_is_valid import redirect_if_form_is_valid
 
 
 @login_required
@@ -48,14 +49,11 @@ def settings_by_education_group(request):
 @user_passes_test(adviser.is_manager)
 def settings_by_education_group_edit(request, pk):
     offer_prop = get_object_or_404(offer_proposition.OfferProposition, pk=pk)
-    offer_prop_form = ManagerOfferPropositionForm(request.POST or None, instance=offer_prop)
-    if offer_prop_form.is_valid():
-        offer_prop = offer_prop_form.save(commit=False)
-        offer_prop.save()
-        return redirect('settings_by_education_group')
+    form = ManagerOfferPropositionForm(request.POST or None, instance=offer_prop)
+    redirect_if_form_is_valid(form, 'settings_by_education_group')
 
     return layout.render(request, "settings_by_education_group_edit.html",
-                         {'offer_proposition': offer_prop, 'form': offer_prop_form})
+                         {'offer_proposition': offer_prop, 'form': form})
 
 
 ###########################
