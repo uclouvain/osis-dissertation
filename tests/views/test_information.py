@@ -23,12 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.http import HttpResponse, HttpResponseRedirect
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
 from base.tests.factories.student import StudentFactory
-from dissertation.forms import AdviserForm
+from dissertation.forms import AdviserForm, ManagerAddAdviserPreForm
 from dissertation.models import dissertation_role
 from dissertation.tests.factories.adviser import AdviserManagerFactory, AdviserTeacherFactory
 from dissertation.tests.factories.dissertation import DissertationFactory
@@ -37,8 +38,6 @@ from dissertation.tests.factories.offer_proposition import OfferPropositionFacto
 from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
 from dissertation.tests.factories.proposition_offer import PropositionOfferFactory
 
-HTTP_OK = 200
-HTTP_FOUND = 302
 
 class InformationViewTestCase(TestCase):
 
@@ -84,7 +83,7 @@ class InformationViewTestCase(TestCase):
                                         'last_name': self.teacher.person.last_name.title()
                                     }
                                     )
-        self.assertEqual(response.status_code, HTTP_OK)
+        self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_informations_detail_stats(self):
         self.client.force_login(self.teacher.person.user)
@@ -103,7 +102,7 @@ class InformationViewTestCase(TestCase):
                                         'tab_offer_count_copro': dissertation_role.get_tab_count_role_by_offer(advisers_copro)
                                     }
                                     )
-        self.assertEqual(response.status_code, HTTP_OK)
+        self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_informations_edit(self):
         self.client.force_login(self.teacher.person.user)
@@ -118,7 +117,7 @@ class InformationViewTestCase(TestCase):
                                         'phone_mobile': self.teacher.person.phone_mobile
                                     }
                                     )
-        self.assertEqual(response.status_code, HTTP_FOUND)
+        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
         response = self.client.get('/dissertation/informations_edit/',
                                     {
                                         'form': form,
@@ -129,7 +128,55 @@ class InformationViewTestCase(TestCase):
                                         'phone_mobile': self.teacher.person.phone_mobile
                                     }
                                     )
-        self.assertEqual(response.status_code, HTTP_OK)
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+
+    def test_informations_add(self):
+        self.client.force_login(self.teacher.person.user)
+        form = ManagerAddAdviserPreForm()
+        message = "empty_data"
+        response = self.client.post('/dissertation/informations_add/',
+                                    {
+                                        'search_form': self.teacher.person.user.email,
+                                        'form': form,
+                                        'message': message
+                                    }
+                                    )
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+
+    def test_manager_informations(self):
+        self.client.force_login(self.manager.person.user)
+        response = self.client.get(reverse("manager_informations"))
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+
+    def test_manager_informations_detail(self):
+        self.client.force_login(self.manager.person.user)
+        response = self.client.get(reverse("manager_informations_detail", args=[self.teacher.pk]))
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+        response = self.client.get(reverse("manager_informations_detail", args=[self.teacher.person.user.pk]))
+        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
+
+    def test_manager_informations_edit(self):
+        self.client.force_login(self.manager.person.user)
+        response = self.client.get(reverse("manager_informations_edit", args=[self.teacher.person.user.pk]))
+        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
+        form = AdviserForm(instance=self.teacher.person.user)
+        adv = self.teacher
+        response = self.client.post(reverse("manager_informations_edit", args=[self.teacher.pk]),
+                                    {
+                                        'adviser': adv,
+                                        'form': form,
+                                        'first_name': adv.person.first_name.title(),
+                                        'last_name': adv.person.last_name.title(),
+                                        'email': adv.person.email,
+                                        'phone': adv.person.phone,
+                                        'phone_mobile': adv.person.phone_mobile
+                                    })
+        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
+
+    def test_manager_informations_edit_with_get_method(self):
+        self.client.force_login(self.manager.person.user)
+        response = self.client.get(reverse("manager_informations_edit", args=[self.teacher.pk]))
+        self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_manager_informations_detail_list(self):
         self.client.force_login(self.manager.person.user)
@@ -140,4 +187,12 @@ class InformationViewTestCase(TestCase):
         self.assertEqual(response.context[-1].get('adv_list_disserts_reader').count(), 1)
         self.assertEqual(response.context[-1].get('adv_list_disserts_accompanist').count(), 1)
         self.assertEqual(response.context[-1].get('adv_list_disserts_president').count(), 1)
+        response = self.client.get(reverse("manager_informations_detail_list", args=[self.teacher.person.user.pk]))
+        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
 
+    def test_manager_informations_detail_list_wait(self):
+        self.client.force_login(self.manager.person.user)
+        response = self.client.get(reverse("manager_informations_detail_list_wait", args=[self.teacher.pk]))
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+        response = self.client.get(reverse("manager_informations_detail_list_wait", args=[self.teacher.person.user.pk]))
+        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
