@@ -121,7 +121,7 @@ class ManagerOfferPropositionForm(ModelForm):
                   'end_visibility_proposition', 'start_visibility_dissertation', 'end_visibility_dissertation',
                   'start_jury_visibility', 'end_jury_visibility', 'start_edit_title', 'end_edit_title',
                   'global_email_to_commission')
-        widgets = {'offer': forms.HiddenInput(), 'acronym': forms.HiddenInput()}
+        widgets = {'offer': forms.HiddenInput(), 'acronym': forms.HiddenInput(), 'education_group': forms.HiddenInput()}
 
 
 class ManagerPropositionDissertationForm(ModelForm):

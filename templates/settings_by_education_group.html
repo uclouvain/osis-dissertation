@@ -48,7 +48,7 @@
         {% for offer_proposition in offer_propositions %}
           <tr>
             <th scope="row">
-                <a href="{% url 'manager_offer_parameters_edit' pk=offer_proposition.pk %}">
+                <a href="{% url 'settings_by_education_group_edit' pk=offer_proposition.pk %}">
                     {{ offer_proposition.recent_acronym_education_group }}
                 </a>
             </th>

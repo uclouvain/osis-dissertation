@@ -135,6 +135,8 @@ urlpatterns = [
 
     url(r'^settings_by_education_group/$', offer_proposition.settings_by_education_group,
         name='settings_by_education_group'),
+    url(r'^settings_by_education_group/(?P<pk>[0-9]+)/edit/$', offer_proposition.settings_by_education_group_edit,
+        name='settings_by_education_group_edit'),
 
     url(r'^manager_proposition_dissertations/$', proposition_dissertation.manager_proposition_dissertations,
         name='manager_proposition_dissertations'),
