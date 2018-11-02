@@ -730,8 +730,8 @@ def manager_dissertations_wait_comm_jsonlist(request):
             'title': dissert.title,
             'author': "{p.last_name} {p.first_name} ".format(p=dissert.author.person),
             'status': dissert.status,
-            'offer_year': str(dissert.offer_year_start.academic_year),
-            'offer': dissert.offer_year_start.acronym,
+            'education_group_year': str(dissert.education_group_year_start.academic_year),
+            'education_groups': dissert.education_group_year_start.acronym,
             'proposition_dissertation': str(dissert.proposition_dissertation),
             'description': dissert.description
         } for dissert in disserts
