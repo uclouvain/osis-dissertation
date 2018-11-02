@@ -40,7 +40,7 @@ from base.models.enums import person_source_type
 ###########################
 #      TEACHER VIEWS      #
 ###########################
-from dissertation.views.utils.redirect_if_form_is_valid import redirect_if_form_is_valid
+from dissertation.views.utils.form_is_valid import save_and_redirect
 
 
 @login_required
@@ -91,7 +91,7 @@ def informations_edit(request):
     adv = adviser.search_by_person(person)
     if request.method == "POST":
         form = AdviserForm(request.POST, instance=adv)
-        redirect_if_form_is_valid(form, 'informations')
+        save_and_redirect(form, 'informations')
     else:
         form = AdviserForm(instance=adv)
     return layout.render(request, "informations_edit.html", {'form': form,

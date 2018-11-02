@@ -27,7 +27,7 @@
 from django.shortcuts import redirect
 
 
-def redirect_if_form_is_valid(form, named_url):
+def save_and_redirect(form, named_url):
     if form.is_valid():
         instance = form.save(commit=False)
         instance.save()
