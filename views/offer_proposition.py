@@ -48,14 +48,14 @@ def settings_by_education_group(request):
 @user_passes_test(adviser.is_manager)
 def settings_by_education_group_edit(request, pk):
     offer_prop = get_object_or_404(offer_proposition.OfferProposition, pk=pk)
-    form = ManagerOfferPropositionForm(request.POST or None, instance=offer_prop)
-    if form.is_valid():
-        offer_prop = form.save(commit=False)
+    offer_prop_form = ManagerOfferPropositionForm(request.POST or None, instance=offer_prop)
+    if offer_prop_form.is_valid():
+        offer_prop = offer_prop_form.save(commit=False)
         offer_prop.save()
         return redirect('settings_by_education_group')
 
     return layout.render(request, "settings_by_education_group_edit.html",
-                         {'offer_proposition': offer_prop, 'form': form})
+                         {'offer_proposition': offer_prop, 'form': offer_prop_form})
 
 
 ###########################
