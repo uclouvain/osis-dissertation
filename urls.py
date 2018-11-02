@@ -129,10 +129,6 @@ urlpatterns = [
         name='manager_informations_list_request'),
     url(r'^manager_informations_search$', information.manager_informations_search, name='manager_informations_search'),
 
-    url(r'^manager_offer_parameters/$', offer_proposition.manager_offer_parameters, name='manager_offer_parameters'),
-    url(r'^manager_offer_parameters/(?P<pk>[0-9]+)/edit/$', offer_proposition.manager_offer_parameters_edit,
-        name='manager_offer_parameters_edit'),
-
     url(r'^settings_by_education_group/$', offer_proposition.settings_by_education_group,
         name='settings_by_education_group'),
     url(r'^settings_by_education_group/(?P<pk>[0-9]+)/edit/$', offer_proposition.settings_by_education_group_edit,

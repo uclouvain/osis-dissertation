@@ -24,10 +24,9 @@
 #
 ##############################################################################
 
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
-from base import models as mdl
 from base.views import layout
 from dissertation.forms import ManagerOfferPropositionForm
 from dissertation.models import adviser
@@ -54,36 +53,3 @@ def settings_by_education_group_edit(request, pk):
 
     return layout.render(request, "settings_by_education_group_edit.html",
                          {'offer_proposition': offer_prop, 'form': form})
-
-
-###########################
-#   OLD MANAGER VIEWS     #
-###########################
-
-
-@login_required
-@user_passes_test(adviser.is_manager)
-def manager_offer_parameters(request):
-    person = mdl.person.find_by_user(request.user)
-    adv = adviser.search_by_person(person)
-    offers = faculty_adviser.search_by_adviser(adv)
-    offer_props = offer_proposition.search_by_offer(offers)
-    return layout.render(request, 'manager_offer_parameters.html', {'offer_propositions': offer_props})
-
-
-@login_required
-@user_passes_test(adviser.is_manager)
-def manager_offer_parameters_edit(request, pk):
-    offer_prop = offer_proposition.find_by_id(pk)
-    if offer_prop is None:
-        return redirect('dissertations')
-    if request.method == "POST":
-        form = ManagerOfferPropositionForm(request.POST, instance=offer_prop)
-        if form.is_valid():
-            form.save()
-            return redirect('manager_offer_parameters')
-    else:
-        form = ManagerOfferPropositionForm(instance=offer_prop)
-    return layout.render(request, "manager_offer_parameters_edit.html",
-                         {'offer_proposition': offer_prop,
-                          'form': form})
