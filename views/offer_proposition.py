@@ -24,12 +24,11 @@
 #
 ##############################################################################
 
-from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.shortcuts import get_object_or_404, redirect
 from base.views import layout
 from dissertation.forms import ManagerOfferPropositionForm
 from dissertation.models import adviser, faculty_adviser, offer_proposition
-from dissertation.views.utils.form_is_valid import save_and_redirect
 
 
 @login_required
@@ -45,8 +44,12 @@ def settings_by_education_group(request):
 @user_passes_test(adviser.is_manager)
 def settings_by_education_group_edit(request, pk):
     offer_prop = get_object_or_404(offer_proposition.OfferProposition, pk=pk)
-    form = ManagerOfferPropositionForm(request.POST or None, instance=offer_prop)
-    save_and_redirect(form, 'settings_by_education_group')
-
+    if request.method == 'POST':
+        form = ManagerOfferPropositionForm(request.POST, instance=offer_prop)
+        if form.is_valid():
+            form.save()
+            return redirect('settings_by_education_group')
+    else:
+        form = ManagerOfferPropositionForm(instance=offer_prop)
     return layout.render(request, "settings_by_education_group_edit.html",
                          {'offer_proposition': offer_prop, 'form': form})

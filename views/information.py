@@ -25,7 +25,7 @@
 ##############################################################################
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
-from dissertation.models.adviser import Adviser, search_adviser
+from dissertation.models.adviser import search_adviser
 from dissertation.models import adviser
 from dissertation.models import dissertation_role
 from dissertation.models import faculty_adviser
@@ -40,7 +40,6 @@ from base.models.enums import person_source_type
 ###########################
 #      TEACHER VIEWS      #
 ###########################
-from dissertation.views.utils.form_is_valid import save_and_redirect
 
 
 @login_required
@@ -91,7 +90,10 @@ def informations_edit(request):
     adv = adviser.search_by_person(person)
     if request.method == "POST":
         form = AdviserForm(request.POST, instance=adv)
-        save_and_redirect(form, 'informations')
+        if form.is_valid():
+            adv = form.save(commit=False)
+            adv.save()
+            return redirect('informations')
     else:
         form = AdviserForm(instance=adv)
     return layout.render(request, "informations_edit.html", {'form': form,
