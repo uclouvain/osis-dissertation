@@ -28,9 +28,10 @@ import json
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.education_group_year import EducationGroupYearFactory
+from base.tests.factories.offer import OfferFactory
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
-from base.tests.factories.offer import OfferFactory
 from base.tests.factories.student import StudentFactory
 from dissertation.tests.factories.adviser import AdviserManagerFactory, AdviserTeacherFactory
 from dissertation.tests.factories.dissertation import DissertationFactory
@@ -101,6 +102,7 @@ class DissertationViewTestCase(TestCase):
         FacultyAdviserFactory(adviser=self.manager, offer=self.offer2)
         roles = ['PROMOTEUR', 'CO_PROMOTEUR', 'READER', 'PROMOTEUR', 'ACCOMPANIST', 'PRESIDENT']
         status = ['DRAFT', 'COM_SUBMIT', 'EVA_SUBMIT', 'TO_RECEIVE', 'DIR_SUBMIT', 'DIR_SUBMIT']
+        self.education_group_year_start = EducationGroupYearFactory()
         self.dissertations_list = list()
         for x in range(0, 6):
             proposition_dissertation = PropositionDissertationFactory(author=self.teacher,
@@ -114,6 +116,7 @@ class DissertationViewTestCase(TestCase):
                 author=self.student,
                 title='Dissertation {}'.format(x),
                 offer_year_start=self.offer_year_start1,
+                education_group_year_start=self.education_group_year_start,
                 proposition_dissertation=proposition_dissertation,
                 status=status[x],
                 active=True,
@@ -123,6 +126,7 @@ class DissertationViewTestCase(TestCase):
         self.dissertation_1 = DissertationFactory(author=self.student,
                                                   title='Dissertation 2017',
                                                   offer_year_start=self.offer_year_start1,
+                                                  education_group_year_start=self.education_group_year_start,
                                                   proposition_dissertation=proposition_dissertation,
                                                   status='COM_SUBMIT',
                                                   active=True,
