@@ -91,8 +91,7 @@ def informations_edit(request):
     if request.method == "POST":
         form = AdviserForm(request.POST, instance=adv)
         if form.is_valid():
-            adv = form.save(commit=False)
-            adv.save()
+            form.save()
             return redirect('informations')
     else:
         form = AdviserForm(instance=adv)
