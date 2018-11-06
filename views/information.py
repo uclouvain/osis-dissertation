@@ -23,18 +23,17 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import redirect
-from django.contrib.auth.decorators import login_required
-from dissertation.models.adviser import search_adviser
+from base import models as mdl
+from base.models.enums import person_source_type
+from base.views import layout
+from dissertation.forms import AdviserForm, ManagerAdviserForm, ManagerAddAdviserForm, ManagerAddAdviserPreForm, \
+    ManagerAddAdviserPerson, AddAdviserForm
 from dissertation.models import adviser
 from dissertation.models import dissertation_role
 from dissertation.models import faculty_adviser
-from base import models as mdl
-from dissertation.forms import AdviserForm, ManagerAdviserForm, ManagerAddAdviserForm, ManagerAddAdviserPreForm, \
-    ManagerAddAdviserPerson, AddAdviserForm
-from django.contrib.auth.decorators import user_passes_test
-from base.views import layout
-from base.models.enums import person_source_type
+from dissertation.views.utils.form_is_valid import save_and_redirect
 
 
 ###########################
@@ -90,9 +89,7 @@ def informations_edit(request):
     adv = adviser.search_by_person(person)
     if request.method == "POST":
         form = AdviserForm(request.POST, instance=adv)
-        if form.is_valid():
-            form.save()
-            return redirect('informations')
+        save_and_redirect(form, 'informations')
     else:
         form = AdviserForm(instance=adv)
     return layout.render(request, "informations_edit.html", {'form': form,
@@ -296,7 +293,7 @@ def manager_informations_edit(request, pk):
 @login_required
 @user_passes_test(adviser.is_manager)
 def manager_informations_search(request):
-    advisers = search_adviser(terms=request.GET['search'])
+    advisers = adviser.search_adviser(terms=request.GET['search'])
     return layout.render(request, "manager_informations_list.html", {'advisers': advisers})
 
 
