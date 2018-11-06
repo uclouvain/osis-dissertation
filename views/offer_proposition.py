@@ -48,7 +48,7 @@ def settings_by_education_group_edit(request, pk):
         form = ManagerOfferPropositionForm(request.POST, instance=offer_prop)
         if form.is_valid():
             form.save()
-            redirect('settings_by_education_group')
+            return redirect('settings_by_education_group')
     else:
         form = ManagerOfferPropositionForm(instance=offer_prop)
     return layout.render(request, "settings_by_education_group_edit.html",

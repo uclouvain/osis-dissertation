@@ -90,7 +90,7 @@ def informations_edit(request):
         form = AdviserForm(request.POST, instance=adv)
         if form.is_valid():
             form.save()
-            redirect('informations')
+            return redirect('informations')
     else:
         form = AdviserForm(instance=adv)
     return layout.render(request, "informations_edit.html", {'form': form,
