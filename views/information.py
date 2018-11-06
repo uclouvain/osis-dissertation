@@ -33,7 +33,6 @@ from dissertation.forms import AdviserForm, ManagerAdviserForm, ManagerAddAdvise
 from dissertation.models import adviser
 from dissertation.models import dissertation_role
 from dissertation.models import faculty_adviser
-from dissertation.views.utils.form_is_valid import save_and_redirect
 
 
 ###########################
@@ -89,7 +88,9 @@ def informations_edit(request):
     adv = adviser.search_by_person(person)
     if request.method == "POST":
         form = AdviserForm(request.POST, instance=adv)
-        save_and_redirect(form, 'informations')
+        if form.is_valid():
+            form.save()
+            redirect('informations')
     else:
         form = AdviserForm(instance=adv)
     return layout.render(request, "informations_edit.html", {'form': form,
