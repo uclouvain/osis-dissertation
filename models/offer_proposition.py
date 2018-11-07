@@ -34,11 +34,13 @@ from datetime import date
 
 
 class OfferPropositionAdmin(SerializableModelAdmin):
-    list_display = ('acronym',
-                    'offer',
-                    'education_group',
-                    'offer_proposition_group',
-                    'recent_acronym_education_group')
+    list_display = (
+        'acronym',
+        'offer',
+        'education_group',
+        'offer_proposition_group',
+        'recent_acronym_education_group',
+    )
     raw_id_fields = ('offer', 'education_group')
     search_fields = ('uuid',)
 
@@ -104,13 +106,15 @@ class OfferProposition(SerializableModel):
         ordering = ['offer_proposition_group', 'acronym']
 
 
-def get_by_education_group_id(education_group_id):
+def get_or_create_by_education_group_id(education_group_id):
     offer_proposition, created = OfferProposition.objects.get_or_create(education_group_id=education_group_id)
     return offer_proposition
 
 
 def get_by_education_group_ids(education_group_ids):
-    offers_propositions = [get_by_education_group_id(education_group_id) for education_group_id in education_group_ids]
+    offers_propositions = [
+        get_or_create_by_education_group_id(education_group_id) for education_group_id in education_group_ids
+    ]
     return offers_propositions
 
 

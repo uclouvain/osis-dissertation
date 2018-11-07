@@ -62,7 +62,12 @@ def search_by_adviser(a_adviser):
 
 
 def search_education_group_ids_by_user(user):
-    education_group_ids = FacultyAdviser.objects.filter(adviser__person__user=user)\
-                                                .values_list('education_group_id', flat=True)\
-                                                .order_by('education_group_id')
-    return education_group_ids
+    return FacultyAdviser.objects.filter(
+        adviser__person__user=user
+    ).values_list(
+        'education_group_id',
+        flat=True
+    ).order_by(
+        'education_group_id'
+    )
+

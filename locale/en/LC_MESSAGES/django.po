@@ -856,8 +856,8 @@ msgstr "Send an email to reading commission when acceptation of evaluation commi
 msgid "september"
 msgstr "September"
 
-msgid "settings_by_education_group"
-msgstr "Settings by education group"
+msgid "Settings by education group"
+msgstr ""
 
 msgid "specific_subject"
 msgstr "Specific subject"

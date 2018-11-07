@@ -81,9 +81,12 @@ class OfferPropositionTestCase(TestCase):
             'global_email_to_commission': False,
         }
         response = self.client.post(
-            reverse("settings_by_education_group_edit", kwargs={'pk': self.offer_proposition.pk}),
+            reverse(
+                "settings_by_education_group_edit",
+                kwargs={'pk': self.offer_proposition.pk}
+            ),
             form_data,
-            follow=True
+            follow=True,
         )
         self.assertEqual(response.status_code, HttpResponse.status_code)
 

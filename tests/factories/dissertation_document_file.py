@@ -26,7 +26,7 @@
 import factory
 
 from dissertation.tests.factories.dissertation import DissertationFactory
-from dissertation.tests.factories.document_file import DocumentFileFactory
+from osis_common.tests.factories.document_file import DocumentFileFactory
 
 
 class DissertationDocumentFileFactory(factory.DjangoModelFactory):

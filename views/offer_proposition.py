@@ -51,5 +51,11 @@ def settings_by_education_group_edit(request, pk):
             return redirect('settings_by_education_group')
     else:
         form = ManagerOfferPropositionForm(instance=offer_prop)
-    return layout.render(request, "settings_by_education_group_edit.html",
-                         {'offer_proposition': offer_prop, 'form': form})
+    return layout.render(
+        request,
+        "settings_by_education_group_edit.html",
+        {
+            'offer_proposition': offer_prop,
+            'form': form,
+        }
+    )

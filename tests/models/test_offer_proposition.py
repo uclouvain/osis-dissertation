@@ -27,7 +27,7 @@ from django.db.models import Q
 
 from base.tests.factories.education_group import EducationGroupFactory
 from dissertation.models.offer_proposition import OfferProposition
-from dissertation.models.offer_proposition import get_by_offer, get_by_dissertation, get_by_education_group_id, \
+from dissertation.models.offer_proposition import get_by_offer, get_by_dissertation, get_or_create_by_education_group_id, \
     get_by_education_group_ids, get_by_offer_proposition_group, find_by_id
 from dissertation.models.offer_proposition_group import OfferPropositionGroup
 from dissertation.tests.factories.offer_proposition import OfferPropositionFactory
@@ -70,11 +70,16 @@ class OfferPropositionTestCase(TestCase):
         OfferPropositionGroupFactory.create(name_short="PSP", name_long="Faculté de Psychologie")
         offer_proposition_g = OfferPropositionGroup.objects.get(name_short='PSP')
         offer_psp2msg = OfferFactory.create(title='PSP2MSG')
-        OfferProposition.objects.create(acronym="PSP2MSG", offer=offer_psp2msg,
-                                        offer_proposition_group=offer_proposition_g)
+        OfferProposition.objects.create(
+            acronym="PSP2MSG",
+            offer=offer_psp2msg,
+            offer_proposition_group=offer_proposition_g
+        )
         offer_proposition_psp = OfferProposition.objects.get(acronym='PSP2MSG')
-        self.assertEqual(offer_proposition_psp.offer_proposition_group,
-                         OfferPropositionGroup.objects.get(name_short='PSP'))
+        self.assertEqual(
+            offer_proposition_psp.offer_proposition_group,
+            OfferPropositionGroup.objects.get(name_short='PSP')
+        )
 
     def test_periode_visibility_proposition(self):
         visibility = self.offer_proposition_with_good_dates.in_periode_visibility_proposition
@@ -95,7 +100,7 @@ class OfferPropositionTestCase(TestCase):
     def test_get_by_education_group_id(self):
         with self.assertRaises(OfferProposition.DoesNotExist):
             OfferProposition.objects.get(education_group_id=self.education_group.id)
-        offer_prop = get_by_education_group_id(self.education_group.id)
+        offer_prop = get_or_create_by_education_group_id(self.education_group.id)
         self.assertIsNotNone(offer_prop)
         self.assertEqual(offer_prop.education_group_id, self.education_group.id)
 

@@ -58,5 +58,7 @@ class FacultyManagerTest(TestCase):
         FacultyAdviserFactory(adviser=self.adviser_manager, education_group=self.eduction_group)
         FacultyAdviserFactory(adviser=self.adviser_manager, education_group=education_group2)
 
-        self.assertSequenceEqual(sorted([self.eduction_group.id, education_group2.id]),
-                                 list(search_education_group_ids_by_user(self.adviser_manager.person.user)))
+        self.assertListEqual(
+            sorted([self.eduction_group.id, education_group2.id]),
+            list(search_education_group_ids_by_user(self.adviser_manager.person.user))
+        )
