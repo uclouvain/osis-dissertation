@@ -70,4 +70,3 @@ def search_education_group_ids_by_user(user):
     ).order_by(
         'education_group_id'
     )
-
