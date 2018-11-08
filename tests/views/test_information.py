@@ -29,7 +29,7 @@ from django.core.urlresolvers import reverse
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
 from base.tests.factories.student import StudentFactory
-from dissertation.forms import AdviserForm, ManagerAddAdviserPreForm
+from dissertation.forms import AdviserForm, ManagerAddAdviserPreForm, ManagerAddAdviserPerson
 from dissertation.models import dissertation_role
 from dissertation.tests.factories.adviser import AdviserManagerFactory, AdviserTeacherFactory
 from dissertation.tests.factories.dissertation import DissertationFactory
@@ -148,6 +148,15 @@ class InformationViewTestCase(TestCase):
         response = self.client.get(reverse("manager_informations"))
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
+    def test_manager_informations_add_person(self):
+        self.client.force_login(self.manager.person.user)
+        form = ManagerAddAdviserPerson()
+        response = self.client.post(reverse("manager_informations_add_person"),
+                                    {
+                                        'form': form,
+                                    })
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+
     def test_manager_informations_detail(self):
         self.client.force_login(self.manager.person.user)
         response = self.client.get(reverse("manager_informations_detail", args=[self.teacher.pk]))
@@ -173,6 +182,11 @@ class InformationViewTestCase(TestCase):
                                     })
         self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
 
+    def test_manager_informations_list_request(self):
+        self.client.force_login(self.manager.person.user)
+        response = self.client.post(reverse("manager_informations_list_request"))
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+
     def test_manager_informations_edit_with_get_method(self):
         self.client.force_login(self.manager.person.user)
         response = self.client.get(reverse("manager_informations_edit", args=[self.teacher.pk]))
@@ -195,4 +209,58 @@ class InformationViewTestCase(TestCase):
         response = self.client.get(reverse("manager_informations_detail_list_wait", args=[self.teacher.pk]))
         self.assertEqual(response.status_code, HttpResponse.status_code)
         response = self.client.get(reverse("manager_informations_detail_list_wait", args=[self.teacher.person.user.pk]))
+        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
+
+    def test_manager_informations_detail_stats(self):
+        self.client.force_login(self.manager.person.user)
+        advisers_pro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, 'PROMOTEUR')
+        advisers_copro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, 'CO_PROMOTEUR')
+        advisers_reader = dissertation_role.search_by_adviser_and_role_stats(self.teacher, 'READER')
+        response = self.client.post(reverse('manager_informations_detail_stats', args=[self.teacher.pk]),
+                                    {
+                                        'adviser': self.teacher,
+                                        'count_advisers_copro': dissertation_role.count_by_adviser_and_role_stats(
+                                            self.teacher, 'CO_PROMOTEUR'),
+                                        'count_advisers_pro': dissertation_role.count_by_adviser_and_role_stats(
+                                            self.teacher, 'PROMOTEUR'),
+                                        'count_advisers_reader': dissertation_role.count_by_adviser_and_role_stats(
+                                            self.teacher, 'READER'),
+                                        'count_advisers_pro_request': dissertation_role.count_by_adviser(self.teacher,
+                                                                                                         'PROMOTEUR',
+                                                                                                         'DIR_SUBMIT'),
+                                        'tab_offer_count_pro': dissertation_role.get_tab_count_role_by_offer(
+                                            advisers_pro),
+                                        'tab_offer_count_read': dissertation_role.get_tab_count_role_by_offer(
+                                            advisers_reader),
+                                        'tab_offer_count_copro': dissertation_role.get_tab_count_role_by_offer(
+                                            advisers_copro)
+                                    }
+                                    )
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+
+    def test_manager_informations_detail_stats_without_teacher(self):
+        self.client.force_login(self.manager.person.user)
+        advisers_pro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, 'PROMOTEUR')
+        advisers_copro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, 'CO_PROMOTEUR')
+        advisers_reader = dissertation_role.search_by_adviser_and_role_stats(self.teacher, 'READER')
+        response = self.client.post(reverse('manager_informations_detail_stats', args=[self.manager.person.user.pk]),
+                                    {
+                                        'adviser': self.teacher,
+                                        'count_advisers_copro': dissertation_role.count_by_adviser_and_role_stats(
+                                            self.teacher, 'CO_PROMOTEUR'),
+                                        'count_advisers_pro': dissertation_role.count_by_adviser_and_role_stats(
+                                            self.teacher, 'PROMOTEUR'),
+                                        'count_advisers_reader': dissertation_role.count_by_adviser_and_role_stats(
+                                            self.teacher, 'READER'),
+                                        'count_advisers_pro_request': dissertation_role.count_by_adviser(self.teacher,
+                                                                                                         'PROMOTEUR',
+                                                                                                         'DIR_SUBMIT'),
+                                        'tab_offer_count_pro': dissertation_role.get_tab_count_role_by_offer(
+                                            advisers_pro),
+                                        'tab_offer_count_read': dissertation_role.get_tab_count_role_by_offer(
+                                            advisers_reader),
+                                        'tab_offer_count_copro': dissertation_role.get_tab_count_role_by_offer(
+                                            advisers_copro)
+                                    }
+                                    )
         self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
