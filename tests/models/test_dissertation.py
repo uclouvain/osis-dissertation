@@ -41,7 +41,6 @@ from dissertation.models.enums import dissertation_status
 
 NOW = datetime.datetime.now()
 
-
 class DissertationModelTestCase(TestCase):
     fixtures = ['dissertation/fixtures/message_template.json', ]
 
