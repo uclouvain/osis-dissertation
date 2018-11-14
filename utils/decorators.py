@@ -38,8 +38,7 @@ from dissertation.models.enums import status_types
 def user_is_dissertation_promotor(user, dissert):
     pers = person.find_by_user(user)
     this_adviser = search_by_person(pers)
-    count_dissert_role = \
-            dissertation_role._find_by_dissertation(dissert). \
+    count_dissert_role = dissertation_role._find_by_dissertation(dissert). \
             filter(status=status_types.PROMOTEUR). \
             filter(adviser=this_adviser).count()
     if count_dissert_role > 0:
@@ -56,8 +55,8 @@ def adviser_can_manage(dissert, advis):
         return False
 
 
-def dissert_is_none_redirect(dissert,template_redirect):
-    if dissert is None:
+def object_is_none_redirect(one_object, template_redirect):
+    if one_object is None:
         return redirect(template_redirect)
 
 
@@ -68,7 +67,7 @@ def autorized_dissert_promotor_or_manager(user, pk, template_redirect='dissertat
     if template_redirect is None:
         template_redirect = 'dissertations'
     if dissert is None:
-        return dissert_is_none_redirect(dissert, template_redirect)
+        return object_is_none_redirect(dissert, template_redirect)
     elif user_is_dissertation_promotor(user, dissert) or adviser_can_manage(dissert, advis):
         return True
     else:
@@ -82,10 +81,13 @@ def user_passes_test_for_dissert(test_func, template_redirect=None):
             if test_func(request.user, kwargs['pk'], template_redirect):
                 return view_func(request, *args, **kwargs)
             else:
-                if template_redirect is None:
-                    raise PermissionDenied()
-                else:
-                    return redirect(template_redirect)
+                return if_template_none(template_redirect)
         return _wrapped_view
-
     return decorator
+
+
+def if_template_none(template):
+    if template is None:
+        raise PermissionDenied()
+    else:
+        return redirect(template)

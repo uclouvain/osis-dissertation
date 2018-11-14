@@ -244,7 +244,6 @@ def manager_dissertations_edit(request, pk):
                           'defend_periode_choices': dissertation.DEFEND_PERIODE_CHOICES})
 
 
-
 @login_required
 @user_passes_test(adviser.is_manager)
 @user_passes_test_for_dissert(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
@@ -260,7 +259,6 @@ def manager_dissertations_jury_edit(request, pk):
     else:
         form = ManagerDissertationRoleForm(instance=dissert_role)
     return layout.render(request, 'manager_dissertations_jury_edit.html', {'form': form})
-
 
 
 @login_required
@@ -305,7 +303,8 @@ def manager_dissertations_jury_new_ajax(request):
         count_dissertation_role = dissertation_role.count_by_dissertation(dissert)
         person = mdl.person.find_by_user(request.user)
         adv_manager = adviser.search_by_person(person)
-        if decorators.adviser_can_manage(dissert, adv_manager) and count_dissertation_role < 4 and dissert.status != 'DRAFT' \
+        if decorators.adviser_can_manage(dissert, adv_manager) \
+                and count_dissertation_role < 4 and dissert.status != 'DRAFT' \
                 and adviser_of_dissert_role is not None and dissert is not None:
             justification = "%s %s %s" % ("manager_add_jury", status_choice, adviser_of_dissert_role)
             dissertation_update.add(request, dissert, dissert.status, justification=justification)
@@ -839,10 +838,15 @@ def dissertations_detail_updates(request, pk):
     person = mdl.person.find_by_user(request.user)
     adv = adviser.search_by_person(person)
     dissertation_updates = dissertation_update.search_by_dissertation(dissert)
-    return layout.render(request, 'dissertations_detail_updates.html',
-                         {'dissertation': dissert,
-                          'adviser': adv,
-                          'dissertation_updates': dissertation_updates})
+    return layout.render(
+        request,
+        'dissertations_detail_updates.html',
+        {
+            'dissertation': dissert,
+            'adviser': adv,
+            'dissertation_updates': dissertation_updates
+        }
+    )
 
 
 @login_required
@@ -872,10 +876,15 @@ def dissertations_to_dir_ok(request, pk):
             return redirect('dissertations_detail', pk=pk)
     else:
         form = ManagerDissertationUpdateForm()
-    return layout.render(request, 'dissertations_add_justification.html',
-                         {'form': form,
-                          'dissert': dissert,
-                          'new_status_display': new_status_display})
+    return layout.render(
+        request,
+        'dissertations_add_justification.html',
+        {
+            'form': form,
+            'dissert': dissert,
+            'new_status_display': new_status_display
+        }
+    )
 
 
 @login_required
@@ -895,9 +904,15 @@ def dissertations_to_dir_ko(request, pk):
             return redirect('dissertations_detail', pk=pk)
     else:
         form = ManagerDissertationUpdateForm()
-
-    return layout.render(request, 'dissertations_add_justification.html',
-                         {'form': form, 'dissert': dissert, 'new_status_display': new_status_display})
+    return layout.render(
+        request,
+        'dissertations_add_justification.html',
+        {
+            'form': form,
+            'dissert': dissert,
+            'new_status_display': new_status_display
+        }
+    )
 
 
 @login_required
@@ -957,6 +972,13 @@ def dissertations_jury_new(request, pk):
                     form = ManagerDissertationRoleForm(initial={'dissertation': dissert})
             else:
                 form = ManagerDissertationRoleForm(initial={'dissertation': dissert})
-            return layout.render(request, 'dissertations_jury_edit.html', {'form': form, 'dissert': dissert})
+            return layout.render(
+                request,
+                'dissertations_jury_edit.html',
+                {
+                    'form': form,
+                    'dissert': dissert,
+                }
+            )
 
     return redirect('dissertations_detail', pk=dissert.pk)

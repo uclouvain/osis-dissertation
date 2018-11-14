@@ -268,7 +268,6 @@ class DissertationViewTestCase(TestCase):
         self.dissertation_test_email.manager_accept()
         self.assertEqual(self.dissertation_test_email.status, 'DRAFT')
 
-
     def test_email_new_dissert(self):
         self.client.force_login(self.manager.person.user)
         count_messages_before_status_change = message_history.find_my_messages(self.teacher.person.id).count()
@@ -466,14 +465,17 @@ class DissertationViewTestCase(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, HTTP_OK)
 
-    def test__new_status_display(self):
+    def test_new_status_display(self):
         self.offer2 = OfferFactory()
-        self.offer_prop2 = OfferPropositionFactory(offer=self.offer2,
-                                                   validation_commission_exists=False,
-                                                   evaluation_first_year=False)
-        self.offer_year_start2 = OfferYearFactory(offer=self.offer2,
-                                                  academic_year=self.academic_year1)
-        self.dissertation_x = DissertationFactory(status=dissertation_status.DIR_SUBMIT,
-                                                  offer_year_start=self.offer_year_start2)
+        self.offer_prop2 = OfferPropositionFactory(
+            offer=self.offer2,
+            validation_commission_exists=False,
+            evaluation_first_year=False
+        )
+        self.offer_year_start2 = OfferYearFactory(offer=self.offer2, academic_year=self.academic_year1)
+        self.dissertation_x = DissertationFactory(
+            status=dissertation_status.DIR_SUBMIT,
+            offer_year_start=self.offer_year_start2
+        )
         self.dissertation_x.status = dissertation_status.DIR_SUBMIT
-        self.assertEqual(_new_status_display(self.dissertation_x,"accept"), _('to_be_received'))
+        self.assertEqual(_new_status_display(self.dissertation_x, "accept"), _('to_be_received'))

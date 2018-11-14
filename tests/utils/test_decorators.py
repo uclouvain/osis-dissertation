@@ -36,7 +36,7 @@ from dissertation.tests.factories.dissertation import DissertationFactory
 from dissertation.tests.factories.faculty_adviser import FacultyAdviserFactory
 from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
 from dissertation.utils import decorators
-from dissertation.utils.decorators import autorized_dissert_promotor_or_manager, user_passes_test_for_dissert
+from dissertation.utils.decorators import autorized_dissert_promotor_or_manager
 
 
 class DecoratorsTestCase(TestCase):
@@ -88,7 +88,7 @@ class DecoratorsTestCase(TestCase):
 
     def test_user_passes_test_for_dissert(self):
         self.client.force_login(self.person_manager2.user)
-        response = self.client.get('/dissertation/manager_dissertations_detail/'+str(self.dissertation1.id))
+        response = self.client.get('/dissertation/manager_dissertations_detail/' + str(self.dissertation1.id))
         self.assertRedirects(response, reverse('manager_dissertations_list'))
         self.client.force_login(self.person_manager.user)
         response = self.client.get('/dissertation/manager_dissertations_detail/' + '999999')
@@ -97,4 +97,11 @@ class DecoratorsTestCase(TestCase):
     def test_user_passes_test_for_dissert2(self):
         self.client.force_login(self.person_manager.user)
         response = self.client.get('/dissertation/manager_dissertations_detail/' + str(self.dissertation1.id))
-        self.assertEqual(response.status_code,302)
+        self.assertEqual(response.status_code, 302)
+
+    def test_object_is_none_redirect(self):
+        self.client.force_login(self.person_manager.user)
+        dissert = None
+        self.assertEqual(decorators.object_is_none_redirect(dissert, '/dissertation/').status_code, 302)
+        dissert = self.dissertation1
+        self.assertEqual(decorators.object_is_none_redirect(dissert, '/dissertation/'), None)
