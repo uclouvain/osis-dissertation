@@ -29,7 +29,8 @@ from django.core.urlresolvers import reverse
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
 from base.tests.factories.student import StudentFactory
-from dissertation.forms import AdviserForm, ManagerAddAdviserPreForm, ManagerAddAdviserPerson
+from dissertation.forms import AdviserForm, ManagerAddAdviserPreForm, ManagerAddAdviserPerson, ManagerAddAdviserForm, \
+    AddAdviserForm
 from dissertation.models import dissertation_role
 from dissertation.tests.factories.adviser import AdviserManagerFactory, AdviserTeacherFactory
 from dissertation.tests.factories.dissertation import DissertationFactory
@@ -44,7 +45,10 @@ class InformationViewTestCase(TestCase):
     def setUp(self):
         self.manager = AdviserManagerFactory()
         a_person_teacher = PersonFactory(first_name='Pierre', last_name='Dupont')
+        a_person_manager2 = PersonFactory(email= 'simon.glautier@uclouvain.be')
         self.teacher = AdviserTeacherFactory(person=a_person_teacher)
+        self.person = PersonFactory()
+        self.manager2 = AdviserManagerFactory(person=a_person_manager2)
         a_person_student = PersonWithoutUserFactory(last_name="Durant")
         student = StudentFactory(person=a_person_student)
 
@@ -106,7 +110,7 @@ class InformationViewTestCase(TestCase):
 
     def test_informations_edit(self):
         self.client.force_login(self.teacher.person.user)
-        form = AdviserForm(instance=self.teacher.person.user)
+        form = AdviserForm()
         response = self.client.post('/dissertation/informations_edit/',
                                     {
                                         'form': form,
@@ -132,15 +136,67 @@ class InformationViewTestCase(TestCase):
 
     def test_informations_add(self):
         self.client.force_login(self.teacher.person.user)
-        form = ManagerAddAdviserPreForm()
-        message = "empty_data"
-        response = self.client.post('/dissertation/informations_add/',
+        response = self.client.post(reverse("informations_add"),
                                     {
-                                        'search_form': self.teacher.person.user.email,
+                                        'search_form': self.person.email,
+                                        'email': self.person.email
+                                    })
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+
+    def test_informations_add_without_email(self):
+        self.client.force_login(self.teacher.person.user)
+        response = self.client.post(reverse("informations_add"),
+                                    {
+                                        'search_form': self.person.email
+                                    })
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+
+    def test_informations_add_with_already_adviser(self):
+        self.client.force_login(self.teacher.person.user)
+        response = self.client.post(reverse("informations_add"),
+                                    {
+                                        'search_form': self.manager2.person.email,
+                                        'email': self.manager2.person.email
+                                    })
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+
+    def test_informations_add_with_invalid_person(self):
+        self.client.force_login(self.teacher.person.user)
+        response = self.client.post(reverse("informations_add"),
+                                    {
+                                        'search_form': "bobo.hibou@uclouvain.be",
+                                        'email': "bobo.hibou@uclouvain.be"
+                                    })
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+
+    def test_informations_add_with_invalid_email(self):
+        self.client.force_login(self.teacher.person.user)
+        response = self.client.post(reverse("informations_add"),
+                                    {
+                                        'search_form': "fake_email",
+                                        'email': "fake_email"
+                                    })
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+
+    def test_informations_add_without_search_form(self):
+        self.client.force_login(self.teacher.person.user)
+        form = AddAdviserForm()
+        response = self.client.post(reverse("informations_add"),
+                                    {
+                                        'email': self.person.email,
                                         'form': form,
-                                        'message': message
-                                    }
-                                    )
+                                        'person': self.person.id
+                                    })
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+        response = self.client.post(reverse("informations_add"),
+                                    {
+                                        'email': self.person.email,
+                                    })
+        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
+
+    def test_informations_add_with_get_method(self):
+        self.client.force_login(self.teacher.person.user)
+        response = self.client.get(reverse("informations_add"))
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_manager_informations(self):
@@ -148,13 +204,110 @@ class InformationViewTestCase(TestCase):
         response = self.client.get(reverse("manager_informations"))
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
+    def test_manager_informations_add(self):
+        self.client.force_login(self.manager.person.user)
+        response = self.client.post(reverse("manager_informations_add"),
+                                    {
+                                        'search_form': self.person.email,
+                                        'email': self.person.email
+                                    })
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+
+    def test_manager_informations_add_without_email(self):
+        self.client.force_login(self.manager.person.user)
+        response = self.client.post(reverse("manager_informations_add"),
+                                    {
+                                        'search_form': self.person.email
+                                    })
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+
+    def test_manager_informations_add_with_already_adviser(self):
+        self.client.force_login(self.manager.person.user)
+        response = self.client.post(reverse("manager_informations_add"),
+                                    {
+                                        'search_form': self.manager2.person.email,
+                                        'email': self.manager2.person.email
+                                    })
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+
+    def test_manager_informations_add_with_invalid_person(self):
+        self.client.force_login(self.manager.person.user)
+        response = self.client.post(reverse("manager_informations_add"),
+                                    {
+                                        'search_form': "bobo.hibou@uclouvain.be",
+                                        'email': "bobo.hibou@uclouvain.be"
+                                    })
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+
+    def test_manager_informations_add_with_invalid_email(self):
+        self.client.force_login(self.manager.person.user)
+        response = self.client.post(reverse("manager_informations_add"),
+                                    {
+                                        'search_form': "fake_email",
+                                        'email': "fake_email"
+                                    })
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+
+    def test_manager_informations_add_without_search_form(self):
+        self.client.force_login(self.manager.person.user)
+        form = ManagerAddAdviserForm()
+        response = self.client.post(reverse("manager_informations_add"),
+                                    {
+                                        'email': self.person.email,
+                                        'form': form,
+                                        'person': self.person.id
+                                    })
+        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
+        response = self.client.post(reverse("manager_informations_add"),
+                                    {
+                                        'email': self.person.email,
+                                    })
+        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
+
+    def test_manager_informations_add_with_get_method(self):
+        self.client.force_login(self.manager.person.user)
+        response = self.client.get(reverse("manager_informations_add"))
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+
     def test_manager_informations_add_person(self):
         self.client.force_login(self.manager.person.user)
-        form = ManagerAddAdviserPerson()
-        response = self.client.post(reverse("manager_informations_add_person"),
-                                    {
-                                        'form': form,
-                                    })
+        form = {
+                   'email': self.person.email,
+                   'last_name': self.person.last_name,
+                   'first_name': self.person.first_name,
+                   'phone': self.person.phone,
+                   'phone_mobile': self.person.phone
+               }
+        response = self.client.post(reverse("manager_informations_add_person"), form)
+        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
+
+    def test_manager_informations_add_person_with_invalid_data(self):
+        self.client.force_login(self.manager.person.user)
+        form = {
+                   'email': self.person.email,
+                   'last_name': self.person.last_name,
+               }
+        response = self.client.post(reverse("manager_informations_add_person"), form)
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+
+    def test_manager_informations_add_person_with_get_method(self):
+        self.client.force_login(self.manager.person.user)
+        form = {
+                   'email': self.person.email,
+                   'last_name': self.person.last_name,
+                   'first_name': self.person.first_name,
+                   'phone': self.person.phone,
+                   'phone_mobile': self.person.phone
+               }
+        response = self.client.get(reverse("manager_informations_add_person"), form)
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+
+    def test_manager_informations_add_person_with_invalid_form(self):
+        self.client.force_login(self.manager.person.user)
+        data = { 'email': "fake_email" }
+        form = ManagerAddAdviserPerson(data)
+        self.assertFalse(form.is_valid())
+        response = self.client.post(reverse("manager_informations_add_person"), data)
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_manager_informations_detail(self):
@@ -169,16 +322,9 @@ class InformationViewTestCase(TestCase):
         response = self.client.get(reverse("manager_informations_edit", args=[self.teacher.person.user.pk]))
         self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
         form = AdviserForm(instance=self.teacher.person.user)
-        adv = self.teacher
         response = self.client.post(reverse("manager_informations_edit", args=[self.teacher.pk]),
                                     {
-                                        'adviser': adv,
                                         'form': form,
-                                        'first_name': adv.person.first_name.title(),
-                                        'last_name': adv.person.last_name.title(),
-                                        'email': adv.person.email,
-                                        'phone': adv.person.phone,
-                                        'phone_mobile': adv.person.phone_mobile
                                     })
         self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
 
