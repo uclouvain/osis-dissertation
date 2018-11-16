@@ -293,14 +293,6 @@ def manager_informations_edit(request, pk):
                           'phone': adv.person.phone,
                           'phone_mobile': adv.person.phone_mobile})
 
-
-@login_required
-@user_passes_test(adviser.is_manager)
-def manager_informations_search(request):
-    advisers = search_adviser(terms=request.GET['search'])
-    return layout.render(request, "manager_informations_list.html", {'advisers': advisers})
-
-
 @login_required
 @user_passes_test(adviser.is_manager)
 def manager_informations_list_request(request):
