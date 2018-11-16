@@ -198,11 +198,9 @@ def manager_dissertations_detail(request, pk):
 
 @login_required
 @user_passes_test(adviser.is_manager)
-@user_passes_test_for_dissert(autorized_dissert_promotor_or_manager)
+@user_passes_test_for_dissert(autorized_dissert_promotor_or_manager,'manager_dissertations_list')
 def manager_dissertations_detail_updates(request, pk):
     dissert = dissertation.find_by_id(pk)
-    if dissert is None:
-        return redirect('manager_dissertations_list')
     person = mdl.person.find_by_user(request.user)
     adv = adviser.search_by_person(person)
     dissertation_updates = dissertation_update.search_by_dissertation(dissert)
@@ -582,7 +580,7 @@ def manager_dissertations_to_dir_ok(request, pk):
 
 @login_required
 @user_passes_test(adviser.is_manager)
-@user_passes_test_for_dissert
+@user_passes_test_for_dissert(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
 def manager_dissertations_accept_comm_list(request, pk):
     dissert = dissertation.find_by_id(pk)
     if dissert is None:
@@ -595,7 +593,7 @@ def manager_dissertations_accept_comm_list(request, pk):
 
 @login_required
 @user_passes_test(adviser.is_manager)
-@user_passes_test_for_dissert
+@user_passes_test_for_dissert(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
 def manager_dissertations_accept_eval_list(request, pk):
     dissert = dissertation.find_by_id(pk)
     if dissert is None:
@@ -627,12 +625,6 @@ def manager_dissertations_to_dir_ko(request, pk):
     return layout.render(request, 'manager_dissertations_add_justification.html',
                          {'form': form, 'dissert': dissert, 'new_status_display': new_status_display})
 
-
-@login_required
-@user_passes_test_for_dissert(autorized_dissert_promotor_or_manager)
-def manager_or_teacher_dissertations_to_dir(request, pk):
-    print('hello_you_are_authoriser')
-    return redirect('manager_dissertations_list')
 
 @login_required
 @user_passes_test(adviser.is_manager)
