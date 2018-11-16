@@ -54,21 +54,23 @@ class DecoratorsTestCase(TestCase):
         self.offer1 = OfferFactory(title="test_offer1")
         self.offer2 = OfferFactory(title="test_offer2")
         self.academic_year1 = AcademicYearFactory()
-        self.offer_year_start1 = OfferYearFactory(acronym="test_offer1",
-                                                  offer=self.offer1,
-                                                  academic_year=self.academic_year1)
-
+        self.offer_year_start1 = OfferYearFactory(
+            acronym="test_offer1",
+            offer=self.offer1,
+            academic_year=self.academic_year1
+        )
         self.faculty_adviser1 = FacultyAdviserFactory(adviser=self.manager, offer=self.offer1)
         self.faculty_adviser2 = FacultyAdviserFactory(adviser=self.manager2, offer=self.offer2)
         self.proposition_dissertation = PropositionDissertationFactory()
-        self.dissertation1 = DissertationFactory(author=self.student,
-                                                 offer_year_start=self.offer_year_start1,
-                                                 proposition_dissertation=self.proposition_dissertation,
-                                                 status='DIR_SUBMIT',
-                                                 active=True,
-                                                 dissertation_role__adviser=self.teacher,
-                                                 dissertation_role__status='PROMOTEUR'
-                                                 )
+        self.dissertation1 = DissertationFactory(
+            author=self.student,
+            offer_year_start=self.offer_year_start1,
+            proposition_dissertation=self.proposition_dissertation,
+            status='DIR_SUBMIT',
+            active=True,
+            dissertation_role__adviser=self.teacher,
+            dissertation_role__status='PROMOTEUR'
+        )
 
     def test_adviser_is_dissertation_promotor(self):
         self.assertTrue(decorators.user_is_dissertation_promotor(self.a_person_teacher.user, self.dissertation1))
