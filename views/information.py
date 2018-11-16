@@ -293,6 +293,7 @@ def manager_informations_edit(request, pk):
                           'phone': adv.person.phone,
                           'phone_mobile': adv.person.phone_mobile})
 
+
 @login_required
 @user_passes_test(adviser.is_manager)
 def manager_informations_list_request(request):
