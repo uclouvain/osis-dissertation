@@ -198,7 +198,7 @@ def manager_dissertations_detail(request, pk):
 
 @login_required
 @user_passes_test(adviser.is_manager)
-@user_passes_test_for_dissert(autorized_dissert_promotor_or_manager,'manager_dissertations_list')
+@user_passes_test_for_dissert(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
 def manager_dissertations_detail_updates(request, pk):
     dissert = dissertation.find_by_id(pk)
     person = mdl.person.find_by_user(request.user)
@@ -562,7 +562,7 @@ def manager_dissertations_to_dir_submit_list(request, pk):
 def manager_dissertations_to_dir_ok(request, pk):
     dissert = dissertation.find_by_id(pk)
     old_status = dissert.status
-    new_status_display = _new_status_display(dissert,"accept")
+    new_status_display = _new_status_display(dissert, "accept")
     if request.method == "POST":
         form = ManagerDissertationUpdateForm(request.POST)
         if form.is_valid():
@@ -610,7 +610,7 @@ def manager_dissertations_accept_eval_list(request, pk):
 def manager_dissertations_to_dir_ko(request, pk):
     dissert = dissertation.find_by_id(pk)
     old_status = dissert.status
-    new_status_display = _new_status_display(dissert,"refuse")
+    new_status_display = _new_status_display(dissert, "refuse")
     if request.method == "POST":
         form = ManagerDissertationUpdateForm(request.POST)
         if form.is_valid():
@@ -857,7 +857,7 @@ def dissertations_delete(request, pk):
 def dissertations_to_dir_ok(request, pk):
     dissert = dissertation.find_by_id(pk)
     old_status = dissert.status
-    new_status_display = _new_status_display(dissert,"accept")
+    new_status_display = _new_status_display(dissert, "accept")
     if request.method == "POST":
         form = ManagerDissertationUpdateForm(request.POST)
         if form.is_valid():
@@ -885,7 +885,7 @@ def dissertations_to_dir_ok(request, pk):
 def dissertations_to_dir_ko(request, pk):
     dissert = dissertation.find_by_id(pk)
     old_status = dissert.status
-    new_status_display = _new_status_display(dissert,"refuse")
+    new_status_display = _new_status_display(dissert, "refuse")
     if request.method == "POST":
         form = ManagerDissertationUpdateForm(request.POST)
         if form.is_valid():

@@ -60,8 +60,11 @@ DEFEND_PERIODE_CHOICES = (
 class Dissertation(SerializableModel):
     title = models.CharField(max_length=500)
     author = models.ForeignKey(student.Student)
-    status = models.CharField(max_length=12, choices=dissertation_status.DISSERTATION_STATUS,
-                              default=dissertation_status.DRAFT)
+    status = models.CharField(
+        max_length=12,
+        choices=dissertation_status.DISSERTATION_STATUS,
+        default=dissertation_status.DRAFT
+    )
     defend_periode = models.CharField(max_length=12, choices=DEFEND_PERIODE_CHOICES, blank=True, null=True)
     defend_year = models.IntegerField(blank=True, null=True)
     offer_year_start = models.ForeignKey(offer_year.OfferYear)
