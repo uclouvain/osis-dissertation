@@ -32,6 +32,7 @@ from base.tests.factories.student import StudentFactory
 from dissertation.forms import AdviserForm, ManagerAddAdviserPreForm, ManagerAddAdviserPerson, ManagerAddAdviserForm, \
     AddAdviserForm
 from dissertation.models import dissertation_role
+from dissertation.models.enums import status_types
 from dissertation.tests.factories.adviser import AdviserManagerFactory, AdviserTeacherFactory
 from dissertation.tests.factories.dissertation import DissertationFactory
 from dissertation.tests.factories.faculty_adviser import FacultyAdviserFactory
@@ -45,10 +46,9 @@ class InformationViewTestCase(TestCase):
     def setUp(self):
         self.manager = AdviserManagerFactory()
         a_person_teacher = PersonFactory(first_name='Pierre', last_name='Dupont')
-        a_person_manager2 = PersonFactory(email= 'simon.glautier@uclouvain.be')
         self.teacher = AdviserTeacherFactory(person=a_person_teacher)
         self.person = PersonFactory()
-        self.manager2 = AdviserManagerFactory(person=a_person_manager2)
+        self.manager2 = AdviserManagerFactory()
         a_person_student = PersonWithoutUserFactory(last_name="Durant")
         student = StudentFactory(person=a_person_student)
 
@@ -80,7 +80,7 @@ class InformationViewTestCase(TestCase):
 
     def test_informations(self):
         self.client.force_login(self.teacher.person.user)
-        response = self.client.post('/dissertation/informations/',
+        response = self.client.post(reverse('informations'),
                                     {
                                         'adviser': self.teacher,
                                         'first_name': self.teacher.person.first_name.title(),
@@ -91,16 +91,16 @@ class InformationViewTestCase(TestCase):
 
     def test_informations_detail_stats(self):
         self.client.force_login(self.teacher.person.user)
-        advisers_pro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, 'PROMOTEUR')
-        advisers_copro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, 'CO_PROMOTEUR')
-        advisers_reader = dissertation_role.search_by_adviser_and_role_stats(self.teacher, 'READER')
-        response = self.client.post('/dissertation/informations_detail_stats/',
+        advisers_pro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, status_types.PROMOTEUR)
+        advisers_copro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, status_types.CO_PROMOTEUR)
+        advisers_reader = dissertation_role.search_by_adviser_and_role_stats(self.teacher, status_types.READER)
+        response = self.client.post(reverse('informations_detail_stats'),
                                     {
                                         'adviser': self.teacher,
-                                        'count_advisers_copro': dissertation_role.count_by_adviser_and_role_stats(self.teacher, 'CO_PROMOTEUR'),
-                                        'count_advisers_pro': dissertation_role.count_by_adviser_and_role_stats(self.teacher, 'PROMOTEUR'),
-                                        'count_advisers_reader': dissertation_role.count_by_adviser_and_role_stats(self.teacher, 'READER'),
-                                        'count_advisers_pro_request': dissertation_role.count_by_adviser(self.teacher, 'PROMOTEUR', 'DIR_SUBMIT'),
+                                        'count_advisers_copro': dissertation_role.count_by_adviser_and_role_stats(self.teacher, status_types.CO_PROMOTEUR),
+                                        'count_advisers_pro': dissertation_role.count_by_adviser_and_role_stats(self.teacher, status_types.PROMOTEUR),
+                                        'count_advisers_reader': dissertation_role.count_by_adviser_and_role_stats(self.teacher, status_types.READER),
+                                        'count_advisers_pro_request': dissertation_role.count_by_adviser(self.teacher, status_types.PROMOTEUR, 'DIR_SUBMIT'),
                                         'tab_offer_count_pro': dissertation_role.get_tab_count_role_by_offer(advisers_pro),
                                         'tab_offer_count_read': dissertation_role.get_tab_count_role_by_offer(advisers_reader),
                                         'tab_offer_count_copro': dissertation_role.get_tab_count_role_by_offer(advisers_copro)
@@ -111,7 +111,7 @@ class InformationViewTestCase(TestCase):
     def test_informations_edit(self):
         self.client.force_login(self.teacher.person.user)
         form = AdviserForm()
-        response = self.client.post('/dissertation/informations_edit/',
+        response = self.client.post(reverse('informations_edit'),
                                     {
                                         'form': form,
                                         'first_name': self.teacher.person.first_name.title(),
@@ -122,7 +122,7 @@ class InformationViewTestCase(TestCase):
                                     }
                                     )
         self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
-        response = self.client.get('/dissertation/informations_edit/',
+        response = self.client.get(reverse('informations_edit'),
                                     {
                                         'form': form,
                                         'first_name': self.teacher.person.first_name.title(),
@@ -359,20 +359,20 @@ class InformationViewTestCase(TestCase):
 
     def test_manager_informations_detail_stats(self):
         self.client.force_login(self.manager.person.user)
-        advisers_pro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, 'PROMOTEUR')
-        advisers_copro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, 'CO_PROMOTEUR')
-        advisers_reader = dissertation_role.search_by_adviser_and_role_stats(self.teacher, 'READER')
+        advisers_pro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, status_types.PROMOTEUR)
+        advisers_copro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, status_types.CO_PROMOTEUR)
+        advisers_reader = dissertation_role.search_by_adviser_and_role_stats(self.teacher, status_types.READER)
         response = self.client.post(reverse('manager_informations_detail_stats', args=[self.teacher.pk]),
                                     {
                                         'adviser': self.teacher,
                                         'count_advisers_copro': dissertation_role.count_by_adviser_and_role_stats(
-                                            self.teacher, 'CO_PROMOTEUR'),
+                                            self.teacher, status_types.CO_PROMOTEUR),
                                         'count_advisers_pro': dissertation_role.count_by_adviser_and_role_stats(
-                                            self.teacher, 'PROMOTEUR'),
+                                            self.teacher, status_types.PROMOTEUR),
                                         'count_advisers_reader': dissertation_role.count_by_adviser_and_role_stats(
-                                            self.teacher, 'READER'),
+                                            self.teacher, status_types.READER),
                                         'count_advisers_pro_request': dissertation_role.count_by_adviser(self.teacher,
-                                                                                                         'PROMOTEUR',
+                                                                                                         status_types.PROMOTEUR,
                                                                                                          'DIR_SUBMIT'),
                                         'tab_offer_count_pro': dissertation_role.get_tab_count_role_by_offer(
                                             advisers_pro),
@@ -386,20 +386,20 @@ class InformationViewTestCase(TestCase):
 
     def test_manager_informations_detail_stats_without_teacher(self):
         self.client.force_login(self.manager.person.user)
-        advisers_pro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, 'PROMOTEUR')
-        advisers_copro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, 'CO_PROMOTEUR')
-        advisers_reader = dissertation_role.search_by_adviser_and_role_stats(self.teacher, 'READER')
+        advisers_pro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, status_types.PROMOTEUR)
+        advisers_copro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, status_types.CO_PROMOTEUR)
+        advisers_reader = dissertation_role.search_by_adviser_and_role_stats(self.teacher, status_types.READER)
         response = self.client.post(reverse('manager_informations_detail_stats', args=[self.manager.person.user.pk]),
                                     {
                                         'adviser': self.teacher,
                                         'count_advisers_copro': dissertation_role.count_by_adviser_and_role_stats(
-                                            self.teacher, 'CO_PROMOTEUR'),
+                                            self.teacher, status_types.CO_PROMOTEUR),
                                         'count_advisers_pro': dissertation_role.count_by_adviser_and_role_stats(
-                                            self.teacher, 'PROMOTEUR'),
+                                            self.teacher, status_types.PROMOTEUR),
                                         'count_advisers_reader': dissertation_role.count_by_adviser_and_role_stats(
-                                            self.teacher, 'READER'),
+                                            self.teacher, status_types.READER),
                                         'count_advisers_pro_request': dissertation_role.count_by_adviser(self.teacher,
-                                                                                                         'PROMOTEUR',
+                                                                                                         status_types.PROMOTEUR,
                                                                                                          'DIR_SUBMIT'),
                                         'tab_offer_count_pro': dissertation_role.get_tab_count_role_by_offer(
                                             advisers_pro),
