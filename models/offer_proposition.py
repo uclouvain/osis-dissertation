@@ -114,6 +114,7 @@ def get_or_create_by_education_group_id(education_group_id):
 def get_by_education_group_ids(education_group_ids):
     offers_propositions = [
         get_or_create_by_education_group_id(education_group_id) for education_group_id in education_group_ids
+        if education_group_id
     ]
     return offers_propositions
 
