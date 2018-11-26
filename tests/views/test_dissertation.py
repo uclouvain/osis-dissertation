@@ -44,8 +44,7 @@ from osis_common.models import message_history
 from osis_common.models import message_template
 from dissertation.models import adviser
 from dissertation.models import dissertation_role
-from dissertation.tests.models.test_faculty_adviser import create_faculty_adviser
-from dissertation.views.dissertation import _new_status_display
+from dissertation.views.dissertation import new_status_display
 
 ERROR_405_BAD_REQUEST = 405
 ERROR_404_PAGE_NO_FOUND = 404
@@ -478,4 +477,4 @@ class DissertationViewTestCase(TestCase):
             offer_year_start=self.offer_year_start2
         )
         self.dissertation_x.status = dissertation_status.DIR_SUBMIT
-        self.assertEqual(_new_status_display(self.dissertation_x, "accept"), _('to_be_received'))
+        self.assertEqual(new_status_display(self.dissertation_x, "accept"), _('to_be_received'))

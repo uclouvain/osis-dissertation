@@ -43,9 +43,8 @@ from dissertation.forms import ManagerDissertationForm, ManagerDissertationEditF
 from openpyxl.writer.excel import save_virtual_workbook
 from openpyxl import Workbook
 from openpyxl.utils.exceptions import IllegalCharacterError
-from dissertation.models.enums.dissertation_status import DISSERTATION_STATUS as DISSERTATION_STATUS
-from dissertation.utils import decorators
-from dissertation.utils.decorators import autorized_dissert_promotor_or_manager, user_passes_test_for_dissert
+from dissertation.models.enums.dissertation_status import DISSERTATION_STATUS
+from dissertation.utils.decorators import autorized_dissert_promotor_or_manager, check_for_dissert_or_redirect
 
 ERROR_405_BAD_REQUEST = 405
 ERROR_404_PAGE_NO_FOUND = 404
@@ -58,10 +57,18 @@ def _role_can_be_deleted(dissert, dissert_role):
     return dissert_role.status != 'PROMOTEUR' or promotors_count > 1
 
 
-def _new_status_display(dissert, opperation):
+def new_status_display(dissert, opperation):
     new_status = dissertation.get_next_status(dissert, opperation)
     status_dict = dict(DISSERTATION_STATUS)
     return status_dict[new_status]
+
+
+def adviser_can_manage(dissert, advis):
+    offers_of_adviser = faculty_adviser.search_by_adviser(advis)
+    if (dissert.offer_year_start.offer in offers_of_adviser) and advis.type == 'MGR':
+        return True
+    else:
+        return False
 
 
 #########################
@@ -113,7 +120,7 @@ def dissertations(request):
 
 @login_required
 @user_passes_test(adviser.is_manager)
-@user_passes_test_for_dissert(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
+@check_for_dissert_or_redirect(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
 def manager_dissertations_detail(request, pk):
     dissert = dissertation.find_by_id(pk)
     if dissert is None:
@@ -198,7 +205,7 @@ def manager_dissertations_detail(request, pk):
 
 @login_required
 @user_passes_test(adviser.is_manager)
-@user_passes_test_for_dissert(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
+@check_for_dissert_or_redirect(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
 def manager_dissertations_detail_updates(request, pk):
     dissert = dissertation.find_by_id(pk)
     person = mdl.person.find_by_user(request.user)
@@ -213,7 +220,7 @@ def manager_dissertations_detail_updates(request, pk):
 
 @login_required
 @user_passes_test(adviser.is_manager)
-@user_passes_test_for_dissert(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
+@check_for_dissert_or_redirect(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
 def manager_dissertations_edit(request, pk):
     dissert = dissertation.find_by_id(pk)
     person = mdl.person.find_by_user(request.user)
@@ -244,7 +251,7 @@ def manager_dissertations_edit(request, pk):
 
 @login_required
 @user_passes_test(adviser.is_manager)
-@user_passes_test_for_dissert(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
+@check_for_dissert_or_redirect(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
 def manager_dissertations_jury_edit(request, pk):
     dissert_role = dissertation_role.find_by_id(pk)
     if dissert_role is None:
@@ -261,7 +268,7 @@ def manager_dissertations_jury_edit(request, pk):
 
 @login_required
 @user_passes_test(adviser.is_manager)
-@user_passes_test_for_dissert(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
+@check_for_dissert_or_redirect(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
 def manager_dissertations_jury_new(request, pk):
     dissert = dissertation.find_by_id(pk)
     count_dissertation_role = dissertation_role.count_by_dissertation(dissert)
@@ -301,7 +308,7 @@ def manager_dissertations_jury_new_ajax(request):
         count_dissertation_role = dissertation_role.count_by_dissertation(dissert)
         person = mdl.person.find_by_user(request.user)
         adv_manager = adviser.search_by_person(person)
-        if decorators.adviser_can_manage(dissert, adv_manager) \
+        if adviser_can_manage(dissert, adv_manager) \
                 and count_dissertation_role < 4 and dissert.status != 'DRAFT' \
                 and adviser_of_dissert_role is not None and dissert is not None:
             justification = "%s %s %s" % ("manager_add_jury", status_choice, adviser_of_dissert_role)
@@ -476,7 +483,7 @@ def manager_dissertations_search(request):
 
 @login_required
 @user_passes_test(adviser.is_manager)
-@user_passes_test_for_dissert(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
+@check_for_dissert_or_redirect(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
 def manager_dissertations_delete(request, pk):
     dissert = dissertation.find_by_id(pk)
     dissert.deactivate()
@@ -486,7 +493,7 @@ def manager_dissertations_delete(request, pk):
 
 @login_required
 @user_passes_test(adviser.is_manager)
-@user_passes_test_for_dissert(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
+@check_for_dissert_or_redirect(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
 def manager_dissertations_role_delete(request, pk):
     dissert_role = dissertation_role.find_by_id(pk)
     dissert = dissert_role.dissertation
@@ -513,7 +520,7 @@ def manager_dissertations_role_delete_by_ajax(request, pk):
     dissert = dissert_role.dissertation
     person = mdl.person.find_by_user(request.user)
     adv = adviser.search_by_person(person)
-    if decorators.adviser_can_manage(dissert, adv) and \
+    if adviser_can_manage(dissert, adv) and \
             _justification_dissert_role_delete_change(request, dissert, dissert_role, "manager_delete_jury"):
         return HttpResponse(HTTP_OK)
     else:
@@ -522,13 +529,13 @@ def manager_dissertations_role_delete_by_ajax(request, pk):
 
 @login_required
 @user_passes_test(adviser.is_manager)
-@user_passes_test_for_dissert(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
+@check_for_dissert_or_redirect(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
 def manager_dissertations_to_dir_submit(request, pk):
     dissert = dissertation.find_by_id(pk)
     if dissert is None:
         return redirect('manager_dissertations_list')
     old_status = dissert.status
-    new_status_display = _new_status_display(dissert, "go_forward")
+    new_status_display_str = new_status_display(dissert, "go_forward")
     if request.method == "POST":
         form = ManagerDissertationUpdateForm(request.POST)
         if form.is_valid():
@@ -540,12 +547,12 @@ def manager_dissertations_to_dir_submit(request, pk):
     else:
         form = ManagerDissertationUpdateForm()
     return layout.render(request, 'manager_dissertations_add_justification.html',
-                         {'form': form, 'dissert': dissert, 'new_status_display': new_status_display})
+                         {'form': form, 'dissert': dissert, 'new_status_display': new_status_display_str})
 
 
 @login_required
 @user_passes_test(adviser.is_manager)
-@user_passes_test_for_dissert(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
+@check_for_dissert_or_redirect(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
 def manager_dissertations_to_dir_submit_list(request, pk):
     dissert = dissertation.find_by_id(pk)
     if dissert is None:
@@ -558,11 +565,11 @@ def manager_dissertations_to_dir_submit_list(request, pk):
 
 @login_required
 @user_passes_test(adviser.is_manager)
-@user_passes_test_for_dissert(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
+@check_for_dissert_or_redirect(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
 def manager_dissertations_to_dir_ok(request, pk):
     dissert = dissertation.find_by_id(pk)
     old_status = dissert.status
-    new_status_display = _new_status_display(dissert, "accept")
+    new_status_display = new_status_display(dissert, "accept")
     if request.method == "POST":
         form = ManagerDissertationUpdateForm(request.POST)
         if form.is_valid():
@@ -580,7 +587,7 @@ def manager_dissertations_to_dir_ok(request, pk):
 
 @login_required
 @user_passes_test(adviser.is_manager)
-@user_passes_test_for_dissert(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
+@check_for_dissert_or_redirect(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
 def manager_dissertations_accept_comm_list(request, pk):
     dissert = dissertation.find_by_id(pk)
     if dissert is None:
@@ -593,7 +600,7 @@ def manager_dissertations_accept_comm_list(request, pk):
 
 @login_required
 @user_passes_test(adviser.is_manager)
-@user_passes_test_for_dissert(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
+@check_for_dissert_or_redirect(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
 def manager_dissertations_accept_eval_list(request, pk):
     dissert = dissertation.find_by_id(pk)
     if dissert is None:
@@ -606,11 +613,11 @@ def manager_dissertations_accept_eval_list(request, pk):
 
 @login_required
 @user_passes_test(adviser.is_manager)
-@user_passes_test_for_dissert(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
+@check_for_dissert_or_redirect(autorized_dissert_promotor_or_manager, 'manager_dissertations_list')
 def manager_dissertations_to_dir_ko(request, pk):
     dissert = dissertation.find_by_id(pk)
     old_status = dissert.status
-    new_status_display = _new_status_display(dissert, "refuse")
+    new_status_display = new_status_display(dissert, "refuse")
     if request.method == "POST":
         form = ManagerDissertationUpdateForm(request.POST)
         if form.is_valid():
@@ -789,7 +796,7 @@ def teacher_is_promotor(adv, dissert):
 
 @login_required
 @user_passes_test(adviser.is_teacher)
-@user_passes_test_for_dissert(autorized_dissert_promotor_or_manager, 'dissertations_list')
+@check_for_dissert_or_redirect(autorized_dissert_promotor_or_manager, 'dissertations_list')
 def dissertations_detail(request, pk):
     dissert = dissertation.find_by_id(pk)
     person = mdl.person.find_by_user(request.user)
@@ -824,7 +831,7 @@ def dissertations_detail(request, pk):
 
 @login_required
 @user_passes_test(adviser.is_teacher)
-@user_passes_test_for_dissert(autorized_dissert_promotor_or_manager, 'dissertations_list')
+@check_for_dissert_or_redirect(autorized_dissert_promotor_or_manager, 'dissertations_list')
 def dissertations_detail_updates(request, pk):
     dissert = dissertation.find_by_id(pk)
     person = mdl.person.find_by_user(request.user)
@@ -843,7 +850,7 @@ def dissertations_detail_updates(request, pk):
 
 @login_required
 @user_passes_test(adviser.is_teacher)
-@user_passes_test_for_dissert(autorized_dissert_promotor_or_manager, 'dissertations_list')
+@check_for_dissert_or_redirect(autorized_dissert_promotor_or_manager, 'dissertations_list')
 def dissertations_delete(request, pk):
     dissert = dissertation.find_by_id(pk)
     dissert.deactivate()
@@ -853,11 +860,11 @@ def dissertations_delete(request, pk):
 
 @login_required
 @user_passes_test(adviser.is_teacher)
-@user_passes_test_for_dissert(autorized_dissert_promotor_or_manager, 'dissertations_list')
+@check_for_dissert_or_redirect(autorized_dissert_promotor_or_manager, 'dissertations_list')
 def dissertations_to_dir_ok(request, pk):
     dissert = dissertation.find_by_id(pk)
     old_status = dissert.status
-    new_status_display = _new_status_display(dissert, "accept")
+    new_status_display = new_status_display(dissert, "accept")
     if request.method == "POST":
         form = ManagerDissertationUpdateForm(request.POST)
         if form.is_valid():
@@ -881,11 +888,11 @@ def dissertations_to_dir_ok(request, pk):
 
 @login_required
 @user_passes_test(adviser.is_teacher)
-@user_passes_test_for_dissert(autorized_dissert_promotor_or_manager, 'dissertations_list')
+@check_for_dissert_or_redirect(autorized_dissert_promotor_or_manager, 'dissertations_list')
 def dissertations_to_dir_ko(request, pk):
     dissert = dissertation.find_by_id(pk)
     old_status = dissert.status
-    new_status_display = _new_status_display(dissert, "refuse")
+    new_status_display = new_status_display(dissert, "refuse")
     if request.method == "POST":
         form = ManagerDissertationUpdateForm(request.POST)
         if form.is_valid():

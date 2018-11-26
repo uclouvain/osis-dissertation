@@ -30,7 +30,7 @@ from django.utils.decorators import available_attrs
 from rest_framework.exceptions import PermissionDenied
 from base import models as mdl
 from base.models import person
-from dissertation.models import dissertation_role, dissertation, adviser, faculty_adviser
+from dissertation.models import dissertation_role, dissertation, adviser
 from dissertation.models.adviser import search_by_person
 from dissertation.models.enums import status_types
 
@@ -47,46 +47,34 @@ def user_is_dissertation_promotor(user, dissert):
         return False
 
 
-def adviser_can_manage(dissert, advis):
-    offers_of_adviser = faculty_adviser.search_by_adviser(advis)
-    if (dissert.offer_year_start.offer in offers_of_adviser) and advis.type == 'MGR':
-        return True
-    else:
-        return False
-
-
-def object_is_none_redirect(one_object, template_redirect):
-    if one_object is None:
-        return redirect(template_redirect)
-
-
 def autorized_dissert_promotor_or_manager(user, pk, template_redirect='dissertations'):
+    from dissertation.views.dissertation import adviser_can_manage
     dissert = dissertation.find_by_id(pk)
     perso = mdl.person.find_by_user(user)
     advis = adviser.search_by_person(perso)
     if template_redirect is None:
         template_redirect = 'dissertations'
     if dissert is None:
-        return object_is_none_redirect(dissert, template_redirect)
+        return redirect(template_redirect)
     elif user_is_dissertation_promotor(user, dissert) or adviser_can_manage(dissert, advis):
         return True
     else:
         return False
 
 
-def user_passes_test_for_dissert(test_func, template_redirect=None):
-    def decorator(view_func):
+def check_for_dissert_or_redirect(test_func, template_redirect=None):
+    def f_check_for_dissert_or_redirect(view_func):
         @wraps(view_func, assigned=available_attrs(view_func))
         def _wrapped_view(request, *args, **kwargs):
             if test_func(request.user, kwargs['pk'], template_redirect):
                 return view_func(request, *args, **kwargs)
             else:
-                return if_template_none(template_redirect)
+                return template_none_denied_or_redirect(template_redirect)
         return _wrapped_view
-    return decorator
+    return f_check_for_dissert_or_redirect
 
 
-def if_template_none(template):
+def template_none_denied_or_redirect(template):
     if template is None:
         raise PermissionDenied()
     else:
