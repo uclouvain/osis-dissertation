@@ -38,13 +38,8 @@ from dissertation.models.enums import status_types
 def user_is_dissertation_promotor(user, dissert):
     pers = person.find_by_user(user)
     this_adviser = search_by_person(pers)
-    count_dissert_role = dissertation_role._find_by_dissertation(dissert). \
-            filter(status=status_types.PROMOTEUR). \
-            filter(adviser=this_adviser).count()
-    if count_dissert_role > 0:
-        return True
-    else:
-        return False
+    return dissertation_role._find_by_dissertation(dissert).\
+        filter(status=status_types.PROMOTEUR).filter(adviser=this_adviser).exists()
 
 
 def autorized_dissert_promotor_or_manager(user, pk, template_redirect='dissertations'):

@@ -65,10 +65,7 @@ def new_status_display(dissert, opperation):
 
 def adviser_can_manage(dissert, advis):
     offers_of_adviser = faculty_adviser.search_by_adviser(advis)
-    if (dissert.offer_year_start.offer in offers_of_adviser) and advis.type == 'MGR':
-        return True
-    else:
-        return False
+    return (dissert.offer_year_start.offer in offers_of_adviser) and advis.type == 'MGR'
 
 
 #########################
