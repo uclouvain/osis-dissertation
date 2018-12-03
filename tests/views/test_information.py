@@ -41,7 +41,7 @@ from dissertation.tests.factories.proposition_dissertation import PropositionDis
 from dissertation.tests.factories.proposition_offer import PropositionOfferFactory
 
 
-class InformationViewTestCase(TestCase):
+class InformationTeacherViewTestCase(TestCase):
 
     def setUp(self):
         self.manager = AdviserManagerFactory()
@@ -49,37 +49,9 @@ class InformationViewTestCase(TestCase):
         self.teacher = AdviserTeacherFactory(person=a_person_teacher)
         self.person = PersonFactory()
         self.manager2 = AdviserManagerFactory()
-        a_person_student = PersonWithoutUserFactory(last_name="Durant")
-        student = StudentFactory(person=a_person_student)
-
-        offer_year_start = OfferYearFactory(acronym="test_offer")
-        offer = offer_year_start.offer
-        offer_proposition = OfferPropositionFactory(offer=offer)
-        FacultyAdviserFactory(adviser=self.manager, offer=offer)
-
-        roles = ['PROMOTEUR', 'CO_PROMOTEUR', 'READER', 'PROMOTEUR', 'ACCOMPANIST', 'PRESIDENT']
-        status = ['DRAFT', 'COM_SUBMIT', 'EVA_SUBMIT', 'TO_RECEIVE', 'DIR_SUBMIT', 'DIR_SUBMIT']
-
-        for x in range(0, 6):
-            proposition_dissertation = PropositionDissertationFactory(author=self.teacher,
-                                                                      creator=a_person_teacher,
-                                                                      title='Proposition {}'.format(x)
-                                                                      )
-            PropositionOfferFactory(proposition_dissertation=proposition_dissertation,
-                                    offer_proposition=offer_proposition)
-
-            DissertationFactory(author=student,
-                                title='Dissertation {}'.format(x),
-                                offer_year_start=offer_year_start,
-                                proposition_dissertation=proposition_dissertation,
-                                status=status[x],
-                                active=True,
-                                dissertation_role__adviser=self.teacher,
-                                dissertation_role__status=roles[x]
-                                )
+        self.client.force_login(self.teacher.person.user)
 
     def test_informations(self):
-        self.client.force_login(self.teacher.person.user)
         response = self.client.post(reverse('informations'),
                                     {
                                         'adviser': self.teacher,
@@ -90,7 +62,6 @@ class InformationViewTestCase(TestCase):
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_informations_detail_stats(self):
-        self.client.force_login(self.teacher.person.user)
         advisers_pro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, status_types.PROMOTEUR)
         advisers_copro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, status_types.CO_PROMOTEUR)
         advisers_reader = dissertation_role.search_by_adviser_and_role_stats(self.teacher, status_types.READER)
@@ -109,7 +80,6 @@ class InformationViewTestCase(TestCase):
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_informations_edit(self):
-        self.client.force_login(self.teacher.person.user)
         form = AdviserForm()
         response = self.client.post(reverse('informations_edit'),
                                     {
@@ -135,7 +105,6 @@ class InformationViewTestCase(TestCase):
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_informations_add(self):
-        self.client.force_login(self.teacher.person.user)
         response = self.client.post(reverse("informations_add"),
                                     {
                                         'search_form': self.person.email,
@@ -144,7 +113,6 @@ class InformationViewTestCase(TestCase):
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_informations_add_without_email(self):
-        self.client.force_login(self.teacher.person.user)
         response = self.client.post(reverse("informations_add"),
                                     {
                                         'search_form': self.person.email
@@ -152,7 +120,6 @@ class InformationViewTestCase(TestCase):
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_informations_add_with_already_adviser(self):
-        self.client.force_login(self.teacher.person.user)
         response = self.client.post(reverse("informations_add"),
                                     {
                                         'search_form': self.manager2.person.email,
@@ -161,7 +128,6 @@ class InformationViewTestCase(TestCase):
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_informations_add_with_invalid_person(self):
-        self.client.force_login(self.teacher.person.user)
         response = self.client.post(reverse("informations_add"),
                                     {
                                         'search_form': "bobo.hibou@uclouvain.be",
@@ -170,7 +136,6 @@ class InformationViewTestCase(TestCase):
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_informations_add_with_invalid_email(self):
-        self.client.force_login(self.teacher.person.user)
         response = self.client.post(reverse("informations_add"),
                                     {
                                         'search_form': "fake_email",
@@ -179,7 +144,6 @@ class InformationViewTestCase(TestCase):
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_informations_add_without_search_form(self):
-        self.client.force_login(self.teacher.person.user)
         form = AddAdviserForm()
         response = self.client.post(reverse("informations_add"),
                                     {
@@ -195,17 +159,49 @@ class InformationViewTestCase(TestCase):
         self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
 
     def test_informations_add_with_get_method(self):
-        self.client.force_login(self.teacher.person.user)
         response = self.client.get(reverse("informations_add"))
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
-    def test_manager_informations(self):
+
+class InformationManagerViewTestCase(TestCase):
+    def setUp(self):
+        self.manager = AdviserManagerFactory()
         self.client.force_login(self.manager.person.user)
+        a_person_teacher = PersonFactory(first_name='Pierre', last_name='Dupont')
+        self.teacher = AdviserTeacherFactory(person=a_person_teacher)
+        self.person = PersonFactory()
+        self.manager2 = AdviserManagerFactory()
+        a_person_student = PersonWithoutUserFactory(last_name="Durant")
+        student = StudentFactory(person=a_person_student)
+        offer_year_start = OfferYearFactory(acronym="test_offer")
+        offer = offer_year_start.offer
+        offer_proposition = OfferPropositionFactory(offer=offer)
+        FacultyAdviserFactory(adviser=self.manager, offer=offer)
+        roles = ['PROMOTEUR', 'CO_PROMOTEUR', 'READER', 'PROMOTEUR', 'ACCOMPANIST', 'PRESIDENT']
+        status = ['DRAFT', 'COM_SUBMIT', 'EVA_SUBMIT', 'TO_RECEIVE', 'DIR_SUBMIT', 'DIR_SUBMIT']
+        for x in range(0, 6):
+            proposition_dissertation = PropositionDissertationFactory(author=self.teacher,
+                                                                      creator=a_person_teacher,
+                                                                      title='Proposition {}'.format(x)
+                                                                      )
+            PropositionOfferFactory(proposition_dissertation=proposition_dissertation,
+                                    offer_proposition=offer_proposition)
+
+            DissertationFactory(author=student,
+                                title='Dissertation {}'.format(x),
+                                offer_year_start=offer_year_start,
+                                proposition_dissertation=proposition_dissertation,
+                                status=status[x],
+                                active=True,
+                                dissertation_role__adviser=self.teacher,
+                                dissertation_role__status=roles[x]
+                                )
+
+    def test_manager_informations(self):
         response = self.client.get(reverse("manager_informations"))
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_manager_informations_add(self):
-        self.client.force_login(self.manager.person.user)
         response = self.client.post(reverse("manager_informations_add"),
                                     {
                                         'search_form': self.person.email,
@@ -214,7 +210,6 @@ class InformationViewTestCase(TestCase):
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_manager_informations_add_without_email(self):
-        self.client.force_login(self.manager.person.user)
         response = self.client.post(reverse("manager_informations_add"),
                                     {
                                         'search_form': self.person.email
@@ -222,7 +217,6 @@ class InformationViewTestCase(TestCase):
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_manager_informations_add_with_already_adviser(self):
-        self.client.force_login(self.manager.person.user)
         response = self.client.post(reverse("manager_informations_add"),
                                     {
                                         'search_form': self.manager2.person.email,
@@ -231,7 +225,6 @@ class InformationViewTestCase(TestCase):
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_manager_informations_add_with_invalid_person(self):
-        self.client.force_login(self.manager.person.user)
         response = self.client.post(reverse("manager_informations_add"),
                                     {
                                         'search_form': "bobo.hibou@uclouvain.be",
@@ -240,7 +233,6 @@ class InformationViewTestCase(TestCase):
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_manager_informations_add_with_invalid_email(self):
-        self.client.force_login(self.manager.person.user)
         response = self.client.post(reverse("manager_informations_add"),
                                     {
                                         'search_form': "fake_email",
@@ -249,7 +241,6 @@ class InformationViewTestCase(TestCase):
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_manager_informations_add_without_search_form(self):
-        self.client.force_login(self.manager.person.user)
         form = ManagerAddAdviserForm()
         response = self.client.post(reverse("manager_informations_add"),
                                     {
@@ -265,12 +256,10 @@ class InformationViewTestCase(TestCase):
         self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
 
     def test_manager_informations_add_with_get_method(self):
-        self.client.force_login(self.manager.person.user)
         response = self.client.get(reverse("manager_informations_add"))
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_manager_informations_add_person(self):
-        self.client.force_login(self.manager.person.user)
         form = {
                    'email': self.person.email,
                    'last_name': self.person.last_name,
@@ -282,7 +271,6 @@ class InformationViewTestCase(TestCase):
         self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
 
     def test_manager_informations_add_person_with_invalid_data(self):
-        self.client.force_login(self.manager.person.user)
         form = {
                    'email': self.person.email,
                    'last_name': self.person.last_name,
@@ -291,7 +279,6 @@ class InformationViewTestCase(TestCase):
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_manager_informations_add_person_with_get_method(self):
-        self.client.force_login(self.manager.person.user)
         form = {
                    'email': self.person.email,
                    'last_name': self.person.last_name,
@@ -303,7 +290,6 @@ class InformationViewTestCase(TestCase):
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_manager_informations_add_person_with_invalid_form(self):
-        self.client.force_login(self.manager.person.user)
         data = { 'email': "fake_email" }
         form = ManagerAddAdviserPerson(data)
         self.assertFalse(form.is_valid())
@@ -311,14 +297,12 @@ class InformationViewTestCase(TestCase):
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_manager_informations_detail(self):
-        self.client.force_login(self.manager.person.user)
         response = self.client.get(reverse("manager_informations_detail", args=[self.teacher.pk]))
         self.assertEqual(response.status_code, HttpResponse.status_code)
         response = self.client.get(reverse("manager_informations_detail", args=[self.teacher.person.user.pk]))
         self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
 
     def test_manager_informations_edit(self):
-        self.client.force_login(self.manager.person.user)
         response = self.client.get(reverse("manager_informations_edit", args=[self.teacher.person.user.pk]))
         self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
         form = AdviserForm(instance=self.teacher.person.user)
@@ -329,17 +313,14 @@ class InformationViewTestCase(TestCase):
         self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
 
     def test_manager_informations_list_request(self):
-        self.client.force_login(self.manager.person.user)
         response = self.client.post(reverse("manager_informations_list_request"))
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_manager_informations_edit_with_get_method(self):
-        self.client.force_login(self.manager.person.user)
         response = self.client.get(reverse("manager_informations_edit", args=[self.teacher.pk]))
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_manager_informations_detail_list(self):
-        self.client.force_login(self.manager.person.user)
         url = reverse('manager_informations_detail_list', kwargs={'pk': self.teacher.id})
         response = self.client.get(url)
         self.assertEqual(response.context[-1].get('adv_list_disserts_pro').count(), 1) # only 1 because 1st is DRAFT
@@ -351,14 +332,12 @@ class InformationViewTestCase(TestCase):
         self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
 
     def test_manager_informations_detail_list_wait(self):
-        self.client.force_login(self.manager.person.user)
         response = self.client.get(reverse("manager_informations_detail_list_wait", args=[self.teacher.pk]))
         self.assertEqual(response.status_code, HttpResponse.status_code)
         response = self.client.get(reverse("manager_informations_detail_list_wait", args=[self.teacher.person.user.pk]))
         self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
 
     def test_manager_informations_detail_stats(self):
-        self.client.force_login(self.manager.person.user)
         advisers_pro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, status_types.PROMOTEUR)
         advisers_copro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, status_types.CO_PROMOTEUR)
         advisers_reader = dissertation_role.search_by_adviser_and_role_stats(self.teacher, status_types.READER)
@@ -385,7 +364,6 @@ class InformationViewTestCase(TestCase):
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_manager_informations_detail_stats_without_teacher(self):
-        self.client.force_login(self.manager.person.user)
         advisers_pro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, status_types.PROMOTEUR)
         advisers_copro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, status_types.CO_PROMOTEUR)
         advisers_reader = dissertation_role.search_by_adviser_and_role_stats(self.teacher, status_types.READER)
