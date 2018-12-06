@@ -49,29 +49,29 @@ class DissertationAdmin(SerializableModelAdmin):
 
 
 STATUS_CHOICES = (
-    ('DRAFT', _('draft')),
-    ('DIR_SUBMIT', _('submitted_to_director')),
-    ('DIR_OK', _('accepted_by_director')),
-    ('DIR_KO', _('refused_by_director')),
-    ('COM_SUBMIT', _('submitted_to_commission')),
-    ('COM_OK', _('accepted_by_commission')),
-    ('COM_KO', _('refused_by_commission')),
-    ('EVA_SUBMIT', _('submitted_to_first_year_evaluation')),
-    ('EVA_OK', _('accepted_by_first_year_evaluation')),
-    ('EVA_KO', _('refused_by_first_year_evaluation')),
-    ('TO_RECEIVE', _('to_be_received')),
-    ('TO_DEFEND', _('to_be_defended')),
-    ('DEFENDED', _('defended')),
-    ('ENDED', _('ended')),
-    ('ENDED_WIN', _('ended_win')),
-    ('ENDED_LOS', _('ended_los')),
+    ('DRAFT', _('Draft')),
+    ('DIR_SUBMIT', _('Submitted to promotor')),
+    ('DIR_OK', _('Accepted by promotor')),
+    ('DIR_KO', _('Refused by promotor')),
+    ('COM_SUBMIT', _('Submitted to commission')),
+    ('COM_OK', _('Accepted by commission')),
+    ('COM_KO', _('Refused by commission')),
+    ('EVA_SUBMIT', _('Submitted to 1st year evaluation')),
+    ('EVA_OK', _('Accepted by 1st year evaluation')),
+    ('EVA_KO', _('1st year evaluation failed')),
+    ('TO_RECEIVE', _('To be received')),
+    ('TO_DEFEND', _('To be defended')),
+    ('DEFENDED', _('Defended')),
+    ('ENDED', _('Ended')),
+    ('ENDED_WIN', _('Ended with success')),
+    ('ENDED_LOS', _('Reported')),
 )
 
 DEFEND_PERIODE_CHOICES = (
-    ('UNDEFINED', _('undefined')),
-    ('JANUARY', _('january')),
-    ('JUNE', _('june')),
-    ('SEPTEMBER', _('september')),
+    ('UNDEFINED', _('Undefined')),
+    ('JANUARY', _('January')),
+    ('JUNE', _('June')),
+    ('SEPTEMBER', _('September')),
 )
 
 

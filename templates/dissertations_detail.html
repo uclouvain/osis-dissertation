@@ -27,7 +27,7 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-<li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'student_path' %}</a></li>
+<li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'Students\' path' %}</a></li>
 <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'dissertations' %}</a></li>
 <li><a href="{% url 'dissertations_list' %}" id="lnk_propositions">{% trans 'dissertations' %}</a></li>
 <li class="active">{{ dissertation.title|truncatechars:24 }}</li>
@@ -112,7 +112,7 @@
                       <label>{% trans 'defend_periode' %}</label>
                   </div>
                   <div class="col-md-9">
-                      {{ dissertation.defend_periode|default_if_none:_("undefined") }}
+                      {{ dissertation.defend_periode|default_if_none:_("Undefined") }}
                   </div>
                 </div>
                 <div class="row">
@@ -120,7 +120,7 @@
                       <label>{% trans 'defend_year' %}</label>
                   </div>
                   <div class="col-md-9">
-                      {{ dissertation.defend_year|default_if_none:_("undefined") }}
+                      {{ dissertation.defend_year|default_if_none:_("Undefined") }}
                   </div>
                 </div>
                 <div class="row">
@@ -128,7 +128,7 @@
                       <label>{% trans 'dissertation_location' %}</label>
                   </div>
                   <div class="col-md-9">
-                      {{ dissertation.location|default_if_none:_("undefined") }}
+                      {{ dissertation.location|default_if_none:_("Undefined") }}
                   </div>
                 </div>
                 <div class="row">

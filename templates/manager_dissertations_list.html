@@ -29,7 +29,7 @@
 <link rel="stylesheet" href="{% static 'css/dataTables.bootstrap.min.css' %}">
 {% endblock %}
 {% block breadcrumb %}
-  <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'student_path' %}</a></li>
+  <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'Students\' path' %}</a></li>
   <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'dissertations' %}</a></li>
   <li class="active">{% trans 'dissertations' %}</li>
 {% endblock %}
@@ -90,19 +90,19 @@
                   <label for="status_search">{% trans 'status' %}</label>
                   <select name="status_search" id="status_search" class="form-control">
                     <option value=""></option>
-                    <option value="DRAFT"{% if status_search  ==  "DARFT" %} selected {% endif %}>{% trans 'draft'%}</option>
-                    <option value="DIR_SUBMIT"{% if status_search  ==  "DIR_SUBMIT" %} selected {% endif %}>{% trans 'submitted_to_director'%}</option>
-                    <option value="DIR_KO"{% if status_search  ==  "DIR_KO" %} selected {% endif %}>{% trans 'refused_by_director'%}</option>
-                    <option value="COM_SUBMIT"{% if status_search  ==  "COM_SUBMIT" %} selected {% endif %}>{% trans 'submitted_to_commission'%}</option>
-                    <option value="COM_KO"{% if status_search  ==  "COM_KO" %} selected {% endif %}>{% trans 'refused_by_commission'%}</option>
-                    <option value="EVA_SUBMIT"{% if status_search  ==  "EVA_SUBMIT" %} selected {% endif %}>{% trans 'submitted_to_first_year_evaluation'%}</option>
-                    <option value="EVA_KO"{% if status_search  ==  "EVA_KO" %} selected {% endif %}>{% trans 'refused_by_first_year_evaluation'%}</option>
-                    <option value="TO_RECEIVE"{% if status_search  ==  "TO_RECEIVE" %} selected {% endif %}>{% trans 'to_be_received'%}</option>
-                    <option value="TO_DEFEND"{% if status_search  ==  "TO_DEFEND" %} selected {% endif %}>{% trans 'to_be_defended'%}</option>
-                    <option value="DEFENDED"{% if status_search  ==  "DEFENDED" %} selected {% endif %}>{% trans 'defended'%}</option>
-                    <option value="ENDED"{% if status_search  ==  "ENDED" %} selected {% endif %}>{% trans 'ended'%}</option>
-                    <option value="ENDED_WIN"{% if status_search  ==  "ENDED_WIN" %} selected {% endif %}>{% trans 'ended_win'%}</option>
-                    <option value="ENDED_LOS"{% if status_search  ==  "ENDED_LOS" %} selected {% endif %}>{% trans 'ended_los'%}</option>
+                    <option value="DRAFT"{% if status_search  ==  "DARFT" %} selected {% endif %}>{% trans 'Draft'%}</option>
+                    <option value="DIR_SUBMIT"{% if status_search  ==  "DIR_SUBMIT" %} selected {% endif %}>{% trans 'Submitted to promotor'%}</option>
+                    <option value="DIR_KO"{% if status_search  ==  "DIR_KO" %} selected {% endif %}>{% trans 'Refused by promotor'%}</option>
+                    <option value="COM_SUBMIT"{% if status_search  ==  "COM_SUBMIT" %} selected {% endif %}>{% trans 'Submitted to commission'%}</option>
+                    <option value="COM_KO"{% if status_search  ==  "COM_KO" %} selected {% endif %}>{% trans 'Refused by commission'%}</option>
+                    <option value="EVA_SUBMIT"{% if status_search  ==  "EVA_SUBMIT" %} selected {% endif %}>{% trans 'Submitted to 1st year evaluation'%}</option>
+                    <option value="EVA_KO"{% if status_search  ==  "EVA_KO" %} selected {% endif %}>{% trans '1st year evaluation failed'%}</option>
+                    <option value="TO_RECEIVE"{% if status_search  ==  "TO_RECEIVE" %} selected {% endif %}>{% trans 'To be received'%}</option>
+                    <option value="TO_DEFEND"{% if status_search  ==  "TO_DEFEND" %} selected {% endif %}>{% trans 'To be defended'%}</option>
+                    <option value="DEFENDED"{% if status_search  ==  "DEFENDED" %} selected {% endif %}>{% trans 'Defended'%}</option>
+                    <option value="ENDED"{% if status_search  ==  "ENDED" %} selected {% endif %}>{% trans 'Ended'%}</option>
+                    <option value="ENDED_WIN"{% if status_search  ==  "ENDED_WIN" %} selected {% endif %}>{% trans 'Ended with success'%}</option>
+                    <option value="ENDED_LOS"{% if status_search  ==  "ENDED_LOS" %} selected {% endif %}>{% trans 'Reported'%}</option>
                   </select>
               </div>
           </div>

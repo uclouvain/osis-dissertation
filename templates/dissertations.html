@@ -27,12 +27,12 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-  <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'student_path' %}</a></li>
-  <li class="active">{% trans 'dissertations' %}</li>
+  <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'Students\' path' %}</a></li>
+  <li class="active">{% trans 'Dissertations' %}</li>
 {% endblock %}
 {% block content %}
   <div class="page-header">
-    <h2>{% trans 'dissertations' %}</h2>
+    <h2>{% trans 'Dissertations' %}</h2>
   </div>
       {% if adviser.type == 'PRF' %}
         {% if count_advisers_pro_request > 0 %}

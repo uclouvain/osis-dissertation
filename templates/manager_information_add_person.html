@@ -27,7 +27,7 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-  <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'student_path' %}</a></li>
+  <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'Students\' path' %}</a></li>
   <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'dissertations' %}</a></li>
   <li><a href="{% url 'manager_informations' %}" id="lnk_manager_informations">{% trans 'teachers' %}</a></li>
   <li class="active">{% trans 'add_person' %}</li>
@@ -52,21 +52,21 @@
             {% csrf_token %}
             <div class="row">
                 <div class="col-md-8 col-lg-offset-2 form-group">
-                    <label for="txt_email" {% if form.email.errors %} style="color:red;" {% endif %}>{% trans 'email' %} ({% trans 'required' %})</label>
+                    <label for="txt_email" {% if form.email.errors %} style="color:red;" {% endif %}>{% trans 'email' %} ({% trans 'Required' %})</label>
                     <input class="form-control" id="txt_email"  name="email"
                     style="margin:-6px;" value="{{ form.email.value|default_if_none:'' }}">
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-8 col-lg-offset-2 form-group">
-                    <label for="txt_last_name" {% if form.last_name.errors %} style="color:red;" {% endif %}>{% trans 'last_name' %} ({% trans 'required' %})</label>
+                    <label for="txt_last_name" {% if form.last_name.errors %} style="color:red;" {% endif %}>{% trans 'last_name' %} ({% trans 'Required' %})</label>
                     <input class="form-control" id="txt_last_name"  name="last_name"
                     style="margin:-6px;" value="{{ form.last_name.value|default_if_none:'' }}">
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-8 col-lg-offset-2 form-group">
-                    <label for="txt_first_name" {% if form.first_name.errors %} style="color:red;" {% endif %}>{% trans 'first_name' %} ({% trans 'required' %})</label>
+                    <label for="txt_first_name" {% if form.first_name.errors %} style="color:red;" {% endif %}>{% trans 'first_name' %} ({% trans 'Required' %})</label>
                     <input class="form-control" id="txt_first_name"  name="first_name"
                     style="margin:-6px;" value="{{ form.first_name.value|default_if_none:'' }}">
                 </div>
