@@ -28,7 +28,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
-from dissertation.models.enums import status_types
+from dissertation.models.enums import dissertation_role_status
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from base.models import person
 from dissertation.models import dissertation_role

@@ -27,9 +27,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from django.db import models
 from django.db.models import Q
-from .enums import status_types
+from .enums import dissertation_role_status
 
-MAX_DISSERTATIOgitN_ROLE_FOR_ONE_DISSERTATION = 4
+MAX_DISSERTATION_ROLE_FOR_ONE_DISSERTATION = 4
 
 class DissertationRoleAdmin(SerializableModelAdmin):
     list_display = ('adviser', 'status', 'dissertation', 'author', 'dissertation_status')
@@ -39,7 +39,7 @@ class DissertationRoleAdmin(SerializableModelAdmin):
 
 
 class DissertationRole(SerializableModel):
-    status = models.CharField(max_length=12, choices=status_types.STATUS_CHOICES)
+    status = models.CharField(max_length=12, choices=dissertation_role_status.STATUS_CHOICES)
     adviser = models.ForeignKey('Adviser')
     dissertation = models.ForeignKey('Dissertation')
 

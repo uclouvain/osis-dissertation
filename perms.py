@@ -28,19 +28,18 @@ from functools import wraps
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import available_attrs
-from rest_framework.exceptions import PermissionDenied
 from base import models as mdl
 from base.models import person
 from dissertation.models import dissertation_role, adviser, faculty_adviser
 from dissertation.models.dissertation import Dissertation
-from dissertation.models.enums import status_types
+from dissertation.models.enums import dissertation_role_status
 
 
 def user_is_dissertation_promotor(user, dissert):
     pers = person.find_by_user(user)
     this_adviser = adviser.search_by_person(pers)
     return dissertation_role._find_by_dissertation(dissert). \
-        filter(status=status_types.PROMOTEUR).filter(adviser=this_adviser).exists()
+        filter(status=dissertation_role_status.PROMOTEUR).filter(adviser=this_adviser).exists()
 
 
 def adviser_can_manage(dissert, advis):
@@ -65,7 +64,6 @@ def check_for_dissert(test_func):
             if test_func(request.user, kwargs['pk']):
                 return view_func(request, *args, **kwargs)
             else:
-                print('pas bon l eau')
                 return HttpResponseForbidden()
         return _wrapped_view
 

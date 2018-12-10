@@ -34,7 +34,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import redirect
 from dissertation.models.dissertation_role import DissertationRole, MAX_DISSERTATION_ROLE_FOR_ONE_DISSERTATION
 from dissertation.models.enums import dissertation_status
-from dissertation.models.enums.status_types import STATUS_CHOICES
+from dissertation.models.enums.dissertation_role_status import STATUS_CHOICES as DISSERT_ROLE_STATUS
 from base.models import academic_year, offer_enrollment
 from base import models as mdl
 from base.views import layout
@@ -127,15 +127,14 @@ def manager_dissertations_detail(request, pk):
         return redirect('manager_dissertations_list')
 
     files = dissertation_document_file.find_by_dissertation(dissert)
-    filename = ""
-    for file in files:
-        filename = file.document_file.file_name
+
+    filename = files[-1].document_file.file_name
 
     if count_proposition_role == 0:
         if count_dissertation_role == 0:
-            justification = "%s %s %s" % ("auto_add_jury", 'PROMOTEUR', str(dissert.proposition_dissertation.author))
+            justification = "%s %s %s" % ("auto_add_jury", DISSERT_ROLE_STATUS.PROMOTEUR, str(dissert.proposition_dissertation.author))
             dissertation_update.add(request, dissert, dissert.status, justification=justification)
-            dissertation_role.add('PROMOTEUR', dissert.proposition_dissertation.author, dissert)
+            dissertation_role.add(DISSERT_ROLE_STATUS.PROMOTEUR, dissert.proposition_dissertation.author, dissert)
     else:
         if count_dissertation_role == 0:
             for role in proposition_roles:
@@ -174,7 +173,7 @@ def manager_dissertations_detail(request, pk):
             jury_student_message = 'student_jury_invisible_dates'
     dissertation_roles = dissertation_role.search_by_dissertation(dissert)
 
-    promotors_count = dissertation_role.count_by_status_dissertation('PROMOTEUR', dissert)
+    promotors_count = dissertation_role.count_by_status_dissertation(DISSERT_ROLE_STATUS.PROMOTEUR, dissert)
 
     return layout.render(request, 'manager_dissertations_detail.html',
                          {'dissertation': dissert,
@@ -411,7 +410,7 @@ def construct_line(dissert, include_description=True):
 def get_ordered_roles(dissert):
     roles = []
     for role in dissertation_role.search_by_dissertation(dissert):
-        if role.status == 'PROMOTEUR':
+        if role.status == DISSERT_ROLE_STATUS.PROMOTEUR:
             roles.insert(0, str(role.adviser))
             roles.insert(0, str(role.status))
         else:
@@ -653,7 +652,7 @@ def manager_dissertations_wait_comm_list(request):
     show_evaluation_first_year = offer_proposition.show_evaluation_first_year(offer_props)
     return layout.render(request, 'manager_dissertations_wait_commission_list.html',
                          {'show_validation_commission': show_validation_commission,
-                          'STATUS_CHOICES': STATUS_CHOICES,
+                          'STATUS_CHOICES': DISSERT_ROLE_STATUS,
                           'show_evaluation_first_year': show_evaluation_first_year,
                           'all_advisers_array': all_advisers_array})
 
