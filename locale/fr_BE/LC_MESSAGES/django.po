@@ -869,30 +869,30 @@ msgstr "Retour"
 #: templates/manager_dissertations_wait_commission_list.html:317
 #: templates/manager_dissertations_wait_commission_list.html:321
 #: templates/manager_informations_add_search.html:46
-msgid "error"
+msgid "Error"
 msgstr "Erreur"
 
 #: templates/informations_add_search.html:53
 #: templates/manager_informations_add_search.html:53
-msgid "if_intern_use_good_email"
+msgid "If this person is a member of the University, you need to use the correct e-mail address."
 msgstr ""
 "Si la personne appartient à l'Université, il faut utiliser son adresse e-"
 "mail correcte."
 
 #: templates/informations_add_search.html:56
-msgid "if_extern_you_can_ask_manager"
+msgid "If this person is not a member of the University, a dissertation manager must add this person to the system."
 msgstr ""
 "Si la personne est externe à l'Université, elle doit être ajoutée par la/le "
 "gestionnaire des mémoires."
 
 #: templates/informations_add_search.html:65
 #: templates/manager_informations_add_search.html:67
-msgid "new_search"
+msgid "New search"
 msgstr "Nouvelle recherche"
 
 #: templates/informations_add_search.html:73
 #: templates/manager_informations_add_search.html:75
-msgid "search_person_explanation"
+msgid "This screen allows you to add, in the dissertation application, as a teacher, a person who did not logged into the application. Please search the person with her/his e-mail address"
 msgstr ""
 "Cet écran permet de rajouter dans l'application Mémoires, en tant "
 "qu'enseignant, un membre du personnel qui ne s'est pas encore connecté à "
@@ -904,44 +904,44 @@ msgstr ""
 #: templates/manager_informations_add_search.html:91
 #: templates/manager_proposition_dissertations_list.html:46
 #: templates/proposition_dissertations_list.html:48
-msgid "search"
+msgid "Search"
 msgstr "Rechercher"
 
 #: templates/informations_detail_stats.html:48
 #: templates/manager_informations_detail_stats.html:53
-msgid "stats"
+msgid "Stats"
 msgstr "Statistiques"
 
 #: templates/informations_detail_stats.html:53
 #: templates/manager_informations_detail_stats.html:58
-msgid "how_many_dissertation_need_answer"
+msgid "Dissertations quantity needing answer"
 msgstr "Nombre de mémoires attendant réponse"
 
 #: templates/informations_detail_stats.html:67
 #: templates/manager_informations_detail_stats.html:72
-msgid "how_many_dissertation_pro"
+msgid "Dissertations quantity as promotor"
 msgstr "Nombre de mémoires en tant que promoteur"
 
 #: templates/informations_detail_stats.html:73
 #: templates/manager_informations_detail_stats.html:78
-msgid "in_this_offer"
+msgid "In this program"
 msgstr "Dans ce programme"
 
 #: templates/informations_detail_stats.html:79
 #: templates/manager_informations_detail_stats.html:84
-msgid "how_many_dissertation_copro"
+msgid "Dissertations quantity as copromotor"
 msgstr "Nombre de mémoires en tant que co-promoteur"
 
 #: templates/informations_detail_stats.html:87
 #: templates/manager_informations_detail_stats.html:92
-msgid "how_many_dissertation_reader"
+msgid "Dissertations quantity as reader"
 msgstr "Nombre de mémoires en tant que lecteur"
 
 #: templates/informations_detail_stats.html:95
 #: templates/informations_detail_stats.html:174
 #: templates/manager_informations_detail_stats.html:101
 #: templates/manager_informations_detail_stats.html:181
-msgid "chart_pie_adviser_promoteur"
+msgid "Chart as promotor"
 msgstr "Graphe en tant que promoteur"
 
 #: templates/informations_detail_stats.html:99
@@ -950,47 +950,33 @@ msgstr "Graphe en tant que promoteur"
 #: templates/manager_informations_detail_stats.html:105
 #: templates/manager_informations_detail_stats.html:113
 #: templates/manager_informations_detail_stats.html:121
-msgid "no_data"
+msgid "No data"
 msgstr "Aucune donnée"
 
 #: templates/informations_detail_stats.html:103
 #: templates/manager_informations_detail_stats.html:109
-msgid "chart_pie_adviser_copro"
+msgid "Chart as copromotor"
 msgstr "Graphe en tant que copromoteur"
 
 #: templates/informations_detail_stats.html:111
 #: templates/manager_informations_detail_stats.html:117
-msgid "chart_pie_adviser_reading"
-msgstr "Graphe en tant que lecteur"
-
-#: templates/informations_detail_stats.html:214
-#: templates/manager_informations_detail_stats.html:221
-#, fuzzy
-#| msgid "chart_pie_adviser_promoteur"
-msgid "chart_pie_adviser_copromoteur"
-msgstr "Graphe en tant que promoteur"
-
-#: templates/informations_detail_stats.html:256
-#: templates/manager_informations_detail_stats.html:263
-#, fuzzy
-#| msgid "chart_pie_adviser_reading"
-msgid "chart_pie_adviser_read"
+msgid "Chart as reader"
 msgstr "Graphe en tant que lecteur"
 
 #: templates/informations_edit.html:48
 #: templates/manager_informations_add.html:57
 #: templates/manager_informations_edit.html:50
-msgid "available_by_email"
+msgid "Available by e-mail"
 msgstr "Disponible par e-mail"
 
 #: templates/informations_edit.html:58
 #: templates/manager_informations_add.html:66
 #: templates/manager_informations_edit.html:60
-msgid "available_by_phone"
+msgid "Available by phone"
 msgstr "Disponible par téléphone"
 
 #: templates/manager_dissertations_detail.html:48
-msgid "delete_dissertation_confirmation_message"
+msgid "You are ready to definitely delete this dissertation. Are you sure you want to continue ?"
 msgstr ""
 "Vous allez définitivement supprimer ce mémoire. Êtes-vous certain de vouloir "
 "continuer ?"
@@ -998,16 +984,15 @@ msgstr ""
 #: templates/manager_dissertations_detail.html:56
 #: templates/manager_proposition_dissertation_detail.html:41
 #: templates/proposition_dissertation_detail.html:42
-#, fuzzy
-msgid "add_file"
+msgid "Add file"
 msgstr "Ajouter un fichier"
 
 #: templates/manager_dissertations_detail.html:192
-msgid "jury_status"
+msgid "Jury status"
 msgstr "État du jury"
 
 #: templates/manager_dissertations_detail.html:195
-msgid "for_managers"
+msgid "For managers"
 msgstr "Pour les gesionnaires"
 
 #: templates/manager_dissertations_detail.html:199
@@ -1019,7 +1004,7 @@ msgstr "Pour les gesionnaires"
 #: templates/proposition_dissertations_list.html:83
 #: templates/proposition_dissertations_list_created.html:83
 #: templates/proposition_dissertations_list_my.html:80
-msgid "visible"
+msgid "Visible"
 msgstr "Visible"
 
 #: templates/manager_dissertations_detail.html:201
@@ -1031,63 +1016,53 @@ msgstr "Visible"
 #: templates/proposition_dissertations_list.html:85
 #: templates/proposition_dissertations_list_created.html:85
 #: templates/proposition_dissertations_list_my.html:82
-msgid "invisible"
+msgid "Invisible"
 msgstr "Invisible"
 
 #: templates/manager_dissertations_detail.html:204
 #: templates/manager_dissertations_detail.html:222
 #: templates/manager_dissertations_detail.html:240
-msgid "editable"
+msgid "Editable"
 msgstr "Modifiable"
 
 #: templates/manager_dissertations_detail.html:206
 #: templates/manager_dissertations_detail.html:224
 #: templates/manager_dissertations_detail.html:242
-msgid "non_editable"
+msgid "Non-editable"
 msgstr "Non modifiable"
 
 #: templates/manager_dissertations_detail.html:213
-msgid "for_teachers"
+msgid "For teachers"
 msgstr "Pour les enseignants"
 
-#: templates/manager_dissertations_detail.html:231
-msgid "for_students"
-msgstr "Pour les étudiants"
-
 #: templates/manager_dissertations_detail.html:279
-msgid "mgr_dissertations_to_dir_submit"
+msgid "Submit to promotor"
 msgstr "Soumette au promoteur"
 
 #: templates/manager_dissertations_detail.html:280
-msgid "mgr_to_dir_submit_confirmation_message"
+msgid "You are ready to submit this dissertation to the promotor.  Are you sure you want to continue ?"
 msgstr ""
 "Vous allez soumettre ce mémoire au promoteur. Êtes-vous certain de vouloir "
 "continuer ?"
 
-#: templates/manager_dissertations_detail.html:282
-#: templates/manager_dissertations_detail.html:345
-#: templates/manager_dissertations_detail.html:353
-msgid "manager_dissertations_to_dir_submit"
-msgstr "Soumettre au promoteur"
-
 #: templates/manager_dissertations_detail.html:287
 #: templates/manager_dissertations_detail.html:290
-msgid "manager_promotor_accept"
+msgid "Promotor accepts"
 msgstr "Acceptation par le promoteur"
 
 #: templates/manager_dissertations_detail.html:288
-msgid "mgr_promotor_accept_confirmation_message"
+msgid "You are ready to set this dissertation as accepted by the promotor. Are you sure you want to continue ?"
 msgstr ""
 "Vous allez indiquer l'acceptation de ce mémoire par le promoteur. Êtes-vous "
 "certain de vouloir continuer ?"
 
 #: templates/manager_dissertations_detail.html:293
 #: templates/manager_dissertations_detail.html:296
-msgid "manager_promotor_refuse"
+msgid "Promotor refuses"
 msgstr "Refus par le promoteur"
 
 #: templates/manager_dissertations_detail.html:294
-msgid "mgr_promotor_refuse_confirmation_message"
+msgid "You are ready to set this dissertation as refused by the promotor.  Are you sure you want to continue ?"
 msgstr ""
 "Vous allez indiquer le refus de ce mémoire par le promoteur. Êtes-vous "
 "certain de vouloir continuer ?"
@@ -1097,23 +1072,23 @@ msgstr ""
 #: templates/manager_dissertations_detail.html:315
 #: templates/manager_dissertations_detail.html:318
 #: templates/manager_dissertations_wait_commission_list.html:228
-msgid "manager_commission_accept"
+msgid "Commission accepts"
 msgstr "Acceptation de la commission"
 
 #: templates/manager_dissertations_detail.html:302
 #: templates/manager_dissertations_detail.html:316
-msgid "mgr_com_accept_confirmation_message"
+msgid "You are ready to set this dissertation as accepted by the commission. Are you sure you want to continue ?"
 msgstr ""
 "Vous allez indiquer l'acceptation de ce mémoire par la commission. Êtes-vous "
 "certain de vouloir continuer ?"
 
 #: templates/manager_dissertations_detail.html:307
 #: templates/manager_dissertations_detail.html:310
-msgid "manager_commission_refuse"
+msgid "Commission refuses"
 msgstr "Refus de la commission"
 
 #: templates/manager_dissertations_detail.html:308
-msgid "mgr_com_refuse_confirmation_message"
+msgid "You are ready to set this dissertation as refused by the commission. Are you sure you want to continue ?"
 msgstr ""
 "Vous allez indiquer le refus de ce mémoire par la commission. Êtes-vous "
 "certain de vouloir continuer ?"
@@ -1123,79 +1098,66 @@ msgstr ""
 #: templates/manager_dissertations_detail.html:337
 #: templates/manager_dissertations_detail.html:340
 #: templates/manager_dissertations_wait_eval_list.html:116
-msgid "manager_evaluation_accept"
+msgid "First year evaluation success"
 msgstr "Éval 1ère année réussie"
 
 #: templates/manager_dissertations_detail.html:324
 #: templates/manager_dissertations_detail.html:338
-msgid "mgr_eva_accept_confirmation_message"
+msgid "You are ready to set the first year evaluation succeeded for this dissertation. Are you sure you want to continue ?"
 msgstr ""
 "Vous allez indiquer la réussite de l'évaluation de fin de première année. "
 "Êtes-vous certain de vouloir continuer ?"
 
 #: templates/manager_dissertations_detail.html:329
 #: templates/manager_dissertations_detail.html:332
-msgid "manager_evaluation_refuse"
+msgid "First year evaluation failed"
 msgstr "Éval de 1ère année échouée"
 
 #: templates/manager_dissertations_detail.html:330
-msgid "mgr_eva_refuse_confirmation_message"
+msgid "You are ready to set the first year evaluation failed for this dissertation. Are you sure you want to continue ?"
 msgstr ""
 "Vous allez indiquer la non-réussite de l'évaluation de fin de première "
 "année. Êtes-vous certain de vouloir continuer ?"
 
 #: templates/manager_dissertations_detail.html:346
-msgid "mgr_receive_confirmation_message"
+msgid "You are ready to set this dissertation as received. Are you sure you want to continue ?"
 msgstr ""
 "Vous allez indiquer que ce mémoire a été réceptionné. Êtes-vous certain de "
 "vouloir continuer ?"
 
 #: templates/manager_dissertations_detail.html:348
-msgid "manager_dissertations_receive"
+msgid "Dissertation received"
 msgstr "Mémoire réceptionné"
 
 #: templates/manager_dissertations_detail.html:354
-msgid "mgr_defended_confirmation_message"
+msgid "You are ready to set this dissertation as defended.  Are you sure you want to continue ?"
 msgstr ""
 "Vous allez indiquer que ce mémoire a été défendu. Êtes-vous certain de "
 "vouloir continuer ?"
 
 #: templates/manager_dissertations_detail.html:356
-msgid "manager_dissertations_defended"
+msgid "Dissertation defended"
 msgstr "Mémoire défendu"
 
-#: templates/manager_dissertations_detail.html:361
-msgid "manager_dissertations_to_dir_ok"
-msgstr "Acceptation par le promoteur"
-
 #: templates/manager_dissertations_detail.html:362
-msgid "mgr_win_confirmation_message"
+msgid "You are ready to set this dissertation as succeeded. Are you sure you want to continue ?"
 msgstr ""
 "Vous allez indiquer la réussite de ce mémoire. Êtes-vous certain de vouloir "
 "continuer ?"
 
 #: templates/manager_dissertations_detail.html:364
-msgid "manager_dissertations_success"
+msgid "Dissertation succeeded"
 msgstr "Mémoire réussi"
 
-#: templates/manager_dissertations_detail.html:367
-msgid "manager_dissertations_to_dir_ko"
-msgstr "Refus par le promoteur"
-
 #: templates/manager_dissertations_detail.html:368
-msgid "mgr_lose_confirmation_message"
+msgid "You are ready to set this dissertation as failed. Are you sure you want to continue ?"
 msgstr ""
 "Vous allez indiquer la non-réussite de ce mémoire. Êtes-vous certain de "
 "vouloir continuer ?"
 
 #: templates/manager_dissertations_detail.html:370
-msgid "manager_dissertations_reported"
+msgid "Dissertation delayed"
 msgstr "Mémoire reporté"
-
-#: templates/manager_dissertations_edit.html:36
-#: templates/manager_dissertations_edit.html:40
-msgid "edit_dissertation"
-msgstr "Modifier"
 
 #: templates/manager_dissertations_edit.html:72
 #: templates/manager_dissertations_new.html:67
@@ -1207,7 +1169,7 @@ msgstr "Modifier"
 #: templates/proposition_dissertations_list.html:74
 #: templates/proposition_dissertations_list_created.html:74
 #: templates/proposition_dissertations_list_my.html:71
-msgid "offer_propositions"
+msgid "Programs"
 msgstr "Programmes"
 
 #: templates/manager_dissertations_edit.html:85
@@ -1218,12 +1180,12 @@ msgstr "Programmes"
 #: templates/manager_dissertations_wait_list.html:65
 #: templates/manager_dissertations_wait_recep_list.html:63
 #: templates/manager_informations_detail_list_wait.html:63
-msgid "proposition_dissertation"
+msgid "Dissertation subject"
 msgstr "Sujet de mémoire"
 
 #: templates/manager_dissertations_edit.html:142
 #: templates/manager_dissertations_new.html:135
-msgid "dissertation_confirmation_message"
+msgid "You are ready to save this dissertation. Continue ?"
 msgstr "Vous allez sauvegarder les modifications de ce mémoire. Continuer ?"
 
 #: templates/manager_dissertations_list.html:44
@@ -1231,7 +1193,7 @@ msgstr "Vous allez sauvegarder les modifications de ce mémoire. Continuer ?"
 #: templates/manager_dissertations_wait_eval_list.html:45
 #: templates/manager_dissertations_wait_list.html:45
 #: templates/manager_dissertations_wait_recep_list.html:43
-msgid "waiting_commission"
+msgid "Waiting commission"
 msgstr "En attente de la commission"
 
 #: templates/manager_dissertations_list.html:47
@@ -1239,7 +1201,7 @@ msgstr "En attente de la commission"
 #: templates/manager_dissertations_wait_eval_list.html:48
 #: templates/manager_dissertations_wait_list.html:48
 #: templates/manager_dissertations_wait_recep_list.html:46
-msgid "waiting_evaluation"
+msgid "Waiting 1st year evaluation"
 msgstr "En attente d'éval 1è année"
 
 #: templates/manager_dissertations_list.html:49
@@ -1247,30 +1209,24 @@ msgstr "En attente d'éval 1è année"
 #: templates/manager_dissertations_wait_eval_list.html:50
 #: templates/manager_dissertations_wait_list.html:50
 #: templates/manager_dissertations_wait_recep_list.html:48
-msgid "waiting_reception"
+msgid "Waiting reception"
 msgstr "En attente de réception"
 
 #: templates/manager_dissertations_list.html:61
 msgid "academic_year"
 msgstr ""
 
-#: templates/manager_dissertations_list.html:75
-#, fuzzy
-#| msgid "offer"
-msgid "offers"
-msgstr "Programme"
-
 #: templates/manager_dissertations_list.html:114
 #: templates/manager_proposition_dissertations_list.html:54
-msgid "export_search_as_xls"
+msgid "Export search as XLS"
 msgstr "Exporter la recherche en XLS"
 
 #: templates/manager_dissertations_list.html:118
-msgid "create_dissertation"
+msgid "Add dissertation"
 msgstr "Ajouter un mémoire"
 
 #: templates/manager_dissertations_list.html:125
-msgid "advanced_search"
+msgid "Advanced search"
 msgstr "Recherche avancée"
 
 #: templates/manager_dissertations_list.html:133
@@ -1284,7 +1240,7 @@ msgstr "Recherche avancée"
 #: templates/proposition_dissertations_list.html:66
 #: templates/proposition_dissertations_list_created.html:66
 #: templates/proposition_dissertations_list_my.html:63
-msgid "no_result"
+msgid "No result"
 msgstr "Aucun résultat"
 
 #: templates/manager_dissertations_list.html:216
@@ -1295,7 +1251,7 @@ msgstr "Aucun résultat"
 #: templates/manager_informations_list.html:107
 #: templates/manager_proposition_dissertations_list.html:120
 #: templates/manager_students_list.html:143
-msgid "datatable_processing"
+msgid "Processing..."
 msgstr "Traitement en cours..."
 
 #: templates/manager_dissertations_list.html:217
@@ -1306,7 +1262,7 @@ msgstr "Traitement en cours..."
 #: templates/manager_informations_list.html:108
 #: templates/manager_proposition_dissertations_list.html:121
 #: templates/manager_students_list.html:144
-msgid "datatable_search"
+msgid "Search:"
 msgstr "Rechercher&nbsp;:"
 
 #: templates/manager_dissertations_list.html:219
@@ -1317,7 +1273,7 @@ msgstr "Rechercher&nbsp;:"
 #: templates/manager_informations_list.html:110
 #: templates/manager_proposition_dissertations_list.html:123
 #: templates/manager_students_list.html:146
-msgid "datatable_info"
+msgid "Showing _START_ to _END_ of _TOTAL_ entries"
 msgstr ""
 "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ "
 "&eacute;l&eacute;ments"
@@ -1330,7 +1286,7 @@ msgstr ""
 #: templates/manager_informations_list.html:111
 #: templates/manager_proposition_dissertations_list.html:124
 #: templates/manager_students_list.html:147
-msgid "datatable_infoempty"
+msgid "Showing 0 to 0 of 0 entries"
 msgstr ""
 "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment"
 
@@ -1342,7 +1298,7 @@ msgstr ""
 #: templates/manager_informations_list.html:112
 #: templates/manager_proposition_dissertations_list.html:125
 #: templates/manager_students_list.html:148
-msgid "datatable_infofiltered"
+msgid "(filtered from _MAX_ total entries)"
 msgstr "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)"
 
 #: templates/manager_dissertations_list.html:222
@@ -1364,7 +1320,7 @@ msgstr ""
 #: templates/manager_informations_list.html:114
 #: templates/manager_proposition_dissertations_list.html:127
 #: templates/manager_students_list.html:150
-msgid "datatable_loadingrecords"
+msgid "Loading..."
 msgstr "Chargement en cours..."
 
 #: templates/manager_dissertations_list.html:224
@@ -1375,7 +1331,7 @@ msgstr "Chargement en cours..."
 #: templates/manager_informations_list.html:115
 #: templates/manager_proposition_dissertations_list.html:128
 #: templates/manager_students_list.html:151
-msgid "datatable_zerorecords"
+msgid "No matching records found"
 msgstr "Aucun &eacute;l&eacute;ment &agrave; afficher"
 
 #: templates/manager_dissertations_list.html:225
@@ -1386,7 +1342,7 @@ msgstr "Aucun &eacute;l&eacute;ment &agrave; afficher"
 #: templates/manager_informations_list.html:116
 #: templates/manager_proposition_dissertations_list.html:129
 #: templates/manager_students_list.html:152
-msgid "datatable_emptytable"
+msgid "No data available in table"
 msgstr "Aucune donn&eacute;e disponible dans le tableau"
 
 #: templates/manager_dissertations_list.html:227
@@ -1397,7 +1353,7 @@ msgstr "Aucune donn&eacute;e disponible dans le tableau"
 #: templates/manager_informations_list.html:119
 #: templates/manager_proposition_dissertations_list.html:131
 #: templates/manager_students_list.html:154
-msgid "datatable_first"
+msgid "First"
 msgstr "Premier"
 
 #: templates/manager_dissertations_list.html:228
@@ -1408,7 +1364,7 @@ msgstr "Premier"
 #: templates/manager_informations_list.html:120
 #: templates/manager_proposition_dissertations_list.html:132
 #: templates/manager_students_list.html:155
-msgid "datatable_previous"
+msgid "Previous"
 msgstr "Pr&eacute;c&eacute;dent"
 
 #: templates/manager_dissertations_list.html:229
@@ -1419,7 +1375,7 @@ msgstr "Pr&eacute;c&eacute;dent"
 #: templates/manager_informations_list.html:121
 #: templates/manager_proposition_dissertations_list.html:133
 #: templates/manager_students_list.html:156
-msgid "datatable_next"
+msgid "Next"
 msgstr "Suivant"
 
 #: templates/manager_dissertations_list.html:230
@@ -1430,7 +1386,7 @@ msgstr "Suivant"
 #: templates/manager_informations_list.html:122
 #: templates/manager_proposition_dissertations_list.html:134
 #: templates/manager_students_list.html:157
-msgid "datatable_last"
+msgid "Last"
 msgstr "Dernier"
 
 #: templates/manager_dissertations_list.html:233
@@ -1441,7 +1397,7 @@ msgstr "Dernier"
 #: templates/manager_informations_list.html:126
 #: templates/manager_proposition_dissertations_list.html:137
 #: templates/manager_students_list.html:160
-msgid "datatable_sortascending"
+msgid ": activate to sort column ascending"
 msgstr ": activer pour trier la colonne par ordre croissant"
 
 #: templates/manager_dissertations_list.html:234
@@ -1452,18 +1408,13 @@ msgstr ": activer pour trier la colonne par ordre croissant"
 #: templates/manager_informations_list.html:127
 #: templates/manager_proposition_dissertations_list.html:138
 #: templates/manager_students_list.html:161
-msgid "datatable_sortdescending"
+msgid ": activate to sort column descending"
 msgstr ": activer pour trier la colonne par ordre d&eacute;croissant"
-
-#: templates/manager_dissertations_new.html:33
-#: templates/manager_dissertations_new.html:37
-msgid "new_dissertation"
-msgstr "Ajouter un mémoire"
 
 #: templates/manager_dissertations_wait_commission_list.html:66
 #: templates/manager_dissertations_wait_eval_list.html:66
 #: templates/manager_dissertations_wait_recep_list.html:64
-msgid "action"
+msgid "Action"
 msgstr "Action"
 
 #: templates/manager_dissertations_wait_commission_list.html:100
@@ -1471,167 +1422,140 @@ msgid "close"
 msgstr ""
 
 #: templates/manager_dissertations_wait_commission_list.html:154
-#, fuzzy
-#| msgid "description"
 msgid "Description"
 msgstr "Description"
-
-#: templates/manager_dissertations_wait_commission_list.html:227
-msgid "manager_dissertations_accept_comm_list"
-msgstr "Acceptation de la commission"
 
 #: templates/manager_dissertations_wait_commission_list.html:240
 #: templates/manager_dissertations_wait_eval_list.html:141
 #: templates/manager_dissertations_wait_list.html:134
 #: templates/manager_dissertations_wait_recep_list.html:138
-msgid "datatable_lengthmenu"
+msgid "Show _MENU_ entries"
 msgstr "Afficher _MENU_ &eacute;l&eacute;ments"
 
 #: templates/manager_dissertations_wait_commission_list.html:317
-msgid "maximum_jury"
+msgid "Maximum number of members of the jury reached"
 msgstr "Nombre maximum de membre du jury atteints"
 
 #: templates/manager_dissertations_wait_commission_list.html:321
-msgid "status_or_adviser_error"
+msgid "The status or the teacher are missing"
 msgstr "Le statut ou l'enseignant est manquant"
-
-#: templates/manager_dissertations_wait_eval_list.html:114
-msgid "manager_dissertations_accept_eval_list"
-msgstr "Réussite de l'évaluation de première année"
 
 #: templates/manager_dissertations_wait_recep_list.html:112
 #: templates/manager_dissertations_wait_recep_list.html:114
-msgid "manager_reception_accept"
+msgid "Dissertation reception"
 msgstr "Réception du mémoire"
 
 #: templates/manager_information_add_person.html:33
 #: templates/manager_information_add_person.html:37
-msgid "add_person"
+msgid "Add person"
 msgstr "Ajouter une personne"
 
 #: templates/manager_information_add_person.html:46
-msgid "warning"
+msgid "Warning"
 msgstr "Attention"
 
 #: templates/manager_information_add_person.html:46
-msgid "add_person_warning"
+msgid "This form is used to add a person to OSIS. Complete carefully the form, you will not be able to edit this person after adding."
 msgstr ""
 "Ce formulaire permet d'ajouter une personne dans OSIS. Complétez "
 "attentivement le formulaire, il ne sera plus possible de modifier cette "
 "personne ensuite."
 
 #: templates/manager_information_add_person.html:62
-msgid "last_name"
+msgid "Last name"
 msgstr "Nom de famille"
 
 #: templates/manager_information_add_person.html:69
-msgid "first_name"
+msgid "First name"
 msgstr "Prénom"
 
 #: templates/manager_information_add_person.html:91
-msgid "add_person_confirmation"
+msgid "This person will be added to OSIS and you will not be able to edit it. Are you sure you want to continue ?"
 msgstr ""
 "Cette personne va être ajoutée dans OSIS, et il ne sera plus possible de la "
 "modifier. Voulez-vous continuer ?"
 
 #: templates/manager_informations_add_search.html:56
-msgid "if_extern_you_can"
+msgid "If this person is not a member of the University, you can"
 msgstr "Si la personne est externe à l'Université, vous pouvez"
 
 #: templates/manager_informations_add_search.html:58
-msgid "manager_informations_add_person"
+msgid "add this person"
 msgstr "ajouter cette personne"
 
 #: templates/manager_informations_detail.html:41
 #: templates/manager_informations_detail_list.html:40
 #: templates/manager_informations_detail_list_wait.html:40
 #: templates/manager_informations_detail_stats.html:42
-msgid "adviser_profile"
+msgid "Teacher profile"
 msgstr "Profil enseignant"
 
 #: templates/manager_informations_detail.html:42
 #: templates/manager_informations_detail_list.html:41
 #: templates/manager_informations_detail_list_wait.html:41
 #: templates/manager_informations_detail_stats.html:43
-msgid "adviser_dissertations"
+msgid "Linked dissertations"
 msgstr "Mémoires reliés"
 
 #: templates/manager_informations_detail.html:43
 #: templates/manager_informations_detail_list.html:42
 #: templates/manager_informations_detail_list_wait.html:43
 #: templates/manager_informations_detail_stats.html:44
-msgid "adviser_dissertations_wait"
+msgid "Waiting dissertations"
 msgstr "Mémoires en attente"
 
 #: templates/manager_informations_detail.html:44
 #: templates/manager_informations_detail_list.html:43
 #: templates/manager_informations_detail_list_wait.html:44
 #: templates/manager_informations_detail_stats.html:45
-msgid "adviser_stats"
+msgid "Teacher stats"
 msgstr "Statistiques enseignant"
 
 #: templates/manager_informations_detail.html:161
-msgid "photo"
+msgid "Photo"
 msgstr "Photo"
 
 #: templates/manager_informations_list.html:43
 #: templates/manager_informations_list_request.html:39
-msgid "all_advisers"
+msgid "All teachers"
 msgstr "Tous les enseignants"
 
 #: templates/manager_informations_list.html:44
 #: templates/manager_informations_list_request.html:40
-msgid "manager_informations_list_request"
+msgid "Teachers having to answer request"
 msgstr "Enseignants devant répondre à une demande"
 
-#: templates/manager_informations_list.html:51
-#: templates/manager_proposition_dissertation_new.html:56
-msgid "manager_informations_add"
-msgstr "Ajouter un enseignant"
-
 #: templates/manager_informations_list.html:61
-msgid "number_of_dissertation_active_total"
+msgid "How many active dissertations (all programs)"
 msgstr "Nombre de mémoires actifs (tous programmes)"
 
 #: templates/manager_informations_list.html:62
-msgid "number_of_dissertation_pro"
+msgid "How many dissertations as promotor"
 msgstr "Nombre de mémoires en tant que promoteur"
 
 #: templates/manager_informations_list.html:63
-msgid "number_of_dissertation_copro"
+msgid "How many dissertations as copromotor"
 msgstr "Nombre de mémoires en tant que copromoteur"
 
-#: templates/manager_informations_list.html:64
-msgid "number_of_dissertation_reader"
-msgstr "Nombre de mémoires en tant que lecteur"
-
 #: templates/manager_informations_list.html:65
-msgid "number_of_dissertation_need_request"
+msgid "How many dissertations need answer"
 msgstr "Nombre de mémoires en attente de réponse"
 
 #: templates/manager_informations_list_request.html:36
-msgid "teachers_not_responding_to_request"
+msgid "Teachers not responding to requests"
 msgstr "Enseignants devant répondre à une ou plusieurs demandes"
 
-#: templates/manager_informations_list_request.html:45
-msgid "adviser_name"
-msgstr "Enseignant"
-
-#: templates/manager_offer_parameters.html:42
-msgid "offer_proposition"
-msgstr "Programme"
-
 #: templates/manager_offer_parameters.html:43
-msgid "parameters_dates"
+msgid "Dates settings"
 msgstr "Paramètres de dates"
 
 #: templates/manager_offer_parameters.html:44
 #: templates/manager_offer_parameters_edit.html:118
-msgid "parameters_others"
+msgid "Other settings"
 msgstr "Autres paramètres"
 
 #: templates/manager_offer_parameters.html:59
-msgid "in_visibility_proposition"
+msgid "Subjects currently visible"
 msgstr "Sujets visibles actuellement"
 
 #: templates/manager_offer_parameters.html:71
@@ -1657,63 +1581,63 @@ msgid "to"
 msgstr "au"
 
 #: templates/manager_offer_parameters.html:79
-msgid "in_visibility_dissertation"
+msgid "Currently possible to create dissertations"
 msgstr "Possible de créer un mémoire actuellement"
 
 #: templates/manager_offer_parameters.html:99
-msgid "in_jury_visibility"
+msgid "Jury currently visible"
 msgstr "Jury visible actuellement"
 
 #: templates/manager_offer_parameters.html:119
-msgid "in_edit_title"
+msgid "Title currently editable"
 msgstr "Titre modifiable actuellement"
 
 #: templates/manager_offer_parameters.html:144
 #: templates/manager_offer_parameters_edit.html:125
-msgid "student_can_manage_readers"
+msgid "Students can manage readers"
 msgstr "Les étudiants peuvent gérer les lecteurs"
 
 #: templates/manager_offer_parameters.html:158
 #: templates/manager_offer_parameters_edit.html:135
-msgid "adviser_can_suggest_reader"
+msgid "Adviser can manage jury members"
 msgstr "Les enseignants peuvent gérer le jury"
 
 #: templates/manager_offer_parameters.html:172
 #: templates/manager_offer_parameters_edit.html:145
-msgid "evaluation_first_year"
+msgid "First year evaluation"
 msgstr "Éval fin de 1ère année"
 
 #: templates/manager_offer_parameters.html:186
 #: templates/manager_offer_parameters_edit.html:155
-msgid "validation_commission_exists"
+msgid "Validation commission exists"
 msgstr "Présence d'une commission Mémoires"
 
 #: templates/manager_offer_parameters.html:200
 #: templates/manager_offer_parameters_edit.html:165
-msgid "send_email_to_commission_accepted"
+msgid "Send an email to reading commission when acceptation of evaluation commission"
 msgstr ""
 "Envoyer un email à la commission de lecture à l'acceptation de la commission "
 "d'évaluation"
 
 #: templates/manager_offer_parameters_edit.html:50
-msgid "periode_visibility_proposition"
+msgid "Period of visibility for dissertation subjects"
 msgstr "Période de visibilité des sujets de Mémoires"
 
 #: templates/manager_offer_parameters_edit.html:67
-msgid "periode_visibility_dissertation"
+msgid "Period of possibility to create dissertations projects"
 msgstr "Période de création des projets de Mémoires"
 
 #: templates/manager_offer_parameters_edit.html:84
-msgid "periode_jury_visibility"
+msgid "Period of visibility for dissertation jurys"
 msgstr "Période de visibilité des jurys de Mémoires"
 
 #: templates/manager_offer_parameters_edit.html:101
-msgid "periode_edit_title"
+msgid "Period of possibility to edit dissertations titles"
 msgstr "Période d'édition des titres des Mémoires"
 
 #: templates/manager_proposition_dissertation_detail.html:48
 #: templates/proposition_dissertation_detail.html:49
-msgid "delete_proposition_dissertation_confirmation_message"
+msgid "You are ready to definitely delete this dissertation subject.  Are you sure you want to continue ?"
 msgstr ""
 "Vous allez définitivement supprimer ce sujet de mémoire. Êtes-vous certain "
 "de vouloir continuer ?"
@@ -1728,12 +1652,12 @@ msgstr ""
 #: templates/proposition_dissertations_list.html:73
 #: templates/proposition_dissertations_list_created.html:73
 #: templates/proposition_dissertations_list_my.html:70
-msgid "visibility"
+msgid "Visibility"
 msgstr "Visibilité"
 
 #: templates/manager_proposition_dissertation_detail.html:97
 #: templates/proposition_dissertation_detail.html:99
-msgid "creation_date"
+msgid "Creation date"
 msgstr "Date de création"
 
 #: templates/manager_proposition_dissertation_detail.html:113
@@ -1742,7 +1666,7 @@ msgstr "Date de création"
 #: templates/proposition_dissertation_detail.html:115
 #: templates/proposition_dissertation_edit.html:69
 #: templates/proposition_dissertation_new.html:68
-msgid "subject_type"
+msgid "Subject type"
 msgstr "Type de sujet"
 
 #: templates/manager_proposition_dissertation_detail.html:121
@@ -1751,7 +1675,7 @@ msgstr "Type de sujet"
 #: templates/proposition_dissertation_detail.html:123
 #: templates/proposition_dissertation_edit.html:77
 #: templates/proposition_dissertation_new.html:76
-msgid "level"
+msgid "Subject developement level"
 msgstr "Niveau de développement du sujet"
 
 #: templates/manager_proposition_dissertation_detail.html:129
@@ -1760,7 +1684,7 @@ msgstr "Niveau de développement du sujet"
 #: templates/proposition_dissertation_detail.html:131
 #: templates/proposition_dissertation_edit.html:85
 #: templates/proposition_dissertation_new.html:84
-msgid "collaboration"
+msgid "Collaboration"
 msgstr "Collaboration"
 
 #: templates/manager_proposition_dissertation_detail.html:137
@@ -1769,12 +1693,12 @@ msgstr "Collaboration"
 #: templates/proposition_dissertation_detail.html:139
 #: templates/proposition_dissertation_edit.html:94
 #: templates/proposition_dissertation_new.html:93
-msgid "max_students_number"
+msgid "Indicative number of places for this subject"
 msgstr "Nombre indicatif de places pour ce sujet"
 
 #: templates/manager_proposition_dissertation_detail.html:145
 #: templates/proposition_dissertation_detail.html:147
-msgid "taken_places"
+msgid "Taken places"
 msgstr "Places occupées"
 
 #: templates/manager_proposition_dissertation_detail.html:148
@@ -1795,80 +1719,68 @@ msgstr ""
 #: templates/proposition_dissertations_list.html:72
 #: templates/proposition_dissertations_list_created.html:72
 #: templates/proposition_dissertations_list_my.html:69
-msgid "creator"
+msgid "Created by"
 msgstr "Créé par"
 
 #: templates/manager_proposition_dissertation_detail.html:175
 #: templates/proposition_dissertation_detail.html:178
-msgid "proposition_dissertation_jury"
+msgid "Dissertation subject jury"
 msgstr "Jury du sujet de mémoire"
 
 #: templates/manager_proposition_dissertation_detail.html:179
 #: templates/proposition_dissertation_detail.html:182
-msgid "proposition_dissertation_jury_info"
+msgid "You can define a jury for the dissertation subject. This jury will automatically be defined for all dissertations created from this subject. There can be only one promotor, if you add one, this promotor will replace the existing one."
 msgstr ""
 "Vous pouvez définir un jury pour ce sujet de mémoire. Ce jury sera "
 "automatiquement ajouté aux mémoires créés pour ce sujet. Il ne peut y avoir "
 "qu'un seul promoteur, si vous en ajoutez un nouveau, il remplacera le "
 "promoteur existant."
 
-#: templates/manager_proposition_dissertation_detail.html:204
-#: templates/manager_proposition_dissertation_detail.html:206
-#: templates/proposition_dissertation_detail.html:207
-#: templates/proposition_dissertation_detail.html:209
-msgid "add_proposition_dissertation_jury_member"
-msgstr "Ajouter un membre au jury"
-
 #: templates/manager_proposition_dissertation_edit.html:101
 #: templates/manager_proposition_dissertation_new.html:113
 #: templates/proposition_dissertation_edit.html:104
 #: templates/proposition_dissertation_new.html:103
-msgid "select_course_programs"
+msgid "Check the programs related to this topic"
 msgstr "Cochez les programmes de cours en relation avec ce sujet"
 
 #: templates/manager_proposition_dissertation_new.html:33
 #: templates/manager_proposition_dissertation_new.html:37
 #: templates/proposition_dissertation_new.html:33
 #: templates/proposition_dissertation_new.html:37
-msgid "new_subject"
+msgid "New dissertation subject"
 msgstr "Nouveau sujet de mémoire"
-
-#: templates/manager_proposition_dissertations_jury_edit.html:32
-#: templates/proposition_dissertations_jury_edit.html:32
-msgid "proposition_dissertations"
-msgstr "Sujets de mémoire"
 
 #: templates/manager_proposition_dissertations_jury_edit.html:33
 #: templates/manager_proposition_dissertations_jury_edit.html:37
 #: templates/proposition_dissertations_jury_edit.html:33
-msgid "new_or_edit_jury_proposition_dissertation"
+msgid "Add/Edit jury member for the dissertation subject"
 msgstr "Ajout/Modification d'un membre du jury pour le sujet de mémoire"
 
 #: templates/manager_proposition_dissertations_list.html:39
 #: templates/proposition_dissertations_list.html:41
 #: templates/proposition_dissertations_list_created.html:41
 #: templates/proposition_dissertations_list_my.html:41
-msgid "all_proposition_dissertations"
+msgid "All subjects"
 msgstr "Tous les sujets"
 
 #: templates/manager_proposition_dissertations_list.html:51
 #: templates/proposition_dissertations_list.html:53
-msgid "search_proposition_dissertation"
+msgid "Search dissertation subject"
 msgstr "Rechercher un sujet de mémoire"
 
 #: templates/manager_proposition_dissertations_list.html:58
 #: templates/proposition_dissertations_list.html:58
 #: templates/proposition_dissertations_list_created.html:52
 #: templates/proposition_dissertations_list_my.html:49
-msgid "create_proposition_dissertation"
+msgid "Add dissertation subject"
 msgstr "Ajouter un sujet de mémoire"
 
 #: templates/manager_proposition_dissertations_list.html:73
-msgid "count_places"
+msgid "Number of places"
 msgstr "Nombre de places"
 
 #: templates/manager_students_list.html:173
-msgid "filtre_by_offer"
+msgid "filter by offer"
 msgstr "filtre par programme"
 
 #: templates/new_document.html:47
@@ -1876,23 +1788,23 @@ msgid "cancel"
 msgstr ""
 
 #: templates/proposition_dissertations_jury_edit.html:37
-msgid "new_or_edit_dissertation"
+msgid "Add/Edit dissertation"
 msgstr "Ajout/Modification d'un mémoire"
 
 #: templates/proposition_dissertations_list.html:39
 #: templates/proposition_dissertations_list_created.html:39
 #: templates/proposition_dissertations_list_my.html:39
-msgid "my_proposition_dissertations"
+msgid "My subjects"
 msgstr "Mes sujets"
 
 #: templates/proposition_dissertations_list.html:40
 #: templates/proposition_dissertations_list_created.html:40
 #: templates/proposition_dissertations_list_my.html:40
-msgid "proposition_dissertations_created"
+msgid "Subjects created"
 msgstr "Sujets créés"
 
 #: templates/proposition_dissertations_list_created.html:48
-msgid "proposition_dissertations_created_info"
+msgid "Subjects you created for others (you are not the promotor)"
 msgstr ""
 "Sujets de mémoire que vous avez créés mais dont vous n'êtes pas le promoteur."
 
