@@ -34,7 +34,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import redirect
 from dissertation.models.dissertation_role import DissertationRole, MAX_DISSERTATION_ROLE_FOR_ONE_DISSERTATION
 from dissertation.models.enums import dissertation_status
-from dissertation.models.enums.dissertation_role_status import STATUS_CHOICES as DISSERT_ROLE_STATUS
+from dissertation.models.enums import dissertation_role_status
 from base.models import academic_year, offer_enrollment
 from base import models as mdl
 from base.views import layout
@@ -49,11 +49,9 @@ from dissertation.models.enums.dissertation_status import DISSERTATION_STATUS
 from dissertation.perms import adviser_can_manage, autorized_dissert_promotor_or_manager, check_for_dissert
 
 
-
-
 def _role_can_be_deleted(dissert, dissert_role):
-    promotors_count = dissertation_role.count_by_status_dissertation('PROMOTEUR', dissert)
-    return dissert_role.status != 'PROMOTEUR' or promotors_count > 1
+    promotors_count = dissertation_role.count_by_status_dissertation(dissertation_role_status.PROMOTEUR, dissert)
+    return dissert_role.status != dissertation_role_status.PROMOTEUR or promotors_count > 1
 
 
 def new_status_display(dissert, opperation):
@@ -125,16 +123,18 @@ def manager_dissertations_detail(request, pk):
 
     if offer_prop is None:
         return redirect('manager_dissertations_list')
-
     files = dissertation_document_file.find_by_dissertation(dissert)
-
-    filename = files[-1].document_file.file_name
+    filename = ""
+    if files:
+        filename = files[-1].document_file.file_name
 
     if count_proposition_role == 0:
         if count_dissertation_role == 0:
-            justification = "%s %s %s" % ("auto_add_jury", DISSERT_ROLE_STATUS.PROMOTEUR, str(dissert.proposition_dissertation.author))
+            justification = "%s %s %s" % ("auto_add_jury",
+                                          dissertation_role_status.PROMOTEUR,
+                                          str(dissert.proposition_dissertation.author))
             dissertation_update.add(request, dissert, dissert.status, justification=justification)
-            dissertation_role.add(DISSERT_ROLE_STATUS.PROMOTEUR, dissert.proposition_dissertation.author, dissert)
+            dissertation_role.add(dissertation_role_status.PROMOTEUR, dissert.proposition_dissertation.author, dissert)
     else:
         if count_dissertation_role == 0:
             for role in proposition_roles:
@@ -173,7 +173,7 @@ def manager_dissertations_detail(request, pk):
             jury_student_message = 'student_jury_invisible_dates'
     dissertation_roles = dissertation_role.search_by_dissertation(dissert)
 
-    promotors_count = dissertation_role.count_by_status_dissertation(DISSERT_ROLE_STATUS.PROMOTEUR, dissert)
+    promotors_count = dissertation_role.count_by_status_dissertation(dissertation_role_status.PROMOTEUR, dissert)
 
     return layout.render(request, 'manager_dissertations_detail.html',
                          {'dissertation': dissert,
@@ -410,7 +410,7 @@ def construct_line(dissert, include_description=True):
 def get_ordered_roles(dissert):
     roles = []
     for role in dissertation_role.search_by_dissertation(dissert):
-        if role.status == DISSERT_ROLE_STATUS.PROMOTEUR:
+        if role.status == dissertation_role_status.PROMOTEUR:
             roles.insert(0, str(role.adviser))
             roles.insert(0, str(role.status))
         else:
@@ -652,7 +652,7 @@ def manager_dissertations_wait_comm_list(request):
     show_evaluation_first_year = offer_proposition.show_evaluation_first_year(offer_props)
     return layout.render(request, 'manager_dissertations_wait_commission_list.html',
                          {'show_validation_commission': show_validation_commission,
-                          'STATUS_CHOICES': DISSERT_ROLE_STATUS,
+                          'STATUS_CHOICES': dissertation_role_status.STATUS_CHOICES,
                           'show_evaluation_first_year': show_evaluation_first_year,
                           'all_advisers_array': all_advisers_array})
 
