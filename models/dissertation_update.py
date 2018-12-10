@@ -43,9 +43,10 @@ class DissertationUpdateAdmin(SerializableModelAdmin):
 
 class DissertationUpdate(SerializableModel):
 
-    status_from = models.CharField(max_length=12,
-                                   choices=dissertation_status.DISSERTATION_STATUS,
-                                   default=dissertation_status.DRAFT)
+    status_from = models.CharField(
+        max_length=12,
+        choices=dissertation_status.DISSERTATION_STATUS,
+        default=dissertation_status.DRAFT)
     status_to = models.CharField(
         max_length=12,
         choices=dissertation_status.DISSERTATION_STATUS,

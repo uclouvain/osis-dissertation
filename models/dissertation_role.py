@@ -29,6 +29,7 @@ from django.db import models
 from django.db.models import Q
 from .enums import status_types
 
+MAX_DISSERTATIOgitN_ROLE_FOR_ONE_DISSERTATION = 4
 
 class DissertationRoleAdmin(SerializableModelAdmin):
     list_display = ('adviser', 'status', 'dissertation', 'author', 'dissertation_status')

@@ -305,7 +305,7 @@ class DissertationModelTestCase(TestCase):
         self.assertIn('n\'a pas validé le projet de mémoire',
                       message_history_result.last().subject)
 
-    def test_search_1(self):
+    def test_search_with_title_name_first_name(self):
         self.assertCountEqual(dissertation.search('Dissertation_1'), [self.dissertation])
         self.assertCountEqual(
             dissertation.search(dissertation_status.DIR_SUBMIT),
@@ -324,7 +324,7 @@ class DissertationModelTestCase(TestCase):
             [self.dissertation, self.dissertation_test_email]
         )
 
-    def test_search_2(self):
+    def test_search_with_subject_offer(self):
         self.assertCountEqual(
             dissertation.search('les phobies'),
             [self.dissertation]
