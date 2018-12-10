@@ -27,7 +27,7 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-  <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'Students\' path' %}</a></li>
+  <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
   <li class="active">{% trans 'Dissertations' %}</li>
 {% endblock %}
 {% block content %}
@@ -134,7 +134,7 @@
             <div class="col-md-5">
                 <h4 class="media-heading">
                     <a href="{% url 'manager_students_list' %}" id="lnk_manager_students_list" >
-                        {% trans 'For students' as students_title %}
+                        {% trans 'For students' %}
                         {{ students_title|title }}
                     </a>
                 </h4>

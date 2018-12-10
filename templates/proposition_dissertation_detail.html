@@ -27,7 +27,7 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-  <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'Students\' path' %}</a></li>
+  <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
   <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
   <li><a href="{% url 'my_dissertation_propositions' %}" id="lnk_propositions">{% trans 'Dissertation subjects' %}</a></li>
   <li class="active">{{ proposition_dissertation.title|truncatechars:24 }}</li>

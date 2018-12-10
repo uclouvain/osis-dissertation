@@ -33,14 +33,14 @@
 {% endblock %}
 
 {% block breadcrumb %}
-  <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'Students\' path' %}</a></li>
+  <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
   <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
-  <li class="active">{% trans 'For students' as students_title %}{{ students_title|title }}</li>
+  <li class="active">{% trans 'For students' %}{{ students_title|title }}</li>
 {% endblock %}
 
 {% block content %}
     <div class="page-header">
-        <h2>{% trans 'For students' as students_title %}{{ students_title|title }}</h2>
+        <h2>{% trans 'For students' %}{{ students_title|title }}</h2>
     </div>
     <div class="panel panel-default">
         <div class="panel-body table-responsive">

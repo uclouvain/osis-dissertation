@@ -29,7 +29,7 @@
 <link rel="stylesheet" href="{% static 'css/bootstrap-datepicker3.min.css' %}" type='text/css'>
 {% endblock %}
 {% block breadcrumb %}
-  <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'Students\' path' %}</a></li>
+  <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
   <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
   <li><a href="{% url 'manager_offer_parameters' %}" id="lnk_parameters">{% trans 'Settings' %}</a></li>
   <li class="active">{{ offer_proposition.acronym }}</li>
