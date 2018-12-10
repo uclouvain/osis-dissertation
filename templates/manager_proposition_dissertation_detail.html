@@ -28,8 +28,8 @@
 
 {% block breadcrumb %}
   <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'Students\' path' %}</a></li>
-  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'dissertations' %}</a></li>
-  <li><a href="{% url 'manager_proposition_dissertations' %}" id="lnk_propositions">{% trans 'subjects' %}</a></li>
+  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+  <li><a href="{% url 'manager_proposition_dissertations' %}" id="lnk_propositions">{% trans 'Dissertation subjects' %}</a></li>
   <li class="active">{{ proposition_dissertation.title|truncatechars:24 }}</li>
 {% endblock %}
 {% block content %}
@@ -38,25 +38,25 @@
     </div>
     <div style="text-align:right; margin-bottom: 5px;">
         <a class="btn btn-default btn-primary" data-toggle="modal" data-target="#pnl_upload_documents"
-           id="btn_add_file" title="{% trans 'add_file'%}">
+           id="btn_add_file" title="{% trans 'Add file'%}">
             <span class="glyphicon glyphicon-upload" aria-hidden="true" id="spn_add_file"></span></a>
         <a class="btn btn-default btn-primary"
            href="{% url 'manager_proposition_dissertation_edit' pk=proposition_dissertation.pk %}">
             <span class="glyphicon glyphicon-edit"></span></a>
         <a class="btn btn-default btn-warning"
            href="{% url 'manager_proposition_dissertation_delete' pk=proposition_dissertation.pk %}"
-           onclick="return confirm('{% trans 'delete_proposition_dissertation_confirmation_message' %}')">
+           onclick="return confirm('{% trans 'You are ready to definitely delete this dissertation subject.  Are you sure you want to continue ?' %}')">
             <span class="glyphicon glyphicon-remove"></span></a>
     </div>
     <input type="hidden" value="{{proposition_dissertation.pk | default_if_none:''}}" id="hdn_current_proposition_dissertation_id" name="proposition_dissertation_id" title="proposition_dissertation_id" >
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">{% trans 'proposition_dissertation_informations' %}</h3>
+            <h3 class="panel-title">{% trans 'Informations about the dissertation subject' %}</h3>
         </div>
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-4" style="text-align: right">
-                    <label>{% trans 'promotor' %}</label>
+                    <label>{% trans 'Promotor' %}</label>
                 </div>
                 <div class="col-md-8">
                     {{ proposition_dissertation.author }}
@@ -64,7 +64,7 @@
             </div>
             <div class="row">
                 <div class="col-md-4" style="text-align: right">
-                    <label>{% trans 'title' %}</label>
+                    <label>{% trans 'Title' %}</label>
                 </div>
                 <div class="col-md-8">
                     {{ proposition_dissertation.title }}
@@ -76,25 +76,25 @@
                          <label>{% trans 'file' %}</label>
                      </div>
                      <div class="col-md-4">
-                         <a href="{% url 'proposition_download' proposition_pk=proposition_dissertation.pk %}">{% trans 'link' %}</a>
+                         <a href="{% url 'proposition_download' proposition_pk=proposition_dissertation.pk %}">{% trans 'Link' %}</a>
                      </div>
                  </div>
             {% endif %}
             <div class="row">
                 <div class="col-md-4" style="text-align: right">
-                    <label>{% trans 'visibility' %}</label>
+                    <label>{% trans 'Visibility' %}</label>
                 </div>
                 <div class="col-md-8" style="text-align: justify">
                     {% if proposition_dissertation.visibility == True %}
-                    <span class="label label-success">{% trans 'visible' %}</span>
+                    <span class="label label-success">{% trans 'Visible' %}</span>
                     {% elif proposition_dissertation.visibility == False %}
-                    <span class="label label-warning">{% trans 'invisible' %}</span>
+                    <span class="label label-warning">{% trans 'Invisible' %}</span>
                     {% endif %}
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-4" style="text-align: right">
-                    <label>{% trans 'creation_date' %}</label>
+                    <label>{% trans 'Creation date' %}</label>
                 </div>
                 <div class="col-md-8">
                     {{ proposition_dissertation.created_date }}
@@ -102,7 +102,7 @@
             </div>
             <div class="row">
                 <div class="col-md-4" style="text-align: right">
-                    <label>{% trans 'description' %}</label>
+                    <label>{% trans 'Description' %}</label>
                 </div>
                 <div class="col-md-8" style="text-align: justify">
                     {{ proposition_dissertation.description|linebreaks }}
@@ -110,7 +110,7 @@
             </div>
             <div class="row">
                 <div class="col-md-4" style="text-align: right">
-                    <label>{% trans 'subject_type' %}</label>
+                    <label>{% trans 'Subject type' %}</label>
                 </div>
                 <div class="col-md-8" style="text-align: justify">
                     {{ proposition_dissertation.get_type_display }}
@@ -118,7 +118,7 @@
             </div>
             <div class="row">
                 <div class="col-md-4" style="text-align: right">
-                    <label>{% trans 'level' %}</label>
+                    <label>{% trans 'Subject developement level' %}</label>
                 </div>
                 <div class="col-md-8" style="text-align: justify">
                     {{ proposition_dissertation.get_level_display  }}
@@ -126,7 +126,7 @@
             </div>
             <div class="row">
                 <div class="col-md-4" style="text-align: right">
-                    <label>{% trans 'collaboration' %}</label>
+                    <label>{% trans 'Collaboration' %}</label>
                 </div>
                 <div class="col-md-8" style="text-align: justify">
                     {{ proposition_dissertation.get_collaboration_display }}
@@ -134,7 +134,7 @@
             </div>
             <div class="row">
                 <div class="col-md-4" style="text-align: right">
-                    <label>{% trans 'max_students_number' %}</label>
+                    <label>{% trans 'Indicative number of places for this subject' %}</label>
                 </div>
                 <div class="col-md-8" style="text-align: justify">
                     {{ proposition_dissertation.max_number_student }}
@@ -142,7 +142,7 @@
             </div>
             <div class="row">
                 <div class="col-md-4" style="text-align: right">
-                    <label>{% trans 'taken_places' %}</label>
+                    <label>{% trans 'Taken places' %}</label>
                 </div>
                 <div class="col-md-8" style="text-align: justify">
                     {{ count_use }} {% trans 'of' %} {{ proposition_dissertation.max_number_student }} ({{ percent }}{% trans '%'%})
@@ -150,7 +150,7 @@
             </div>
             <div class="row">
                 <div class="col-md-4" style="text-align: right">
-                    <label>{% trans 'offer_propositions' %}</label>
+                    <label>{% trans 'Programs' %}</label>
                 </div>
                 <div class="col-md-8">
                     {% for offer_proposition in offer_propositions %}
@@ -161,7 +161,7 @@
             {% if proposition_dissertation.creator %}
             <div class="row">
                 <div class="col-md-4" style="text-align: right">
-                    <label>{% trans 'creator' %}</label>
+                    <label>{% trans 'Created by' %}</label>
                 </div>
                 <div class="col-md-8" style="text-align: justify">
                     {{ proposition_dissertation.creator }}
@@ -172,11 +172,11 @@
     </div>
     <div class="panel panel-default">
              <div class="panel-heading">
-                 <h3 class="panel-title">{% trans 'proposition_dissertation_jury' %}</h3>
+                 <h3 class="panel-title">{% trans 'Dissertation subject jury' %}</h3>
              </div>
              <div class="panel-body">
                  <div class="well well-sm">
-                       {% trans 'proposition_dissertation_jury_info' %}
+                       {% trans 'You can define a jury for the dissertation subject. This jury will automatically be defined for all dissertations created from this subject. There can be only one promotor, if you add one, this promotor will replace the existing one.' %}
                  </div>
                  {% for proposition_role in proposition_roles %}
                  <div class="row" style="margin: 10px;">
@@ -190,7 +190,7 @@
                    <div class="col-md-1">
                        <a class="btn btn-warning"
                           href="{% url 'manager_proposition_dissertations_role_delete' pk=proposition_role.pk %}"
-                          onclick="return confirm('{% trans 'delete_adviser_role_confirmation_message' %}')">
+                          onclick="return confirm('{% trans 'You are ready to delete this jury member. Are you sure you want to continue?' %}')">
                            <span class="glyphicon glyphicon-remove span2"></span></a>
                    </div>
                    {% endif %}
@@ -201,9 +201,9 @@
                      <div class="col-md-5 pull-right">
                          <a href="{% url 'manager_proposition_dissertations_jury_new' pk=proposition_dissertation.pk %}"
                               id="lnk_proposition_add_dissertation_jury_member" class="btn btn-default btn-sm"
-                              role="button" title="{% trans 'add_proposition_dissertation_jury_member'%}"><span
+                              role="button" title="{% trans 'Add jury member'%}"><span
                                    class="glyphicon glyphicon-plus"
-                                   aria-hidden="true"></span> {% trans 'add_proposition_dissertation_jury_member'%}</a>
+                                   aria-hidden="true"></span> {% trans 'Add jury member'%}</a>
                      </div>
                  </div>
              </div>

@@ -1063,9 +1063,8 @@ msgstr ""
 #: templates/manager_proposition_dissertation_detail.html:41
 #: templates/proposition_dissertation_detail.html:42
 #, fuzzy
-#| msgid "adviser_profile"
 msgid "add_file"
-msgstr "Profil enseignant"
+msgstr "Ajouter un fichier"
 
 #: templates/manager_dissertations_detail.html:192
 msgid "jury_status"

@@ -32,24 +32,24 @@
 
 {% block breadcrumb %}
   <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'Students\' path' %}</a></li>
-  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'dissertations' %}</a></li>
-  <li class="active">{% trans 'teachers' %}</li>
+  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+  <li class="active">{% trans 'Teachers' %}</li>
 {% endblock %}
 {% block content %}
   <div class="page-header">
-    <h2>{% trans 'teachers' %}</h2>
+    <h2>{% trans 'Teachers' %}</h2>
   </div>
   <ul class="nav nav-tabs">
-    <li class="active"><a href={% url 'manager_informations' %}>{% trans 'all_advisers' %}</a></li>
-    <li><a href="{% url 'manager_informations_list_request' %}">{% trans 'manager_informations_list_request' %}</a></li>
+    <li class="active"><a href={% url 'manager_informations' %}>{% trans 'All teachers' %}</a></li>
+    <li><a href="{% url 'manager_informations_list_request' %}">{% trans 'Teacher having to answer request' %}</a></li>
   </ul>
   <div class="panel panel-default">
     <div class="panel-body">
         <div class="row">
              <div class="col-md-12">
                   <a href="{% url 'manager_informations_add' %}" id="lnk_manager_informations_add" class="btn btn-default"
-                    role="button" title="{% trans 'manager_informations_add'%}"><span class="glyphicon glyphicon-plus"
-                    aria-hidden="true"></span> {% trans 'add_advisers' %}</a>
+                    role="button" title="{% trans 'Add teacher'%}"><span class="glyphicon glyphicon-plus"
+                    aria-hidden="true"></span> {% trans 'Add teacher' %}</a>
              </div>
         </div>
         <br>
@@ -57,12 +57,12 @@
             <table class="table table-hover display responsive no-wrap" width="100%" id="table-advisers">
                 <thead>
                     <tr>
-                        <th>{% trans 'adviser' %}</th>
-                        <th>{% trans 'number_of_dissertation_active_total' %}</th>
-                        <th>{% trans 'number_of_dissertation_pro' %}</th>
-                        <th>{% trans 'number_of_dissertation_copro' %}</th>
-                        <th>{% trans 'number_of_dissertation_reader' %}</th>
-                        <th>{% trans 'number_of_dissertation_need_request' %}</th>
+                        <th>{% trans 'Teacher' %}</th>
+                        <th>{% trans 'How many active dissetations (all programs)' %}</th>
+                        <th>{% trans 'How many dissertations as promotor' %}</th>
+                        <th>{% trans 'How many dissertations as copromotor' %}</th>
+                        <th>{% trans 'How many dissertations as reader' %}</th>
+                        <th>{% trans 'How many dissertations need answer' %}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -104,27 +104,27 @@
                 "language":
                 {
 
-                    "sProcessing":     "{% trans 'datatable_processing'%}",
-                    "sSearch":         "{% trans 'datatable_search'%}",
+                    "sProcessing":     "{% trans 'Processing...'%}",
+                    "sSearch":         "{% trans 'Search:'%}",
                     "sLengthMenu":     "&nbsp;&nbsp;&nbsp;_MENU_ &eacute;l&eacute;ments",
-                    "sInfo":           "{% trans 'datatable_info'%}",
-                    "sInfoEmpty":      "{% trans 'datatable_infoempty'%}",
-                    "sInfoFiltered":   "{% trans 'datatable_infofiltered'%}",
+                    "sInfo":           "{% trans 'Showing _START_ to _END_ of _TOTAL_ entries'%}",
+                    "sInfoEmpty":      "{% trans 'Showing 0 to 0 of 0 entries'%}",
+                    "sInfoFiltered":   "{% trans '(filtered from _MAX_ total entries)'%}",
                     "sInfoPostFix":    "{% trans 'datatable_infopostfix'%}",
-                    "sLoadingRecords": "{% trans 'datatable_loadingrecords'%}",
-                    "sZeroRecords":    "{% trans 'datatable_zerorecords'%}",
-                    "sEmptyTable":     "{% trans 'datatable_emptytable'%}",
+                    "sLoadingRecords": "{% trans 'Loading...'%}",
+                    "sZeroRecords":    "{% trans 'No matching records found'%}",
+                    "sEmptyTable":     "{% trans 'No data available in table'%}",
                     "oPaginate":
                     {
-                        "sFirst":      "{% trans 'datatable_first'%}",
-                        "sPrevious":   "{% trans 'datatable_previous'%}",
-                        "sNext":       "{% trans 'datatable_next'%}",
-                        "sLast":       "{% trans 'datatable_last'%}"
+                        "sFirst":      "{% trans 'First'%}",
+                        "sPrevious":   "{% trans 'Previous'%}",
+                        "sNext":       "{% trans 'Next'%}",
+                        "sLast":       "{% trans 'Last'%}"
                     },
                     "oAria":
                     {
-                        "sSortAscending":  "{% trans 'datatable_sortascending'%}",
-                        "sSortDescending": "{% trans 'datatable_sortdescending'%}",
+                        "sSortAscending":  "{% trans ': activate to sort column ascending'%}",
+                        "sSortDescending": "{% trans ': activate to sort column descending'%}",
                     }
                 },
                 "columns": [

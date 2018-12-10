@@ -444,15 +444,6 @@ msgstr "Current status"
 msgid "next_status"
 msgstr "Next status"
 
-#: templates/dissertations_add_justification.html:80
-#: templates/dissertations_detail_updates.html:93
-#: templates/manager_dissertations_add_justification.html:80
-#: templates/manager_dissertations_detail_updates.html:93
-#, fuzzy
-#| msgid "add_justification"
-msgid "justification"
-msgstr "Add justification"
-
 #: templates/dissertations_add_justification.html:84
 #: templates/dissertations_jury_edit.html:73 templates/informations_add.html:53
 #: templates/informations_edit.html:81
@@ -818,7 +809,7 @@ msgstr "Welcome"
 #: templates/dissertations_welcome.html:40
 msgid "welcome_message_dissertation"
 msgstr ""
-"This application is dedicated to student's dissertations management, for the "
+"This application is dedicated to student\'s dissertations management, for the "
 "Faculties which choosed to use it."
 
 #: templates/dissertations_welcome.html:43
@@ -876,12 +867,12 @@ msgstr "Available at office"
 #: templates/informations.html:122
 #: templates/manager_informations_detail.html:132
 msgid "yes"
-msgstr "yes"
+msgstr ""
 
 #: templates/informations.html:124
 #: templates/manager_informations_detail.html:134
 msgid "no"
-msgstr "no"
+msgstr ""
 
 #: templates/informations.html:137 templates/informations_edit.html:75
 #: templates/manager_informations_add.html:81
@@ -1028,16 +1019,8 @@ msgstr "Chart as reader"
 #: templates/informations_detail_stats.html:214
 #: templates/manager_informations_detail_stats.html:221
 #, fuzzy
-#| msgid "chart_pie_adviser_promoteur"
 msgid "chart_pie_adviser_copromoteur"
-msgstr "Chart as promotor"
-
-#: templates/informations_detail_stats.html:256
-#: templates/manager_informations_detail_stats.html:263
-#, fuzzy
-#| msgid "chart_pie_adviser_reading"
-msgid "chart_pie_adviser_read"
-msgstr "Chart as reader"
+msgstr "Chart as copromotor"
 
 #: templates/informations_edit.html:48
 #: templates/manager_informations_add.html:57
@@ -1054,16 +1037,15 @@ msgstr "Available by phone"
 #: templates/manager_dissertations_detail.html:48
 msgid "delete_dissertation_confirmation_message"
 msgstr ""
-"You are ready to definitely delete this dissertation.  Are you sure you want "
+"You are ready to definitely delete this dissertation. Are you sure you want "
 "to continue ?"
 
 #: templates/manager_dissertations_detail.html:56
 #: templates/manager_proposition_dissertation_detail.html:41
 #: templates/proposition_dissertation_detail.html:42
 #, fuzzy
-#| msgid "adviser_profile"
 msgid "add_file"
-msgstr "Teacher profile"
+msgstr "Add file"
 
 #: templates/manager_dissertations_detail.html:192
 msgid "jury_status"
@@ -1113,10 +1095,6 @@ msgstr "Non-editable"
 msgid "for_teachers"
 msgstr "For teachers"
 
-#: templates/manager_dissertations_detail.html:231
-msgid "for_students"
-msgstr "For students"
-
 #: templates/manager_dissertations_detail.html:279
 msgid "mgr_dissertations_to_dir_submit"
 msgstr "Submit to promotor"
@@ -1141,7 +1119,7 @@ msgstr "Promotor accepts"
 #: templates/manager_dissertations_detail.html:288
 msgid "mgr_promotor_accept_confirmation_message"
 msgstr ""
-"You are ready to set this dissertation as accepted by the promotor.  Are you "
+"You are ready to set this dissertation as accepted by the promotor. Are you "
 "sure you want to continue ?"
 
 #: templates/manager_dissertations_detail.html:293
@@ -1167,7 +1145,7 @@ msgstr "Commission accepts"
 #: templates/manager_dissertations_detail.html:316
 msgid "mgr_com_accept_confirmation_message"
 msgstr ""
-"You are ready to set this dissertation as accepted by the commission.  Are "
+"You are ready to set this dissertation as accepted by the commission. Are "
 "you sure you want to continue ?"
 
 #: templates/manager_dissertations_detail.html:307
@@ -1178,7 +1156,7 @@ msgstr "Commission refuses"
 #: templates/manager_dissertations_detail.html:308
 msgid "mgr_com_refuse_confirmation_message"
 msgstr ""
-"You are ready to set this dissertation as refused by the commission.  Are "
+"You are ready to set this dissertation as refused by the commission. Are "
 "you sure you want to continue ?"
 
 #: templates/manager_dissertations_detail.html:323
@@ -1194,7 +1172,7 @@ msgstr "First year evaluation success"
 msgid "mgr_eva_accept_confirmation_message"
 msgstr ""
 "You are ready to set the first year evaluation succeeded for this "
-"dissertation.  Are you sure you want to continue ?"
+"dissertation. Are you sure you want to continue ?"
 
 #: templates/manager_dissertations_detail.html:329
 #: templates/manager_dissertations_detail.html:332
@@ -1205,12 +1183,12 @@ msgstr "First year evaluation failed"
 msgid "mgr_eva_refuse_confirmation_message"
 msgstr ""
 "You are ready to set the first year evaluation failed for this "
-"dissertation.  Are you sure you want to continue ?"
+"dissertation. Are you sure you want to continue ?"
 
 #: templates/manager_dissertations_detail.html:346
 msgid "mgr_receive_confirmation_message"
 msgstr ""
-"You are ready to set this dissertation as received.  Are you sure you want "
+"You are ready to set this dissertation as received. Are you sure you want "
 "to continue ?"
 
 #: templates/manager_dissertations_detail.html:348
@@ -1234,7 +1212,7 @@ msgstr "Promotor accepts"
 #: templates/manager_dissertations_detail.html:362
 msgid "mgr_win_confirmation_message"
 msgstr ""
-"You are ready to set this dissertation as succeeded.  Are you sure you want "
+"You are ready to set this dissertation as succeeded. Are you sure you want "
 "to continue ?"
 
 #: templates/manager_dissertations_detail.html:364
@@ -1248,7 +1226,7 @@ msgstr "Promotor refuses"
 #: templates/manager_dissertations_detail.html:368
 msgid "mgr_lose_confirmation_message"
 msgstr ""
-"You are ready to set this dissertation as failed.  Are you sure you want to "
+"You are ready to set this dissertation as failed. Are you sure you want to "
 "continue ?"
 
 #: templates/manager_dissertations_detail.html:370

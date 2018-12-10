@@ -37,15 +37,15 @@
       {% if adviser.type == 'PRF' %}
         {% if count_advisers_pro_request > 0 %}
         <div class="jumbotron">
-            <h2>{% trans 'action_needed' %}</h2>
+            <h2>{% trans 'Action needed' %}</h2>
                 <p>
-                   {% trans 'you_have' %}
+                   {% trans 'You have' %}
                    <span style="font-weight: bold">{{ count_advisers_pro_request }}</span>
-                   {% trans 'waiting_dissertations_message' %}
+                   {% trans 'Dissertations waiting validation' %}
                 </p>
                 <p>
                     <a class="btn btn-primary btn-lg" href="{% url 'dissertations_wait_list' %}" role="button">
-                        {% trans 'see_my_waiting_dissertations' %}
+                        {% trans 'See my waiting dissertations' %}
                     </a>
                 </p>
         </div>
@@ -57,19 +57,19 @@
           <div class="col-md-5">
             <h4 class="media-heading">
                 <a href="{% url 'my_dissertation_propositions' %}" id="lnk_my_dissertation_propositions" >
-                    {% trans 'subjects' %}
+                    {% trans 'Dissertation subjects' %}
                 </a>
             </h4>
-            <p>{% trans 'desc_lnk_propositions_dissertations' %}</p>
+            <p>{% trans 'Dissertation subjects submitted by myself and others teachers' %}</p>
           </div>
           <div class="col-md-1"><i class="fa fa-cogs" style="font-size: 400%; color: #6699FF;"></i></div>
           <div class="col-md-5">
             <h4 class="media-heading">
                 <a href="{% url 'informations' %}" id="lnk_informations" >
-                    {% trans 'my_informations' %}
+                    {% trans 'My informations' %}
                 </a>
             </h4>
-            <p>{% trans 'desc_lnk_informations' %}</p>
+            <p>{% trans 'My settings for the Dissertation application.' %}</p>
           </div>
         </div>
         <br>
@@ -78,10 +78,10 @@
           <div class="col-md-5">
             <h4 class="media-heading">
                 <a href="{% url 'dissertations_list' %}" id="lnk_dissertations" >
-                    {% trans 'dissertations' %}
+                    {% trans 'Dissertations' %}
                 </a>
             </h4>
-            <p>{% trans 'desc_lnk_dissertations' %}</p>
+            <p>{% trans 'List of dissertations which I am linked to' %}</p>
           </div>
         </div>
       {% elif adviser.type == 'MGR' %}
@@ -92,19 +92,19 @@
           <div class="col-md-5">
             <h4 class="media-heading">
                 <a href="{% url 'manager_proposition_dissertations' %}" id="lnk_manager_proposition_dissertations" >
-                    {% trans 'subjects' %}
+                    {% trans 'Dissertation subjects' %}
                 </a>
             </h4>
-            <p>{% trans 'desc_lnk_manager_proposition_dissertations' %}</p>
+            <p>{% trans 'Dissertation subjects submitted by teachers' %}</p>
           </div>
           <div class="col-md-1"><i class="fa fa-users" style="font-size: 400%; color: #6699FF;"></i></div>
           <div class="col-md-5">
             <h4 class="media-heading">
                 <a href="{% url 'manager_informations' %}" id="lnk_manager_informations" >
-                    {% trans 'teachers' %}
+                    {% trans 'Teachers' %}
                 </a>
             </h4>
-            <p>{% trans 'desc_lnk_manager_informations' %}</p>
+            <p>{% trans 'List of teachers linked to the Dissertation application' %}</p>
           </div>
         </div>
         <br>
@@ -113,19 +113,19 @@
           <div class="col-md-5">
             <h4 class="media-heading">
                 <a href="{% url 'manager_dissertations_list' %}" id="lnk_manager_dissertations" >
-                    {% trans 'dissertations' %}
+                    {% trans 'Dissertations' %}
                 </a>
             </h4>
-            <p>{% trans 'desc_lnk_manager_dissertations' %}</p>
+            <p>{% trans 'List of the dissertation subjects' %}</p>
           </div>
           <div class="col-md-1"><i class="fa fa-cog" style="font-size: 400%; color: #6699FF;"></i></div>
           <div class="col-md-5">
             <h4 class="media-heading">
                 <a href="{% url 'manager_offer_parameters' %}" id="lnk_manager_offer_parameters" >
-                    {% trans 'parameters' %}
+                    {% trans 'Settings' %}
                 </a>
             </h4>
-            <p>{% trans 'desc_lnk_manager_offer_parameters' %}</p>
+            <p>{% trans 'Settings of the Dissertation application' %}</p>
           </div>
         </div>
         <br>
@@ -134,11 +134,11 @@
             <div class="col-md-5">
                 <h4 class="media-heading">
                     <a href="{% url 'manager_students_list' %}" id="lnk_manager_students_list" >
-                        {% trans 'students' as students_title %}
+                        {% trans 'For students' as students_title %}
                         {{ students_title|title }}
                     </a>
                 </h4>
-                <p>{% trans 'desc_lnk_manager_students_list' %}</p>
+                <p>{% trans 'List of students' %}</p>
             </div>
         </div>
       {% endif %}

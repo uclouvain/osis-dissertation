@@ -28,8 +28,8 @@
 
 {% block breadcrumb %}
   <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'Students\' path' %}</a></li>
-  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'dissertations' %}</a></li>
-  <li><a href="{% url 'manager_informations' %}" id="lnk_teachers">{% trans 'teachers' %}</a></li>
+  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+  <li><a href="{% url 'manager_informations' %}" id="lnk_teachers">{% trans 'Teachers' %}</a></li>
   <li class="active">{{ adv.person.last_name }}, {{ adv.person.first_name }}</li>
 {% endblock %}
 {% block content %}
@@ -37,24 +37,24 @@
     <h2>{{ adv.person.last_name }}, {{ adv.person.first_name }}</h2>
   </div>
   <ul class="nav nav-tabs">
-    <li><a href="{% url 'manager_informations_detail' pk=adv.pk %}">{% trans 'adviser_profile' %}</a></li>
-    <li class="active"><a href="{% url 'manager_informations_detail' pk=adv.pk %}">{% trans 'adviser_dissertations' %}</a></li>
-    <li><a href="{% url 'manager_informations_detail_list_wait' pk=adv.pk %}">{% trans 'adviser_dissertations_wait' %}</a></li>
-    <li><a href="{% url 'manager_informations_detail_stats' pk=adv.pk %}">{% trans 'adviser_stats' %}</a></li>
+    <li><a href="{% url 'manager_informations_detail' pk=adv.pk %}">{% trans 'Teacher profile' %}</a></li>
+    <li class="active"><a href="{% url 'manager_informations_detail' pk=adv.pk %}">{% trans 'Linked dissertations' %}</a></li>
+    <li><a href="{% url 'manager_informations_detail_list_wait' pk=adv.pk %}">{% trans 'Waiting dissertations' %}</a></li>
+    <li><a href="{% url 'manager_informations_detail_stats' pk=adv.pk %}">{% trans 'Teacher stats' %}</a></li>
   </ul>
   <div class="panel panel-default">
     <div class="panel-body">
       {% if adv_list_disserts_pro %}
           <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">{% trans 'dissertation_adviser_promoteur' %}</h3>
+                <h3 class="panel-title">{% trans 'Dissertations as promotor' %}</h3>
             </div>
               <table class="table table-hover">
                 <tr>
-                  <th>{% trans 'dissertation_title'%}</th>
-                  <th>{% trans 'author'%}</th>
-                  <th>{% trans 'status'%}</th>
-                  <th>{% trans 'offer_year_start'%}</th>
+                  <th>{% trans 'Title'%}</th>
+                  <th>{% trans 'Author'%}</th>
+                  <th>{% trans 'Status'%}</th>
+                  <th>{% trans 'Start Program/Year'%}</th>
                 </tr>
                 {% for adviser_list_dissertation in adv_list_disserts_pro %}
                   <tr>
@@ -70,14 +70,14 @@
       {% if adv_list_disserts_copro %}
           <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">{% trans 'dissertation_adviser_copromoteur' %}</h3>
+                <h3 class="panel-title">{% trans 'Dissertations as co⁻promotor' %}</h3>
             </div>
               <table class="table table-hover">
                 <tr>
-                  <th>{% trans 'dissertation_title'%}</th>
-                  <th>{% trans 'author'%}</th>
-                  <th>{% trans 'status'%}</th>
-                  <th>{% trans 'offer_year_start'%}</th>
+                  <th>{% trans 'Title'%}</th>
+                  <th>{% trans 'Author'%}</th>
+                  <th>{% trans 'Status'%}</th>
+                  <th>{% trans 'Start Program/Year'%}</th>
                 </tr>
                 {% for adviser_list_dissertation in adv_list_disserts_copro %}
                   <tr>
@@ -93,14 +93,14 @@
       {% if adv_list_disserts_reader %}
           <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">{% trans 'dissertation_adviser_reader' %}</h3>
+                <h3 class="panel-title">{% trans 'Dissertations as reader' %}</h3>
             </div>
               <table class="table table-hover">
                 <tr>
-                  <th>{% trans 'dissertation_title'%}</th>
-                  <th>{% trans 'author'%}</th>
-                  <th>{% trans 'status'%}</th>
-                  <th>{% trans 'offer_year_start'%}</th>
+                  <th>{% trans 'Title'%}</th>
+                  <th>{% trans 'Author'%}</th>
+                  <th>{% trans 'Status'%}</th>
+                  <th>{% trans 'Start Program/Year'%}</th>
                 </tr>
                 {% for adviser_list_dissertation in adv_list_disserts_reader %}
                   <tr>
@@ -116,14 +116,14 @@
       {% if adv_list_disserts_accompanist %}
           <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">{% trans 'adviser_list_dissertations_accompanist' %}</h3>
+                <h3 class="panel-title">{% trans 'Dissertations as accompanist' %}</h3>
             </div>
               <table class="table table-hover">
                 <tr>
-                  <th>{% trans 'dissertation_title'%}</th>
-                  <th>{% trans 'author'%}</th>
-                  <th>{% trans 'status'%}</th>
-                  <th>{% trans 'offer_year_start'%}</th>
+                  <th>{% trans 'Title'%}</th>
+                  <th>{% trans 'Author'%}</th>
+                  <th>{% trans 'Status'%}</th>
+                  <th>{% trans 'Start Program/Year'%}</th>
                 </tr>
                 {% for adviser_list_dissertation in adv_list_disserts_accompanist %}
                   <tr>
@@ -139,14 +139,14 @@
       {% if adv_list_disserts_internship %}
           <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">{% trans 'adviser_list_dissertations_internship' %}</h3>
+                <h3 class="panel-title">{% trans 'Dissertations as internship master' %}</h3>
             </div>
               <table class="table table-hover">
                 <tr>
-                  <th>{% trans 'dissertation_title'%}</th>
-                  <th>{% trans 'author'%}</th>
-                  <th>{% trans 'status'%}</th>
-                  <th>{% trans 'offer_year_start'%}</th>
+                  <th>{% trans 'Title'%}</th>
+                  <th>{% trans 'Author'%}</th>
+                  <th>{% trans 'Status'%}</th>
+                  <th>{% trans 'Start Program/Year'%}</th>
                 </tr>
                 {% for adviser_list_dissertation in adv_list_disserts_internship %}
                   <tr>
@@ -162,14 +162,14 @@
       {% if adv_list_disserts_president %}
           <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">{% trans 'adviser_list_dissertations_president' %}</h3>
+                <h3 class="panel-title">{% trans 'Dissertations as president' %}</h3>
             </div>
               <table class="table table-hover">
                 <tr>
-                  <th>{% trans 'dissertation_title'%}</th>
-                  <th>{% trans 'author'%}</th>
-                  <th>{% trans 'status'%}</th>
-                  <th>{% trans 'offer_year_start'%}</th>
+                  <th>{% trans 'Title'%}</th>
+                  <th>{% trans 'Author'%}</th>
+                  <th>{% trans 'Status'%}</th>
+                  <th>{% trans 'Start Program/Year'%}</th>
                 </tr>
                 {% for adviser_list_dissertation in adv_list_disserts_president %}
                   <tr>

@@ -28,13 +28,13 @@
 
 {% block breadcrumb %}
   <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'Students\' path' %}</a></li>
-  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'dissertations' %}</a></li>
-  <li><a href="{% url 'manager_dissertations_list' %}" id="lnk_dissertations_list">{% trans 'dissertations' %}</a></li>
-  <li class="active">{% trans 'new_dissertation' %}</li>
+  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+  <li><a href="{% url 'manager_dissertations_list' %}" id="lnk_dissertations_list">{% trans 'Dissertations' %}</a></li>
+  <li class="active">{% trans 'Add dissertation' %}</li>
 {% endblock %}
 {% block content %}
   <div class="page-header">
-    <h2>{% trans 'new_dissertation' %}</h2>
+    <h2>{% trans 'Add dissertation' %}</h2>
   </div>
   <div class="panel panel-default">
     <div class="panel-body">
@@ -42,7 +42,7 @@
         {% csrf_token %}
         <div class="form-group">
             <label for="txt_author" {% if form.author.errors %} style="color:red;" {% endif %}>
-                {% trans 'author' %}
+                {% trans 'Author' %}
                 {% for error in form.author.errors %}
                     <br>{{ error|escape }}
                 {% endfor %}
@@ -53,7 +53,7 @@
         </div>
         <div class="panel-group" {% if form.title.errors %} style="color:red;" {% endif %}>
             <label for="txt_title" style="margin-left:-6px;">
-                {% trans 'title' %}
+                {% trans 'Title' %}
                 {% for error in form.title.errors %}
                     <br>{{ error|escape }}
                 {% endfor %}
@@ -64,7 +64,7 @@
             <div class="col-md-6" {% if form.offer_year_start.errors %} style="color:red;" {% endif %}>
                 <div class="panel-group">
                     <label for="txt_offer_year_start" style="margin-left:-6px;">
-                        {% trans 'offer_propositions' %}
+                        {% trans 'Programs' %}
                         {% for error in form.offer_year_start.errors %}
                             <br>{{ error|escape }}
                         {% endfor %}
@@ -77,7 +77,7 @@
             <div class="col-md-6">
                 <div class="panel-group" {% if form.proposition_dissertation.errors %} style="color:red;" {% endif %}>
                     <label for="txt_proposition_dissertation" style="margin-left:-6px;">
-                        {% trans 'proposition_dissertation' %}
+                        {% trans 'Dissertation subject' %}
                         {% for error in form.proposition_dissertation.errors %}
                             <br>{{ error|escape }}
                         {% endfor %}
@@ -92,7 +92,7 @@
             <div class="col-md-6">
                 <div class="panel-group" {% if form.defend_periode.errors %} style="color:red;" {% endif %}>
                     <label for="txt_defend_periode" style="margin-left:-6px;">
-                        {% trans 'defend_periode' %}
+                        {% trans 'Defense period' %}
                         {% for error in form.defend_periode.errors %}
                             <br>{{ error|escape }}
                         {% endfor %}
@@ -107,7 +107,7 @@
             <div class="col-md-6">
                 <div class="panel-group" {% if form.defend_year.errors %} style="color:red;" {% endif %}>
                     <label for="txt_defend_year" style="margin-left:-6px;">
-                        {% trans 'defend_year' %}
+                        {% trans 'Defense year' %}
                         {% for error in form.defend_year.errors %}
                             <br>{{ error|escape }}
                         {% endfor %}
@@ -118,7 +118,7 @@
         </div>
         <div class="form-group">
             <label for="txt_location" {% if form.location.errors %} style="color:red;" {% endif %}>
-                {% trans 'dissertation_location' %}
+                {% trans 'Dissertation location' %}
                 {% for error in form.location.errors %}
                     <br>{{ error|escape }}
                 {% endfor %}
@@ -128,12 +128,12 @@
             </select>
         </div>
         <div class="panel-group {% if field.errors %}error{% endif %}">
-            <label for="txt_description" style="margin-left:-6px;">{% trans 'description' %}</label>
+            <label for="txt_description" style="margin-left:-6px;">{% trans 'Description' %}</label>
             <textarea class="form-control" id="txt_description"  name="description" rows="10" style="margin:-6px;">{{ form.description.value | default_if_none:''}}</textarea>
         </div>
         <div style="text-align:right">
-            <button type="submit" class="save btn btn-primary" onclick="return confirm('{% trans 'dissertation_confirmation_message' %}')">
-                {% trans 'save' %}
+            <button type="submit" class="save btn btn-primary" onclick="return confirm('{% trans 'You are ready to save this dissertation. Continue ?' %}')">
+                {% trans 'Save' %}
             </button>
         </div>
       </form>

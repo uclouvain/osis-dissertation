@@ -28,20 +28,20 @@
 
 {% block breadcrumb %}
   <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'Students\' path' %}</a></li>
-  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'dissertations' %}</a></li>
-  <li class="active">{% trans 'parameters' %}</li>
+  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+  <li class="active">{% trans 'Settings' %}</li>
 {% endblock %}
 {% block content %}
   <div class="page-header">
-    <h2>{% trans 'parameters' %}</h2>
+    <h2>{% trans 'Settings' %}</h2>
   </div>
   <div class="panel panel-default">
       <table class="table .table-hover">
         <thead>
             <tr>
-              <th>{% trans 'offer_proposition'%}</th>
-              <th>{% trans 'parameters_dates'%}</th>
-              <th>{% trans 'parameters_others'%}</th>
+              <th>{% trans 'Program'%}</th>
+              <th>{% trans 'Dates settings'%}</th>
+              <th>{% trans 'Other settings'%}</th>
             </tr>
         </thead>
         <tbody>
@@ -56,7 +56,7 @@
                 <table>
                     <tr>
                         <td style="padding-right: 1em">
-                            {% trans 'in_visibility_proposition' %}
+                            {% trans 'Subjects currently visible' %}
                         </td>
                         <td style="padding-right: 1em">
                             {% if offer_proposition.in_periode_visibility_proposition %}
@@ -76,7 +76,7 @@
                     </tr>
                     <tr>
                         <td style="padding-right: 1em">
-                            {% trans 'in_visibility_dissertation' %}
+                            {% trans 'Currently possible to create dissertations' %}
                         </td>
                         <td style="padding-right: 1em">
                             {% if offer_proposition.in_periode_visibility_dissertation %}
@@ -96,7 +96,7 @@
                     </tr>
                     <tr>
                         <td style="padding-right: 1em">
-                            {% trans 'in_jury_visibility' %}
+                            {% trans 'Jury currently visible' %}
                         </td>
                         <td style="padding-right: 1em">
                             {% if offer_proposition.in_periode_jury_visibility %}
@@ -116,7 +116,7 @@
                     </tr>
                     <tr>
                         <td style="padding-right: 1em">
-                            {% trans 'in_edit_title' %}
+                            {% trans 'Title currently editable' %}
                         </td>
                         <td style="padding-right: 1em">
                             {% if offer_proposition.in_periode_edit_title %}
@@ -141,7 +141,7 @@
                 <table>
                     <tr>
                         <td style="padding-right: 1em">
-                            {% trans 'student_can_manage_readers'%}
+                            {% trans 'Students can manage readers'%}
                         </td>
                         <td>
                             {% if offer_proposition.student_can_manage_readers %}
@@ -155,7 +155,7 @@
                     </tr>
                     <tr>
                         <td style="padding-right: 1em">
-                            {% trans 'adviser_can_suggest_reader'%}
+                            {% trans 'Adviser can manage jury members'%}
                         </td>
                         <td>
                             {% if offer_proposition.adviser_can_suggest_reader %}
@@ -169,7 +169,7 @@
                     </tr>
                     <tr>
                         <td style="padding-right: 1em">
-                            {% trans 'evaluation_first_year'%}
+                            {% trans 'First year evaluation'%}
                         </td>
                         <td>
                             {% if offer_proposition.evaluation_first_year %}
@@ -183,7 +183,7 @@
                     </tr>
                     <tr>
                         <td style="padding-right: 1em">
-                            {% trans 'validation_commission_exists'%}
+                            {% trans 'Validation commission exists'%}
                         </td>
                         <td>
                             {% if offer_proposition.validation_commission_exists %}
@@ -197,7 +197,7 @@
                     </tr>
                     <tr>
                         <td style="padding-right: 1em">
-                            {% trans 'send_email_to_commission_accepted'%}
+                            {% trans 'Send an email to reading commission when acceptation of evaluation commission'%}
                         </td>
                         <td>
                             {% if offer_proposition.global_email_to_commission %}

@@ -28,27 +28,27 @@
 
 {% block breadcrumb %}
   <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'Students\' path' %}</a></li>
-  <li class="active">{% trans 'dissertations' %}</li>
+  <li class="active">{% trans 'Dissertations' %}</li>
 {% endblock %}
 {% block content %}
   <div class="page-header">
-    <h2>{% trans 'dissertations' %}</h2>
+    <h2>{% trans 'Dissertations' %}</h2>
   </div>
   <div class="jumbotron">
-    <h2>{% trans 'welcome' %}</h2>
+    <h2>{% trans 'Welcome' %}</h2>
         <p>
-           {% trans 'welcome_message_dissertation' %}
+           {% trans 'This application is dedicated to student\'s dissertations management, for the Faculties which choosed to use it.' %}
         </p>
         <p>
-           {% trans 'welcome_warning_dissertation' %}
+           {% trans 'If you continue, you will be registered as teacher in the application, and you will be able to create dissertation subjects for the students.' %}
         </p>
         <p>
             <form method="POST" class="post-form">
                 {% csrf_token %}
                 <br>
-                <button type="submit" class="btn btn-primary btn-lg">{% trans 'continue' %}</button>
+                <button type="submit" class="btn btn-primary btn-lg">{% trans 'Continue' %}</button>
                 <a class="btn btn-default btn-lg" href="{% url 'home' %}" role="button">
-                    {% trans 'go_away' %}
+                    {% trans 'Go away' %}
                 </a>
             </form>
         </p>

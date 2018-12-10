@@ -28,13 +28,13 @@
 
 {% block breadcrumb %}
   <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'Students\' path' %}</a></li>
-  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'dissertations' %}</a></li>
-  <li><a href="{% url 'informations' %}" id="lnk_informations">{% trans 'teachers' %}</a></li>
-  <li class="active">{% trans 'new_adviser' %}</li>
+  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+  <li><a href="{% url 'informations' %}" id="lnk_informations">{% trans 'Teachers' %}</a></li>
+  <li class="active">{% trans 'Add teacher' %}</li>
 {% endblock %}
 {% block content %}
 <div class="page-header">
-    <h2>{% trans 'new_adviser' %}</h2>
+    <h2>{% trans 'Add teacher' %}</h2>
 </div>
 <div class="panel panel-default">
     <div class="panel-body">
@@ -43,17 +43,17 @@
             {% if message %}
             <div class="row">
               <div class="col-md-2" style="text-align: right; color: red;">
-                  <label>{% trans 'error' %}</label>
+                  <label>{% trans 'Error' %}</label>
               </div>
               <div class="col-md-10">
                 {% trans message %} {% if email %}: {{ email }}{% endif %}
                 {% if message_add %}
                   <ul>
                       <li>
-                          {% trans 'if_intern_use_good_email' %}
+                          {% trans 'If this person is a member of the University, you need to use the correct e-mail address.' %}
                       </li>
                       <li>
-                          {% trans 'if_extern_you_can_ask_manager' %}
+                          {% trans 'If this person is not a member of the University, a dissertation manager must add this person to the system.' %}
                       </li>
                   </ul>
                 {% endif %}
@@ -62,7 +62,7 @@
             <br>
             <div class="row">
               <div class="col-md-6">
-                  <h3>{% trans 'new_search' %}</h3>
+                  <h3>{% trans 'New search' %}</h3>
               </div>
             </div>
             <br>
@@ -70,7 +70,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <p>
-                        {% trans 'search_person_explanation' %}
+                        {% trans 'This screen allows you to add, in the dissertation application, as a teacher, a person who did not logged into the application. Please search the person with her/his e-mail address' %}
                     </p>
                 </div>
             </div>
@@ -86,7 +86,7 @@
             <br>
             <div class="row">
               <div class="col-md-2 col-lg-offset-2">
-                  <button type="submit" name="search_form" class="save btn btn-default">{% trans 'search' %}</button>
+                  <button type="submit" name="search_form" class="save btn btn-default">{% trans 'Search' %}</button>
               </div>
             </div>
 

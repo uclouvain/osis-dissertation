@@ -28,13 +28,13 @@
 
 {% block breadcrumb %}
   <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'Students\' path' %}</a></li>
-  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'dissertations' %}</a></li>
-  <li><a href="{% url 'manager_informations' %}" id="lnk_manager_informations">{% trans 'teachers' %}</a></li>
-  <li class="active">{% trans 'add_person' %}</li>
+  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+  <li><a href="{% url 'manager_informations' %}" id="lnk_manager_informations">{% trans 'Teachers' %}</a></li>
+  <li class="active">{% trans 'Add person' %}</li>
 {% endblock %}
 {% block content %}
 <div class="page-header">
-    <h2>{% trans 'add_person' %}</h2>
+    <h2>{% trans 'Add person' %}</h2>
 </div>
 <div class="panel panel-default">
     <div class="panel-body">
@@ -43,7 +43,7 @@
                 <div class="alert alert-warning alert-dismissible" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
-                    <strong>{% trans 'warning' %} :</strong> {% trans 'add_person_warning' %}
+                    <strong>{% trans 'Warning' %} :</strong> {% trans 'This form is used to add a person to OSIS. Complete carefully the form, you will not be able to edit this person after adding.' %}
                 </div>
 
             </div>
@@ -59,14 +59,14 @@
             </div>
             <div class="row">
                 <div class="col-md-8 col-lg-offset-2 form-group">
-                    <label for="txt_last_name" {% if form.last_name.errors %} style="color:red;" {% endif %}>{% trans 'last_name' %} ({% trans 'Required' %})</label>
+                    <label for="txt_last_name" {% if form.last_name.errors %} style="color:red;" {% endif %}>{% trans 'Last name' %} ({% trans 'Required' %})</label>
                     <input class="form-control" id="txt_last_name"  name="last_name"
                     style="margin:-6px;" value="{{ form.last_name.value|default_if_none:'' }}">
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-8 col-lg-offset-2 form-group">
-                    <label for="txt_first_name" {% if form.first_name.errors %} style="color:red;" {% endif %}>{% trans 'first_name' %} ({% trans 'Required' %})</label>
+                    <label for="txt_first_name" {% if form.first_name.errors %} style="color:red;" {% endif %}>{% trans 'First name' %} ({% trans 'Required' %})</label>
                     <input class="form-control" id="txt_first_name"  name="first_name"
                     style="margin:-6px;" value="{{ form.first_name.value|default_if_none:'' }}">
                 </div>
@@ -80,7 +80,7 @@
             </div>
             <div class="row">
                 <div class="col-md-8 col-lg-offset-2 form-group">
-                    <label for="txt_phone_mobile" {% if form.phone_mobile.errors %} style="color:red;" {% endif %}>{% trans 'phone_mobile' %}</label>
+                    <label for="txt_phone_mobile" {% if form.phone_mobile.errors %} style="color:red;" {% endif %}>{% trans 'Mobile phone' %}</label>
                     <input class="form-control" id="txt_phone_mobile"  name="phone_mobile"
                     style="margin:-6px;" value="{{ form.phone_mobile.value|default_if_none:'' }}">
                 </div>
@@ -88,8 +88,8 @@
             <div class="row">
                 <div class="col-md-12" style="text-align: right;">
                     <button type="submit" class="save btn btn-primary"
-                    onclick="return confirm('{% trans 'add_person_confirmation' %}')">
-                        {% trans 'save' %}
+                    onclick="return confirm('{% trans 'This person will be added to OSIS and you will not be able to edit it. Are you sure you want to continue ?' %}')">
+                        {% trans 'Save' %}
                     </button>
                 </div>
             </div>

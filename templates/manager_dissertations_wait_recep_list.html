@@ -28,40 +28,40 @@
 
 {% block breadcrumb %}
   <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'Students\' path' %}</a></li>
-  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'dissertations' %}</a></li>
-  <li class="active">{% trans 'dissertations' %}</li>
+  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+  <li class="active">{% trans 'Dissertations' %}</li>
 {% endblock %}
 {% block content %}
   <div class="page-header">
-    <h2>{% trans 'dissertations' %}</h2>
+    <h2>{% trans 'Dissertations' %}</h2>
   </div>
   <ul class="nav nav-tabs">
 
-    <li><a href="{% url 'manager_dissertations_list' %}">{% trans 'all_dissertations' %}</a></li>
-    <li><a href="manager_dissertations_wait_list">{% trans 'waiting_dissertations' %}</a></li>
+    <li><a href="{% url 'manager_dissertations_list' %}">{% trans 'All dissertations' %}</a></li>
+    <li><a href="manager_dissertations_wait_list">{% trans 'Waiting promotor' %}</a></li>
     {% if show_validation_commission %}
-      <li><a href="{% url 'manager_dissertations_wait_comm_list' %}">{% trans 'waiting_commission' %}</a></li>
+      <li><a href="{% url 'manager_dissertations_wait_comm_list' %}">{% trans 'Waiting commission' %}</a></li>
     {% endif %}
     {% if show_evaluation_first_year == True %}
-      <li><a href="{% url 'manager_dissertations_wait_eval_list' %}">{% trans 'waiting_evaluation' %}</a></li>
+      <li><a href="{% url 'manager_dissertations_wait_eval_list' %}">{% trans 'Waiting 1st year evaluation' %}</a></li>
     {% endif %}
-    <li class="active"><a href="{% url 'manager_dissertations_wait_recep_list' %}">{% trans 'waiting_reception' %}</a></li>
+    <li class="active"><a href="{% url 'manager_dissertations_wait_recep_list' %}">{% trans 'Waiting reception' %}</a></li>
   </ul>
   <div class="panel panel-default">
     {% if dissertations|length == 0 %}
       <br>
-      <label class="alert alert-info" style="margin-left:10%;width:80%;text-align:center;">{% trans 'no_result' %}</label>
+      <label class="alert alert-info" style="margin-left:10%;width:80%;text-align:center;">{% trans 'No result' %}</label>
     {% else %}
       <br>
       <table class="table table-hover" id="tb_memoire">
         <thead>
-          <th>{% trans 'title'%}</th>
-          <th>{% trans 'author'%}</th>
-          <th>{% trans 'status'%}</th>
-          <th>{% trans 'offer'%}</th>
-          <th>{% trans 'year_start'%}</th>
-          <th>{% trans 'proposition_dissertation'%}</th>
-          <th>{% trans 'action'%}</th>
+          <th>{% trans 'Title'%}</th>
+          <th>{% trans 'Author'%}</th>
+          <th>{% trans 'Status'%}</th>
+          <th>{% trans 'Program'%}</th>
+          <th>{% trans 'year beginning'%}</th>
+          <th>{% trans 'Dissertation subject'%}</th>
+          <th>{% trans 'Action'%}</th>
         </thead>
         {% for dissertation in dissertations %}
           <tr>
@@ -109,9 +109,9 @@
             <td>{{ dissertation.proposition_dissertation }}</td>
             <td><a href="{% url 'manager_dissertations_to_dir_submit_list' pk=dissertation.pk %}"
                id="manager_dissertations_to_dir_submit_list" class="btn btn-default"
-               role="button" title="{% trans 'manager_reception_accept'%}"><span
+               role="button" title="{% trans 'Dissertation reception'%}"><span
                     class="glyphicon glyphicon-ok-circle"
-                    aria-hidden="true"></span> {% trans 'manager_reception_accept'%}</a></td>
+                    aria-hidden="true"></span> {% trans 'Dissertation reception'%}</a></td>
           </tr>
         {% endfor %}
       </table>
@@ -133,25 +133,25 @@
                 "language":
                 {
 
-                "sProcessing":     "{% trans 'datatable_processing'%}",
-                "sSearch":         "{% trans 'datatable_search'%}",
-                "sLengthMenu":     "{% trans 'datatable_lengthmenu'%}",
-                "sInfo":           "{% trans 'datatable_info'%}",
-                "sInfoEmpty":      "{% trans 'datatable_infoempty'%}",
-                "sInfoFiltered":   "{% trans 'datatable_infofiltered'%}",
+                "sProcessing":     "{% trans 'Processing...'%}",
+                "sSearch":         "{% trans 'Search:'%}",
+                "sLengthMenu":     "{% trans 'Show _MENU_ entries'%}",
+                "sInfo":           "{% trans 'Showing _START_ to _END_ of _TOTAL_ entries'%}",
+                "sInfoEmpty":      "{% trans 'Showing 0 to 0 of 0 entries'%}",
+                "sInfoFiltered":   "{% trans '(filtered from _MAX_ total entries)'%}",
                 "sInfoPostFix":    "{% trans 'datatable_infopostfix'%}",
-                "sLoadingRecords": "{% trans 'datatable_loadingrecords'%}",
-                "sZeroRecords":    "{% trans 'datatable_zerorecords'%}",
-                "sEmptyTable":     "{% trans 'datatable_emptytable'%}",
+                "sLoadingRecords": "{% trans 'Loading...'%}",
+                "sZeroRecords":    "{% trans 'No matching records found'%}",
+                "sEmptyTable":     "{% trans 'No data available in table'%}",
                 "oPaginate": {
-                    "sFirst":      "{% trans 'datatable_first'%}",
-                    "sPrevious":   "{% trans 'datatable_previous'%}",
-                    "sNext":       "{% trans 'datatable_next'%}",
-                    "sLast":       "{% trans 'datatable_last'%}"
+                    "sFirst":      "{% trans 'First'%}",
+                    "sPrevious":   "{% trans 'Previous'%}",
+                    "sNext":       "{% trans 'Next'%}",
+                    "sLast":       "{% trans 'Last'%}"
                             },
             "oAria": {
-                "sSortAscending":  "{% trans 'datatable_sortascending'%}",
-                "sSortDescending": "{% trans 'datatable_sortdescending'%}",
+                "sSortAscending":  "{% trans ': activate to sort column ascending'%}",
+                "sSortDescending": "{% trans ': activate to sort column descending'%}",
                     }
                 }
             })

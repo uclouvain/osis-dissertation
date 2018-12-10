@@ -28,21 +28,21 @@
 
 {% block breadcrumb %}
   <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'Students\' path' %}</a></li>
-  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'dissertations' %}</a></li>
-  <li class="active">{% trans 'teachers' %}</li>
+  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+  <li class="active">{% trans 'Teachers' %}</li>
 {% endblock %}
 {% block content %}
   <div class="page-header">
-    <h2>{% trans 'teachers_not_responding_to_request' %}</h2>
+    <h2>{% trans 'Teachers not responding to requests' %}</h2>
   </div>
   <ul class="nav nav-tabs">
-    <li><a href={% url 'manager_informations' %}>{% trans 'all_advisers' %}</a></li>
-    <li class="active"><a href="{% url 'manager_informations_list_request' %}">{% trans 'manager_informations_list_request' %}</a></li>
+    <li><a href={% url 'manager_informations' %}>{% trans 'All teachers' %}</a></li>
+    <li class="active"><a href="{% url 'manager_informations_list_request' %}">{% trans 'Teacher having to answer request' %}</a></li>
   </ul>
   <div class="panel panel-default">
       <table class="table table-hover">
         <tr>
-          <th>{% trans 'adviser_name' %}</th>
+          <th>{% trans 'Teacher' %}</th>
         </tr>
         {% for adviser_need_request in advisers_need_request %}
           <tr>

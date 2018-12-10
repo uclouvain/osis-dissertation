@@ -28,8 +28,8 @@
 
 {% block breadcrumb %}
   <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'Students\' path' %}</a></li>
-  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'dissertations' %}</a></li>
-  <li><a href="{% url 'manager_informations' %}" id="lnk_teachers">{% trans 'teachers' %}</a></li>
+  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+  <li><a href="{% url 'manager_informations' %}" id="lnk_teachers">{% trans 'Teachers' %}</a></li>
   <li class="active">{{ adviser.person.last_name }}, {{ adviser.person.first_name }}</li>
 {% endblock %}
 
@@ -38,10 +38,10 @@
     <h2>{{ adviser.person.last_name }}, {{ adviser.person.first_name }}</h2>
   </div>
   <ul class="nav nav-tabs">
-    <li class="active"><a href="#">{% trans 'adviser_profile' %}</a></li>
-    <li><a href="{% url 'manager_informations_detail_list' pk=adviser.pk %}">{% trans 'adviser_dissertations' %}</a></li>
-    <li><a href="{% url 'manager_informations_detail_list_wait' pk=adviser.pk %}">{% trans 'adviser_dissertations_wait' %}</a></li>
-    <li><a href="{% url 'manager_informations_detail_stats' pk=adviser.pk %}">{% trans 'adviser_stats' %}</a></li>
+    <li class="active"><a href="#">{% trans 'Teacher profile' %}</a></li>
+    <li><a href="{% url 'manager_informations_detail_list' pk=adviser.pk %}">{% trans 'Linked dissertations' %}</a></li>
+    <li><a href="{% url 'manager_informations_detail_list_wait' pk=adviser.pk %}">{% trans 'Waiting dissertations' %}</a></li>
+    <li><a href="{% url 'manager_informations_detail_stats' pk=adviser.pk %}">{% trans 'Teacher stats' %}</a></li>
   </ul>
   <div class="panel panel-default">
     <div class="panel-body">
@@ -54,7 +54,7 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-3" style="text-align: right">
-                                <label>{% trans 'name' %}</label>
+                                <label>{% trans 'Name' %}</label>
                             </div>
                             <div class="col-md-4">
                                 <span>{{  first_name }} {{ last_name }}</span>
@@ -105,7 +105,7 @@
                         {% if adviser.person.phone_mobile %}
                         <div class="row">
                             <div class="col-md-3" style="text-align: right">
-                                <label>{% trans 'phone_mobile' %}</label>
+                                <label>{% trans 'Mobile phone' %}</label>
                             </div>
                             <div class="col-md-4">
                                 {% if adviser.available_by_phone %}
@@ -125,7 +125,7 @@
                         {% endif %}
                         <div class="row">
                             <div class="col-md-3" style="text-align: right">
-                                <label>{% trans 'available_at_office' %}</label>
+                                <label>{% trans 'Available at office' %}</label>
                             </div>
                             <div class="col-md-4">
                                 {% if adviser.available_at_office %}
@@ -144,7 +144,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-3" style="text-align: right">
-                                <label>{% trans 'comment' %}</label>
+                                <label>{% trans 'Comment' %}</label>
                             </div>
                         </div>
                         <div class="row">
@@ -158,7 +158,7 @@
             <div class="col-md-3">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">{% trans 'photo' %}</h3>
+                        <h3 class="panel-title">{% trans 'Photo' %}</h3>
                     </div>
                     <div class="panel-body" style="text-align: center">
                         <img src="/my_osis/profile/{{ adviser.person.id }}" class="avatar img-responsive"
@@ -169,9 +169,9 @@
         </div>
         <div class="panel-body">
             <a href="{% url 'manager_informations_edit' pk=adviser.pk %}" id="lnk_manager_informations_edit"
-               class="btn btn-default btn-primary" role="button" title="{% trans 'edit_adviser'%}">
+               class="btn btn-default btn-primary" role="button" title="{% trans 'Edit teacher'%}">
                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                {% trans 'edit_adviser' %}
+                {% trans 'Edit teacher' %}
             </a>
         </div>
     </div>

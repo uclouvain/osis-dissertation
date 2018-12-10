@@ -28,13 +28,13 @@
 
 {% block breadcrumb %}
   <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'Students\' path' %}</a></li>
-  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'dissertations' %}</a></li>
-  <li><a href="{% url 'my_dissertation_propositions' %}" id="lnk_propositions">{% trans 'subjects' %}</a></li>
-  <li class="active">{% trans 'new_subject' %}</li>
+  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+  <li><a href="{% url 'my_dissertation_propositions' %}" id="lnk_propositions">{% trans 'Dissertation subjects' %}</a></li>
+  <li class="active">{% trans 'New dissertation subject' %}</li>
 {% endblock %}
 {% block content %}
   <div class="page-header">
-    <h2>{% trans 'new_subject' %}</h2>
+    <h2>{% trans 'New dissertation subject' %}</h2>
   </div>
   <div class="panel panel-default">
     <div class="panel-body">
@@ -47,7 +47,7 @@
         </div>
         <div class="panel-group">
             <label for="txt_title" {% if form.title.errors %} style="color:red;" {% endif %}>
-                {% trans 'title' %}
+                {% trans 'Title' %}
                 {% for error in form.title.errors %}
                     <br>{{ error|escape }}
                 {% endfor %}
@@ -56,16 +56,16 @@
                 style="margin:-6px;" value="{{ form.title.value|default_if_none:'' }}">
         </div>
         <div class="panel-group">
-            <label for="txt_visibility">{% trans 'visibility' %}</label>
+            <label for="txt_visibility">{% trans 'Visibility' %}</label>
             <input id="txt_visibility"  name="visibility"
                    style="margin-left:6px;" type="checkbox" {% if form.visibility.value %} checked {% endif %}>
         </div>
         <div class="panel-group">
-            <label for="txt_description">{% trans 'description' %}</label>
+            <label for="txt_description">{% trans 'Description' %}</label>
             <textarea class="form-control" id="txt_description"  name="description" rows="10" style="margin:-6px;">{{ form.description.value|default_if_none:'' }}</textarea>
         </div>
         <div class="panel-group">
-            <label for="txt_type">{% trans 'subject_type' %}</label>
+            <label for="txt_type">{% trans 'Subject type' %}</label>
             <select class="form-control" id="txt_type"  name="type" style="margin:-6px;">
                 {% for type in types_choices %}
                     <option value="{{ type.0 }}" {% if form.type.value == type.0 %}selected{% endif %}>{{ type.1}}</option>
@@ -73,7 +73,7 @@
             </select>
         </div>
         <div class="panel-group">
-            <label for="txt_level">{% trans 'level' %}</label>
+            <label for="txt_level">{% trans 'Subject developement level' %}</label>
             <select class="form-control" id="txt_level"  name="level" style="margin:-6px;">
                 {% for level in levels_choices %}
                     <option value="{{ level.0 }}" {% if form.level.value == level.0 %}selected{% endif %}>{{ level.1}}</option>
@@ -81,7 +81,7 @@
             </select>
         </div>
         <div class="panel-group">
-            <label for="txt_collaboration">{% trans 'collaboration' %}</label>
+            <label for="txt_collaboration">{% trans 'Collaboration' %}</label>
             <select class="form-control" id="txt_collaboration"  name="collaboration" style="margin:-6px;">
                 {% for collaboration in collaborations_choices %}
                     <option value="{{ collaboration.0 }}" {% if form.collaboration.value == collaboration.0 %}selected{% endif %}>{{ collaboration.1}}</option>
@@ -90,7 +90,7 @@
         </div>
         <div class="panel-group">
             <label for="txt_max_number_student" {% if form.max_number_student.errors %} style="color:red;" {% endif %}>
-                {% trans 'max_students_number' %}
+                {% trans 'Indicative number of places for this subject' %}
                 {% for error in form.max_number_student.errors %}
                     <br>{{ error|escape }}
                 {% endfor %}
@@ -100,7 +100,7 @@
         </div>
         <div class="panel-group">
             <label for="txt_level" {% if offer_propositions_error %} style="color:red;" {% endif %}>
-                {% trans 'select_course_programs' %}
+                {% trans 'Check the programs related to this topic' %}
                 {% if offer_propositions_error %}
                     <br>{% trans offer_propositions_error %}
                 {% endif %}
@@ -138,7 +138,7 @@
         </div>
         <div style="text-align: right;">
             <button type="submit" class="save btn btn-primary">
-                {% trans 'save' %}
+                {% trans 'Save' %}
             </button>
         </div>
       </form>

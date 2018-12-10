@@ -28,16 +28,16 @@
 
 {% block breadcrumb %}
   <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'Students\' path' %}</a></li>
-  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'dissertations' %}</a></li>
-  <li class="active">{% trans 'my_informations' %}</li>
+  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+  <li class="active">{% trans 'My informations' %}</li>
 {% endblock %}
 {% block content %}
   <div class="page-header">
-    <h2>{% trans 'my_informations' %} - {{ adviser.person.last_name }}, {{ adviser.person.first_name }}</h2>
+    <h2>{% trans 'My informations' %} - {{ adviser.person.last_name }}, {{ adviser.person.first_name }}</h2>
   </div>
   <ul class="nav nav-tabs">
-    <li class="active"><a href="#">{% trans 'my_profile' %}</a></li>
-    <li><a href="{% url 'informations_detail_stats' %}">{% trans 'my_stats' %}</a></li>
+    <li class="active"><a href="#">{% trans 'My profile' %}</a></li>
+    <li><a href="{% url 'informations_detail_stats' %}">{% trans 'My stats' %}</a></li>
   </ul>
   <div class="panel panel-default">
     <div class="panel-body">
@@ -48,7 +48,7 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-3" style="text-align: right">
-                        <label>{% trans 'name' %}</label>
+                        <label>{% trans 'Name' %}</label>
                     </div>
                     <div class="col-md-9">
                         <span>{{  first_name }} {{ last_name }}</span>
@@ -95,7 +95,7 @@
                 {% if adviser.person.phone_mobile %}
                 <div class="row">
                     <div class="col-md-3" style="text-align: right">
-                        <label>{% trans 'phone_mobile' %}</label>
+                        <label>{% trans 'Mobile phone' %}</label>
                     </div>
                     <div class="col-md-4">
                         {% if adviser.available_by_phone %}
@@ -115,7 +115,7 @@
                 {% endif %}
                 <div class="row">
                     <div class="col-md-3" style="text-align: right">
-                        <label>{% trans 'available_at_office' %}</label>
+                        <label>{% trans 'Available at office' %}</label>
                     </div>
                     <div class="col-md-4">
                         {% if adviser.available_at_office %}
@@ -134,7 +134,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-3" style="text-align: right">
-                        <label>{% trans 'comment' %}</label>
+                        <label>{% trans 'Comment' %}</label>
                     </div>
                     <div class="col-md-9" style="text-align: justify">
                         {{ adviser.comment|linebreaks }}
@@ -144,9 +144,9 @@
           </div>
       <div>
         <a href="{% url 'informations_edit' %}" id="lnk_informations_edit"
-           class="btn btn-default btn-primary" role="button" title="{% trans 'edit_adviser'%}">
+           class="btn btn-default btn-primary" role="button" title="{% trans 'Edit teacher'%}">
             <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-            {% trans 'edit' %}
+            {% trans 'Edit' %}
         </a>
       </div>
     </div>

@@ -28,13 +28,13 @@
 
 {% block breadcrumb %}
   <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'Students\' path' %}</a></li>
-  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'dissertations' %}</a></li>
-  <li><a href="{% url 'informations' %}" id="lnk_informations">{% trans 'teachers' %}</a></li>
-  <li class="active">{% trans 'new_adviser' %}</li>
+  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+  <li><a href="{% url 'informations' %}" id="lnk_informations">{% trans 'Teachers' %}</a></li>
+  <li class="active">{% trans 'Add teacher' %}</li>
 {% endblock %}
 {% block content %}
 <div class="page-header">
-    <h2>{% trans 'new_adviser' %}</h2>
+    <h2>{% trans 'Add teacher' %}</h2>
 </div>
 <div class="panel panel-default">
     <div class="panel-body">
@@ -43,29 +43,29 @@
             {% csrf_token %}
             <div class="row">
               <div class="col-md-9 col-md-offset-1">
-                  <label for="person">{% trans 'person_to_add' %} : </label>
+                  <label for="person">{% trans 'Person to add' %} : </label>
                 <input type="hidden" name="person" id="person" value={{ pers.id }}>
                 {{ pers }}
               </div>
             </div>
             <div class="row">
               <div class="col-md-9 col-md-offset-1">
-                  <button type="submit" class="save btn btn-primary">{% trans 'save' %}</button>
+                  <button type="submit" class="save btn btn-primary">{% trans 'Save' %}</button>
               </div>
             </div>
         </form>
         {% else %}
             <div class="row">
                 <div class="col-md-9 col-md-offset-1">
-                    <label for="person">{% trans 'person_added' %} : </label>
+                    <label for="person">{% trans 'Person added' %} : </label>
                     {{ adv }}
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-9 col-md-offset-1">
                     <a href="{% url 'dissertations' %}" id="lnk_dissertations_button"
-                    class="btn btn-default btn-primary" role="button" title="{% trans 'edit_adviser'%}">
-                        {% trans 'back' %}
+                    class="btn btn-default btn-primary" role="button" title="{% trans 'Edit teacher'%}">
+                        {% trans 'Back' %}
                     </a>
                 </div>
             </div>

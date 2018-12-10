@@ -28,8 +28,8 @@
 
 {% block breadcrumb %}
   <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'Students\' path' %}</a></li>
-  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'dissertations' %}</a></li>
-  <li><a href="{% url 'manager_informations' %}" id="lnk_teachers">{% trans 'teachers' %}</a></li>
+  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+  <li><a href="{% url 'manager_informations' %}" id="lnk_teachers">{% trans 'Teachers' %}</a></li>
   <li class="active">{{ adviser.person.last_name }}, {{ adviser.person.first_name }}</li>
 {% endblock %}
 
@@ -39,10 +39,10 @@
     <h2>{{ adviser.person.last_name }}, {{ adviser.person.first_name }}</h2>
   </div>
   <ul class="nav nav-tabs">
-    <li><a href="{% url 'manager_informations_detail' pk=adviser.pk %}">{% trans 'adviser_profile' %}</a></li>
-    <li><a href="{% url 'manager_informations_detail_list' pk=adviser.pk %}">{% trans 'adviser_dissertations' %}</a></li>
-    <li><a href="{% url 'manager_informations_detail_list_wait' pk=adviser.pk %}">{% trans 'adviser_dissertations_wait' %}</a></li>
-    <li class="active"><a href="#">{% trans 'adviser_stats' %}</a></li>
+    <li><a href="{% url 'manager_informations_detail' pk=adviser.pk %}">{% trans 'Teacher profile' %}</a></li>
+    <li><a href="{% url 'manager_informations_detail_list' pk=adviser.pk %}">{% trans 'Linked dissertations' %}</a></li>
+    <li><a href="{% url 'manager_informations_detail_list_wait' pk=adviser.pk %}">{% trans 'Waiting dissertations' %}</a></li>
+    <li class="active"><a href="#">{% trans 'Teacher stats' %}</a></li>
   </ul>
   <div class="panel panel-default">
     <div class="panel-body">
@@ -50,12 +50,12 @@
           <div class="col-md-12">
               <div class="panel panel-default">
                   <div class="panel-heading">
-                    <h3 class="panel-title">{% trans 'stats' %}</h3>
+                    <h3 class="panel-title">{% trans 'Stats' %}</h3>
                   </div>
                   <div class="panel-body">
                       <div class="row">
                         <div class="col-md-6" style="text-align: right">
-                            <label>{% trans 'how_many_dissertation_need_answer' %}</label>
+                            <label>{% trans 'Dissertations quantity needing answer' %}</label>
                         </div>
                         <div class="col-md-6">
                             {% if count_advisers_pro_request > 0 %}
@@ -69,19 +69,19 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6" style="text-align: right">
-                            <label>{% trans 'how_many_dissertation_pro' %}</label>
+                            <label>{% trans 'Dissertations quantity as promotor' %}</label>
                         </div>
                         <div class="col-md-6">
                             {{ count_advisers_pro }}
                             {% for key,value in tab_offer_count.items %}
                                 <br>
-                                {% trans 'in_this_offer' %}{{ key }} : {{ value }}
+                                {% trans 'In this program' %}{{ key }} : {{ value }}
                             {% endfor %}
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6" style="text-align: right">
-                            <label>{% trans 'how_many_dissertation_copro' %}</label>
+                            <label>{% trans 'Dissertation quantity as copromotor' %}</label>
                         </div>
                         <div class="col-md-6">
                             {{ count_advisers_copro }}
@@ -89,7 +89,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6" style="text-align: right">
-                            <label>{% trans 'how_many_dissertation_reader' %}</label>
+                            <label>{% trans 'Dissertation quantity as reader' %}</label>
                         </div>
                         <div class="col-md-6">
                             {{ count_advisers_reader }}
@@ -98,27 +98,27 @@
                     <br>
                     <div class="row">
                         <div class="col-md-4">
-                          <h4 class="panel-title">{% trans 'chart_pie_adviser_promoteur'  %}</h4>
+                          <h4 class="panel-title">{% trans 'Chart as promotor'  %}</h4>
                           {% if count_advisers_pro > 0 %}
                               <canvas id="pie_chart_pro" width="100" height="100"></canvas>
                           {% else %}
-                              <label>{% trans 'no_data' %}</label>
+                              <label>{% trans 'No data' %}</label>
                           {% endif %}
                         </div>
                         <div class="col-md-4">
-                          <h4 class="panel-title">{% trans 'chart_pie_adviser_copro'  %}</h4>
+                          <h4 class="panel-title">{% trans 'Chart as copromotor'  %}</h4>
                           {% if count_advisers_copro > 0 %}
                           <canvas id="pie_chart_copro" width="100" height="100"></canvas>
                           {% else %}
-                              <label>{% trans 'no_data' %}</label>
+                              <label>{% trans 'No data' %}</label>
                           {% endif %}
                         </div>
                         <div class="col-md-4">
-                          <h4 class="panel-title">{% trans 'chart_pie_adviser_reading'  %}</h4>
+                          <h4 class="panel-title">{% trans 'Chart as reader'  %}</h4>
                           {% if count_advisers_reader > 0 %}
                           <canvas id="pie_chart_read" width="100" height="100"></canvas>
                           {% else %}
-                              <label>{% trans 'no_data' %}</label>
+                              <label>{% trans 'No data' %}</label>
                           {% endif %}
                         </div>
                       </div>
@@ -178,7 +178,7 @@
             options: {
                 title: {
                     display: true,
-                    options: '{% trans 'chart_pie_adviser_promoteur'  %}'
+                    options: '{% trans 'Chart as promotor'  %}'
                         }
                       }
         });
@@ -218,7 +218,7 @@
             options: {
                 title: {
                     display: true,
-                    options: '{% trans 'chart_pie_adviser_copromoteur'  %}'
+                    options: '{% trans 'Chart as copromotor'  %}'
                         }
                       }
 
@@ -260,7 +260,7 @@
             options: {
                 title: {
                     display: true,
-                    options: '{% trans 'chart_pie_adviser_read'  %}'
+                    options: '{% trans 'Chart as reader'  %}'
                         }
                       }
         });
