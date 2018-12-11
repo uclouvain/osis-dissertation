@@ -29,10 +29,10 @@ from django.core.urlresolvers import reverse
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
 from base.tests.factories.student import StudentFactory
-from dissertation.forms import AdviserForm, ManagerAddAdviserPreForm, ManagerAddAdviserPerson, ManagerAddAdviserForm, \
+from dissertation.forms import AdviserForm, ManagerAddAdviserPerson, ManagerAddAdviserForm, \
     AddAdviserForm
 from dissertation.models import dissertation_role
-from dissertation.models.enums import status_types
+from dissertation.models.enums import status_types, dissertation_role_status, dissertation_status
 from dissertation.tests.factories.adviser import AdviserManagerFactory, AdviserTeacherFactory
 from dissertation.tests.factories.dissertation import DissertationFactory
 from dissertation.tests.factories.faculty_adviser import FacultyAdviserFactory
@@ -177,8 +177,8 @@ class InformationManagerViewTestCase(TestCase):
         offer = offer_year_start.offer
         offer_proposition = OfferPropositionFactory(offer=offer)
         FacultyAdviserFactory(adviser=self.manager, offer=offer)
-        roles = ['PROMOTEUR', 'CO_PROMOTEUR', 'READER', 'PROMOTEUR', 'ACCOMPANIST', 'PRESIDENT']
-        status = ['DRAFT', 'COM_SUBMIT', 'EVA_SUBMIT', 'TO_RECEIVE', 'DIR_SUBMIT', 'DIR_SUBMIT']
+        roles = [dissertation_role_status.PROMOTEUR, dissertation_role_status.CO_PROMOTEUR, dissertation_role_status.READER, dissertation_role_status.PROMOTEUR, dissertation_role_status.ACCOMPANIST, dissertation_role_status.PRESIDENT]
+        status = [dissertation_status.DRAFT, dissertation_status.COM_SUBMIT, dissertation_status.EVA_SUBMIT, dissertation_status.TO_RECEIVE, dissertation_status.DIR_SUBMIT, dissertation_status.DIR_SUBMIT]
         for x in range(0, 6):
             proposition_dissertation = PropositionDissertationFactory(author=self.teacher,
                                                                       creator=a_person_teacher,
