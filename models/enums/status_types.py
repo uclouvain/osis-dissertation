@@ -24,7 +24,7 @@
 #
 ##############################################################################
 from django.utils.translation import ugettext_lazy as _
-
+#TODO: L'énum sera supprimée quand le refactoring sera terminé
 PROMOTEUR = 'PROMOTEUR'
 CO_PROMOTEUR = 'CO_PROMOTEUR'
 READER = 'READER'
