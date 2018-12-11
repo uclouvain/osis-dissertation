@@ -838,16 +838,6 @@ def dissertations_detail_updates(request, pk):
 
 
 @login_required
-@user_passes_test(adviser.is_manager())
-@check_for_dissert(autorized_dissert_promotor_or_manager)
-def dissertations_delete(request, pk):
-    dissert = dissertation.find_by_id(pk)
-    dissert.deactivate()
-    dissertation_update.add(request, dissert, dissert.status, justification="teacher_set_active_false ")
-    return redirect('dissertations_list')
-
-
-@login_required
 @user_passes_test(adviser.is_teacher)
 @user_passes_test(autorized_dissert_promotor_or_manager)
 def dissertations_to_dir_ok(request, pk):

@@ -31,9 +31,6 @@ from dissertation.utils import request
 
 urlpatterns = [
     url(r'^$', dissertation.dissertations, name='dissertations'),
-
-    url(r'^dissertations_delete/(?P<pk>[0-9]+)$', dissertation.dissertations_delete,
-        name='dissertations_delete'),
     url(r'^dissertations_detail/(?P<pk>[0-9]+)$', dissertation.dissertations_detail,
         name='dissertations_detail'),
     url(r'^dissertations_detail_updates/(?P<pk>[0-9]+)$', dissertation.dissertations_detail_updates,
