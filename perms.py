@@ -38,7 +38,7 @@ from dissertation.models.enums import dissertation_role_status
 def user_is_dissertation_promotor(user, dissert):
     pers = person.find_by_user(user)
     this_adviser = adviser.search_by_person(pers)
-    return dissertation_role._find_by_dissertation(dissert). \
+    return dissertation_role.find_by_dissertation(dissert). \
         filter(status=dissertation_role_status.PROMOTEUR).filter(adviser=this_adviser).exists()
 
 
@@ -47,11 +47,21 @@ def adviser_can_manage(dissert, advis):
     return (dissert.offer_year_start.offer in offers_of_adviser) and advis.type == 'MGR'
 
 
+def adviser_is_in_jury(user, pk):
+    dissert = get_object_or_404(Dissertation, pk=pk)
+    perso = mdl.person.find_by_user(user)
+    advis = adviser.search_by_person(perso)
+    if dissertation_role.count_by_adviser_dissertation(advis, dissert) > 0:
+        return True
+    else:
+        return False
+
+
 def autorized_dissert_promotor_or_manager(user, pk):
     dissert = get_object_or_404(Dissertation, pk=pk)
     perso = mdl.person.find_by_user(user)
     advis = adviser.search_by_person(perso)
-    if (user_is_dissertation_promotor(user, dissert) or adviser_can_manage(dissert, advis)):
+    if user_is_dissertation_promotor(user, dissert) or adviser_can_manage(dissert, advis):
         return True
     else:
         return False

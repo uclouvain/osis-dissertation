@@ -71,24 +71,24 @@ def count_by_adviser(adviser, role=None, dissertation_status=None):
     return query
 
 
-def _find_by_dissertation(dissertation):
+def find_by_dissertation(dissertation):
     return DissertationRole.objects.filter(dissertation=dissertation)
 
 
 def count_by_dissertation(dissertation):
-    return _find_by_dissertation(dissertation).count()
+    return find_by_dissertation(dissertation).count()
 
 
 def count_by_status_dissertation(status, dissertation):
-    return _find_by_dissertation(dissertation).filter(status=status).count()
+    return find_by_dissertation(dissertation).filter(status=status).count()
 
 
 def count_by_adviser_dissertation(adviser, dissertation):
-    return _find_by_dissertation(dissertation).filter(adviser=adviser).count()
+    return find_by_dissertation(dissertation).filter(adviser=adviser).count()
 
 
 def count_by_status_adviser_dissertation(status, adviser, dissertation):
-    return _find_by_dissertation(dissertation).filter(adviser=adviser).filter(status=status).count()
+    return find_by_dissertation(dissertation).filter(adviser=adviser).filter(status=status).count()
 
 
 def search_by_adviser_and_role_stats(adviser, role):

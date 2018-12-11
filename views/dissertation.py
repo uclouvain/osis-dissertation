@@ -46,7 +46,8 @@ from openpyxl.writer.excel import save_virtual_workbook
 from openpyxl import Workbook
 from openpyxl.utils.exceptions import IllegalCharacterError
 from dissertation.models.enums.dissertation_status import DISSERTATION_STATUS
-from dissertation.perms import adviser_can_manage, autorized_dissert_promotor_or_manager, check_for_dissert
+from dissertation.perms import adviser_can_manage, autorized_dissert_promotor_or_manager, check_for_dissert, \
+    adviser_is_in_jury
 
 
 def _role_can_be_deleted(dissert, dissert_role):
@@ -785,8 +786,7 @@ def teacher_is_promotor(adv, dissert):
 
 
 @login_required
-@user_passes_test(adviser.is_teacher)
-@check_for_dissert(autorized_dissert_promotor_or_manager)
+@check_for_dissert(adviser_is_in_jury)
 def dissertations_detail(request, pk):
     dissert = dissertation.find_by_id(pk)
     person = mdl.person.find_by_user(request.user)
@@ -820,8 +820,7 @@ def dissertations_detail(request, pk):
 
 
 @login_required
-@user_passes_test(adviser.is_teacher)
-@check_for_dissert(autorized_dissert_promotor_or_manager)
+@check_for_dissert(adviser_is_in_jury)
 def dissertations_detail_updates(request, pk):
     dissert = dissertation.find_by_id(pk)
     person = mdl.person.find_by_user(request.user)
@@ -839,7 +838,7 @@ def dissertations_detail_updates(request, pk):
 
 
 @login_required
-@user_passes_test(adviser.is_teacher)
+@user_passes_test(adviser.is_manager())
 @check_for_dissert(autorized_dissert_promotor_or_manager)
 def dissertations_delete(request, pk):
     dissert = dissertation.find_by_id(pk)
