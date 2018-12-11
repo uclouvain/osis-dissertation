@@ -35,8 +35,8 @@ PRESIDENT = 'PRESIDENT'
 STATUS_CHOICES = (
     (PROMOTEUR, _('Promotor')),
     (CO_PROMOTEUR, _('Co-Promotor')),
-    (READER, _(READER)),
-    (ACCOMPANIST, _(ACCOMPANIST)),
-    (INTERNSHIP, _(INTERNSHIP)),
-    (PRESIDENT, _(PRESIDENT)),
+    (READER, _('Reader')),
+    (ACCOMPANIST, _('Accompanist')),
+    (INTERNSHIP, _('Internship Master')),
+    (PRESIDENT, _('President')),
 )

@@ -66,7 +66,7 @@ msgstr ""
 
 #: models/dissertation.py:63 templates/manager_dissertations_list.html:101
 msgid "To be defended"
-msgstr "To be defended"
+msgstr ""
 
 #: models/dissertation.py:64 templates/manager_dissertations_list.html:102
 msgid "Defended"
@@ -1784,11 +1784,17 @@ msgstr ""
 msgid "Co-Promotor"
 msgstr ""
 
-#~ msgid "ACCOMPANIST"
-#~ msgstr "Accompanist"
+msgid "Reader"
+msgstr ""
 
-#~ msgid "accompanist"
-#~ msgstr "Accompanist"
+msgid "Accompanist"
+msgstr ""
+
+msgid "Internship Master"
+msgstr ""
+
+msgid "President"
+msgstr ""
 
 #~ msgid "actions"
 #~ msgstr "Actions"
@@ -1810,9 +1816,6 @@ msgstr ""
 
 #~ msgid "case_study"
 #~ msgstr "Case study"
-
-#~ msgid "copromotor"
-#~ msgstr "Co-Promotor"
 
 #~ msgid "datatable_infothousands"
 #~ msgstr ","
@@ -1852,9 +1855,6 @@ msgstr ""
 
 #~ msgid "empty_data"
 #~ msgstr "No data submitted"
-
-#~ msgid "INTERNSHIP"
-#~ msgstr "Internship Master"
 
 #~ msgid "internship_master"
 #~ msgstr "Internship Master"
@@ -1897,25 +1897,10 @@ msgstr ""
 #~ msgid "person_not_found_by_mail"
 #~ msgstr "No person matches this e-mail address"
 
-#~ msgid "PRESIDENT"
-#~ msgstr "President"
-
-#~ msgid "president"
-#~ msgstr "President"
-
-#~ msgid "PROMOTEUR"
-#~ msgstr "Promotor"
-
 #~ msgid "proposition_dissertation_confirmation_message"
 #~ msgstr ""
 #~ "You are ready to save this dissertation subject details. Are you sure you "
 #~ "want to continue ?"
-
-#~ msgid "READER"
-#~ msgstr "Reader"
-
-#~ msgid "reader"
-#~ msgstr "Reader"
 
 #~ msgid "search_teacher"
 #~ msgstr "Search teacher"

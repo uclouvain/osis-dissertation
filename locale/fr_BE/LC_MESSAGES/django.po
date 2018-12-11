@@ -1844,11 +1844,17 @@ msgstr "Le manager a édité la dissertation"
 msgid "Co-Promotor"
 msgstr "Co-Promoteur"
 
-#~ msgid "ACCOMPANIST"
-#~ msgstr "Accompagnateur"
+msgid "Reader"
+msgstr "Lecteur"
 
-#~ msgid "accompanist"
-#~ msgstr "Accompagnateur"
+msgid "Accompanist"
+msgstr "Accompagnateur"
+
+msgid "Internship Master"
+msgstr "Maître de stage"
+
+msgid "President"
+msgstr "Président"
 
 #~ msgid "actions"
 #~ msgstr "Actions"
@@ -1870,9 +1876,6 @@ msgstr "Co-Promoteur"
 
 #~ msgid "case_study"
 #~ msgstr "Étude de cas"
-
-#~ msgid "copromotor"
-#~ msgstr "Co-Promoteur"
 
 #~ msgid "datatable_infothousands"
 #~ msgstr ","
@@ -1912,12 +1915,6 @@ msgstr "Co-Promoteur"
 
 #~ msgid "empty_data"
 #~ msgstr "Pas de données introduites"
-
-#~ msgid "INTERNSHIP"
-#~ msgstr "Maître de stage"
-
-#~ msgid "internship_master"
-#~ msgstr "Maître de stage"
 
 #~ msgid "invalid_data"
 #~ msgstr "Données invalides"
@@ -1960,25 +1957,10 @@ msgstr "Co-Promoteur"
 #~ msgid "person_not_found_by_mail"
 #~ msgstr "Aucune personne ne correspond à cet adresse e-mail"
 
-#~ msgid "PRESIDENT"
-#~ msgstr "Président"
-
-#~ msgid "president"
-#~ msgstr "Président"
-
-#~ msgid "PROMOTEUR"
-#~ msgstr "Promoteur"
-
 #~ msgid "proposition_dissertation_confirmation_message"
 #~ msgstr ""
 #~ "Vous allez indiquer enregistrer les modifications de ce sujet de mémoire. "
 #~ "Êtes-vous certain de vouloir continuer ?"
-
-#~ msgid "READER"
-#~ msgstr "Lecteur"
-
-#~ msgid "reader"
-#~ msgstr "Lecteur"
 
 #~ msgid "search_teacher"
 #~ msgstr "Rechercher un enseignant"
