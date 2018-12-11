@@ -29,7 +29,9 @@ from django.db import models
 from django.db.models import Q
 from .enums import dissertation_role_status
 
+
 MAX_DISSERTATION_ROLE_FOR_ONE_DISSERTATION = 4
+
 
 class DissertationRoleAdmin(SerializableModelAdmin):
     list_display = ('adviser', 'status', 'dissertation', 'author', 'dissertation_status')
@@ -205,4 +207,3 @@ def find_by_id(dissertrole_id):
         return DissertationRole.objects.get(id=dissertrole_id)
     except ObjectDoesNotExist:
         return None
-
