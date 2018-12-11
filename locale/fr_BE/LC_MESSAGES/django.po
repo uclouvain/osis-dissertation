@@ -1040,7 +1040,7 @@ msgid "Submit to promotor"
 msgstr "Soumette au promoteur"
 
 #: templates/manager_dissertations_detail.html:280
-msgid "You are ready to submit this dissertation to the promotor.  Are you sure you want to continue ?"
+msgid "You are ready to submit this dissertation to the promotor. Are you sure you want to continue ?"
 msgstr ""
 "Vous allez soumettre ce mémoire au promoteur. Êtes-vous certain de vouloir "
 "continuer ?"
@@ -1837,6 +1837,9 @@ msgstr "Le jury est actuellement visible par l'étudiant."
 
 msgid "Jury is currently invisible for the student"
 msgstr "Le jury n'est pas actuellement visible par l'étudiant."
+
+msgid "manager has edited the dissertation"
+msgstr "Le manager a édité la dissertation"
 
 #~ msgid "ACCOMPANIST"
 #~ msgstr "Accompagnateur"

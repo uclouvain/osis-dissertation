@@ -27,6 +27,7 @@ import time
 import json
 from django.http import HttpResponse,JsonResponse
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -43,6 +44,7 @@ from dissertation.forms import ManagerDissertationForm, ManagerDissertationEditF
 from openpyxl.writer.excel import save_virtual_workbook
 from openpyxl import Workbook
 from openpyxl.utils.exceptions import IllegalCharacterError
+
 
 ERROR_405_BAD_REQUEST = 405
 ERROR_404_PAGE_NO_FOUND = 404
@@ -148,7 +150,7 @@ def manager_dissertations_detail(request, pk):
             if jury_student_can_edit:
                 jury_student_message = 'Dissertation status is draft, student can manage readers'
             else:
-                jury_student_message = "    Dissertation status is draft, student can't manage readers"
+                jury_student_message = "Dissertation status is draft, student can't manage readers"
         else:
             jury_manager_visibility = True
             jury_manager_can_edit = True
@@ -219,7 +221,7 @@ def manager_dissertations_edit(request, pk):
             form = ManagerDissertationEditForm(request.POST, instance=dissert)
             if form.is_valid():
                 dissert = form.save()
-                justification = "manager_edit_dissertation"
+                justification = _("manager has edited the dissertation")
                 dissertation_update.add(request, dissert, dissert.status, justification=justification)
                 return redirect('manager_dissertations_detail', pk=dissert.pk)
             else:

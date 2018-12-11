@@ -1021,7 +1021,7 @@ msgid "Submit to promotor"
 msgstr ""
 
 #: templates/manager_dissertations_detail.html:280
-msgid "You are ready to submit this dissertation to the promotor.  Are you sure you want to continue ?"
+msgid "You are ready to submit this dissertation to the promotor. Are you sure you want to continue ?"
 msgstr ""
 
 #: templates/manager_dissertations_detail.html:287
@@ -1776,6 +1776,9 @@ msgid "Jury is currently visible for the student"
 msgstr ""
 
 msgid "Jury is currently invisible for the student"
+msgstr ""
+
+msgid "manager has edited the dissertation"
 msgstr ""
 
 #~ msgid "ACCOMPANIST"
