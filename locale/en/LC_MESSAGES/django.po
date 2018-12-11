@@ -1748,7 +1748,34 @@ msgid "Subjects created"
 msgstr ""
 
 #: templates/proposition_dissertations_list_created.html:48
-msgid "Subjects you created for others (you are not the promotor)"
+msgid "Subjects you created for others (you are not the promotor)."
+msgstr ""
+
+msgid "Managers can see and edit jury."
+msgstr ""
+
+msgid "Dissertation status is draft, managers can't edit jury."
+msgstr ""
+
+msgid "Dissertation status is draft, teachers can't edit jury."
+msgstr ""
+
+msgid "Teachers can see and edit jury."
+msgstr ""
+
+msgid "Teachers can see jury but not edit it."
+msgstr ""
+
+msgid "Dissertation status is draft, student can manage readers"
+msgstr ""
+
+msgid "Dissertation status is draft, student can't manage readers"
+msgstr ""
+
+msgid "Jury is currently visible for the student"
+msgstr ""
+
+msgid "Jury is currently invisible for the student"
 msgstr ""
 
 #~ msgid "ACCOMPANIST"
@@ -1852,12 +1879,6 @@ msgstr ""
 #~ msgid "MAIN"
 #~ msgstr "Main"
 
-#~ msgid "manager_jury_draft"
-#~ msgstr "Dissertation status is draft, managers can't edit jury."
-
-#~ msgid "manager_jury_editable"
-#~ msgstr "Managers can see and edit jury."
-
 #~ msgid "max_students"
 #~ msgstr "Max number of students"
 
@@ -1901,27 +1922,6 @@ msgstr ""
 
 #~ msgid "select_program_first"
 #~ msgstr "Please select Start Program/Year first"
-
-#~ msgid "student_jury_draft_can_edit_param"
-#~ msgstr "Dissertation status is draft, student can manage readers"
-
-#~ msgid "student_jury_draft_no_edit_param"
-#~ msgstr "Dissertation status is draft, student can't manage readers"
-
-#~ msgid "student_jury_invisible_dates"
-#~ msgstr "Jury is currently invisible for the student"
-
-#~ msgid "student_jury_visible_dates"
-#~ msgstr "Jury is currently visible for the student"
-
-#~ msgid "teacher_jury_draft"
-#~ msgstr "Dissertation status is draft, teachers can't edit jury."
-
-#~ msgid "teacher_jury_visible_editable_parameter"
-#~ msgstr "Teachers can see and edit jury."
-
-#~ msgid "teacher_jury_visible_not_editable_parameter"
-#~ msgstr "Teachers can see jury but not edit it."
 
 #~ msgid "title_chart_copro"
 #~ msgstr "Dissertations as copromotor"

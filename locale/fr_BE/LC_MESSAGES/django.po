@@ -466,7 +466,7 @@ msgstr "Sauvegarder"
 #: templates/manager_dissertations_detail.html:40
 #: templates/manager_dissertations_detail_updates.html:42
 msgid "main"
-msgstr ""
+msgstr "Principal"
 
 #: templates/dissertations_detail.html:43
 #: templates/dissertations_detail_updates.html:43
@@ -1804,9 +1804,39 @@ msgid "Subjects created"
 msgstr "Sujets créés"
 
 #: templates/proposition_dissertations_list_created.html:48
-msgid "Subjects you created for others (you are not the promotor)"
+msgid "Subjects you created for others (you are not the promotor)."
 msgstr ""
 "Sujets de mémoire que vous avez créés mais dont vous n'êtes pas le promoteur."
+
+msgid "Managers can see and edit jury."
+msgstr "Les managers peuvent voir et modifier le jury."
+
+msgid "Dissertation status is draft, managers can't edit jury."
+msgstr ""
+"Le mémoire est en brouillon, les managers ne peuvent pas modifier le jury."
+
+msgid "Dissertation status is draft, teachers can't edit jury."
+msgstr ""
+"Le mémoire est en brouillon, les enseignants ne peuvent pas modifier le jury."
+
+msgid "Teachers can see and edit jury."
+msgstr "Les enseignants peuvent voir et modifier le jury."
+
+msgid "Teachers can see jury but not edit it."
+msgstr "Les enseignants peuvent voir le jury mais pas le modifier."
+
+msgid "Dissertation status is draft, student can manage readers"
+msgstr "Le mémoire est en brouillon, l'étudiant peut gérer les lecteurs."
+
+msgid "Dissertation status is draft, student can't manage readers"
+msgstr ""
+"Le mémoire est en brouillon, l'étudiant ne peut pas gérer les lecteurs."
+
+msgid "Jury is currently visible for the student"
+msgstr "Le jury est actuellement visible par l'étudiant."
+
+msgid "Jury is currently invisible for the student"
+msgstr "Le jury n'est pas actuellement visible par l'étudiant."
 
 #~ msgid "ACCOMPANIST"
 #~ msgstr "Accompagnateur"
@@ -1909,13 +1939,6 @@ msgstr ""
 #~ msgid "MAIN"
 #~ msgstr "Principal"
 
-#~ msgid "manager_jury_draft"
-#~ msgstr ""
-#~ "Le mémoire est en brouillon, les managers ne peuvent pas modifier le jury."
-
-#~ msgid "manager_jury_editable"
-#~ msgstr "Les managers peuvent voir et modifier le jury."
-
 #~ msgid "max_students"
 #~ msgstr "Nombre maximum d'étudiants"
 
@@ -1962,30 +1985,6 @@ msgstr ""
 
 #~ msgid "select_program_first"
 #~ msgstr "Choisissez d'abord le Programme/Année de début"
-
-#~ msgid "student_jury_draft_can_edit_param"
-#~ msgstr "Le mémoire est en brouillon, l'étudiant peut gérer les lecteurs."
-
-#~ msgid "student_jury_draft_no_edit_param"
-#~ msgstr ""
-#~ "Le mémoire est en brouillon, l'étudiant ne peut pas gérer les lecteurs."
-
-#~ msgid "student_jury_invisible_dates"
-#~ msgstr "Le jury n'est pas actuellement visible par l'étudiant."
-
-#~ msgid "student_jury_visible_dates"
-#~ msgstr "Le jury est actuellement visible par l'étudiant."
-
-#~ msgid "teacher_jury_draft"
-#~ msgstr ""
-#~ "Le mémoire est en brouillon, les enseignants ne peuvent pas modifier le "
-#~ "jury."
-
-#~ msgid "teacher_jury_visible_editable_parameter"
-#~ msgstr "Les enseignants peuvent voir et modifier le jury."
-
-#~ msgid "teacher_jury_visible_not_editable_parameter"
-#~ msgstr "Les enseignants peuvent voir le jury mais pas le modifier."
 
 #~ msgid "title_chart_copro"
 #~ msgstr "Mémoires en tant que copromoteur"

@@ -139,32 +139,32 @@ def manager_dissertations_detail(request, pk):
         if dissert.status == "DRAFT":
             jury_manager_visibility = True
             jury_manager_can_edit = False
-            jury_manager_message = 'manager_jury_draft'
+            jury_manager_message = "Dissertation status is draft, managers can't edit jury."
             jury_teacher_visibility = False
             jury_teacher_can_edit = False
-            jury_teacher_message = 'teacher_jury_draft'
+            jury_teacher_message = "Dissertation status is draft, teachers can't edit jury."
             jury_student_visibility = True
             jury_student_can_edit = offer_prop.student_can_manage_readers
             if jury_student_can_edit:
-                jury_student_message = 'student_jury_draft_can_edit_param'
+                jury_student_message = 'Dissertation status is draft, student can manage readers'
             else:
-                jury_student_message = 'student_jury_draft_no_edit_param'
+                jury_student_message = "    Dissertation status is draft, student can't manage readers"
         else:
             jury_manager_visibility = True
             jury_manager_can_edit = True
-            jury_manager_message = 'manager_jury_editable'
+            jury_manager_message = 'Managers can see and edit jury.'
             jury_teacher_visibility = True
             jury_teacher_can_edit = offer_prop.adviser_can_suggest_reader
             if jury_teacher_can_edit:
-                jury_teacher_message = 'teacher_jury_visible_editable_parameter'
+                jury_teacher_message = 'Teachers can see and edit jury.'
             else:
-                jury_teacher_message = 'teacher_jury_visible_not_editable_parameter'
+                jury_teacher_message = 'Teachers can see jury but not edit it.'
             jury_student_visibility = offer_prop.in_periode_jury_visibility
             jury_student_can_edit = False
             if jury_student_visibility:
-                jury_student_message = 'student_jury_visible_dates'
+                jury_student_message = 'Jury is currently visible for the student'
             else:
-                jury_student_message = 'student_jury_invisible_dates'
+                jury_student_message = 'Jury is currently invisible for the student'
         dissertation_roles = dissertation_role.search_by_dissertation(dissert)
 
         promotors_count = dissertation_role.count_by_status_dissertation('PROMOTEUR', dissert)
