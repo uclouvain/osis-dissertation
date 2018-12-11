@@ -58,22 +58,18 @@ def create_adviser_from_scratch(username, email, password, type="PRF"):
 class UtilsTestCase(TestCase):
     def setUp(self):
         self.maxDiff = None
-        self.person_manager = PersonFactory.create()
-        self.person_manager2 = PersonFactory.create()
+        self.person_manager = PersonFactory()
+        self.person_manager2 = PersonFactory()
         self.manager = AdviserManagerFactory(person=self.person_manager)
         self.manager2 = AdviserManagerFactory(person=self.person_manager2)
-        self.a_person_teacher = PersonFactory.create(first_name='Pierre',
-                                                     last_name='Dupont'
-                                                     )
+        self.a_person_teacher = PersonFactory(first_name='Pierre', last_name='Dupont')
         self.teacher = AdviserTeacherFactory(person=self.a_person_teacher)
-        self.a_person_teacher2 = PersonFactory.create(first_name='Marco',
-                                                      last_name='Millet'
-                                                      )
+        self.a_person_teacher2 = PersonFactory(first_name='Marco', last_name='Millet')
         self.teacher2 = AdviserTeacherFactory(person=self.a_person_teacher2)
         self.teacher3 = AdviserTeacherFactory()
         self.teacher4 = AdviserTeacherFactory()
-        a_person_student = PersonWithoutUserFactory.create(last_name="Durant")
-        self.student = StudentFactory.create(person=a_person_student)
+        a_person_student = PersonWithoutUserFactory(last_name="Durant")
+        self.student = StudentFactory(person=a_person_student)
         self.offer1 = OfferFactory(title="test_offer1")
         self.offer2 = OfferFactory(title="test_offer2")
         self.academic_year1 = AcademicYearFactory()

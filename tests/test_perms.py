@@ -44,7 +44,6 @@ from dissertation.perms import adviser_can_manage, autorized_dissert_promotor_or
 
 class DecoratorsTestCase(TestCase):
     def setUp(self):
-        self.maxDiff = None
         self.person_manager = PersonFactory()
         self.person_manager2 = PersonFactory()
         self.manager = AdviserManagerFactory(person=self.person_manager)

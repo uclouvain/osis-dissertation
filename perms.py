@@ -51,21 +51,14 @@ def adviser_is_in_jury(user, pk):
     dissert = get_object_or_404(Dissertation, pk=pk)
     perso = mdl.person.find_by_user(user)
     advis = adviser.search_by_person(perso)
-    if dissertation_role.count_by_adviser_dissertation(advis, dissert) > 0:
-        return True
-    else:
-        return False
+    return dissertation_role.count_by_adviser_dissertation(advis, dissert) > 0
 
 
 def autorized_dissert_promotor_or_manager(user, pk):
     dissert = get_object_or_404(Dissertation, pk=pk)
     perso = mdl.person.find_by_user(user)
     advis = adviser.search_by_person(perso)
-    if user_is_dissertation_promotor(user, dissert) or adviser_can_manage(dissert, advis):
-        return True
-    else:
-        return False
-
+    return user_is_dissertation_promotor(user, dissert) or adviser_can_manage(dissert, advis)
 
 def check_for_dissert(test_func):
     def f_check_for_dissert_or_redirect(view_func):
