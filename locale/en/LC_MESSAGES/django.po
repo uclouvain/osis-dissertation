@@ -1781,6 +1781,9 @@ msgstr ""
 msgid "manager has edited the dissertation"
 msgstr ""
 
+msgid "Co-Promotor"
+msgstr ""
+
 #~ msgid "ACCOMPANIST"
 #~ msgstr "Accompanist"
 
@@ -1807,9 +1810,6 @@ msgstr ""
 
 #~ msgid "case_study"
 #~ msgstr "Case study"
-
-#~ msgid "CO_PROMOTEUR"
-#~ msgstr "Co-Promotor"
 
 #~ msgid "copromotor"
 #~ msgstr "Co-Promotor"

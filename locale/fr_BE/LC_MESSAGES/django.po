@@ -1841,6 +1841,9 @@ msgstr "Le jury n'est pas actuellement visible par l'étudiant."
 msgid "manager has edited the dissertation"
 msgstr "Le manager a édité la dissertation"
 
+msgid "Co-Promotor"
+msgstr "Co-Promoteur"
+
 #~ msgid "ACCOMPANIST"
 #~ msgstr "Accompagnateur"
 
@@ -1867,9 +1870,6 @@ msgstr "Le manager a édité la dissertation"
 
 #~ msgid "case_study"
 #~ msgstr "Étude de cas"
-
-#~ msgid "CO_PROMOTEUR"
-#~ msgstr "Co-Promoteur"
 
 #~ msgid "copromotor"
 #~ msgstr "Co-Promoteur"
