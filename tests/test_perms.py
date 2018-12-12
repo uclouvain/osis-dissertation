@@ -53,7 +53,7 @@ class DecoratorsTestCase(TestCase):
         self.teacher2 = AdviserTeacherFactory()
         self.teacher3 = AdviserTeacherFactory()
         self.a_person_student = PersonWithoutUserFactory()
-        self.student = StudentFactory.create(person=self.a_person_student)
+        self.student = StudentFactory(person=self.a_person_student)
         self.offer1 = OfferFactory(title="test_offer1")
         self.offer2 = OfferFactory(title="test_offer2")
         self.academic_year1 = AcademicYearFactory()
@@ -65,7 +65,7 @@ class DecoratorsTestCase(TestCase):
         self.faculty_adviser1 = FacultyAdviserFactory(adviser=self.manager, offer=self.offer1)
         self.faculty_adviser2 = FacultyAdviserFactory(adviser=self.manager2, offer=self.offer2)
         self.proposition_dissertation = PropositionDissertationFactory()
-        self.offer_propo = OfferPropositionFactory.create(offer=self.offer1)
+        self.offer_propo = OfferPropositionFactory(offer=self.offer1)
         self.dissertation1 = DissertationFactory(
             author=self.student,
             offer_year_start=self.offer_year_start1,

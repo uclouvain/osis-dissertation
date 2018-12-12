@@ -57,7 +57,6 @@ def create_adviser_from_scratch(username, email, password, type="PRF"):
 
 class UtilsTestCase(TestCase):
     def setUp(self):
-        self.maxDiff = None
         self.person_manager = PersonFactory()
         self.person_manager2 = PersonFactory()
         self.manager = AdviserManagerFactory(person=self.person_manager)

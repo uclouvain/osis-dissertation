@@ -69,6 +69,7 @@ class OfferProposition(SerializableModel):
     def recent_acronym_education_group(self):
         if self.education_group:
             return self.education_group.most_recent_acronym
+        return None
 
     @property
     def in_periode_visibility_proposition(self):
