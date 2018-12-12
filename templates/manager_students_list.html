@@ -170,7 +170,7 @@
                 initComplete: function () {
                     this.api().columns([1]).every( function () {
                         var column = this;
-                        var select = $('<select class="search_select_filter form-control input-sm"><option value="">{% trans 'filter_by_offer'%}</option></select>')
+                        var select = $('<select class="search_select_filter form-control input-sm"><option value="">{% trans 'filter by offer'%}</option></select>')
                             .appendTo( $('#students-list_filter'))
                             .on( 'change', function () {
                                 var val = $.fn.dataTable.util.escapeRegex(

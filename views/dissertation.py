@@ -493,7 +493,7 @@ def manager_dissertations_delete(request, pk):
     adv = adviser.search_by_person(person)
     if (adviser_can_manage(dissert, adv)):
         dissert.deactivate()
-        dissertation_update.add(request, dissert, dissert.status, justification=_("manager_set_active_false"))
+        dissertation_update.add(request, dissert, dissert.status, justification=_("Delete dissertation"))
 
         return redirect('manager_dissertations_list')
     else:
@@ -916,7 +916,7 @@ def dissertations_delete(request, pk):
     adv = adviser.search_by_person(person)
     if teacher_is_promotor(adv, dissert):
         dissert.deactivate()
-        dissertation_update.add(request, dissert, dissert.status, justification=_("teacher_set_active_false "))
+        dissertation_update.add(request, dissert, dissert.status, justification="teacher_set_active_false")
         return redirect('dissertations_list')
     else:
         return redirect('dissertations_detail', pk=pk)

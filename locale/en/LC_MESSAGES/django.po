@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-12 10:22+0100\n"
+"POT-Creation-Date: 2018-12-12 11:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1630,7 +1630,7 @@ msgid "Teacher having to answer request"
 msgstr ""
 
 #: templates/manager_informations_list.html:61
-msgid "How many active dissetations (all programs)"
+msgid "How many active dissertations (all programs)"
 msgstr ""
 
 #: templates/manager_informations_list.html:62
@@ -1887,7 +1887,7 @@ msgid "Number of places"
 msgstr ""
 
 #: templates/manager_students_list.html:173
-msgid "filter_by_offer"
+msgid "filter by offer"
 msgstr ""
 
 #: templates/new_document.html:47
@@ -1915,7 +1915,7 @@ msgid "Subjects you created for others (you are not the promotor)."
 msgstr ""
 
 #: views/dissertation.py:131 views/dissertation.py:137
-msgid "auto_add_jury"
+msgid "Auto add jury"
 msgstr ""
 
 #: views/dissertation.py:144
@@ -1959,7 +1959,7 @@ msgid "manager has edited the dissertation"
 msgstr ""
 
 #: views/dissertation.py:284 views/dissertation.py:316
-msgid "manager_add_jury"
+msgid "Manager add jury"
 msgstr ""
 
 #: views/dissertation.py:355
@@ -1967,158 +1967,17 @@ msgid "manager created dissertation"
 msgstr ""
 
 #: views/dissertation.py:496
-msgid "manager_set_active_false"
+msgid "Delete dissertation"
 msgstr ""
 
 #: views/dissertation.py:513 views/dissertation.py:537
-msgid "manager_delete_jury"
-msgstr ""
-
-#: views/dissertation.py:919
-msgid "teacher_set_active_false "
+msgid "Manager deleted jury"
 msgstr ""
 
 #: views/dissertation.py:1016
-msgid "teacher_delete_jury"
+msgid "Teacher deleted jury"
 msgstr ""
 
 #: views/dissertation.py:1042
-msgid "teacher_add_jury"
+msgid "Teacher added jury"
 msgstr ""
-
-#~ msgid "actions"
-#~ msgstr "Actions"
-
-#~ msgid "active"
-#~ msgstr "Active"
-
-#~ msgid "add_proposition"
-#~ msgstr "Add subject"
-
-#~ msgid "add_success"
-#~ msgstr "successfully added"
-
-#~ msgid "adviser_type"
-#~ msgstr "Adviser type"
-
-#~ msgid "case_study"
-#~ msgstr "Case study"
-
-#~ msgid "datatable_infothousands"
-#~ msgstr ","
-
-#~ msgid "date_end_visibility_dissertation"
-#~ msgstr "End of period for creation of dissertations"
-
-#~ msgid "date_end_visibility_proposition"
-#~ msgstr "End of period of visibility for dissertation subjects"
-
-#~ msgid "date_start_visibility_dissertation"
-#~ msgstr "Start of period for creation of dissertations"
-
-#~ msgid "date_start_visibility_proposition"
-#~ msgstr "Start of period of visibility for dissertation subjects"
-
-#~ msgid "delete"
-#~ msgstr "Delete"
-
-#~ msgid "delete_dissertation"
-#~ msgstr "Delete"
-
-#~ msgid "delete_manager_dissertation"
-#~ msgstr "Delete"
-
-#~ msgid "delete_proposition_dissertation"
-#~ msgstr "Delete"
-
-#~ msgid "edit_parameters"
-#~ msgstr "Edit parameters"
-
-#~ msgid "edit_proposition_dissertation"
-#~ msgstr "Edit"
-
-#~ msgid "empty_data"
-#~ msgstr "No data submitted"
-
-#~ msgid "internship_master"
-#~ msgstr "Internship Master"
-
-#~ msgid "invalid_data"
-#~ msgstr "Invalid data"
-
-#~ msgid "justification_confirmation_message"
-#~ msgstr ""
-#~ "You are ready to save this change and your justification. Are you sure "
-#~ "you want to continue ?"
-
-#~ msgid "level_domain"
-#~ msgstr "Search domain"
-
-#~ msgid "level_work"
-#~ msgstr "Search work"
-
-#~ msgid "level_question"
-#~ msgstr "Search question"
-
-#~ msgid "level_theme"
-#~ msgstr "Search theme"
-
-#~ msgid "MAIN"
-#~ msgstr "Main"
-
-#~ msgid "max_students"
-#~ msgstr "Max number of students"
-
-#~ msgid "mobile_phone"
-#~ msgstr "Mobile phone"
-
-#~ msgid "new_or_edit_subject"
-#~ msgstr "Add/Edit dissertation subject"
-
-#~ msgid "person_already_adviser"
-#~ msgstr "This person already exists as teacher"
-
-#~ msgid "person_not_found_by_mail"
-#~ msgstr "No person matches this e-mail address"
-
-#~ msgid "proposition_dissertation_confirmation_message"
-#~ msgstr ""
-#~ "You are ready to save this dissertation subject details. Are you sure you "
-#~ "want to continue ?"
-
-#~ msgid "search_teacher"
-#~ msgstr "Search teacher"
-
-#~ msgid "select_at_least_one_item"
-#~ msgstr "Please select at least one item"
-
-#~ msgid "select_program_first"
-#~ msgstr "Please select Start Program/Year first"
-
-#~ msgid "title_chart_copro"
-#~ msgstr "Dissertations as copromotor"
-
-#~ msgid "title_chart_pro"
-#~ msgstr "Dissertations as promotor"
-
-#~ msgid "title_chart_read"
-#~ msgstr "Dissertations as reader"
-
-#~ msgid "to_dir_ko_confirmation_message"
-#~ msgstr ""
-#~ "You are ready to refuse this dissertation project, which will be resend "
-#~ "to the student.  Are you sure you want to continue ?"
-
-#~ msgid "to_dir_ok_confirmation_message"
-#~ msgstr ""
-#~ "You are ready to accept this dissertation project.  Are you sure you want "
-#~ "to continue ?"
-
-#~ msgid "type"
-#~ msgstr "Subject type"
-
-#~ msgid "updates"
-#~ msgstr "Updates"
-
-#~ msgid "yes,no"
-#~ msgstr "yes,no"

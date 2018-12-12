@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-12 10:22+0100\n"
+"POT-Creation-Date: 2018-12-12 11:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -681,10 +681,6 @@ msgstr "Jury du mémoire"
 #: templates/manager_dissertations_wait_commission_list.html:331
 #: templates/manager_proposition_dissertation_detail.html:193
 #: templates/proposition_dissertation_detail.html:196
-#, fuzzy
-#| msgid ""
-#| "You are ready to delete this jury member.  Are you sure you want to "
-#| "continue ?"
 msgid ""
 "You are ready to delete this jury member. Are you sure you want to continue?"
 msgstr ""
@@ -859,8 +855,6 @@ msgid "Dissertations as president"
 msgstr "Mémoires encadrés en tant que président"
 
 #: templates/dissertations_welcome.html:38
-#, fuzzy
-#| msgid "welcome"
 msgid "Welcome"
 msgstr "Bienvenue"
 
@@ -1092,10 +1086,6 @@ msgid "Available by phone"
 msgstr "Disponible par téléphone"
 
 #: templates/manager_dissertations_detail.html:48
-#, fuzzy
-#| msgid ""
-#| "You are ready to definitely delete this dissertation. Are you sure you "
-#| "want to continue ?"
 msgid ""
 "You are ready to definitely delete this dissertation. Are you sure you want "
 "to continue?"
@@ -1193,10 +1183,6 @@ msgid "Promotor refuses"
 msgstr "Refus par le promoteur"
 
 #: templates/manager_dissertations_detail.html:294
-#, fuzzy
-#| msgid ""
-#| "You are ready to set this dissertation as refused by the promotor.  Are "
-#| "you sure you want to continue ?"
 msgid ""
 "You are ready to set this dissertation as refused by the promotor. Are you "
 "sure you want to continue ?"
@@ -1279,10 +1265,6 @@ msgid "Dissertation received"
 msgstr "Mémoire réceptionné"
 
 #: templates/manager_dissertations_detail.html:354
-#, fuzzy
-#| msgid ""
-#| "You are ready to set this dissertation as defended.  Are you sure you "
-#| "want to continue ?"
 msgid ""
 "You are ready to set this dissertation as defended. Are you sure you want to "
 "continue ?"
@@ -1641,8 +1623,6 @@ msgid "If this person is not a member of the University, you can"
 msgstr "Si la personne est externe à l'Université, vous pouvez"
 
 #: templates/manager_informations_add_search.html:58
-#, fuzzy
-#| msgid "add this person"
 msgid "Add this person"
 msgstr "ajouter cette personne"
 
@@ -1707,9 +1687,7 @@ msgid "Teacher having to answer request"
 msgstr "Enseignants devant répondre à une demande"
 
 #: templates/manager_informations_list.html:61
-#, fuzzy
-#| msgid "How many active dissertations (all programs)"
-msgid "How many active dissetations (all programs)"
+msgid "How many active dissertations (all programs)"
 msgstr "Nombre de mémoires actifs (tous programmes)"
 
 #: templates/manager_informations_list.html:62
@@ -1721,10 +1699,8 @@ msgid "How many dissertations as copromotor"
 msgstr "Nombre de mémoires en tant que copromoteur"
 
 #: templates/manager_informations_list.html:64
-#, fuzzy
-#| msgid "How many dissertations as promotor"
 msgid "How many dissertations as reader"
-msgstr "Nombre de mémoires en tant que promoteur"
+msgstr "Nombre de mémoires en tant que lecteur"
 
 #: templates/manager_informations_list.html:65
 msgid "How many dissertations need answer"
@@ -1976,9 +1952,7 @@ msgid "Number of places"
 msgstr "Nombre de places"
 
 #: templates/manager_students_list.html:173
-#, fuzzy
-#| msgid "filter by offer"
-msgid "filter_by_offer"
+msgid "filter by offer"
 msgstr "filtre par programme"
 
 #: templates/new_document.html:47
@@ -2007,7 +1981,7 @@ msgstr ""
 "Sujets de mémoire que vous avez créés mais dont vous n'êtes pas le promoteur."
 
 #: views/dissertation.py:131 views/dissertation.py:137
-msgid "auto_add_jury"
+msgid "Auto add jury"
 msgstr ""
 
 #: views/dissertation.py:144
@@ -2054,172 +2028,25 @@ msgid "manager has edited the dissertation"
 msgstr "Le manager a édité la dissertation"
 
 #: views/dissertation.py:284 views/dissertation.py:316
-msgid "manager_add_jury"
-msgstr ""
+msgid "Manager add jury"
+msgstr "Les managers ont ajoutés un membre du jury"
 
 #: views/dissertation.py:355
 msgid "manager created dissertation"
 msgstr "Le manager a créée la dissertation"
 
 #: views/dissertation.py:496
-msgid "manager_set_active_false"
-msgstr ""
+msgid "Delete dissertation"
+msgstr "Mémoire supprimé"
 
 #: views/dissertation.py:513 views/dissertation.py:537
-msgid "manager_delete_jury"
-msgstr ""
-
-#: views/dissertation.py:919
-msgid "teacher_set_active_false "
-msgstr ""
+msgid "Manager deleted jury"
+msgstr "Les managers ont supprimés un membre du jury."
 
 #: views/dissertation.py:1016
-msgid "teacher_delete_jury"
-msgstr ""
+msgid "Teacher deleted jury"
+msgstr "Les enseignants ont supprimés un membre du jury."
 
 #: views/dissertation.py:1042
-msgid "teacher_add_jury"
-msgstr ""
-
-#~ msgid "actions"
-#~ msgstr "Actions"
-
-#~ msgid "active"
-#~ msgstr "Actif"
-
-#~ msgid "add_dissertation"
-#~ msgstr "Ajouter un mémoire"
-
-#~ msgid "add_proposition"
-#~ msgstr "Ajouter un sujet"
-
-#~ msgid "add_success"
-#~ msgstr "Ajout réussi"
-
-#~ msgid "adviser_type"
-#~ msgstr "Type de la personne"
-
-#~ msgid "case_study"
-#~ msgstr "Étude de cas"
-
-#~ msgid "datatable_infothousands"
-#~ msgstr ","
-
-#~ msgid "date_end_visibility_dissertation"
-#~ msgstr "Date de fin de la période de création des mémoires"
-
-#~ msgid "date_end_visibility_proposition"
-#~ msgstr "Date de fin de la période de visibilité des sujets de mémoires"
-
-#~ msgid "date_start_visibility_dissertation"
-#~ msgstr "Date de début de la période de création des mémoires"
-
-#~ msgid "date_start_visibility_proposition"
-#~ msgstr "Date de début de la période de visibilité des sujets de mémoires"
-
-#~ msgid "delete"
-#~ msgstr "Supprimer"
-
-#~ msgid "delete_dissertation"
-#~ msgstr "Supprimer"
-
-#~ msgid "delete_manager_dissertation"
-#~ msgstr "Supprimer"
-
-#~ msgid "delete_proposition_dissertation"
-#~ msgstr "Supprimer"
-
-#~ msgid "edit_manager_dissertation"
-#~ msgstr "Modifier"
-
-#~ msgid "edit_parameters"
-#~ msgstr "Modifier les paramètres"
-
-#~ msgid "edit_proposition_dissertation"
-#~ msgstr "Modifier"
-
-#~ msgid "empty_data"
-#~ msgstr "Pas de données introduites"
-
-#~ msgid "invalid_data"
-#~ msgstr "Données invalides"
-
-#~ msgid "justification_confirmation_message"
-#~ msgstr ""
-#~ "Vous allez enregistrer le changement de statut et sa justification. "
-#~ "Voulez-vous continuer ?"
-
-#~ msgid "level_domain"
-#~ msgstr "Domaine de recherche"
-
-#~ msgid "level_work"
-#~ msgstr "Travail de recherche"
-
-#~ msgid "level_question"
-#~ msgstr "Question de recherche"
-
-#~ msgid "level_theme"
-#~ msgstr "Thème de recherche"
-
-#~ msgid "MAIN"
-#~ msgstr "Principal"
-
-#~ msgid "max_students"
-#~ msgstr "Nombre maximum d'étudiants"
-
-#~ msgid "mobile_phone"
-#~ msgstr "Téléphone mobile"
-
-#~ msgid "new_or_edit_subject"
-#~ msgstr "Ajout/Modification d'un sujet de mémoire"
-
-#~ msgid "offer_proposition_group"
-#~ msgstr "Facultés/groupes d'offer"
-
-#~ msgid "person_already_adviser"
-#~ msgstr "Cette personne existe déjà en tant qu'enseignant"
-
-#~ msgid "person_not_found_by_mail"
-#~ msgstr "Aucune personne ne correspond à cet adresse e-mail"
-
-#~ msgid "proposition_dissertation_confirmation_message"
-#~ msgstr ""
-#~ "Vous allez indiquer enregistrer les modifications de ce sujet de mémoire. "
-#~ "Êtes-vous certain de vouloir continuer ?"
-
-#~ msgid "search_teacher"
-#~ msgstr "Rechercher un enseignant"
-
-#~ msgid "select_at_least_one_item"
-#~ msgstr "Veuillez choisir au moins un élément"
-
-#~ msgid "select_program_first"
-#~ msgstr "Choisissez d'abord le Programme/Année de début"
-
-#~ msgid "title_chart_copro"
-#~ msgstr "Mémoires en tant que copromoteur"
-
-#~ msgid "title_chart_pro"
-#~ msgstr "Mémoires en tant que promoteur"
-
-#~ msgid "title_chart_read"
-#~ msgstr "Mémoires en tant que lecteur"
-
-#~ msgid "to_dir_ko_confirmation_message"
-#~ msgstr ""
-#~ "Vous allez refuser ce projet de mémoire, qui sera renvoyé vers "
-#~ "l'étudiant. Êtes-vous certain de vouloir continuer ?"
-
-#~ msgid "to_dir_ok_confirmation_message"
-#~ msgstr ""
-#~ "Vous allez indiquer accepter ce projet de mémoire. Êtes-vous certain de "
-#~ "vouloir continuer ?"
-
-#~ msgid "type"
-#~ msgstr "Type de sujet"
-
-#~ msgid "updates"
-#~ msgstr "Mises-à-jour"
-
-#~ msgid "yes,no"
-#~ msgstr "oui,non"
+msgid "Teacher added jury"
+msgstr "Les enseignants ont ajoutés un membre du jury."
