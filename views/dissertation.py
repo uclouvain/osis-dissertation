@@ -23,28 +23,30 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import time
 import json
-from rest_framework import status
-from django.http import HttpResponse, JsonResponse
-from django.utils import timezone
-from django.shortcuts import get_object_or_404
-from django.views.decorators.http import require_http_methods
+import time
+
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
-from dissertation.models.dissertation_role import DissertationRole, MAX_DISSERTATION_ROLE_FOR_ONE_DISSERTATION
-from dissertation.models.enums import dissertation_status
-from dissertation.models.enums import dissertation_role_status
-from base.models import academic_year, offer_enrollment
-from base import models as mdl
-from base.views import layout
-from dissertation.models import adviser, dissertation, dissertation_document_file, dissertation_role,\
-    dissertation_update, faculty_adviser, offer_proposition, proposition_dissertation, proposition_role
-from dissertation.forms import ManagerDissertationForm, ManagerDissertationEditForm, ManagerDissertationRoleForm, \
-    ManagerDissertationUpdateForm, AdviserForm
-from openpyxl.writer.excel import save_virtual_workbook
+from django.utils import timezone
+from django.views.decorators.http import require_http_methods
 from openpyxl import Workbook
 from openpyxl.utils.exceptions import IllegalCharacterError
+from openpyxl.writer.excel import save_virtual_workbook
+from rest_framework import status
+
+from base import models as mdl
+from base.models import academic_year, offer_enrollment
+from base.views import layout
+from dissertation.forms import ManagerDissertationForm, ManagerDissertationEditForm, ManagerDissertationRoleForm, \
+    ManagerDissertationUpdateForm, AdviserForm
+from dissertation.models import adviser, dissertation, dissertation_document_file, dissertation_role, \
+    dissertation_update, faculty_adviser, offer_proposition, proposition_dissertation, proposition_role
+from dissertation.models.dissertation_role import DissertationRole, MAX_DISSERTATION_ROLE_FOR_ONE_DISSERTATION
+from dissertation.models.enums import dissertation_role_status
+from dissertation.models.enums import dissertation_status
 from dissertation.models.enums.dissertation_status import DISSERTATION_STATUS
 from dissertation.perms import adviser_can_manage, autorized_dissert_promotor_or_manager, check_for_dissert, \
     adviser_is_in_jury

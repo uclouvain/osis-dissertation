@@ -28,6 +28,7 @@ from functools import wraps
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import available_attrs
+
 from base import models as mdl
 from base.models import person
 from dissertation.models import dissertation_role, adviser, faculty_adviser
@@ -59,6 +60,7 @@ def autorized_dissert_promotor_or_manager(user, pk):
     perso = mdl.person.find_by_user(user)
     advis = adviser.search_by_person(perso)
     return user_is_dissertation_promotor(user, dissert) or adviser_can_manage(dissert, advis)
+
 
 def check_for_dissert(test_func):
     def f_check_for_dissert_or_redirect(view_func):
