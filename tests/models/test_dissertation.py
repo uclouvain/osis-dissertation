@@ -46,16 +46,16 @@ class DissertationModelTestCase(TestCase):
     fixtures = ['dissertation/fixtures/message_template.json', ]
 
     def setUp(self):
-        a_person_teacher = PersonFactory.create(
+        a_person_teacher = PersonFactory(
             first_name='Pierre',
             last_name='Dupont'
         )
         self.teacher = AdviserTeacherFactory(person=a_person_teacher)
-        a_person_student = PersonWithoutUserFactory.create(
+        a_person_student = PersonWithoutUserFactory(
             last_name="Durant",
             first_name='jean'
         )
-        self.student = StudentFactory.create(person=a_person_student)
+        self.student = StudentFactory(person=a_person_student)
         self.offer1 = OfferFactory(title="test_offer1")
         self.offer_prop = OfferPropositionFactory(offer=self.offer1,
                                                   acronym="test_offer1",
