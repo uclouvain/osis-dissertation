@@ -141,6 +141,7 @@
               <th>{% trans 'offer'%}</th>
               <th>{% trans 'year_start'%}</th>
               <th>{% trans 'proposition_dissertation'%}</th>
+              <th>{% trans 'Status change'%}</th>
             </thead>
             {% for dissertation in dissertations %}
             <tr class="visible" style="display: table-row;">
@@ -190,6 +191,42 @@
                 <td>{{ dissertation.offer_year_start.acronym }}</td>
                 <td>{{ dissertation.offer_year_start.academic_year }}</td>
                 <td>{{ dissertation.proposition_dissertation }}</td>
+                <td>{% if dissertation.status == 'DRAFT' %}
+                    <span class="label label-default">
+                    {% elif dissertation.status == 'DIR_SUBMIT' %}
+                    <span class="label label-primary">
+                    {% elif dissertation.status == 'DIR_OK' %}
+                    <span class="label label-success">
+                    {% elif dissertation.status == 'DIR_KO' %}
+                    <span class="label label-danger">
+                    {% elif dissertation.status == 'COM_SUBMIT' %}
+                    <span class="label label-primary">
+                    {% elif dissertation.status == 'COM_OK' %}
+                    <span class="label label-default">
+                    {% elif dissertation.status == 'COM_KO' %}
+                    <span class="label label-danger">
+                    {% elif dissertation.status == 'EVA_SUBMIT' %}
+                    <span class="label label-primary">
+                    {% elif dissertation.status == 'EVA_OK' %}
+                    <span class="label label-default">
+                    {% elif dissertation.status == 'EVA_KO' %}
+                    <span class="label label-danger">
+                    {% elif dissertation.status == 'TO_RECEIVE' %}
+                    <span class="label label-default">
+                    {% elif dissertation.status == 'TO_DEFEND' %}
+                    <span class="label label-default">
+                    {% elif dissertation.status == 'DEFENDED' %}
+                    <span class="label label-default">
+                    {% elif dissertation.status == 'ENDED' %}
+                    <span class="label label-default">
+                    {% elif dissertation.status == 'ENDED_WIN' %}
+                    <span class="label label-default">
+                    {% elif dissertation.status == 'ENDED_LOS' %}
+                    <span class="label label-danger">
+                    {% endif %}
+                        {{ dissertation.get_status_display }}
+                    </span>
+                </td>
               </tr>
             {% endfor %}
           </table>

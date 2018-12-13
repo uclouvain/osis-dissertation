@@ -27,11 +27,13 @@
 import json
 from django.test import TestCase
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext_lazy as _
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
 from base.tests.factories.offer import OfferFactory
 from base.tests.factories.student import StudentFactory
+from dissertation.models.enums import dissertation_status
 from dissertation.tests.factories.adviser import AdviserManagerFactory, AdviserTeacherFactory
 from dissertation.tests.factories.dissertation import DissertationFactory
 from dissertation.tests.factories.faculty_adviser import FacultyAdviserFactory
@@ -42,8 +44,7 @@ from osis_common.models import message_history
 from osis_common.models import message_template
 from dissertation.models import adviser
 from dissertation.models import dissertation_role
-from dissertation.tests.models.test_faculty_adviser import create_faculty_adviser
-from dissertation.views.dissertation import adviser_can_manage
+from dissertation.views.dissertation import new_status_display
 
 ERROR_405_BAD_REQUEST = 405
 ERROR_404_PAGE_NO_FOUND = 404
@@ -266,36 +267,6 @@ class DissertationViewTestCase(TestCase):
         self.dissertation_test_email.manager_accept()
         self.assertEqual(self.dissertation_test_email.status, 'DRAFT')
 
-    def test_adviser_can_manage_dissertation(self):
-        manager = AdviserManagerFactory()
-        manager2 = AdviserManagerFactory()
-        a_person_teacher = PersonFactory.create(first_name='Pierre', last_name='Dupont')
-        a_person_teacher2 = PersonFactory.create(first_name='Marco', last_name='Millet')
-        teacher = AdviserTeacherFactory(person=a_person_teacher)
-        a_person_student = PersonWithoutUserFactory.create(last_name="Durant")
-        student = StudentFactory.create(person=a_person_student)
-        offer_year_start = OfferYearFactory(academic_year=self.academic_year1, acronym="test_offer2")
-        offer_year_start2 = OfferYearFactory(acronym="test_offer3", academic_year=offer_year_start.academic_year)
-        offer = offer_year_start.offer
-        offer2 = offer_year_start2.offer
-        FacultyAdviserFactory(adviser=manager, offer=offer)
-        create_faculty_adviser(manager, offer)
-        create_faculty_adviser(manager2, offer2)
-        proposition_dissertation = PropositionDissertationFactory(author=teacher,
-                                                                  creator=a_person_teacher,
-                                                                  title='Proposition1')
-        dissertation = DissertationFactory(author=student,
-                                           title='Dissertation 2017',
-                                           offer_year_start=offer_year_start,
-                                           proposition_dissertation=proposition_dissertation,
-                                           status='DIR_SUBMIT',
-                                           active=True,
-                                           dissertation_role__adviser=teacher,
-                                           dissertation_role__status='PROMOTEUR')
-        self.assertEqual(adviser_can_manage(dissertation, manager), True)
-        self.assertEqual(adviser_can_manage(dissertation, manager2), False)
-        self.assertEqual(adviser_can_manage(dissertation, teacher), False)
-
     def test_email_new_dissert(self):
         self.client.force_login(self.manager.person.user)
         count_messages_before_status_change = message_history.find_my_messages(self.teacher.person.id).count()
@@ -492,3 +463,18 @@ class DissertationViewTestCase(TestCase):
         url = reverse('manager_students_list')
         response = self.client.get(url)
         self.assertEqual(response.status_code, HTTP_OK)
+
+    def test_new_status_display(self):
+        self.offer2 = OfferFactory()
+        self.offer_prop2 = OfferPropositionFactory(
+            offer=self.offer2,
+            validation_commission_exists=False,
+            evaluation_first_year=False
+        )
+        self.offer_year_start2 = OfferYearFactory(offer=self.offer2, academic_year=self.academic_year1)
+        self.dissertation_x = DissertationFactory(
+            status=dissertation_status.DIR_SUBMIT,
+            offer_year_start=self.offer_year_start2
+        )
+        self.dissertation_x.status = dissertation_status.DIR_SUBMIT
+        self.assertEqual(new_status_display(self.dissertation_x, "accept"), _('to_be_received'))
