@@ -101,7 +101,7 @@
                         {% elif dissert_role.dissertation.status == 'ENDED_LOS' %}
                     <span class="label label-default">
                     {% endif %}
-                        {{ dissert_role.dissertation.status }}
+                        {{ dissert_role.dissertation.get_status_display }}
                     </span>
                     </td>
                     <td>{{ dissert_role.dissertation.offer_year_start }}</td>

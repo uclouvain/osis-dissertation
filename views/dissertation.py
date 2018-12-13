@@ -843,7 +843,7 @@ def dissertations_detail_updates(request, pk):
 
 @login_required
 @user_passes_test(adviser.is_teacher)
-@user_passes_test(autorized_dissert_promotor_or_manager)
+@check_for_dissert(autorized_dissert_promotor_or_manager)
 def dissertations_to_dir_ok(request, pk):
     dissert = dissertation.find_by_id(pk)
     old_status = dissert.status
