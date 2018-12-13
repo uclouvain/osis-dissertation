@@ -31,9 +31,6 @@ from dissertation.utils import request
 
 urlpatterns = [
     url(r'^$', dissertation.dissertations, name='dissertations'),
-
-    url(r'^dissertations_delete/(?P<pk>[0-9]+)$', dissertation.dissertations_delete,
-        name='dissertations_delete'),
     url(r'^dissertations_detail/(?P<pk>[0-9]+)$', dissertation.dissertations_detail,
         name='dissertations_detail'),
     url(r'^dissertations_detail_updates/(?P<pk>[0-9]+)$', dissertation.dissertations_detail_updates,
@@ -127,7 +124,6 @@ urlpatterns = [
         name='manager_informations_edit'),
     url(r'^manager_informations_list_request/$', information.manager_informations_list_request,
         name='manager_informations_list_request'),
-    url(r'^manager_informations_search$', information.manager_informations_search, name='manager_informations_search'),
 
     url(r'^manager_offer_parameters/$', offer_proposition.manager_offer_parameters, name='manager_offer_parameters'),
     url(r'^manager_offer_parameters/(?P<pk>[0-9]+)/edit/$', offer_proposition.manager_offer_parameters_edit,

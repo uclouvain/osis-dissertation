@@ -57,21 +57,18 @@ def create_adviser_from_scratch(username, email, password, type="PRF"):
 
 class UtilsTestCase(TestCase):
     def setUp(self):
-        self.maxDiff = None
-        self.manager = AdviserManagerFactory()
-        a_person_teacher = PersonFactory.create(first_name='Pierre',
-                                                last_name='Dupont',
-                                                email='laurent.dermine@uclouvain.be')
-        self.teacher = AdviserTeacherFactory(person=a_person_teacher)
-        a_person_teacher2 = PersonFactory.create(first_name='Marco',
-                                                 last_name='Millet',
-                                                 email='laurent.dermine@uclouvain.be')
-        self.teacher2 = AdviserTeacherFactory(person=a_person_teacher2)
+        self.person_manager = PersonFactory()
+        self.person_manager2 = PersonFactory()
+        self.manager = AdviserManagerFactory(person=self.person_manager)
+        self.manager2 = AdviserManagerFactory(person=self.person_manager2)
+        self.a_person_teacher = PersonFactory(first_name='Pierre', last_name='Dupont')
+        self.teacher = AdviserTeacherFactory(person=self.a_person_teacher)
+        self.a_person_teacher2 = PersonFactory(first_name='Marco', last_name='Millet')
+        self.teacher2 = AdviserTeacherFactory(person=self.a_person_teacher2)
         self.teacher3 = AdviserTeacherFactory()
         self.teacher4 = AdviserTeacherFactory()
-        a_person_student = PersonWithoutUserFactory.create(last_name="Durant",
-                                                           email='laurent.dermine@uclouvain.be')
-        self.student = StudentFactory.create(person=a_person_student)
+        a_person_student = PersonWithoutUserFactory(last_name="Durant")
+        self.student = StudentFactory(person=a_person_student)
         self.offer1 = OfferFactory(title="test_offer1")
         self.offer2 = OfferFactory(title="test_offer2")
         self.academic_year1 = AcademicYearFactory()
@@ -85,10 +82,11 @@ class UtilsTestCase(TestCase):
                                                           evaluation_first_year=True)
         self.offer_proposition2 = OfferPropositionFactory(offer=self.offer2, global_email_to_commission=False)
         self.proposition_dissertation = PropositionDissertationFactory(author=self.teacher,
-                                                                       creator=a_person_teacher,
+                                                                       creator=self.a_person_teacher,
                                                                        title='Proposition 1212121'
                                                                        )
-        FacultyAdviserFactory(adviser=self.manager, offer=self.offer1)
+        self.faculty_adviser1 = FacultyAdviserFactory(adviser=self.manager, offer=self.offer1)
+        self.faculty_adviser2 = FacultyAdviserFactory(adviser=self.manager, offer=self.offer2)
         self.dissertation1 = DissertationFactory(author=self.student,
                                                  title='Dissertation_test_email',
                                                  offer_year_start=self.offer_year_start1,
@@ -143,4 +141,3 @@ class UtilsTestCase(TestCase):
         self.assertEqual(tab_offer_count_pro, {})
         self.assertEqual(tab_offer_count_read[self.offer1], 1)
         self.assertEqual(tab_offer_count_copro, {})
-

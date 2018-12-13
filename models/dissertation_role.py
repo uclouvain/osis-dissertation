@@ -27,7 +27,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from django.db import models
 from django.db.models import Q
-from .enums import status_types
+from .enums import dissertation_role_status
+
+
+MAX_DISSERTATION_ROLE_FOR_ONE_DISSERTATION = 4
 
 
 class DissertationRoleAdmin(SerializableModelAdmin):
@@ -38,7 +41,7 @@ class DissertationRoleAdmin(SerializableModelAdmin):
 
 
 class DissertationRole(SerializableModel):
-    status = models.CharField(max_length=12, choices=status_types.STATUS_CHOICES)
+    status = models.CharField(max_length=12, choices=dissertation_role_status.STATUS_CHOICES)
     adviser = models.ForeignKey('Adviser')
     dissertation = models.ForeignKey('Dissertation')
 
@@ -70,24 +73,24 @@ def count_by_adviser(adviser, role=None, dissertation_status=None):
     return query
 
 
-def _find_by_dissertation(dissertation):
+def find_by_dissertation(dissertation):
     return DissertationRole.objects.filter(dissertation=dissertation)
 
 
 def count_by_dissertation(dissertation):
-    return _find_by_dissertation(dissertation).count()
+    return find_by_dissertation(dissertation).count()
 
 
 def count_by_status_dissertation(status, dissertation):
-    return _find_by_dissertation(dissertation).filter(status=status).count()
+    return find_by_dissertation(dissertation).filter(status=status).count()
 
 
 def count_by_adviser_dissertation(adviser, dissertation):
-    return _find_by_dissertation(dissertation).filter(adviser=adviser).count()
+    return find_by_dissertation(dissertation).filter(adviser=adviser).count()
 
 
 def count_by_status_adviser_dissertation(status, adviser, dissertation):
-    return _find_by_dissertation(dissertation).filter(adviser=adviser).filter(status=status).count()
+    return find_by_dissertation(dissertation).filter(adviser=adviser).filter(status=status).count()
 
 
 def search_by_adviser_and_role_stats(adviser, role):
@@ -204,4 +207,3 @@ def find_by_id(dissertrole_id):
         return DissertationRole.objects.get(id=dissertrole_id)
     except ObjectDoesNotExist:
         return None
-
