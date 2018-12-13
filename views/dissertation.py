@@ -484,11 +484,15 @@ def manager_dissertations_delete(request, pk):
 
 @login_required
 @user_passes_test(adviser.is_manager)
-@check_for_dissert(autorized_dissert_promotor_or_manager)
 def manager_dissertations_role_delete(request, pk):
     dissert_role = dissertation_role.find_by_id(pk)
+    if dissert_role is None:
+        return redirect('manager_dissertations_list')
     dissert = dissert_role.dissertation
-    if _justification_dissert_role_delete_change(request, dissert, dissert_role, _("Manager deleted jury")):
+    person = mdl.person.find_by_user(request.user)
+    adv = adviser.search_by_person(person)
+    if adviser_can_manage(dissert, adv) and \
+            _justification_dissert_role_delete_change(request, dissert, dissert_role, _("Manager deleted jury")):
         return redirect('manager_dissertations_detail', pk=dissert.pk)
     else:
         return redirect('manager_dissertations_list')
