@@ -40,23 +40,23 @@ class PropositionDissertationAdmin(SerializableModelAdmin):
 
 class PropositionDissertation(SerializableModel):
     TYPES_CHOICES = (
-        ('RDL', _('litterature_review')),
-        ('EMP', _('empirical_research')),
-        ('THE', _('theoretical_analysis')),
-        ('PRO', _('project_dissertation')),
-        ('DEV', _('development_dissertation')),
-        ('OTH', _('other')),
+        ('RDL', _('Litterature review')),
+        ('EMP', _('Empirical research')),
+        ('THE', _('Theoretical analysis')),
+        ('PRO', _('Project dissertation')),
+        ('DEV', _('Development dissertation')),
+        ('OTH', _('Other')),
         )
 
     LEVELS_CHOICES = (
-        ('SPECIFIC', _('specific_subject')),
-        ('THEME', _('large_theme')),
+        ('SPECIFIC', _('Specific subject')),
+        ('THEME', _('Large theme')),
         )
 
     COLLABORATION_CHOICES = (
-        ('POSSIBLE', _('possible')),
-        ('REQUIRED', _('required')),
-        ('FORBIDDEN', _('forbidden')),
+        ('POSSIBLE', _('Possible')),
+        ('REQUIRED', _('Required')),
+        ('FORBIDDEN', _('Forbidden')),
         )
 
     author = models.ForeignKey('Adviser')

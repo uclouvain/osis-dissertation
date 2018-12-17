@@ -27,18 +27,18 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-  <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'student_path' %}</a></li>
-  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'dissertations' %}</a></li>
-  <li class="active">{% trans 'subjects' %}</li>
+  <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
+  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+  <li class="active">{% trans 'Dissertation subjects' %}</li>
 {% endblock %}
 {% block content %}
   <div class="page-header">
-    <h2>{% trans 'subjects' %}</h2>
+    <h2>{% trans 'Dissertation subjects' %}</h2>
   </div>
   <ul class="nav nav-tabs">
-    <li class="active"><a href="#">{% trans 'my_proposition_dissertations' %}</a></li>
-    <li><a href="{% url 'proposition_dissertations_created'%}">{% trans 'proposition_dissertations_created' %}</a></li>
-    <li><a href="{% url 'proposition_dissertations'%}">{% trans 'all_proposition_dissertations' %}</a></li>
+    <li class="active"><a href="#">{% trans 'My subjects' %}</a></li>
+    <li><a href="{% url 'proposition_dissertations_created'%}">{% trans 'Subjects created' %}</a></li>
+    <li><a href="{% url 'proposition_dissertations'%}">{% trans 'All subjects' %}</a></li>
   </ul>
   <div class="panel panel-default">
     <div class="panel-body">
@@ -46,7 +46,7 @@
         <div class="row">
           <div class="col-md-1 pull-right">
             <a href="{% url 'proposition_dissertation_new' %}" id="lnk_proposition_dissertation_new" class="btn btn-default"
-            role="button" title="{% trans 'create_proposition_dissertation'%}"><span class="glyphicon glyphicon-plus"
+            role="button" title="{% trans 'Add dissertation subject'%}"><span class="glyphicon glyphicon-plus"
             aria-hidden="true"></span></a>
           </div>
         </div>
@@ -60,15 +60,15 @@
           <div>
             {% if propositions_dissertations|length == 0 %}
               <br>
-              <label class="alert alert-info" style="margin-left:10%;width:80%;text-align:center;">{% trans 'no_result' %}</label>
+              <label class="alert alert-info" style="margin-left:10%;width:80%;text-align:center;">{% trans 'No result' %}</label>
             {% else %}
               <table class="table table-hover">
                 <tr>
-                  <th>{% trans 'title'%}</th>
-                  <th>{% trans 'promotor'%}</th>
-                  <th>{% trans 'creator'%}</th>
-                  <th>{% trans 'visibility'%}</th>
-                  <th>{% trans 'offer_propositions'%}</th>
+                  <th>{% trans 'Title'%}</th>
+                  <th>{% trans 'Promotor'%}</th>
+                  <th>{% trans 'Created by'%}</th>
+                  <th>{% trans 'Visibility'%}</th>
+                  <th>{% trans 'Programs'%}</th>
                 </tr>
                 {% for proposition_dissertation in propositions_dissertations %}
                   <tr>
@@ -77,9 +77,9 @@
                     <td>{{ proposition_dissertation.creator|default_if_none:"" }}</td>
                     <td>
                       {% if proposition_dissertation.visibility == True %}
-                        <span class="label label-success">{% trans 'visible' %}</span>
+                        <span class="label label-success">{% trans 'Visible' %}</span>
                       {% else %}
-                        <span class="label label-warning">{% trans 'invisible' %}</span>
+                        <span class="label label-warning">{% trans 'Invisible' %}</span>
                       {% endif %}
                     </td>
                     <td>

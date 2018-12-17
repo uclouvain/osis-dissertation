@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-22 15:14+0200\n"
+"POT-Creation-Date: 2018-12-13 15:59+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,992 +16,1963 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "accepted_by_commission"
-msgstr "Accepted by commission"
+#: models/adviser.py:45 templates/dissertations_jury_edit.html:57
+#: templates/manager_dissertations_jury_edit.html:57
+#: templates/manager_dissertations_wait_commission_list.html:90
+#: templates/manager_informations_list.html:60
+#: templates/manager_informations_list_request.html:45
+#: templates/manager_proposition_dissertations_jury_edit.html:54
+#: templates/proposition_dissertations_jury_edit.html:54
+msgid "Teacher"
+msgstr ""
 
-msgid "accepted_by_director"
-msgstr "Accepted by promotor"
+#: models/adviser.py:46
+msgid "Manager"
+msgstr ""
 
-msgid "accepted_by_first_year_evaluation"
-msgstr "Accepted by 1st year evaluation"
+#: models/dissertation.py:53 templates/dissertations_detail.html:115
+#: templates/dissertations_detail.html:123
+#: templates/dissertations_detail.html:131
+#: templates/manager_dissertations_detail.html:126
+#: templates/manager_dissertations_detail.html:134
+#: templates/manager_dissertations_detail.html:142
+msgid "Undefined"
+msgstr ""
 
-msgid "ACCOMPANIST"
-msgstr "Accompanist"
+#: models/dissertation.py:54
+msgid "January"
+msgstr ""
 
-msgid "accompanist"
-msgstr "Accompanist"
+#: models/dissertation.py:55
+msgid "June"
+msgstr ""
 
-msgid "action_needed"
-msgstr "Action needed"
+#: models/dissertation.py:56
+msgid "September"
+msgstr ""
 
-msgid "action"
-msgstr "Action"
+#: models/enums/dissertation_role_status.py:36
+#: templates/dissertations_detail.html:190
+#: templates/manager_dissertations_detail.html:257
+#: templates/manager_proposition_dissertation_detail.html:59
+#: templates/manager_proposition_dissertations_list.html:71
+#: templates/proposition_dissertation_detail.html:61
+#: templates/proposition_dissertations_list.html:71
+#: templates/proposition_dissertations_list_created.html:71
+#: templates/proposition_dissertations_list_my.html:68
+msgid "Promotor"
+msgstr ""
 
-msgid "actions"
-msgstr "Actions"
+#: models/enums/dissertation_role_status.py:37
+msgid "Co-Promotor"
+msgstr ""
 
-msgid "active"
-msgstr "Active"
+#: models/enums/dissertation_role_status.py:38
+msgid "Reader"
+msgstr ""
 
-msgid "add_advisers"
-msgstr "Add teacher"
+#: models/enums/dissertation_role_status.py:39
+msgid "Accompanist"
+msgstr ""
 
-msgid "add_dissertation"
-msgstr "Add dissertation"
+#: models/enums/dissertation_role_status.py:40
+msgid "Internship Master"
+msgstr ""
 
-msgid "add_dissertation_jury_member"
-msgstr "Add a jury member"
+#: models/enums/dissertation_role_status.py:41
+msgid "President"
+msgstr ""
 
-msgid "add_justification"
-msgstr "Add justification"
+#: models/enums/dissertation_status.py:47
+#: templates/manager_dissertations_list.html:93
+msgid "Draft"
+msgstr ""
 
-msgid "add_person"
-msgstr "Add person"
+#: models/enums/dissertation_status.py:48
+#: templates/manager_dissertations_list.html:94
+msgid "Submitted to promotor"
+msgstr ""
 
-msgid "add_person_confirmation"
-msgstr "This person will be added to OSIS and you will not be able to edit it. Are you sure you want to continue ?"
+#: models/enums/dissertation_status.py:49
+msgid "Accepted by promotor"
+msgstr ""
 
-msgid "add_person_warning"
-msgstr "This form is used to add a person to OSIS. Complete carefully the form, you will not be able to edit this person after adding."
+#: models/enums/dissertation_status.py:50
+#: templates/manager_dissertations_list.html:95
+msgid "Refused by promotor"
+msgstr ""
 
-msgid "add_proposition"
-msgstr "Add subject"
+#: models/enums/dissertation_status.py:51
+#: templates/manager_dissertations_list.html:96
+msgid "Submitted to commission"
+msgstr ""
 
-msgid "add_proposition_dissertation_jury_member"
-msgstr "Add jury member"
+#: models/enums/dissertation_status.py:52
+msgid "Accepted by commission"
+msgstr ""
 
-msgid "add_success"
-msgstr "successfully added"
+#: models/enums/dissertation_status.py:53
+#: templates/manager_dissertations_list.html:97
+msgid "Refused by commission"
+msgstr ""
 
-msgid "advanced_search"
-msgstr "Advanced search"
+#: models/enums/dissertation_status.py:54
+#: templates/manager_dissertations_list.html:98
+msgid "Submitted to 1st year evaluation"
+msgstr ""
 
-msgid "adviser"
-msgstr "Teacher"
+#: models/enums/dissertation_status.py:55
+msgid "Accepted by 1st year evaluation"
+msgstr ""
 
-msgid "adviser_name"
-msgstr "Teacher"
+#: models/enums/dissertation_status.py:56
+#: templates/manager_dissertations_list.html:99
+msgid "1st year evaluation failed"
+msgstr ""
 
-msgid "adviser_can_suggest_reader"
-msgstr "Adviser can manage jury members"
+#: models/enums/dissertation_status.py:57
+#: templates/manager_dissertations_list.html:100
+#: tests/views/test_dissertation.py:480
+msgid "To be received"
+msgstr ""
 
-msgid "adviser_dissertations"
-msgstr "Linked dissertations"
+#: models/enums/dissertation_status.py:58
+#: templates/manager_dissertations_list.html:101
+msgid "To be defended"
+msgstr ""
 
-msgid "adviser_dissertations_wait"
-msgstr "Waiting dissertations"
+#: models/enums/dissertation_status.py:59
+#: templates/manager_dissertations_list.html:102
+msgid "Defended"
+msgstr ""
 
-msgid "adviser_list_dissertations_accompanist"
-msgstr "Dissertations as accompanist"
+#: models/enums/dissertation_status.py:60
+#: templates/manager_dissertations_list.html:103
+msgid "Ended"
+msgstr ""
 
-msgid "adviser_list_dissertations_internship"
-msgstr "Dissertations as internship master"
+#: models/enums/dissertation_status.py:61
+#: templates/manager_dissertations_list.html:104
+msgid "Ended with success"
+msgstr ""
 
-msgid "adviser_list_dissertations_president"
-msgstr "Dissertations as president"
+#: models/enums/dissertation_status.py:62
+#: templates/manager_dissertations_list.html:105
+msgid "Reported"
+msgstr ""
 
-msgid "adviser_profile"
-msgstr "Teacher profile"
+#: models/proposition_dissertation.py:43
+msgid "Litterature review"
+msgstr ""
 
-msgid "adviser_stats"
-msgstr "Teacher stats"
+#: models/proposition_dissertation.py:44
+msgid "Empirical research"
+msgstr ""
 
-msgid "adviser_type"
-msgstr "Adviser type"
+#: models/proposition_dissertation.py:45
+msgid "Theoretical analysis"
+msgstr ""
 
-msgid "all_advisers"
-msgstr "All teachers"
+#: models/proposition_dissertation.py:46
+msgid "Project dissertation"
+msgstr ""
 
-msgid "all_dissertations"
-msgstr "All dissertations"
+#: models/proposition_dissertation.py:47
+msgid "Development dissertation"
+msgstr ""
 
-msgid "all_proposition_dissertations"
-msgstr "All subjects"
+#: models/proposition_dissertation.py:48
+msgid "Other"
+msgstr ""
 
-msgid "author"
-msgstr "Author"
+#: models/proposition_dissertation.py:52
+msgid "Specific subject"
+msgstr ""
 
-msgid "available_at_office"
-msgstr "Available at office"
+#: models/proposition_dissertation.py:53
+msgid "Large theme"
+msgstr ""
 
-msgid "available_by_email"
-msgstr "Available by e-mail"
+#: models/proposition_dissertation.py:57
+msgid "Possible"
+msgstr ""
 
-msgid "available_by_phone"
-msgstr "Available by phone"
+#: models/proposition_dissertation.py:58
+#: templates/manager_information_add_person.html:55
+#: templates/manager_information_add_person.html:62
+#: templates/manager_information_add_person.html:69
+msgid "Required"
+msgstr ""
 
-msgid "back"
-msgstr "Back"
+#: models/proposition_dissertation.py:59
+msgid "Forbidden"
+msgstr ""
 
-msgid "case_study"
-msgstr "Case study"
+#: templates/dissertations.html:30
+#: templates/dissertations_add_justification.html:30
+#: templates/dissertations_detail.html:30
+#: templates/dissertations_detail_updates.html:32
+#: templates/dissertations_jury_edit.html:30
+#: templates/dissertations_list.html:30
+#: templates/dissertations_wait_list.html:30
+#: templates/dissertations_welcome.html:30 templates/informations.html:30
+#: templates/informations_add.html:30 templates/informations_add_search.html:30
+#: templates/informations_detail_stats.html:30
+#: templates/informations_edit.html:30
+#: templates/manager_dissertations_add_justification.html:30
+#: templates/manager_dissertations_detail.html:30
+#: templates/manager_dissertations_detail_updates.html:32
+#: templates/manager_dissertations_edit.html:30
+#: templates/manager_dissertations_jury_edit.html:30
+#: templates/manager_dissertations_list.html:32
+#: templates/manager_dissertations_new.html:30
+#: templates/manager_dissertations_wait_commission_list.html:35
+#: templates/manager_dissertations_wait_eval_list.html:33
+#: templates/manager_dissertations_wait_list.html:33
+#: templates/manager_dissertations_wait_recep_list.html:30
+#: templates/manager_information_add_person.html:30
+#: templates/manager_informations_add.html:30
+#: templates/manager_informations_add_search.html:30
+#: templates/manager_informations_detail.html:30
+#: templates/manager_informations_detail_list.html:30
+#: templates/manager_informations_detail_list_wait.html:30
+#: templates/manager_informations_detail_stats.html:30
+#: templates/manager_informations_edit.html:30
+#: templates/manager_informations_list.html:34
+#: templates/manager_informations_list_request.html:30
+#: templates/manager_offer_parameters.html:30
+#: templates/manager_offer_parameters_edit.html:32
+#: templates/manager_proposition_dissertation_detail.html:30
+#: templates/manager_proposition_dissertation_edit.html:30
+#: templates/manager_proposition_dissertation_new.html:30
+#: templates/manager_proposition_dissertations_jury_edit.html:30
+#: templates/manager_proposition_dissertations_list.html:30
+#: templates/manager_students_list.html:36
+#: templates/proposition_dissertation_detail.html:30
+#: templates/proposition_dissertation_edit.html:30
+#: templates/proposition_dissertation_new.html:30
+#: templates/proposition_dissertations_jury_edit.html:30
+#: templates/proposition_dissertations_list.html:30
+#: templates/proposition_dissertations_list_created.html:30
+#: templates/proposition_dissertations_list_my.html:30
+msgid "Students' path"
+msgstr ""
 
-msgid "change"
-msgstr "Change"
+#: templates/dissertations.html:31 templates/dissertations.html:35
+#: templates/dissertations.html:81 templates/dissertations.html:116
+#: templates/dissertations_add_justification.html:31
+#: templates/dissertations_add_justification.html:32
+#: templates/dissertations_detail.html:31
+#: templates/dissertations_detail.html:32
+#: templates/dissertations_detail_updates.html:33
+#: templates/dissertations_detail_updates.html:34
+#: templates/dissertations_jury_edit.html:31
+#: templates/dissertations_jury_edit.html:32
+#: templates/dissertations_list.html:31 templates/dissertations_list.html:32
+#: templates/dissertations_list.html:36
+#: templates/dissertations_wait_list.html:31
+#: templates/dissertations_wait_list.html:32
+#: templates/dissertations_wait_list.html:36
+#: templates/dissertations_welcome.html:31
+#: templates/dissertations_welcome.html:35 templates/informations.html:31
+#: templates/informations_add.html:31 templates/informations_add_search.html:31
+#: templates/informations_detail_stats.html:31
+#: templates/informations_edit.html:31
+#: templates/manager_dissertations_add_justification.html:31
+#: templates/manager_dissertations_add_justification.html:32
+#: templates/manager_dissertations_detail.html:31
+#: templates/manager_dissertations_detail.html:32
+#: templates/manager_dissertations_detail_updates.html:33
+#: templates/manager_dissertations_detail_updates.html:34
+#: templates/manager_dissertations_edit.html:31
+#: templates/manager_dissertations_edit.html:32
+#: templates/manager_dissertations_jury_edit.html:31
+#: templates/manager_dissertations_jury_edit.html:32
+#: templates/manager_dissertations_list.html:33
+#: templates/manager_dissertations_list.html:34
+#: templates/manager_dissertations_list.html:38
+#: templates/manager_dissertations_new.html:31
+#: templates/manager_dissertations_new.html:32
+#: templates/manager_dissertations_wait_commission_list.html:36
+#: templates/manager_dissertations_wait_commission_list.html:37
+#: templates/manager_dissertations_wait_commission_list.html:41
+#: templates/manager_dissertations_wait_eval_list.html:34
+#: templates/manager_dissertations_wait_eval_list.html:35
+#: templates/manager_dissertations_wait_eval_list.html:39
+#: templates/manager_dissertations_wait_list.html:34
+#: templates/manager_dissertations_wait_list.html:35
+#: templates/manager_dissertations_wait_list.html:39
+#: templates/manager_dissertations_wait_recep_list.html:31
+#: templates/manager_dissertations_wait_recep_list.html:32
+#: templates/manager_dissertations_wait_recep_list.html:36
+#: templates/manager_information_add_person.html:31
+#: templates/manager_informations_add.html:31
+#: templates/manager_informations_add_search.html:31
+#: templates/manager_informations_detail.html:31
+#: templates/manager_informations_detail_list.html:31
+#: templates/manager_informations_detail_list_wait.html:31
+#: templates/manager_informations_detail_stats.html:31
+#: templates/manager_informations_edit.html:31
+#: templates/manager_informations_list.html:35
+#: templates/manager_informations_list_request.html:31
+#: templates/manager_offer_parameters.html:31
+#: templates/manager_offer_parameters_edit.html:33
+#: templates/manager_proposition_dissertation_detail.html:31
+#: templates/manager_proposition_dissertation_edit.html:31
+#: templates/manager_proposition_dissertation_new.html:31
+#: templates/manager_proposition_dissertations_jury_edit.html:31
+#: templates/manager_proposition_dissertations_list.html:31
+#: templates/manager_students_list.html:37
+#: templates/proposition_dissertation_detail.html:31
+#: templates/proposition_dissertation_edit.html:31
+#: templates/proposition_dissertation_new.html:31
+#: templates/proposition_dissertations_jury_edit.html:31
+#: templates/proposition_dissertations_list.html:31
+#: templates/proposition_dissertations_list_created.html:31
+#: templates/proposition_dissertations_list_my.html:31
+msgid "Dissertations"
+msgstr ""
 
-msgid "chart_pie_adviser_copro"
-msgstr "Chart as copromotor"
+#: templates/dissertations.html:40
+msgid "Action needed"
+msgstr ""
 
-msgid "chart_pie_adviser_promoteur"
-msgstr "Chart as promotor"
+#: templates/dissertations.html:42
+msgid "You have"
+msgstr ""
 
-msgid "chart_pie_adviser_reading"
-msgstr "Chart as reader"
+#: templates/dissertations.html:44
+msgid "Dissertations waiting validation"
+msgstr ""
 
-msgid "collaboration"
-msgstr "Collaboration"
+#: templates/dissertations.html:48
+msgid "See my waiting dissertations"
+msgstr ""
 
-msgid "comment"
-msgstr "Comment"
+#: templates/dissertations.html:60 templates/dissertations.html:95
+#: templates/manager_proposition_dissertation_detail.html:32
+#: templates/manager_proposition_dissertation_edit.html:32
+#: templates/manager_proposition_dissertation_new.html:32
+#: templates/manager_proposition_dissertations_jury_edit.html:32
+#: templates/manager_proposition_dissertations_list.html:32
+#: templates/manager_proposition_dissertations_list.html:36
+#: templates/proposition_dissertation_detail.html:32
+#: templates/proposition_dissertation_edit.html:32
+#: templates/proposition_dissertation_new.html:32
+#: templates/proposition_dissertations_jury_edit.html:32
+#: templates/proposition_dissertations_list.html:32
+#: templates/proposition_dissertations_list.html:36
+#: templates/proposition_dissertations_list_created.html:32
+#: templates/proposition_dissertations_list_created.html:36
+#: templates/proposition_dissertations_list_my.html:32
+#: templates/proposition_dissertations_list_my.html:36
+msgid "Dissertation subjects"
+msgstr ""
 
-msgid "continue"
-msgstr "Continue"
+#: templates/dissertations.html:63
+msgid "Dissertation subjects submitted by myself and others teachers"
+msgstr ""
 
-msgid "CO_PROMOTEUR"
-msgstr "Co-Promotor"
+#: templates/dissertations.html:69 templates/informations.html:32
+#: templates/informations.html:36 templates/informations_detail_stats.html:32
+#: templates/informations_detail_stats.html:36
+#: templates/informations_edit.html:32 templates/informations_edit.html:36
+msgid "My informations"
+msgstr ""
 
-msgid "copromotor"
-msgstr "Co-Promotor"
+#: templates/dissertations.html:72
+msgid "My settings for the Dissertation application."
+msgstr ""
 
-msgid "count_places"
-msgstr "Number of places"
+#: templates/dissertations.html:84
+msgid "List of dissertations which I am linked to"
+msgstr ""
 
-msgid "create_dissertation"
-msgstr "Add dissertation"
+#: templates/dissertations.html:98
+msgid "Dissertation subjects submitted by teachers"
+msgstr ""
 
-msgid "create_proposition_dissertation"
-msgstr "Add dissertation subject"
+#: templates/dissertations.html:104 templates/informations_add.html:32
+#: templates/informations_add_search.html:32
+#: templates/manager_information_add_person.html:32
+#: templates/manager_informations_add.html:32
+#: templates/manager_informations_add_search.html:32
+#: templates/manager_informations_detail.html:32
+#: templates/manager_informations_detail_list.html:32
+#: templates/manager_informations_detail_list_wait.html:32
+#: templates/manager_informations_detail_stats.html:32
+#: templates/manager_informations_edit.html:32
+#: templates/manager_informations_list.html:36
+#: templates/manager_informations_list.html:40
+#: templates/manager_informations_list_request.html:32
+msgid "Teachers"
+msgstr ""
 
-msgid "creation_date"
-msgstr "Creation date"
+#: templates/dissertations.html:107
+msgid "List of teachers linked to the Dissertation application"
+msgstr ""
 
-msgid "creator"
-msgstr "Created by"
+#: templates/dissertations.html:119
+msgid "List of the dissertation subjects"
+msgstr ""
 
-msgid "current_status"
-msgstr "Current status"
+#: templates/dissertations.html:125 templates/manager_offer_parameters.html:32
+#: templates/manager_offer_parameters.html:36
+#: templates/manager_offer_parameters_edit.html:34
+#: templates/manager_offer_parameters_edit.html:39
+msgid "Settings"
+msgstr ""
 
-msgid "datatable_emptytable"
-msgstr "No data available in table"
+#: templates/dissertations.html:128
+msgid "Settings of the Dissertation application"
+msgstr ""
 
-msgid "datatable_info"
-msgstr "Showing _START_ to _END_ of _TOTAL_ entries"
+#: templates/dissertations.html:137
+#: templates/manager_dissertations_detail.html:231
+#: templates/manager_students_list.html:38
+#: templates/manager_students_list.html:43
+msgid "For students"
+msgstr ""
 
-msgid "datatable_infoempty"
-msgstr "Showing 0 to 0 of 0 entries"
+#: templates/dissertations.html:141
+msgid "List of students"
+msgstr ""
 
-msgid "datatable_infofiltered"
-msgstr "(filtered from _MAX_ total entries)"
+#: templates/dissertations_add_justification.html:35
+#: templates/dissertations_add_justification.html:39
+#: templates/dissertations_add_justification.html:80
+#: templates/dissertations_detail_updates.html:93
+#: templates/manager_dissertations_add_justification.html:35
+#: templates/manager_dissertations_add_justification.html:39
+#: templates/manager_dissertations_add_justification.html:80
+#: templates/manager_dissertations_detail_updates.html:93
+msgid "Add justification"
+msgstr ""
 
+#: templates/dissertations_add_justification.html:46
+#: templates/manager_dissertations_add_justification.html:46
+msgid ""
+"The status update is nearly done. This update is detailed just after. Please "
+"add your explanation for this update."
+msgstr ""
+
+#: templates/dissertations_add_justification.html:51
+#: templates/manager_dissertations_add_justification.html:51
+#: templates/manager_students_list.html:53
+#: templates/manager_students_list.html:116
+msgid "Dissertation"
+msgstr ""
+
+#: templates/dissertations_add_justification.html:59
+#: templates/dissertations_detail.html:57 templates/dissertations_list.html:52
+#: templates/dissertations_list.html:95 templates/dissertations_list.html:138
+#: templates/dissertations_list.html:181 templates/dissertations_list.html:224
+#: templates/dissertations_list.html:267
+#: templates/dissertations_wait_list.html:53
+#: templates/manager_dissertations_add_justification.html:59
+#: templates/manager_dissertations_detail.html:69
+#: templates/manager_dissertations_edit.html:48
+#: templates/manager_dissertations_list.html:139
+#: templates/manager_dissertations_new.html:45
+#: templates/manager_dissertations_wait_commission_list.html:61
+#: templates/manager_dissertations_wait_eval_list.html:61
+#: templates/manager_dissertations_wait_list.html:61
+#: templates/manager_dissertations_wait_recep_list.html:59
+#: templates/manager_informations_detail_list.html:55
+#: templates/manager_informations_detail_list.html:78
+#: templates/manager_informations_detail_list.html:101
+#: templates/manager_informations_detail_list.html:124
+#: templates/manager_informations_detail_list.html:147
+#: templates/manager_informations_detail_list.html:170
+#: templates/manager_informations_detail_list_wait.html:60
+#: templates/manager_proposition_dissertation_edit.html:44
+#: templates/manager_proposition_dissertation_new.html:45
+msgid "Author"
+msgstr ""
+
+#: templates/dissertations_add_justification.html:68
+#: templates/dissertations_detail_updates.html:47
+#: templates/manager_dissertations_add_justification.html:68
+#: templates/manager_dissertations_detail_updates.html:47
+msgid "Current status"
+msgstr ""
+
+#: templates/dissertations_add_justification.html:74
+#: templates/manager_dissertations_add_justification.html:74
+msgid "Next status"
+msgstr ""
+
+#: templates/dissertations_add_justification.html:84
+#: templates/dissertations_jury_edit.html:73 templates/informations_add.html:53
+#: templates/informations_edit.html:81
+#: templates/manager_dissertations_add_justification.html:84
+#: templates/manager_dissertations_edit.html:143
+#: templates/manager_dissertations_jury_edit.html:73
+#: templates/manager_dissertations_new.html:136
+#: templates/manager_dissertations_wait_commission_list.html:101
+#: templates/manager_information_add_person.html:92
+#: templates/manager_informations_add.html:87
+#: templates/manager_informations_edit.html:83
+#: templates/manager_offer_parameters_edit.html:169
+#: templates/manager_proposition_dissertation_edit.html:143
+#: templates/manager_proposition_dissertation_new.html:151
+#: templates/manager_proposition_dissertations_jury_edit.html:70
+#: templates/new_document.html:49
+#: templates/proposition_dissertation_edit.html:146
+#: templates/proposition_dissertation_new.html:141
+#: templates/proposition_dissertations_jury_edit.html:70
+msgid "Save"
+msgstr ""
+
+#: templates/dissertations_detail.html:40
+#: templates/dissertations_detail_updates.html:42
+#: templates/manager_dissertations_detail.html:40
+#: templates/manager_dissertations_detail_updates.html:42
+msgid "main"
+msgstr ""
+
+#: templates/dissertations_detail.html:43
+#: templates/dissertations_detail_updates.html:43
+#: templates/manager_dissertations_detail.html:43
+#: templates/manager_dissertations_detail_updates.html:43
+msgid "Dissertation updates"
+msgstr ""
+
+#: templates/dissertations_detail.html:52
+#: templates/manager_dissertations_detail.html:64
+msgid "Informations about the dissertation"
+msgstr ""
+
+#: templates/dissertations_detail.html:65
+#: templates/dissertations_detail.html:198 templates/dissertations_list.html:51
+#: templates/dissertations_list.html:94 templates/dissertations_list.html:137
+#: templates/dissertations_list.html:180 templates/dissertations_list.html:223
+#: templates/dissertations_list.html:266
+#: templates/dissertations_wait_list.html:52
+#: templates/manager_dissertations_detail.html:77
+#: templates/manager_dissertations_detail.html:265
+#: templates/manager_dissertations_edit.html:60
+#: templates/manager_dissertations_list.html:138
+#: templates/manager_dissertations_new.html:56
+#: templates/manager_dissertations_wait_commission_list.html:60
+#: templates/manager_dissertations_wait_eval_list.html:60
+#: templates/manager_dissertations_wait_list.html:60
+#: templates/manager_dissertations_wait_recep_list.html:58
+#: templates/manager_informations_detail_list.html:54
+#: templates/manager_informations_detail_list.html:77
+#: templates/manager_informations_detail_list.html:100
+#: templates/manager_informations_detail_list.html:123
+#: templates/manager_informations_detail_list.html:146
+#: templates/manager_informations_detail_list.html:169
+#: templates/manager_informations_detail_list_wait.html:59
+#: templates/manager_proposition_dissertation_detail.html:67
+#: templates/manager_proposition_dissertation_edit.html:48
+#: templates/manager_proposition_dissertation_new.html:60
+#: templates/manager_proposition_dissertations_list.html:70
+#: templates/proposition_dissertation_detail.html:69
+#: templates/proposition_dissertation_edit.html:51
+#: templates/proposition_dissertation_new.html:50
+#: templates/proposition_dissertations_list.html:70
+#: templates/proposition_dissertations_list_created.html:70
+#: templates/proposition_dissertations_list_my.html:67
+msgid "Title"
+msgstr ""
+
+#: templates/dissertations_detail.html:74
+#: templates/manager_dissertations_detail.html:86
+#: templates/manager_proposition_dissertation_detail.html:76
+#: templates/proposition_dissertation_detail.html:78
+msgid "file"
+msgstr ""
+
+#: templates/dissertations_detail.html:78
+#: templates/manager_dissertations_detail.html:89
+#: templates/manager_proposition_dissertation_detail.html:79
+#: templates/proposition_dissertation_detail.html:81
+msgid "Link"
+msgstr ""
+
+#: templates/dissertations_detail.html:84
+#: templates/dissertations_jury_edit.html:49
+#: templates/dissertations_list.html:53 templates/dissertations_list.html:96
+#: templates/dissertations_list.html:139 templates/dissertations_list.html:182
+#: templates/dissertations_list.html:225 templates/dissertations_list.html:268
+#: templates/dissertations_wait_list.html:54
+#: templates/manager_dissertations_detail.html:95
+#: templates/manager_dissertations_jury_edit.html:49
+#: templates/manager_dissertations_list.html:90
+#: templates/manager_dissertations_list.html:140
+#: templates/manager_dissertations_wait_commission_list.html:62
+#: templates/manager_dissertations_wait_commission_list.html:83
+#: templates/manager_dissertations_wait_eval_list.html:62
+#: templates/manager_dissertations_wait_list.html:62
+#: templates/manager_dissertations_wait_recep_list.html:60
+#: templates/manager_informations_detail_list.html:56
+#: templates/manager_informations_detail_list.html:79
+#: templates/manager_informations_detail_list.html:102
+#: templates/manager_informations_detail_list.html:125
+#: templates/manager_informations_detail_list.html:148
+#: templates/manager_informations_detail_list.html:171
+#: templates/manager_informations_detail_list_wait.html:61
+#: templates/manager_proposition_dissertations_jury_edit.html:46
+#: templates/manager_students_list.html:52
+#: templates/manager_students_list.html:115
+#: templates/proposition_dissertations_jury_edit.html:46
+msgid "Status"
+msgstr ""
+
+#: templates/dissertations_detail.html:104
+#: templates/manager_dissertations_detail.html:115
+#: templates/manager_dissertations_edit.html:137
+#: templates/manager_dissertations_new.html:131
+#: templates/manager_dissertations_wait_commission_list.html:154
+#: templates/manager_proposition_dissertation_detail.html:105
+#: templates/manager_proposition_dissertation_edit.html:62
+#: templates/manager_proposition_dissertation_new.html:74
+#: templates/proposition_dissertation_detail.html:107
+#: templates/proposition_dissertation_edit.html:65
+#: templates/proposition_dissertation_new.html:64
+msgid "Description"
+msgstr ""
+
+#: templates/dissertations_detail.html:112
+#: templates/manager_dissertations_detail.html:123
+#: templates/manager_dissertations_edit.html:100
+#: templates/manager_dissertations_new.html:95
+msgid "Defense period"
+msgstr ""
+
+#: templates/dissertations_detail.html:120
+#: templates/manager_dissertations_detail.html:131
+#: templates/manager_dissertations_edit.html:115
+#: templates/manager_dissertations_new.html:110
+msgid "Defense year"
+msgstr ""
+
+#: templates/dissertations_detail.html:128
+#: templates/manager_dissertations_detail.html:139
+#: templates/manager_dissertations_edit.html:126
+#: templates/manager_dissertations_new.html:121
+msgid "Dissertation location"
+msgstr ""
+
+#: templates/dissertations_detail.html:136
+#: templates/manager_dissertations_detail.html:147
+#: templates/manager_informations_detail_list.html:57
+#: templates/manager_informations_detail_list.html:80
+#: templates/manager_informations_detail_list.html:103
+#: templates/manager_informations_detail_list.html:126
+#: templates/manager_informations_detail_list.html:149
+#: templates/manager_informations_detail_list.html:172
+#: templates/manager_informations_detail_list_wait.html:62
+msgid "Start Program/Year"
+msgstr ""
+
+#: templates/dissertations_detail.html:146
+#: templates/manager_dissertations_detail.html:157
+#: templates/manager_dissertations_wait_commission_list.html:123
+msgid "Dissertation jury"
+msgstr ""
+
+#: templates/dissertations_detail.html:162
+#: templates/manager_dissertations_detail.html:173
+#: templates/manager_dissertations_wait_commission_list.html:331
+#: templates/manager_proposition_dissertation_detail.html:193
+#: templates/proposition_dissertation_detail.html:196
+msgid ""
+"You are ready to delete this jury member. Are you sure you want to continue?"
+msgstr ""
+
+#: templates/dissertations_detail.html:175
+#: templates/dissertations_detail.html:177
+#: templates/manager_dissertations_detail.html:185
+#: templates/manager_dissertations_detail.html:187
+#: templates/manager_dissertations_wait_commission_list.html:142
+#: templates/manager_dissertations_wait_commission_list.html:146
+msgid "Add a jury member"
+msgstr ""
+
+#: templates/dissertations_detail.html:185
+#: templates/manager_dissertations_detail.html:252
+#: templates/manager_proposition_dissertation_detail.html:54
+#: templates/proposition_dissertation_detail.html:56
+msgid "Informations about the dissertation subject"
+msgstr ""
+
+#: templates/dissertations_detail.html:211
+#: templates/dissertations_detail.html:213
+msgid "Accept this dissertation project"
+msgstr ""
+
+#: templates/dissertations_detail.html:217
+#: templates/dissertations_detail.html:219
+msgid "Refuse this dissertation project"
+msgstr ""
+
+#: templates/dissertations_detail_updates.html:90
+#: templates/manager_dissertations_detail_updates.html:90
+msgid "Change"
+msgstr ""
+
+#: templates/dissertations_detail_updates.html:91
+#: templates/manager_dissertations_detail_updates.html:91
+msgid "Person"
+msgstr ""
+
+#: templates/dissertations_detail_updates.html:92
+#: templates/manager_dissertations_detail_updates.html:92
+msgid "Update date"
+msgstr ""
+
+#: templates/dissertations_jury_edit.html:36
+#: templates/dissertations_jury_edit.html:40
+#: templates/manager_dissertations_jury_edit.html:36
+#: templates/manager_dissertations_jury_edit.html:40
+#: templates/manager_dissertations_wait_commission_list.html:77
+#: templates/manager_proposition_dissertation_detail.html:204
+#: templates/manager_proposition_dissertation_detail.html:206
+#: templates/proposition_dissertation_detail.html:207
+#: templates/proposition_dissertation_detail.html:209
+msgid "Add jury member"
+msgstr ""
+
+#: templates/dissertations_jury_edit.html:65
+#: templates/manager_dissertations_jury_edit.html:65
+#: templates/manager_dissertations_wait_commission_list.html:94
+#: templates/manager_proposition_dissertation_new.html:54
+#: templates/manager_proposition_dissertations_jury_edit.html:62
+#: templates/proposition_dissertations_jury_edit.html:62
+msgid "If the concerned teacher is not in the list, you can"
+msgstr ""
+
+#: templates/dissertations_jury_edit.html:67
+#: templates/manager_dissertations_jury_edit.html:67
+#: templates/manager_dissertations_wait_commission_list.html:96
+#: templates/manager_proposition_dissertations_jury_edit.html:64
+#: templates/proposition_dissertations_jury_edit.html:64
+msgid "Informations"
+msgstr ""
+
+#: templates/dissertations_jury_edit.html:67 templates/informations_add.html:33
+#: templates/informations_add.html:37 templates/informations_add_search.html:33
+#: templates/informations_add_search.html:37
+#: templates/manager_dissertations_jury_edit.html:67
+#: templates/manager_dissertations_wait_commission_list.html:96
+#: templates/manager_informations_add.html:33
+#: templates/manager_informations_add.html:37
+#: templates/manager_informations_add_search.html:33
+#: templates/manager_informations_add_search.html:37
+#: templates/manager_informations_list.html:51
+#: templates/manager_informations_list.html:52
+#: templates/manager_proposition_dissertation_new.html:56
+#: templates/manager_proposition_dissertations_jury_edit.html:64
+#: templates/proposition_dissertations_jury_edit.html:64
+msgid "Add teacher"
+msgstr ""
+
+#: templates/dissertations_list.html:39
+#: templates/dissertations_wait_list.html:39
+#: templates/manager_dissertations_list.html:41
+#: templates/manager_dissertations_wait_commission_list.html:44
+#: templates/manager_dissertations_wait_eval_list.html:42
+#: templates/manager_dissertations_wait_list.html:42
+#: templates/manager_dissertations_wait_recep_list.html:40
+msgid "All dissertations"
+msgstr ""
+
+#: templates/dissertations_list.html:40
+#: templates/dissertations_wait_list.html:40
+#: templates/manager_dissertations_list.html:42
+#: templates/manager_dissertations_wait_commission_list.html:45
+#: templates/manager_dissertations_wait_eval_list.html:43
+#: templates/manager_dissertations_wait_list.html:43
+#: templates/manager_dissertations_wait_recep_list.html:41
+#: templates/manager_informations_detail_list_wait.html:50
+msgid "Waiting promotor"
+msgstr ""
+
+#: templates/dissertations_list.html:47
+#: templates/dissertations_wait_list.html:48
+#: templates/manager_informations_detail_list.html:50
+msgid "Dissertations as promotor"
+msgstr ""
+
+#: templates/dissertations_list.html:54 templates/dissertations_list.html:97
+#: templates/dissertations_list.html:140 templates/dissertations_list.html:183
+#: templates/dissertations_list.html:226 templates/dissertations_list.html:269
+#: templates/dissertations_wait_list.html:55
+#: templates/manager_dissertations_list.html:75
+#: templates/manager_dissertations_list.html:141
+#: templates/manager_dissertations_wait_commission_list.html:64
+#: templates/manager_dissertations_wait_eval_list.html:63
+#: templates/manager_dissertations_wait_list.html:63
+#: templates/manager_dissertations_wait_recep_list.html:61
+#: templates/manager_offer_parameters.html:42
+msgid "Program"
+msgstr ""
+
+#: templates/dissertations_list.html:55 templates/dissertations_list.html:98
+#: templates/dissertations_list.html:141 templates/dissertations_list.html:184
+#: templates/dissertations_list.html:227 templates/dissertations_list.html:270
+#: templates/dissertations_wait_list.html:56
+#: templates/manager_dissertations_list.html:142
+#: templates/manager_dissertations_wait_commission_list.html:63
+#: templates/manager_dissertations_wait_eval_list.html:64
+#: templates/manager_dissertations_wait_list.html:64
+#: templates/manager_dissertations_wait_recep_list.html:62
+msgid "year beginning"
+msgstr ""
+
+#: templates/dissertations_list.html:90
+#: templates/manager_informations_detail_list.html:73
+msgid "Dissertations as co-promotor"
+msgstr ""
+
+#: templates/dissertations_list.html:133
+#: templates/manager_informations_detail_list.html:96
+msgid "Dissertations as reader"
+msgstr ""
+
+#: templates/dissertations_list.html:176
+#: templates/manager_informations_detail_list.html:119
+msgid "Dissertations as accompanist"
+msgstr ""
+
+#: templates/dissertations_list.html:219
+#: templates/manager_informations_detail_list.html:142
+msgid "Dissertations as internship master"
+msgstr ""
+
+#: templates/dissertations_list.html:262
+#: templates/manager_informations_detail_list.html:165
+msgid "Dissertations as president"
+msgstr ""
+
+#: templates/dissertations_welcome.html:38
+msgid "Welcome"
+msgstr ""
+
+#: templates/dissertations_welcome.html:40
+msgid ""
+"This application is dedicated to student's dissertations management, for the "
+"Faculties which choosed to use it."
+msgstr ""
+
+#: templates/dissertations_welcome.html:43
+msgid ""
+"If you continue, you will be registered as teacher in the application, and "
+"you will be able to create dissertation subjects for the students."
+msgstr ""
+
+#: templates/dissertations_welcome.html:49
+msgid "Continue"
+msgstr ""
+
+#: templates/dissertations_welcome.html:51
+msgid "Go away"
+msgstr ""
+
+#: templates/informations.html:39 templates/informations_detail_stats.html:39
+msgid "My profile"
+msgstr ""
+
+#: templates/informations.html:40 templates/informations_detail_stats.html:40
+msgid "My stats"
+msgstr ""
+
+#: templates/informations.html:51 templates/manager_informations_detail.html:57
+msgid "Name"
+msgstr ""
+
+#: templates/informations.html:59 templates/informations_add_search.html:80
+#: templates/manager_information_add_person.html:55
+#: templates/manager_informations_add_search.html:82
+#: templates/manager_informations_detail.html:66
+msgid "email"
+msgstr ""
+
+#: templates/informations.html:78
+#: templates/manager_information_add_person.html:76
+#: templates/manager_informations_detail.html:87
+msgid "phone"
+msgstr ""
+
+#: templates/informations.html:98
+#: templates/manager_information_add_person.html:83
+#: templates/manager_informations_detail.html:108
+msgid "Mobile phone"
+msgstr ""
+
+#: templates/informations.html:118 templates/informations_edit.html:69
+#: templates/manager_informations_add.html:75
+#: templates/manager_informations_detail.html:128
+#: templates/manager_informations_edit.html:71
+msgid "Available at office"
+msgstr ""
+
+#: templates/informations.html:122
+#: templates/manager_informations_detail.html:132
+msgid "yes"
+msgstr ""
+
+#: templates/informations.html:124
+#: templates/manager_informations_detail.html:134
+msgid "no"
+msgstr ""
+
+#: templates/informations.html:137 templates/informations_edit.html:75
+#: templates/manager_informations_add.html:81
+#: templates/manager_informations_detail.html:147
+#: templates/manager_informations_edit.html:77
+msgid "Comment"
+msgstr ""
+
+#: templates/informations.html:147 templates/informations_add.html:67
+#: templates/manager_informations_detail.html:172
+#: templates/manager_informations_detail.html:174
+msgid "Edit teacher"
+msgstr ""
+
+#: templates/informations.html:149 templates/manager_dissertations_edit.html:36
+#: templates/manager_dissertations_edit.html:40
+#: templates/manager_informations_edit.html:34
+#: templates/manager_proposition_dissertation_edit.html:34
+#: templates/manager_proposition_dissertation_edit.html:38
+#: templates/proposition_dissertation_edit.html:34
+#: templates/proposition_dissertation_edit.html:38
+msgid "Edit"
+msgstr ""
+
+#: templates/informations_add.html:46
+#: templates/manager_informations_add.html:45
+msgid "Person to add"
+msgstr ""
+
+#: templates/informations_add.html:60
+msgid "Person added"
+msgstr ""
+
+#: templates/informations_add.html:68
+msgid "Back"
+msgstr ""
+
+#: templates/informations_add_search.html:46
+#: templates/manager_dissertations_wait_commission_list.html:317
+#: templates/manager_dissertations_wait_commission_list.html:321
+#: templates/manager_informations_add_search.html:46
+msgid "Error"
+msgstr ""
+
+#: templates/informations_add_search.html:53
+#: templates/manager_informations_add_search.html:53
+msgid ""
+"If this person is a member of the University, you need to use the correct e-"
+"mail address."
+msgstr ""
+
+#: templates/informations_add_search.html:56
+msgid ""
+"If this person is not a member of the University, a dissertation manager "
+"must add this person to the system."
+msgstr ""
+
+#: templates/informations_add_search.html:65
+#: templates/manager_informations_add_search.html:67
+msgid "New search"
+msgstr ""
+
+#: templates/informations_add_search.html:73
+msgid ""
+"This screen allows you to add, in the dissertation application, as a "
+"teacher, a person who did not logged into the application. Please search the "
+"person with her/his e-mail address"
+msgstr ""
+
+#: templates/informations_add_search.html:89
+#: templates/manager_dissertations_list.html:56
+#: templates/manager_dissertations_list.html:111
+#: templates/manager_informations_add_search.html:91
+#: templates/manager_proposition_dissertations_list.html:46
+#: templates/proposition_dissertations_list.html:48
+msgid "Search"
+msgstr ""
+
+#: templates/informations_detail_stats.html:48
+#: templates/manager_informations_detail_stats.html:53
+msgid "Stats"
+msgstr ""
+
+#: templates/informations_detail_stats.html:53
+#: templates/manager_informations_detail_stats.html:58
+msgid "Dissertations quantity needing answer"
+msgstr ""
+
+#: templates/informations_detail_stats.html:67
+#: templates/manager_informations_detail_stats.html:72
+msgid "Dissertations quantity as promotor"
+msgstr ""
+
+#: templates/informations_detail_stats.html:73
+#: templates/manager_informations_detail_stats.html:78
+msgid "In this program"
+msgstr ""
+
+#: templates/informations_detail_stats.html:79
+#: templates/manager_informations_detail_stats.html:84
+msgid "Dissertations quantity as copromotor"
+msgstr ""
+
+#: templates/informations_detail_stats.html:87
+#: templates/manager_informations_detail_stats.html:92
+msgid "Dissertations quantity as reader"
+msgstr ""
+
+#: templates/informations_detail_stats.html:95
+#: templates/informations_detail_stats.html:174
+#: templates/informations_detail_stats.html:214
+#: templates/manager_informations_detail_stats.html:101
+#: templates/manager_informations_detail_stats.html:181
+#: templates/manager_informations_detail_stats.html:221
+msgid "Chart as promotor"
+msgstr ""
+
+#: templates/informations_detail_stats.html:99
+#: templates/informations_detail_stats.html:107
+#: templates/informations_detail_stats.html:115
+#: templates/manager_informations_detail_stats.html:105
+#: templates/manager_informations_detail_stats.html:113
+#: templates/manager_informations_detail_stats.html:121
+msgid "No data"
+msgstr ""
+
+#: templates/informations_detail_stats.html:103
+#: templates/manager_informations_detail_stats.html:109
+msgid "Chart as copromotor"
+msgstr ""
+
+#: templates/informations_detail_stats.html:111
+#: templates/informations_detail_stats.html:256
+#: templates/manager_informations_detail_stats.html:117
+#: templates/manager_informations_detail_stats.html:263
+msgid "Chart as reader"
+msgstr ""
+
+#: templates/informations_edit.html:48
+#: templates/manager_informations_add.html:57
+#: templates/manager_informations_edit.html:50
+msgid "Available by e-mail"
+msgstr ""
+
+#: templates/informations_edit.html:58
+#: templates/manager_informations_add.html:66
+#: templates/manager_informations_edit.html:60
+msgid "Available by phone"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:48
+msgid ""
+"You are ready to definitely delete this dissertation. Are you sure you want "
+"to continue?"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:56
+#: templates/manager_proposition_dissertation_detail.html:41
+#: templates/proposition_dissertation_detail.html:42
+msgid "Add file"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:192
+msgid "Jury status"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:195
+msgid "For managers"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:199
+#: templates/manager_dissertations_detail.html:217
+#: templates/manager_dissertations_detail.html:235
+#: templates/manager_proposition_dissertation_detail.html:89
+#: templates/manager_proposition_dissertations_list.html:85
+#: templates/proposition_dissertation_detail.html:91
+#: templates/proposition_dissertations_list.html:83
+#: templates/proposition_dissertations_list_created.html:83
+#: templates/proposition_dissertations_list_my.html:80
+msgid "Visible"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:201
+#: templates/manager_dissertations_detail.html:219
+#: templates/manager_dissertations_detail.html:237
+#: templates/manager_proposition_dissertation_detail.html:91
+#: templates/manager_proposition_dissertations_list.html:87
+#: templates/proposition_dissertation_detail.html:93
+#: templates/proposition_dissertations_list.html:85
+#: templates/proposition_dissertations_list_created.html:85
+#: templates/proposition_dissertations_list_my.html:82
+msgid "Invisible"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:204
+#: templates/manager_dissertations_detail.html:222
+#: templates/manager_dissertations_detail.html:240
+msgid "Editable"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:206
+#: templates/manager_dissertations_detail.html:224
+#: templates/manager_dissertations_detail.html:242
+msgid "Non-editable"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:213
+msgid "For teachers"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:279
+#: templates/manager_dissertations_detail.html:282
+#: templates/manager_dissertations_detail.html:345
+#: templates/manager_dissertations_detail.html:353
+msgid "Submit to promotor"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:280
+msgid ""
+"You are ready to submit this dissertation to the promotor. Are you sure you "
+"want to continue ?"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:287
+#: templates/manager_dissertations_detail.html:290
+#: templates/manager_dissertations_detail.html:361
+msgid "Promotor accepts"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:288
+msgid ""
+"You are ready to set this dissertation as accepted by the promotor. Are you "
+"sure you want to continue ?"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:293
+#: templates/manager_dissertations_detail.html:296
+#: templates/manager_dissertations_detail.html:367
+msgid "Promotor refuses"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:294
+msgid ""
+"You are ready to set this dissertation as refused by the promotor. Are you "
+"sure you want to continue ?"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:301
+#: templates/manager_dissertations_detail.html:304
+#: templates/manager_dissertations_detail.html:315
+#: templates/manager_dissertations_detail.html:318
+#: templates/manager_dissertations_wait_commission_list.html:227
+#: templates/manager_dissertations_wait_commission_list.html:228
+msgid "Commission accepts"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:302
+#: templates/manager_dissertations_detail.html:316
+msgid ""
+"You are ready to set this dissertation as accepted by the commission. Are "
+"you sure you want to continue ?"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:307
+#: templates/manager_dissertations_detail.html:310
+msgid "Commission refuses"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:308
+msgid ""
+"You are ready to set this dissertation as refused by the commission. Are you "
+"sure you want to continue ?"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:323
+#: templates/manager_dissertations_detail.html:326
+#: templates/manager_dissertations_detail.html:337
+#: templates/manager_dissertations_detail.html:340
+#: templates/manager_dissertations_wait_eval_list.html:114
+#: templates/manager_dissertations_wait_eval_list.html:116
+msgid "First year evaluation success"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:324
+#: templates/manager_dissertations_detail.html:338
+msgid ""
+"You are ready to set the first year evaluation succeeded for this "
+"dissertation. Are you sure you want to continue ?"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:329
+#: templates/manager_dissertations_detail.html:332
+msgid "First year evaluation failed"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:330
+msgid ""
+"You are ready to set the first year evaluation failed for this dissertation. "
+"Are you sure you want to continue ?"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:346
+msgid ""
+"You are ready to set this dissertation as received. Are you sure you want to "
+"continue ?"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:348
+msgid "Dissertation received"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:354
+msgid ""
+"You are ready to set this dissertation as defended. Are you sure you want to "
+"continue ?"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:356
+msgid "Dissertation defended"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:362
+msgid ""
+"You are ready to set this dissertation as succeeded. Are you sure you want "
+"to continue ?"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:364
+msgid "Dissertation succeeded"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:368
+msgid ""
+"You are ready to set this dissertation as failed. Are you sure you want to "
+"continue ?"
+msgstr ""
+
+#: templates/manager_dissertations_detail.html:370
+msgid "Dissertation delayed"
+msgstr ""
+
+#: templates/manager_dissertations_edit.html:72
+#: templates/manager_dissertations_new.html:67
+#: templates/manager_proposition_dissertation_detail.html:153
+#: templates/manager_proposition_dissertations_list.html:75
+#: templates/manager_students_list.html:51
+#: templates/manager_students_list.html:114
+#: templates/proposition_dissertation_detail.html:155
+#: templates/proposition_dissertations_list.html:74
+#: templates/proposition_dissertations_list_created.html:74
+#: templates/proposition_dissertations_list_my.html:71
+msgid "Programs"
+msgstr ""
+
+#: templates/manager_dissertations_edit.html:85
+#: templates/manager_dissertations_list.html:143
+#: templates/manager_dissertations_new.html:80
+#: templates/manager_dissertations_wait_commission_list.html:65
+#: templates/manager_dissertations_wait_eval_list.html:65
+#: templates/manager_dissertations_wait_list.html:65
+#: templates/manager_dissertations_wait_recep_list.html:63
+#: templates/manager_informations_detail_list_wait.html:63
+msgid "Dissertation subject"
+msgstr ""
+
+#: templates/manager_dissertations_edit.html:142
+#: templates/manager_dissertations_new.html:135
+msgid "You are ready to save this dissertation. Continue ?"
+msgstr ""
+
+#: templates/manager_dissertations_list.html:44
+#: templates/manager_dissertations_wait_commission_list.html:47
+#: templates/manager_dissertations_wait_eval_list.html:45
+#: templates/manager_dissertations_wait_list.html:45
+#: templates/manager_dissertations_wait_recep_list.html:43
+msgid "Waiting commission"
+msgstr ""
+
+#: templates/manager_dissertations_list.html:47
+#: templates/manager_dissertations_wait_commission_list.html:50
+#: templates/manager_dissertations_wait_eval_list.html:48
+#: templates/manager_dissertations_wait_list.html:48
+#: templates/manager_dissertations_wait_recep_list.html:46
+msgid "Waiting 1st year evaluation"
+msgstr ""
+
+#: templates/manager_dissertations_list.html:49
+#: templates/manager_dissertations_wait_commission_list.html:52
+#: templates/manager_dissertations_wait_eval_list.html:50
+#: templates/manager_dissertations_wait_list.html:50
+#: templates/manager_dissertations_wait_recep_list.html:48
+msgid "Waiting reception"
+msgstr ""
+
+#: templates/manager_dissertations_list.html:61
+msgid "academic_year"
+msgstr ""
+
+#: templates/manager_dissertations_list.html:114
+#: templates/manager_proposition_dissertations_list.html:54
+msgid "Export search as XLS"
+msgstr ""
+
+#: templates/manager_dissertations_list.html:118
+#: templates/manager_dissertations_new.html:33
+#: templates/manager_dissertations_new.html:37
+msgid "Add dissertation"
+msgstr ""
+
+#: templates/manager_dissertations_list.html:125
+msgid "Advanced search"
+msgstr ""
+
+#: templates/manager_dissertations_list.html:133
+#: templates/manager_dissertations_wait_commission_list.html:339
+#: templates/manager_dissertations_wait_commission_list.html:357
+#: templates/manager_dissertations_wait_eval_list.html:55
+#: templates/manager_dissertations_wait_list.html:55
+#: templates/manager_dissertations_wait_recep_list.html:53
+#: templates/manager_informations_detail_list_wait.html:54
+#: templates/manager_proposition_dissertations_list.html:66
+#: templates/proposition_dissertations_list.html:66
+#: templates/proposition_dissertations_list_created.html:66
+#: templates/proposition_dissertations_list_my.html:63
+msgid "No result"
+msgstr ""
+
+#: templates/manager_dissertations_list.html:216
+#: templates/manager_dissertations_wait_commission_list.html:238
+#: templates/manager_dissertations_wait_eval_list.html:139
+#: templates/manager_dissertations_wait_list.html:132
+#: templates/manager_dissertations_wait_recep_list.html:136
+#: templates/manager_informations_list.html:107
+#: templates/manager_proposition_dissertations_list.html:120
+#: templates/manager_students_list.html:143
+msgid "Processing..."
+msgstr ""
+
+#: templates/manager_dissertations_list.html:217
+#: templates/manager_dissertations_wait_commission_list.html:239
+#: templates/manager_dissertations_wait_eval_list.html:140
+#: templates/manager_dissertations_wait_list.html:133
+#: templates/manager_dissertations_wait_recep_list.html:137
+#: templates/manager_informations_list.html:108
+#: templates/manager_proposition_dissertations_list.html:121
+#: templates/manager_students_list.html:144
+msgid "Search:"
+msgstr ""
+
+#: templates/manager_dissertations_list.html:219
+#: templates/manager_dissertations_wait_commission_list.html:241
+#: templates/manager_dissertations_wait_eval_list.html:142
+#: templates/manager_dissertations_wait_list.html:135
+#: templates/manager_dissertations_wait_recep_list.html:139
+#: templates/manager_informations_list.html:110
+#: templates/manager_proposition_dissertations_list.html:123
+#: templates/manager_students_list.html:146
+msgid "Showing _START_ to _END_ of _TOTAL_ entries"
+msgstr ""
+
+#: templates/manager_dissertations_list.html:220
+#: templates/manager_dissertations_wait_commission_list.html:242
+#: templates/manager_dissertations_wait_eval_list.html:143
+#: templates/manager_dissertations_wait_list.html:136
+#: templates/manager_dissertations_wait_recep_list.html:140
+#: templates/manager_informations_list.html:111
+#: templates/manager_proposition_dissertations_list.html:124
+#: templates/manager_students_list.html:147
+msgid "Showing 0 to 0 of 0 entries"
+msgstr ""
+
+#: templates/manager_dissertations_list.html:221
+#: templates/manager_dissertations_wait_commission_list.html:243
+#: templates/manager_dissertations_wait_eval_list.html:144
+#: templates/manager_dissertations_wait_list.html:137
+#: templates/manager_dissertations_wait_recep_list.html:141
+#: templates/manager_informations_list.html:112
+#: templates/manager_proposition_dissertations_list.html:125
+#: templates/manager_students_list.html:148
+msgid "(filtered from _MAX_ total entries)"
+msgstr ""
+
+#: templates/manager_dissertations_list.html:222
+#: templates/manager_dissertations_wait_commission_list.html:244
+#: templates/manager_dissertations_wait_eval_list.html:145
+#: templates/manager_dissertations_wait_list.html:138
+#: templates/manager_dissertations_wait_recep_list.html:142
+#: templates/manager_informations_list.html:113
+#: templates/manager_proposition_dissertations_list.html:126
+#: templates/manager_students_list.html:149
 msgid "datatable_infopostfix"
 msgstr ""
 
-msgid "datatable_infothousands"
-msgstr ","
-
-msgid "datatable_lengthmenu"
-msgstr "Show _MENU_ entries"
-
-msgid "datatable_loadingrecords"
-msgstr "Loading..."
-
-msgid "datatable_processing"
-msgstr "Processing..."
-
-msgid "datatable_search"
-msgstr "Search:"
-
-msgid "datatable_zerorecords"
-msgstr "No matching records found"
-
-msgid "datatable_first"
-msgstr "First"
-
-msgid "datatable_last"
-msgstr "Last"
-
-msgid "datatable_next"
-msgstr "Next"
-
-msgid "datatable_previous"
-msgstr "Previous"
-
-msgid "datatable_sortascending"
-msgstr ": activate to sort column ascending"
-
-msgid "datatable_sortdescending"
-msgstr ": activate to sort column descending"
-
-msgid "date_end_visibility_dissertation"
-msgstr "End of period for creation of dissertations"
-
-msgid "date_end_visibility_proposition"
-msgstr "End of period of visibility for dissertation subjects"
-
-msgid "date_start_visibility_dissertation"
-msgstr "Start of period for creation of dissertations"
-
-msgid "date_start_visibility_proposition"
-msgstr "Start of period of visibility for dissertation subjects"
-
-msgid "defend_periode"
-msgstr "Defense period"
-
-msgid "defend_year"
-msgstr "Defense year"
-
-msgid "defended"
-msgstr "Defended"
-
-msgid "delete"
-msgstr "Delete"
-
-msgid "delete_adviser_role_confirmation_message"
-msgstr "You are ready to delete this jury member.  Are you sure you want to continue ?"
-
-msgid "delete_dissertation"
-msgstr "Delete"
-
-msgid "delete_dissertation_confirmation_message"
-msgstr "You are ready to definitely delete this dissertation.  Are you sure you want to continue ?"
-
-msgid "delete_manager_dissertation"
-msgstr "Delete"
-
-msgid "delete_proposition_dissertation"
-msgstr "Delete"
-
-msgid "delete_proposition_dissertation_confirmation_message"
-msgstr "You are ready to definitely delete this dissertation subject.  Are you sure you want to continue ?"
-
-msgid "desc_lnk_dissertations"
-msgstr "List of dissertations which I am linked to"
-
-msgid "desc_lnk_informations"
-msgstr "My settings for the Dissertation application."
-
-msgid "desc_lnk_manager_dissertations"
-msgstr "List of the dissertation subjects"
-
-msgid "desc_lnk_manager_informations"
-msgstr "List of teachers linked to the Dissertation application"
-
-msgid "desc_lnk_manager_offer_parameters"
-msgstr "Settings of the Dissertation application"
-
-msgid "desc_lnk_manager_proposition_dissertations"
-msgstr "Dissertation subjects submitted by teachers"
-
-msgid "desc_lnk_manager_students_list"
-msgstr "List of students"
-
-msgid "desc_lnk_propositions_dissertations"
-msgstr "Dissertation subjects submitted by myself and others teachers"
-
-msgid "description"
-msgstr "Description"
-
-msgid "development_dissertation"
-msgstr "Development dissertation"
-
-msgid "dissertation"
-msgstr "Dissertation"
-
-msgid "dissertation_adviser_copromoteur"
-msgstr "Dissertations as co-promotor"
-
-msgid "dissertation_adviser_promoteur"
-msgstr "Dissertations as promotor"
-
-msgid "dissertation_adviser_reader"
-msgstr "Dissertations as reader"
-
-msgid "dissertation_confirmation_message"
-msgstr "You are ready to save this dissertation. Continue ?"
-
-msgid "dissertation_informations"
-msgstr "Informations about the dissertation"
-
-msgid "dissertation_jury"
-msgstr "Dissertation jury"
-
-msgid "dissertation_location"
-msgstr "Dissertation location"
-
-msgid "dissertations"
-msgstr "Dissertations"
-
-msgid "dissertations_to_dir_ko"
-msgstr "Refuse this dissertation project"
-
-msgid "dissertations_to_dir_ok"
-msgstr "Accept this dissertation project"
-
-msgid "dissertation_title"
-msgstr "Title"
-
-msgid "dissertation_updates"
-msgstr "Dissertation updates"
-
-msgid "draft"
-msgstr "Draft"
-
-msgid "edit"
-msgstr "Edit"
-
-msgid "editable"
-msgstr "Editable"
-
-msgid "edit_adviser"
-msgstr "Edit teacher"
-
-msgid "edit_dissertation"
-msgstr "Edit"
-
-msgid "edit_manager_dissertation"
-msgstr "Edit"
-
-msgid "edit_parameters"
-msgstr "Edit parameters"
-
-msgid "edit_proposition_dissertation"
-msgstr "Edit"
-
-msgid "empirical_research"
-msgstr "Empirical research"
-
-msgid "empty_data"
-msgstr "No data submitted"
-
-msgid "ended"
-msgstr "Ended"
-
-msgid "ended_win"
-msgstr "Ended with success"
-
-msgid "ended_los"
-msgstr "Reported"
-
-msgid "error"
-msgstr "Error"
-
-msgid "evaluation_first_year"
-msgstr "First year evaluation"
-
-msgid "export_search_as_xls"
-msgstr "Export search as XLS"
-
-msgid "filtre_by_offer"
-msgstr "filter by offer"
-
-msgid "first_name"
-msgstr "First name"
-
-msgid "for_managers"
-msgstr "For managers"
-
-msgid "for_students"
-msgstr "For students"
-
-msgid "for_teachers"
-msgstr "For teachers"
-
-msgid "forbidden"
-msgstr "Forbidden"
-
-msgid "from"
-msgstr "from"
-
-msgid "go_away"
-msgstr "Go away"
-
-msgid "how_many_dissertation_copro"
-msgstr "Dissertations quantity as copromotor"
-
-msgid "how_many_dissertation_need_answer"
-msgstr "Dissertations quantity needing answer"
-
-msgid "how_many_dissertation_pro"
-msgstr "Dissertations quantity as promotor"
-
-msgid "how_many_dissertation_reader"
-msgstr "Dissertations quantity as reader"
-
-msgid "if_extern_you_can"
-msgstr "If this person is not a member of the University, you can"
-
-msgid "if_extern_you_can_ask_manager"
-msgstr "If this person is not a member of the University, a dissertation manager must add this person to the system."
-
-msgid "if_intern_use_good_email"
-msgstr "If this person is a member of the University, you need to use the correct e-mail address."
-
-msgid "if_unavailable_adviser"
-msgstr "If the concerned teacher is not in the list, you can"
-
-msgid "in_edit_title"
-msgstr "Title currently editable"
-
-msgid "INTERNSHIP"
-msgstr "Internship Master"
-
-msgid "internship_master"
-msgstr "Internship Master"
-
-msgid "informations"
-msgstr "Informations"
-
-msgid "in_jury_visibility"
-msgstr "Jury currently visible"
-
-msgid "in_this_offer"
-msgstr "In this program"
-
-msgid "in_visibility_dissertation"
-msgstr "Currently possible to create dissertations"
-
-msgid "in_visibility_proposition"
-msgstr "Subjects currently visible"
-
-msgid "invalid_data"
-msgstr "Invalid data"
-
-msgid "invisible"
-msgstr "Invisible"
-
-msgid "january"
-msgstr "January"
-
-msgid "june"
-msgstr "June"
-
-msgid "jury_status"
-msgstr "Jury status"
-
-msgid "justification_confirmation_message"
-msgstr "You are ready to save this change and your justification. Are you sure you want to continue ?"
-
-msgid "justification_instructions"
-msgstr "The status update is nearly done. This update is detailed just after. Please add your explanation for this update."
-
-msgid "large_theme"
-msgstr "Large theme"
-
-msgid "last_name"
-msgstr "Last name"
-
-msgid "level"
-msgstr "Subject developement level"
-
-msgid "level_domain"
-msgstr "Search domain"
-
-msgid "level_work"
-msgstr "Search work"
-
-msgid "level_question"
-msgstr "Search question"
-
-msgid "level_theme"
-msgstr "Search theme"
-
-msgid "link"
-msgstr "Link"
-
-msgid "litterature_review"
-msgstr "Litterature review"
-
-msgid "MAIN"
-msgstr "Main"
-
-msgid "manager"
-msgstr "Manager"
-
-msgid "manager_commission_accept"
-msgstr "Commission accepts"
-
-msgid "manager_commission_refuse"
-msgstr "Commission refuses"
-
-msgid "manager_dissertations_accept_comm_list"
-msgstr "Commission accepts"
-
-msgid "manager_dissertations_accept_eval_list"
-msgstr "First year evaluation success"
-
-msgid "manager_dissertations_defended"
-msgstr "Dissertation defended"
-
-msgid "manager_dissertations_receive"
-msgstr "Dissertation received"
-
-msgid "manager_dissertations_reported"
-msgstr "Dissertation delayed"
-
-msgid "manager_dissertations_success"
-msgstr "Dissertation succeeded"
-
-msgid "manager_dissertations_to_dir_ko"
-msgstr "Promotor refuses"
-
-msgid "manager_dissertations_to_dir_ok"
-msgstr "Promotor accepts"
-
-msgid "manager_dissertations_to_dir_submit"
-msgstr "Submit to promotor"
-
-msgid "manager_evaluation_accept"
-msgstr "First year evaluation success"
-
-msgid "manager_evaluation_refuse"
-msgstr "First year evaluation failed"
-
-msgid "manager_informations_add"
-msgstr "Add teacher"
-
-msgid "manager_informations_add_person"
-msgstr "add this person"
-
-msgid "manager_informations_list_request"
-msgstr "Teachers having to answer request"
-
-msgid "manager_jury_draft"
-msgstr "Dissertation status is draft, managers can't edit jury."
-
-msgid "manager_jury_editable"
-msgstr "Managers can see and edit jury."
-
-msgid "manager_promotor_accept"
-msgstr "Promotor accepts"
-
-msgid "manager_promotor_refuse"
-msgstr "Promotor refuses"
-
-msgid "manager_reception_accept"
-msgstr "Dissertation reception"
-
-msgid "max_students"
-msgstr "Max number of students"
-
-msgid "max_students_number"
-msgstr "Indicative number of places for this subject"
-
-msgid "maximum_jury"
-msgstr "Maximum number of members of the jury reached"
-
-msgid "mgr_com_accept_confirmation_message"
-msgstr "You are ready to set this dissertation as accepted by the commission.  Are you sure you want to continue ?"
-
-msgid "mgr_com_refuse_confirmation_message"
-msgstr "You are ready to set this dissertation as refused by the commission.  Are you sure you want to continue ?"
-
-msgid "mgr_dissertations_to_dir_submit"
-msgstr "Submit to promotor"
-
-msgid "mgr_defended_confirmation_message"
-msgstr "You are ready to set this dissertation as defended.  Are you sure you want to continue ?"
-
-msgid "mgr_eva_accept_confirmation_message"
-msgstr "You are ready to set the first year evaluation succeeded for this dissertation.  Are you sure you want to continue ?"
-
-msgid "mgr_eva_refuse_confirmation_message"
-msgstr "You are ready to set the first year evaluation failed for this dissertation.  Are you sure you want to continue ?"
-
-msgid "mgr_lose_confirmation_message"
-msgstr "You are ready to set this dissertation as failed.  Are you sure you want to continue ?"
-
-msgid "mgr_promotor_accept_confirmation_message"
-msgstr "You are ready to set this dissertation as accepted by the promotor.  Are you sure you want to continue ?"
-
-msgid "mgr_promotor_refuse_confirmation_message"
-msgstr "You are ready to set this dissertation as refused by the promotor.  Are you sure you want to continue ?"
-
-msgid "mgr_receive_confirmation_message"
-msgstr "You are ready to set this dissertation as received.  Are you sure you want to continue ?"
-
-msgid "mgr_to_dir_submit_confirmation_message"
-msgstr "You are ready to submit this dissertation to the promotor.  Are you sure you want to continue ?"
-
-msgid "mgr_win_confirmation_message"
-msgstr "You are ready to set this dissertation as succeeded.  Are you sure you want to continue ?"
-
-msgid "mobile_phone"
-msgstr "Mobile phone"
-
-msgid "my_informations"
-msgstr "My informations"
-
-msgid "my_profile"
-msgstr "My profile"
-
-msgid "my_proposition_dissertations"
-msgstr "My subjects"
-
-msgid "my_stats"
-msgstr "My stats"
-
-msgid "name"
-msgstr "Name"
-
-msgid "new_adviser"
-msgstr "Add teacher"
-
-msgid "new_dissertation"
-msgstr "Add dissertation"
-
-msgid "new_jury_dissertation"
-msgstr "Add jury member"
-
-msgid "new_or_edit_dissertation"
-msgstr "Add/Edit dissertation"
-
-msgid "new_or_edit_jury_proposition_dissertation"
-msgstr "Add/Edit jury member for the dissertation subject"
-
-msgid "new_or_edit_subject"
-msgstr "Add/Edit dissertation subject"
-
-msgid "new_search"
-msgstr "New search"
-
-msgid "new_subject"
-msgstr "New dissertation subject"
-
-msgid "next_status"
-msgstr "Next status"
-
-msgid "no"
-msgstr "no"
-
-msgid "no_data"
-msgstr "No data"
-
-msgid "non_editable"
-msgstr "Non-editable"
-
-msgid "no_result"
-msgstr "No result"
-
-msgid "number_of_dissertation_active_total"
-msgstr "How many active dissertations (all programs)"
-
-msgid "number_of_dissertation_copro"
-msgstr "How many dissertations as copromotor"
-
-msgid "number_of_dissertation_need_request"
-msgstr "How many dissertations need answer"
-
-msgid "number_of_dissertation_pro"
-msgstr "How many dissertations as promotor"
-
-msgid "number_of_dissertation_reader"
-msgstr "How many dissertations as reader"
-
-msgid "of"
-msgstr "of"
-
-msgid "offer"
-msgstr "Program"
-
-msgid "offer_proposition"
-msgstr "Program"
-
-msgid "offer_propositions"
-msgstr "Programs"
-
-msgid "offer_year_start"
-msgstr "Start Program/Year"
-
-msgid "other"
-msgstr "Other"
-
-msgid "parameters"
-msgstr "Settings"
-
-msgid "parameters_dates"
-msgstr "Dates settings"
-
-msgid "parameters_others"
-msgstr "Other settings"
-
-msgid "periode_visibility_proposition"
-msgstr "Period of visibility for dissertation subjects"
-
-msgid "periode_visibility_dissertation"
-msgstr "Period of possibility to create dissertations projects"
-
-msgid "periode_jury_visibility"
-msgstr "Period of visibility for dissertation jurys"
-
-msgid "periode_edit_title"
-msgstr "Period of possibility to edit dissertations titles"
-
-msgid "person"
-msgstr "Person"
-
-msgid "person_added"
-msgstr "Person added"
-
-msgid "person_already_adviser"
-msgstr "This person already exists as teacher"
-
-msgid "person_to_add"
-msgstr "Person to add"
-
-msgid "person_not_found_by_mail"
-msgstr "No person matches this e-mail address"
-
-msgid "phone_mobile"
-msgstr "Mobile phone"
-
-msgid "photo"
-msgstr "Photo"
-
-msgid "possible"
-msgstr "Possible"
-
-msgid "PRESIDENT"
-msgstr "President"
-
-msgid "president"
-msgstr "President"
-
-msgid "professor"
-msgstr "Teacher"
-
-msgid "project_dissertation"
-msgstr "Project dissertation"
-
-msgid "PROMOTEUR"
-msgstr "Promotor"
-
-msgid "promotor"
-msgstr "Promotor"
-
-msgid "proposition_dissertation"
-msgstr "Dissertation subject"
-
-msgid "proposition_dissertation_confirmation_message"
-msgstr "You are ready to save this dissertation subject details. Are you sure you want to continue ?"
-
-msgid "proposition_dissertations_created"
-msgstr "Subjects created"
-
-msgid "proposition_dissertations_created_info"
-msgstr "Subjects you created for others (you are not the promotor)."
-
-msgid "proposition_dissertation_informations"
-msgstr "Informations about the dissertation subject"
-
-msgid "proposition_dissertation_jury"
-msgstr "Dissertation subject jury"
-
-msgid "proposition_dissertation_jury_info"
-msgstr "You can define a jury for the dissertation subject. This jury will automatically be defined for all dissertations created from this subject. There can be only one promotor, if you add one, this promotor will replace the existing one."
-
-msgid "proposition_dissertations"
-msgstr "Dissertation subjects"
-
-msgid "READER"
-msgstr "Reader"
-
-msgid "reader"
-msgstr "Reader"
-
-msgid "refused_by_commission"
-msgstr "Refused by commission"
-
-msgid "refused_by_director"
-msgstr "Refused by promotor"
-
-msgid "refused_by_first_year_evaluation"
-msgstr "1st year evaluation failed"
-
-msgid "required"
-msgstr "Required"
-
-msgid "save"
-msgstr "Save"
-
-msgid "search"
-msgstr "Search"
-
-msgid "status_or_adviser_error"
-msgstr "The status or the teacher are missing"
-
+#: templates/manager_dissertations_list.html:223
+#: templates/manager_dissertations_wait_commission_list.html:245
+#: templates/manager_dissertations_wait_eval_list.html:146
+#: templates/manager_dissertations_wait_list.html:139
+#: templates/manager_dissertations_wait_recep_list.html:143
+#: templates/manager_informations_list.html:114
+#: templates/manager_proposition_dissertations_list.html:127
+#: templates/manager_students_list.html:150
+msgid "Loading..."
+msgstr ""
+
+#: templates/manager_dissertations_list.html:224
+#: templates/manager_dissertations_wait_commission_list.html:246
+#: templates/manager_dissertations_wait_eval_list.html:147
+#: templates/manager_dissertations_wait_list.html:140
+#: templates/manager_dissertations_wait_recep_list.html:144
+#: templates/manager_informations_list.html:115
+#: templates/manager_proposition_dissertations_list.html:128
+#: templates/manager_students_list.html:151
+msgid "No matching records found"
+msgstr ""
+
+#: templates/manager_dissertations_list.html:225
+#: templates/manager_dissertations_wait_commission_list.html:247
+#: templates/manager_dissertations_wait_eval_list.html:148
+#: templates/manager_dissertations_wait_list.html:141
+#: templates/manager_dissertations_wait_recep_list.html:145
+#: templates/manager_informations_list.html:116
+#: templates/manager_proposition_dissertations_list.html:129
+#: templates/manager_students_list.html:152
+msgid "No data available in table"
+msgstr ""
+
+#: templates/manager_dissertations_list.html:227
+#: templates/manager_dissertations_wait_commission_list.html:250
+#: templates/manager_dissertations_wait_eval_list.html:150
+#: templates/manager_dissertations_wait_list.html:143
+#: templates/manager_dissertations_wait_recep_list.html:147
+#: templates/manager_informations_list.html:119
+#: templates/manager_proposition_dissertations_list.html:131
+#: templates/manager_students_list.html:154
+msgid "First"
+msgstr ""
+
+#: templates/manager_dissertations_list.html:228
+#: templates/manager_dissertations_wait_commission_list.html:251
+#: templates/manager_dissertations_wait_eval_list.html:151
+#: templates/manager_dissertations_wait_list.html:144
+#: templates/manager_dissertations_wait_recep_list.html:148
+#: templates/manager_informations_list.html:120
+#: templates/manager_proposition_dissertations_list.html:132
+#: templates/manager_students_list.html:155
+msgid "Previous"
+msgstr ""
+
+#: templates/manager_dissertations_list.html:229
+#: templates/manager_dissertations_wait_commission_list.html:252
+#: templates/manager_dissertations_wait_eval_list.html:152
+#: templates/manager_dissertations_wait_list.html:145
+#: templates/manager_dissertations_wait_recep_list.html:149
+#: templates/manager_informations_list.html:121
+#: templates/manager_proposition_dissertations_list.html:133
+#: templates/manager_students_list.html:156
+msgid "Next"
+msgstr ""
+
+#: templates/manager_dissertations_list.html:230
+#: templates/manager_dissertations_wait_commission_list.html:253
+#: templates/manager_dissertations_wait_eval_list.html:153
+#: templates/manager_dissertations_wait_list.html:146
+#: templates/manager_dissertations_wait_recep_list.html:150
+#: templates/manager_informations_list.html:122
+#: templates/manager_proposition_dissertations_list.html:134
+#: templates/manager_students_list.html:157
+msgid "Last"
+msgstr ""
+
+#: templates/manager_dissertations_list.html:233
+#: templates/manager_dissertations_wait_commission_list.html:256
+#: templates/manager_dissertations_wait_eval_list.html:156
+#: templates/manager_dissertations_wait_list.html:149
+#: templates/manager_dissertations_wait_recep_list.html:153
+#: templates/manager_informations_list.html:126
+#: templates/manager_proposition_dissertations_list.html:137
+#: templates/manager_students_list.html:160
+msgid ": activate to sort column ascending"
+msgstr ""
+
+#: templates/manager_dissertations_list.html:234
+#: templates/manager_dissertations_wait_commission_list.html:257
+#: templates/manager_dissertations_wait_eval_list.html:157
+#: templates/manager_dissertations_wait_list.html:150
+#: templates/manager_dissertations_wait_recep_list.html:154
+#: templates/manager_informations_list.html:127
+#: templates/manager_proposition_dissertations_list.html:138
+#: templates/manager_students_list.html:161
+msgid ": activate to sort column descending"
+msgstr ""
+
+#: templates/manager_dissertations_wait_commission_list.html:66
+#: templates/manager_dissertations_wait_eval_list.html:66
+#: templates/manager_dissertations_wait_recep_list.html:64
+msgid "Action"
+msgstr ""
+
+#: templates/manager_dissertations_wait_commission_list.html:100
+msgid "close"
+msgstr ""
+
+#: templates/manager_dissertations_wait_commission_list.html:240
+#: templates/manager_dissertations_wait_eval_list.html:141
+#: templates/manager_dissertations_wait_list.html:134
+#: templates/manager_dissertations_wait_recep_list.html:138
+msgid "Show _MENU_ entries"
+msgstr ""
+
+#: templates/manager_dissertations_wait_commission_list.html:317
+msgid "Maximum number of members of the jury reached"
+msgstr ""
+
+#: templates/manager_dissertations_wait_commission_list.html:321
+msgid "The status or the teacher are missing"
+msgstr ""
+
+#: templates/manager_dissertations_wait_recep_list.html:112
+#: templates/manager_dissertations_wait_recep_list.html:114
+msgid "Dissertation reception"
+msgstr ""
+
+#: templates/manager_information_add_person.html:33
+#: templates/manager_information_add_person.html:37
+msgid "Add person"
+msgstr ""
+
+#: templates/manager_information_add_person.html:46
+msgid "Warning"
+msgstr ""
+
+#: templates/manager_information_add_person.html:46
+msgid ""
+"This form is used to add a person to OSIS. Complete carefully the form, you "
+"will not be able to edit this person after adding."
+msgstr ""
+
+#: templates/manager_information_add_person.html:62
+msgid "Last name"
+msgstr ""
+
+#: templates/manager_information_add_person.html:69
+msgid "First name"
+msgstr ""
+
+#: templates/manager_information_add_person.html:91
+msgid ""
+"This person will be added to OSIS and you will not be able to edit it. Are "
+"you sure you want to continue ?"
+msgstr ""
+
+#: templates/manager_informations_add_search.html:56
+msgid "If this person is not a member of the University, you can"
+msgstr ""
+
+#: templates/manager_informations_add_search.html:58
+msgid "Add this person"
+msgstr ""
+
+#: templates/manager_informations_add_search.html:75
 msgid "search_person_explanation"
-msgstr "This screen allows you to add, in the dissertation application, as a teacher, a person who did not logged into the application. Please search the person with her/his e-mail address"
+msgstr ""
 
-msgid "search_proposition_dissertation"
-msgstr "Search dissertation subject"
+#: templates/manager_informations_detail.html:41
+#: templates/manager_informations_detail_list.html:40
+#: templates/manager_informations_detail_list_wait.html:40
+#: templates/manager_informations_detail_stats.html:42
+msgid "Teacher profile"
+msgstr ""
 
-msgid "search_teacher"
-msgstr "Search teacher"
+#: templates/manager_informations_detail.html:42
+#: templates/manager_informations_detail_list.html:41
+#: templates/manager_informations_detail_list_wait.html:41
+#: templates/manager_informations_detail_stats.html:43
+msgid "Linked dissertations"
+msgstr ""
 
-msgid "see_my_waiting_dissertations"
-msgstr "See my waiting dissertations"
+#: templates/manager_informations_detail.html:43
+#: templates/manager_informations_detail_list.html:42
+#: templates/manager_informations_detail_list_wait.html:43
+#: templates/manager_informations_detail_stats.html:44
+msgid "Waiting dissertations"
+msgstr ""
 
-msgid "select_at_least_one_item"
-msgstr "Please select at least one item"
+#: templates/manager_informations_detail.html:44
+#: templates/manager_informations_detail_list.html:43
+#: templates/manager_informations_detail_list_wait.html:44
+#: templates/manager_informations_detail_stats.html:45
+msgid "Teacher stats"
+msgstr ""
 
-msgid "select_course_programs"
-msgstr "Check the programs related to this topic"
+#: templates/manager_informations_detail.html:161
+msgid "Photo"
+msgstr ""
 
-msgid "select_program_first"
-msgstr "Please select Start Program/Year first"
+#: templates/manager_informations_list.html:43
+#: templates/manager_informations_list_request.html:39
+msgid "All teachers"
+msgstr ""
 
-msgid "send_email_to_commission_accepted"
-msgstr "Send an email to reading commission when acceptation of evaluation commission"
+#: templates/manager_informations_list.html:44
+#: templates/manager_informations_list_request.html:40
+msgid "Teachers having to answer request"
+msgstr ""
 
-msgid "september"
-msgstr "September"
+#: templates/manager_informations_list.html:61
+msgid "How many active dissertations (all programs)"
+msgstr ""
 
-msgid "specific_subject"
-msgstr "Specific subject"
+#: templates/manager_informations_list.html:62
+msgid "How many dissertations as promotor"
+msgstr ""
 
-msgid "stats"
-msgstr "Stats"
+#: templates/manager_informations_list.html:63
+msgid "How many dissertations as copromotor"
+msgstr ""
 
-msgid "status"
-msgstr "Status"
+#: templates/manager_informations_list.html:64
+msgid "How many dissertations as reader"
+msgstr ""
 
-msgid "student_can_manage_readers"
-msgstr "Students can manage readers"
+#: templates/manager_informations_list.html:65
+msgid "How many dissertations need answer"
+msgstr ""
 
-msgid "student_jury_draft_can_edit_param"
-msgstr "Dissertation status is draft, student can manage readers"
+#: templates/manager_informations_list_request.html:36
+msgid "Teachers not responding to requests"
+msgstr ""
 
-msgid "student_jury_draft_no_edit_param"
-msgstr "Dissertation status is draft, student can't manage readers"
+#: templates/manager_offer_parameters.html:43
+msgid "Dates settings"
+msgstr ""
 
-msgid "student_jury_invisible_dates"
-msgstr "Jury is currently invisible for the student"
+#: templates/manager_offer_parameters.html:44
+#: templates/manager_offer_parameters_edit.html:118
+msgid "Other settings"
+msgstr ""
 
-msgid "student_jury_visible_dates"
-msgstr "Jury is currently visible for the student"
+#: templates/manager_offer_parameters.html:59
+msgid "Subjects currently visible"
+msgstr ""
 
-msgid "student_path"
-msgstr "Students' path"
+#: templates/manager_offer_parameters.html:71
+#: templates/manager_offer_parameters.html:91
+#: templates/manager_offer_parameters.html:111
+#: templates/manager_offer_parameters.html:131
+#: templates/manager_offer_parameters_edit.html:54
+#: templates/manager_offer_parameters_edit.html:71
+#: templates/manager_offer_parameters_edit.html:88
+#: templates/manager_offer_parameters_edit.html:105
+msgid "from"
+msgstr ""
 
-msgid "subject_type"
-msgstr "Subject type"
-
-msgid "subjects"
-msgstr "Dissertation subjects"
-
-msgid "submitted_to_commission"
-msgstr "Submitted to commission"
-
-msgid "submitted_to_director"
-msgstr "Submitted to promotor"
-
-msgid "submitted_to_first_year_evaluation"
-msgstr "Submitted to 1st year evaluation"
-
-msgid "taken_places"
-msgstr "Taken places"
-
-msgid "teacher_jury_draft"
-msgstr "Dissertation status is draft, teachers can't edit jury."
-
-msgid "teacher_jury_visible_editable_parameter"
-msgstr "Teachers can see and edit jury."
-
-msgid "teacher_jury_visible_not_editable_parameter"
-msgstr "Teachers can see jury but not edit it."
-
-msgid "teachers"
-msgstr "Teachers"
-
-msgid "teachers_not_responding_to_request"
-msgstr "Teachers not responding to requests"
-
-msgid "theoretical_analysis"
-msgstr "Theoretical analysis"
-
-msgid "title"
-msgstr "Title"
-
-msgid "title_chart_copro"
-msgstr "Dissertations as copromotor"
-
-msgid "title_chart_pro"
-msgstr "Dissertations as promotor"
-
-msgid "title_chart_read"
-msgstr "Dissertations as reader"
-
+#: templates/manager_offer_parameters.html:73
+#: templates/manager_offer_parameters.html:93
+#: templates/manager_offer_parameters.html:113
+#: templates/manager_offer_parameters.html:133
+#: templates/manager_offer_parameters_edit.html:61
+#: templates/manager_offer_parameters_edit.html:78
+#: templates/manager_offer_parameters_edit.html:95
+#: templates/manager_offer_parameters_edit.html:112
 msgid "to"
-msgstr "to"
+msgstr ""
 
-msgid "to_be_defended"
-msgstr "To be defended"
+#: templates/manager_offer_parameters.html:79
+msgid "Currently possible to create dissertations"
+msgstr ""
 
-msgid "to_be_received"
-msgstr "To be received"
+#: templates/manager_offer_parameters.html:99
+msgid "Jury currently visible"
+msgstr ""
 
-msgid "to_dir_ko_confirmation_message"
-msgstr "You are ready to refuse this dissertation project, which will be resend to the student.  Are you sure you want to continue ?"
+#: templates/manager_offer_parameters.html:119
+msgid "Title currently editable"
+msgstr ""
 
-msgid "to_dir_ok_confirmation_message"
-msgstr "You are ready to accept this dissertation project.  Are you sure you want to continue ?"
+#: templates/manager_offer_parameters.html:144
+#: templates/manager_offer_parameters_edit.html:125
+msgid "Students can manage readers"
+msgstr ""
 
-msgid "type"
-msgstr "Subject type"
+#: templates/manager_offer_parameters.html:158
+#: templates/manager_offer_parameters_edit.html:135
+msgid "Adviser can manage jury members"
+msgstr ""
 
-msgid "undefined"
-msgstr "Undefined"
+#: templates/manager_offer_parameters.html:172
+#: templates/manager_offer_parameters_edit.html:145
+msgid "First year evaluation"
+msgstr ""
 
-msgid "update_date"
-msgstr "Update date"
+#: templates/manager_offer_parameters.html:186
+#: templates/manager_offer_parameters_edit.html:155
+msgid "Validation commission exists"
+msgstr ""
 
-msgid "updates"
-msgstr "Updates"
+#: templates/manager_offer_parameters.html:200
+#: templates/manager_offer_parameters_edit.html:165
+msgid ""
+"Send an email to reading commission when acceptation of evaluation commission"
+msgstr ""
 
-msgid "validation_commission_exists"
-msgstr "Validation commission exists"
+#: templates/manager_offer_parameters_edit.html:50
+msgid "Period of visibility for dissertation subjects"
+msgstr ""
 
-msgid "visibility"
-msgstr "Visibility"
+#: templates/manager_offer_parameters_edit.html:67
+msgid "Period of possibility to create dissertations projects"
+msgstr ""
 
-msgid "visible"
-msgstr "Visible"
+#: templates/manager_offer_parameters_edit.html:84
+msgid "Period of visibility for dissertation jurys"
+msgstr ""
 
-msgid "waiting_commission"
-msgstr "Waiting commission"
+#: templates/manager_offer_parameters_edit.html:101
+msgid "Period of possibility to edit dissertations titles"
+msgstr ""
 
-msgid "waiting_dissertations"
-msgstr "Waiting promotor"
+#: templates/manager_proposition_dissertation_detail.html:48
+#: templates/proposition_dissertation_detail.html:49
+msgid ""
+"You are ready to definitely delete this dissertation subject.  Are you sure "
+"you want to continue ?"
+msgstr ""
 
-msgid "waiting_evaluation"
-msgstr "Waiting 1st year evaluation"
+#: templates/manager_proposition_dissertation_detail.html:85
+#: templates/manager_proposition_dissertation_edit.html:57
+#: templates/manager_proposition_dissertation_new.html:69
+#: templates/manager_proposition_dissertations_list.html:74
+#: templates/proposition_dissertation_detail.html:87
+#: templates/proposition_dissertation_edit.html:60
+#: templates/proposition_dissertation_new.html:59
+#: templates/proposition_dissertations_list.html:73
+#: templates/proposition_dissertations_list_created.html:73
+#: templates/proposition_dissertations_list_my.html:70
+msgid "Visibility"
+msgstr ""
 
-msgid "waiting_reception"
-msgstr "Waiting reception"
+#: templates/manager_proposition_dissertation_detail.html:97
+#: templates/proposition_dissertation_detail.html:99
+msgid "Creation date"
+msgstr ""
 
-msgid "waiting_dissertations_message"
-msgstr "Dissertations waiting validation"
+#: templates/manager_proposition_dissertation_detail.html:113
+#: templates/manager_proposition_dissertation_edit.html:66
+#: templates/manager_proposition_dissertation_new.html:78
+#: templates/proposition_dissertation_detail.html:115
+#: templates/proposition_dissertation_edit.html:69
+#: templates/proposition_dissertation_new.html:68
+msgid "Subject type"
+msgstr ""
 
-msgid "warning"
-msgstr "Warning"
+#: templates/manager_proposition_dissertation_detail.html:121
+#: templates/manager_proposition_dissertation_edit.html:74
+#: templates/manager_proposition_dissertation_new.html:86
+#: templates/proposition_dissertation_detail.html:123
+#: templates/proposition_dissertation_edit.html:77
+#: templates/proposition_dissertation_new.html:76
+msgid "Subject developement level"
+msgstr ""
 
-msgid "welcome"
-msgstr "Welcome"
+#: templates/manager_proposition_dissertation_detail.html:129
+#: templates/manager_proposition_dissertation_edit.html:82
+#: templates/manager_proposition_dissertation_new.html:94
+#: templates/proposition_dissertation_detail.html:131
+#: templates/proposition_dissertation_edit.html:85
+#: templates/proposition_dissertation_new.html:84
+msgid "Collaboration"
+msgstr ""
 
-msgid "welcome_message_dissertation"
-msgstr "This application is dedicated to student's dissertations management, for the Faculties which choosed to use it."
+#: templates/manager_proposition_dissertation_detail.html:137
+#: templates/manager_proposition_dissertation_edit.html:91
+#: templates/manager_proposition_dissertation_new.html:103
+#: templates/proposition_dissertation_detail.html:139
+#: templates/proposition_dissertation_edit.html:94
+#: templates/proposition_dissertation_new.html:93
+msgid "Indicative number of places for this subject"
+msgstr ""
 
-msgid "welcome_warning_dissertation"
-msgstr "If you continue, you will be registered as teacher in the application, and you will be able to create dissertation subjects for the students."
+#: templates/manager_proposition_dissertation_detail.html:145
+#: templates/proposition_dissertation_detail.html:147
+msgid "Taken places"
+msgstr ""
 
-msgid "yes"
-msgstr "yes"
+#: templates/manager_proposition_dissertation_detail.html:148
+#: templates/manager_proposition_dissertations_list.html:82
+#: templates/proposition_dissertation_detail.html:150
+msgid "of"
+msgstr ""
 
-msgid "yes,no"
-msgstr "yes,no"
+#: templates/manager_proposition_dissertation_detail.html:148
+#: templates/proposition_dissertation_detail.html:150
+#, python-format
+msgid "%%"
+msgstr ""
 
-msgid "you_have"
-msgstr "You have"
+#: templates/manager_proposition_dissertation_detail.html:164
+#: templates/manager_proposition_dissertations_list.html:72
+#: templates/proposition_dissertation_detail.html:166
+#: templates/proposition_dissertations_list.html:72
+#: templates/proposition_dissertations_list_created.html:72
+#: templates/proposition_dissertations_list_my.html:69
+msgid "Created by"
+msgstr ""
 
-msgid "year_start"
-msgstr "year beginning"
+#: templates/manager_proposition_dissertation_detail.html:175
+#: templates/proposition_dissertation_detail.html:178
+msgid "Dissertation subject jury"
+msgstr ""
+
+#: templates/manager_proposition_dissertation_detail.html:179
+#: templates/proposition_dissertation_detail.html:182
+msgid ""
+"You can define a jury for the dissertation subject. This jury will "
+"automatically be defined for all dissertations created from this subject. "
+"There can be only one promotor, if you add one, this promotor will replace "
+"the existing one."
+msgstr ""
+
+#: templates/manager_proposition_dissertation_edit.html:101
+#: templates/manager_proposition_dissertation_new.html:113
+#: templates/proposition_dissertation_edit.html:104
+#: templates/proposition_dissertation_new.html:103
+msgid "Check the programs related to this topic"
+msgstr ""
+
+#: templates/manager_proposition_dissertation_new.html:33
+#: templates/manager_proposition_dissertation_new.html:37
+#: templates/proposition_dissertation_new.html:33
+#: templates/proposition_dissertation_new.html:37
+msgid "New dissertation subject"
+msgstr ""
+
+#: templates/manager_proposition_dissertations_jury_edit.html:33
+#: templates/manager_proposition_dissertations_jury_edit.html:37
+#: templates/proposition_dissertations_jury_edit.html:33
+msgid "Add/Edit jury member for the dissertation subject"
+msgstr ""
+
+#: templates/manager_proposition_dissertations_list.html:39
+#: templates/proposition_dissertations_list.html:41
+#: templates/proposition_dissertations_list_created.html:41
+#: templates/proposition_dissertations_list_my.html:41
+msgid "All subjects"
+msgstr ""
+
+#: templates/manager_proposition_dissertations_list.html:51
+#: templates/proposition_dissertations_list.html:53
+msgid "Search dissertation subject"
+msgstr ""
+
+#: templates/manager_proposition_dissertations_list.html:58
+#: templates/proposition_dissertations_list.html:58
+#: templates/proposition_dissertations_list_created.html:52
+#: templates/proposition_dissertations_list_my.html:49
+msgid "Add dissertation subject"
+msgstr ""
+
+#: templates/manager_proposition_dissertations_list.html:73
+msgid "Number of places"
+msgstr ""
+
+#: templates/manager_students_list.html:173
+msgid "filter by offer"
+msgstr ""
+
+#: templates/new_document.html:47
+msgid "cancel"
+msgstr ""
+
+#: templates/proposition_dissertations_jury_edit.html:37
+msgid "Add/Edit dissertation"
+msgstr ""
+
+#: templates/proposition_dissertations_list.html:39
+#: templates/proposition_dissertations_list_created.html:39
+#: templates/proposition_dissertations_list_my.html:39
+msgid "My subjects"
+msgstr ""
+
+#: templates/proposition_dissertations_list.html:40
+#: templates/proposition_dissertations_list_created.html:40
+#: templates/proposition_dissertations_list_my.html:40
+msgid "Subjects created"
+msgstr ""
+
+#: templates/proposition_dissertations_list_created.html:48
+msgid "Subjects you created for others (you are not the promotor)."
+msgstr ""
+
+#: views/dissertation.py:135 views/dissertation.py:142
+msgid "Auto add jury"
+msgstr ""
+
+#: views/dissertation.py:149
+msgid "Dissertation status is draft, managers can't edit jury."
+msgstr ""
+
+#: views/dissertation.py:152
+msgid "Dissertation status is draft, teachers can't edit jury."
+msgstr ""
+
+#: views/dissertation.py:156
+msgid "Dissertation status is draft, student can manage readers"
+msgstr ""
+
+#: views/dissertation.py:158
+msgid "Dissertation status is draft, student can't manage readers"
+msgstr ""
+
+#: views/dissertation.py:162
+msgid "Managers can see and edit jury."
+msgstr ""
+
+#: views/dissertation.py:166
+msgid "Teachers can see and edit jury."
+msgstr ""
+
+#: views/dissertation.py:168
+msgid "Teachers can see jury but not edit it."
+msgstr ""
+
+#: views/dissertation.py:172
+msgid "Jury is currently visible for the student"
+msgstr ""
+
+#: views/dissertation.py:174
+msgid "Jury is currently invisible for the student"
+msgstr ""
+
+#: views/dissertation.py:224
+msgid "manager has edited the dissertation"
+msgstr ""
+
+#: views/dissertation.py:274 views/dissertation.py:305
+msgid "Manager add jury"
+msgstr ""
+
+#: views/dissertation.py:344
+msgid "manager created dissertation"
+msgstr ""
+
+#: views/dissertation.py:481
+msgid "Delete dissertation"
+msgstr ""
+
+#: views/dissertation.py:495 views/dissertation.py:519
+msgid "Manager deleted jury"
+msgstr ""
+
+#: views/dissertation.py:923
+msgid "Teacher deleted jury"
+msgstr ""
+
+#: views/dissertation.py:950
+msgid "Teacher added jury"
+msgstr ""

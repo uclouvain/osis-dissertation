@@ -29,9 +29,9 @@
 {% load tz %}
 
 {% block breadcrumb %}
-<li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'student_path' %}</a></li>
-<li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'dissertations' %}</a></li>
-<li><a href="{% url 'manager_dissertations_list' %}" id="lnk_propositions">{% trans 'dissertations' %}</a></li>
+<li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
+<li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+<li><a href="{% url 'manager_dissertations_list' %}" id="lnk_propositions">{% trans 'Dissertations' %}</a></li>
 <li class="active">{{ dissertation.title|truncatechars:24 }}</li>
 {% endblock %}
 {% block content %}
@@ -40,11 +40,11 @@
 </div>
 <ul class="nav nav-tabs">
     <li><a href="{% url 'manager_dissertations_detail' pk=dissertation.pk %}">{% trans 'main' %}</a></li>
-    <li class="active"><a href="#">{% trans 'dissertation_updates' %}</a></li>
+    <li class="active"><a href="#">{% trans 'Dissertation updates' %}</a></li>
 </ul>
 <div class="panel panel-default">
     <div class="panel-body">
-        <h3>{% trans 'current_status' %}</h3>
+        <h3>{% trans 'Current status' %}</h3>
         <p>
             {% if dissertation.status == 'DRAFT' %}
             <span class="label label-default">
@@ -87,10 +87,10 @@
     </div>
         <table class="table table-hover">
             <tr>
-              <th>{% trans 'change'%}</th>
-              <th>{% trans 'person'%}</th>
-              <th>{% trans 'update_date'%}</th>
-              <th>{% trans 'justification'%}</th>
+              <th>{% trans 'Change'%}</th>
+              <th>{% trans 'Person'%}</th>
+              <th>{% trans 'Update date'%}</th>
+              <th>{% trans 'Add justification'%}</th>
             </tr>
         {% for dissertation_update in dissertation_updates %}
             <tr>

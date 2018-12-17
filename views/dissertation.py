@@ -27,7 +27,9 @@ import json
 import time
 
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse,JsonResponse
+from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.utils import timezone
@@ -130,46 +132,46 @@ def manager_dissertations_detail(request, pk):
     filename = files[-1].document_file.file_name if files else ""
 
     if count_proposition_role == 0 and count_dissertation_role == 0:
-            justification = "%s %s %s" % ("auto_add_jury",
+            justification = "%s %s %s" % (_("Auto add jury"),
                                           dissertation_role_status.PROMOTEUR,
                                           str(dissert.proposition_dissertation.author))
             dissertation_update.add(request, dissert, dissert.status, justification=justification)
             dissertation_role.add(dissertation_role_status.PROMOTEUR, dissert.proposition_dissertation.author, dissert)
     elif count_dissertation_role == 0:
         for role in proposition_roles:
-            justification = "%s %s %s" % ("auto_add_jury", role.status, str(role.adviser))
+            justification = "%s %s %s" % (_("Auto add jury"), role.status, str(role.adviser))
             dissertation_update.add(request, dissert, dissert.status, justification=justification)
             dissertation_role.add(role.status, role.adviser, dissert)
 
     if dissert.status == dissertation_status.DRAFT:
         jury_manager_visibility = True
         jury_manager_can_edit = False
-        jury_manager_message = 'manager_jury_draft'
+        jury_manager_message =  _("Dissertation status is draft, managers can't edit jury.")
         jury_teacher_visibility = False
         jury_teacher_can_edit = False
-        jury_teacher_message = 'teacher_jury_draft'
+        jury_teacher_message = _("Dissertation status is draft, teachers can't edit jury.")
         jury_student_visibility = True
         jury_student_can_edit = offer_prop.student_can_manage_readers
         if jury_student_can_edit:
-            jury_student_message = 'student_jury_draft_can_edit_param'
+            jury_student_message = _('Dissertation status is draft, student can manage readers')
         else:
-            jury_student_message = 'student_jury_draft_no_edit_param'
+            jury_student_message = _("Dissertation status is draft, student can't manage readers")
     else:
         jury_manager_visibility = True
         jury_manager_can_edit = True
-        jury_manager_message = 'manager_jury_editable'
+        jury_manager_message = _('Managers can see and edit jury.')
         jury_teacher_visibility = True
         jury_teacher_can_edit = offer_prop.adviser_can_suggest_reader
         if jury_teacher_can_edit:
-            jury_teacher_message = 'teacher_jury_visible_editable_parameter'
+            jury_teacher_message = _('Teachers can see and edit jury.')
         else:
-            jury_teacher_message = 'teacher_jury_visible_not_editable_parameter'
+            jury_teacher_message = _('Teachers can see jury but not edit it.')
         jury_student_visibility = offer_prop.in_periode_jury_visibility
         jury_student_can_edit = False
         if jury_student_visibility:
-            jury_student_message = 'student_jury_visible_dates'
+            jury_student_message = _('Jury is currently visible for the student')
         else:
-            jury_student_message = 'student_jury_invisible_dates'
+            jury_student_message = _('Jury is currently invisible for the student')
     dissertation_roles = dissertation_role.search_by_dissertation(dissert)
 
     promotors_count = dissertation_role.count_by_status_dissertation(dissertation_role_status.PROMOTEUR, dissert)
@@ -219,7 +221,7 @@ def manager_dissertations_edit(request, pk):
         form = ManagerDissertationEditForm(request.POST, instance=dissert)
         if form.is_valid():
             dissert = form.save()
-            justification = "manager_edit_dissertation"
+            justification = _("manager has edited the dissertation")
             dissertation_update.add(request, dissert, dissert.status, justification=justification)
             return redirect('manager_dissertations_detail', pk=dissert.pk)
         else:
@@ -269,7 +271,7 @@ def manager_dissertations_jury_new(request, pk):
                 status = data['status']
                 adv = data['adviser']
                 diss = data['dissertation']
-                justification = "%s %s %s" % ("manager_add_jury", str(status), str(adv))
+                justification = "%s %s %s" % (_("Manager add jury"), str(status), str(adv))
                 dissertation_update.add(request, dissert, dissert.status, justification=justification)
                 dissertation_role.add(status, adv, diss)
                 return redirect('manager_dissertations_detail', pk=dissert.pk)
@@ -300,7 +302,7 @@ def manager_dissertations_jury_new_ajax(request):
         if adviser_can_manage(dissert, adv_manager) \
                 and count_dissertation_role < MAX_DISSERTATION_ROLE_FOR_ONE_DISSERTATION and dissert.status != 'DRAFT' \
                 and adviser_of_dissert_role is not None and dissert is not None:
-            justification = "%s %s %s" % ("manager_add_jury", status_choice, adviser_of_dissert_role)
+            justification = "%s %s %s" % (_("Manager add jury"), status_choice, adviser_of_dissert_role)
             dissertation_update.add(request, dissert, dissert.status, justification=justification)
             dissertation_role.add(status_choice, adviser_of_dissert_role, dissert)
             return HttpResponse(status=status.HTTP_200_OK)
@@ -339,7 +341,7 @@ def manager_dissertations_new(request):
         form = ManagerDissertationForm(request.POST)
         if form.is_valid():
             dissert = form.save()
-            justification = "manager_creation_dissertation"
+            justification = _("manager created dissertation")
             dissertation_update.add(request, dissert, dissert.status, justification=justification)
             return redirect('manager_dissertations_detail', pk=dissert.pk)
         else:
@@ -476,17 +478,21 @@ def manager_dissertations_search(request):
 def manager_dissertations_delete(request, pk):
     dissert = dissertation.find_by_id(pk)
     dissert.deactivate()
-    dissertation_update.add(request, dissert, dissert.status, justification="manager_set_active_false")
+    dissertation_update.add(request, dissert, dissert.status, justification=_("Delete dissertation"))
     return redirect('manager_dissertations_list')
 
 
 @login_required
 @user_passes_test(adviser.is_manager)
-@check_for_dissert(autorized_dissert_promotor_or_manager)
 def manager_dissertations_role_delete(request, pk):
     dissert_role = dissertation_role.find_by_id(pk)
+    if dissert_role is None:
+        return redirect('manager_dissertations_list')
     dissert = dissert_role.dissertation
-    if _justification_dissert_role_delete_change(request, dissert, dissert_role, "manager_delete_jury"):
+    person = mdl.person.find_by_user(request.user)
+    adv = adviser.search_by_person(person)
+    if adviser_can_manage(dissert, adv) and \
+            _justification_dissert_role_delete_change(request, dissert, dissert_role, _("Manager deleted jury")):
         return redirect('manager_dissertations_detail', pk=dissert.pk)
     else:
         return redirect('manager_dissertations_list')
@@ -510,7 +516,7 @@ def manager_dissertations_role_delete_by_ajax(request, pk):
     person = mdl.person.find_by_user(request.user)
     adv = adviser.search_by_person(person)
     if adviser_can_manage(dissert, adv) and \
-            _justification_dissert_role_delete_change(request, dissert, dissert_role, "manager_delete_jury"):
+            _justification_dissert_role_delete_change(request, dissert, dissert_role, _("Manager deleted jury")):
         return HttpResponse(status.HTTP_200_OK)
     else:
         return redirect('manager_dissertations_list')
@@ -837,7 +843,7 @@ def dissertations_detail_updates(request, pk):
 
 @login_required
 @user_passes_test(adviser.is_teacher)
-@user_passes_test(autorized_dissert_promotor_or_manager)
+@check_for_dissert(autorized_dissert_promotor_or_manager)
 def dissertations_to_dir_ok(request, pk):
     dissert = dissertation.find_by_id(pk)
     old_status = dissert.status
@@ -914,7 +920,7 @@ def dissertations_role_delete(request, pk):
     offer_prop = offer_proposition.get_by_dissertation(dissert)
     if offer_prop is not None and teacher_is_promotor(adv, dissert):
         if offer_prop.adviser_can_suggest_reader and _role_can_be_deleted(dissert, dissert_role):
-            justification = "%s %s" % ("teacher_delete_jury", str(dissert_role))
+            justification = "%s %s" % (_("Teacher deleted jury"), str(dissert_role))
             dissertation_update.add(request, dissert, dissert.status, justification=justification)
             dissert_role.delete()
 
@@ -941,7 +947,7 @@ def dissertations_jury_new(request, pk):
                     status = data['status']
                     adv = data['adviser']
                     diss = data['dissertation']
-                    justification = "%s %s %s" % ("teacher_add_jury", str(status), str(adv))
+                    justification = "%s %s %s" % (_("Teacher added jury"), str(status), str(adv))
                     dissertation_update.add(request, dissert, dissert.status, justification=justification)
                     dissertation_role.add(status, adv, diss)
                     return redirect('dissertations_detail', pk=dissert.pk)

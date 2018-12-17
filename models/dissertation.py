@@ -50,10 +50,10 @@ class DissertationAdmin(SerializableModelAdmin):
 
 
 DEFEND_PERIODE_CHOICES = (
-    ('UNDEFINED', _('undefined')),
-    ('JANUARY', _('january')),
-    ('JUNE', _('june')),
-    ('SEPTEMBER', _('september')),
+    ('UNDEFINED', _('Undefined')),
+    ('JANUARY', _('January')),
+    ('JUNE', _('June')),
+    ('SEPTEMBER', _('September')),
 )
 
 

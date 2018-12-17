@@ -33,14 +33,14 @@
 {% endblock %}
 
 {% block breadcrumb %}
-  <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans 'student_path' %}</a></li>
-  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'dissertations' %}</a></li>
-  <li class="active">{% trans 'students' as students_title %}{{ students_title|title }}</li>
+  <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
+  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+  <li class="active">{% trans 'For students' %}{{ students_title|title }}</li>
 {% endblock %}
 
 {% block content %}
     <div class="page-header">
-        <h2>{% trans 'students' as students_title %}{{ students_title|title }}</h2>
+        <h2>{% trans 'For students' %}{{ students_title|title }}</h2>
     </div>
     <div class="panel panel-default">
         <div class="panel-body table-responsive">
@@ -48,9 +48,9 @@
                 <thead>
                     <tr>
                         <th class="col-xs-3">{{ students_title|title }}</th>
-                        <th>{% trans 'offer_propositions' %}</th>
-                        <th>{% trans 'status' %}</th>
-                        <th>{% trans 'dissertation' %}</th>
+                        <th>{% trans 'Programs' %}</th>
+                        <th>{% trans 'Status' %}</th>
+                        <th>{% trans 'Dissertation' %}</th>
                 </thead>
                 <tbody>
                     {% for offer_enrollement in offer_enrollements %}
@@ -111,9 +111,9 @@
                 <tfoot id="foot-list">
                     <tr>
                         <th>{{ students_title|title }}</th>
-                        <th>{% trans 'offer_propositions' %}</th>
-                        <th>{% trans 'status' %}</th>
-                        <th>{% trans 'dissertation' %}</th>
+                        <th>{% trans 'Programs' %}</th>
+                        <th>{% trans 'Status' %}</th>
+                        <th>{% trans 'Dissertation' %}</th>
                     </tr>
                 </tfoot>
             </table>
@@ -140,25 +140,25 @@
                 "info"  : false,
                 "searching" : true,
                 "language": {
-                    "sProcessing":     "{% trans 'datatable_processing'%}",
-                    "sSearch":         "{% trans 'datatable_search'%}",
+                    "sProcessing":     "{% trans 'Processing...'%}",
+                    "sSearch":         "{% trans 'Search:'%}",
                     "sLengthMenu":     "&nbsp;&nbsp;&nbsp;_MENU_ &eacute;l&eacute;ments",
-                    "sInfo":           "{% trans 'datatable_info'%}",
-                    "sInfoEmpty":      "{% trans 'datatable_infoempty'%}",
-                    "sInfoFiltered":   "{% trans 'datatable_infofiltered'%}",
+                    "sInfo":           "{% trans 'Showing _START_ to _END_ of _TOTAL_ entries'%}",
+                    "sInfoEmpty":      "{% trans 'Showing 0 to 0 of 0 entries'%}",
+                    "sInfoFiltered":   "{% trans '(filtered from _MAX_ total entries)'%}",
                     "sInfoPostFix":    "{% trans 'datatable_infopostfix'%}",
-                    "sLoadingRecords": "{% trans 'datatable_loadingrecords'%}",
-                    "sZeroRecords":    "{% trans 'datatable_zerorecords'%}",
-                    "sEmptyTable":     "{% trans 'datatable_emptytable'%}",
+                    "sLoadingRecords": "{% trans 'Loading...'%}",
+                    "sZeroRecords":    "{% trans 'No matching records found'%}",
+                    "sEmptyTable":     "{% trans 'No data available in table'%}",
                     "oPaginate": {
-                        "sFirst":      "{% trans 'datatable_first'%}",
-                        "sPrevious":   "{% trans 'datatable_previous'%}",
-                        "sNext":       "{% trans 'datatable_next'%}",
-                        "sLast":       "{% trans 'datatable_last'%}"
+                        "sFirst":      "{% trans 'First'%}",
+                        "sPrevious":   "{% trans 'Previous'%}",
+                        "sNext":       "{% trans 'Next'%}",
+                        "sLast":       "{% trans 'Last'%}"
                     },
                     "oAria": {
-                        "sSortAscending":  "{% trans 'datatable_sortascending'%}",
-                        "sSortDescending": "{% trans 'datatable_sortdescending'%}",
+                        "sSortAscending":  "{% trans ': activate to sort column ascending'%}",
+                        "sSortDescending": "{% trans ': activate to sort column descending'%}",
                     }
                 },
                 "columns":[
@@ -170,7 +170,7 @@
                 initComplete: function () {
                     this.api().columns([1]).every( function () {
                         var column = this;
-                        var select = $('<select class="search_select_filter form-control input-sm"><option value="">{% trans 'filtre_by_offer'%}</option></select>')
+                        var select = $('<select class="search_select_filter form-control input-sm"><option value="">{% trans 'filter by offer'%}</option></select>')
                             .appendTo( $('#students-list_filter'))
                             .on( 'change', function () {
                                 var val = $.fn.dataTable.util.escapeRegex(

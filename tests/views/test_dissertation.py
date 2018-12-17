@@ -477,4 +477,4 @@ class DissertationViewTestCase(TestCase):
             offer_year_start=self.offer_year_start2
         )
         self.dissertation_x.status = dissertation_status.DIR_SUBMIT
-        self.assertEqual(new_status_display(self.dissertation_x, "accept"), _('to_be_received'))
+        self.assertEqual(new_status_display(self.dissertation_x, "accept"), _('To be received'))
