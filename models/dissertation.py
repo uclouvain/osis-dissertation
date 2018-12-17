@@ -29,12 +29,13 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
+
 from base.models import academic_year, education_group_year
 from base.models import offer_year, student
 from dissertation.models import proposition_dissertation, offer_proposition, dissertation_location
+from dissertation.models.enums import dissertation_status
 from dissertation.utils import emails_dissert
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
-from dissertation.models.enums import dissertation_status
 
 
 class DissertationAdmin(SerializableModelAdmin):
@@ -46,7 +47,7 @@ class DissertationAdmin(SerializableModelAdmin):
                      'education_group_year_start')
     search_fields = ('uuid', 'title', 'author__person__last_name', 'author__person__first_name',
                      'proposition_dissertation__title', 'proposition_dissertation__author__person__last_name',
-                     'proposition_dissertation__author__person__first_name')
+                     'proposition_dissertation__author__person__first_name', 'education_group_year_start__acronym')
 
 
 DEFEND_PERIODE_CHOICES = (
@@ -72,7 +73,7 @@ class Dissertation(SerializableModel):
         education_group_year.EducationGroupYear,
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name='dissertations')
     proposition_dissertation = models.ForeignKey(proposition_dissertation.PropositionDissertation)
     description = models.TextField(blank=True, null=True)

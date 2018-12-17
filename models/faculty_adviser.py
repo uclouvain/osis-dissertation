@@ -25,6 +25,7 @@
 ##############################################################################
 from django.contrib import admin
 from django.db import models
+
 from base.models import education_group
 from base.models import offer
 from base.models import offer_year
@@ -34,14 +35,15 @@ from . import adviser
 class FacultyAdviserAdmin(admin.ModelAdmin):
     list_display = ('adviser', 'offer_most_recent_offer_year', 'get_adviser_type', 'education_group')
     raw_id_fields = ('adviser', 'offer', 'education_group')
-    search_fields = ('adviser__person__last_name', 'adviser__person__first_name', 'offer__id')
+    search_fields = ('adviser__person__last_name', 'adviser__person__first_name', 'offer__id',
+                     'education_group__id')
     readonly_fields = ('offer_most_recent_offer_year',)
 
 
 class FacultyAdviser(models.Model):
     adviser = models.ForeignKey(adviser.Adviser)
     offer = models.ForeignKey(offer.Offer)
-    education_group = models.ForeignKey(education_group.EducationGroup, null=True, blank=True, on_delete=models.CASCADE)
+    education_group = models.ForeignKey(education_group.EducationGroup, null=True, blank=True, on_delete=models.PROTECT)
 
     def __str__(self):
         return "{} - Offer {}".format(str(self.adviser), str(self.offer.id))
