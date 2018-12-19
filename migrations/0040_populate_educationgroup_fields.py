@@ -12,9 +12,9 @@ def populate_educationgroup_fields(apps, shema_editor):
     OfferProposition = apps.get_model('dissertation', 'offerproposition')
     FacultyAdviser = apps.get_model('dissertation', 'facultyadviser')
 
-    offer_propositions = OfferProposition.objects.filter(education_group__isnull=True)
-    faculty_advisers = FacultyAdviser.objects.filter(education_group__isnull=True)
-    dissertations = Dissertation.objects.filter(education_group_year_start__isnull=True)
+    offer_propositions = OfferProposition.objects.all()
+    faculty_advisers = FacultyAdviser.objects.all()
+    dissertations = Dissertation.objects.all()
     offer_ids = set([op.offer_id for op in offer_propositions])
     offer_year_ids = set([dissert.offer_year_start_id for dissert in dissertations])
 
