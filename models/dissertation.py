@@ -39,7 +39,7 @@ from osis_common.models.serializable_model import SerializableModel, Serializabl
 
 
 class DissertationAdmin(SerializableModelAdmin):
-    list_display = ('uuid', 'title', 'author', 'status', 'active', 'proposition_dissertation', 'modification_date')
+    list_display = ('uuid', 'title', 'author', 'status', 'active', 'proposition_dissertation', 'modification_date', 'education_group_year_start')
     raw_id_fields = ('author',
                      'offer_year_start',
                      'proposition_dissertation',
