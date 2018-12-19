@@ -101,7 +101,7 @@ class OfferProposition(SerializableModel):
         return start <= date.today() <= end
 
     def __str__(self):
-        return self.acronym
+        return self.recent_acronym_education_group
 
     class Meta:
         ordering = ['offer_proposition_group', 'acronym']

@@ -86,11 +86,11 @@
                       {% endif %}
                   </td>
                   <td>
-                      {% for prop_diss_education_group in proposition_dissertation.topiceducationgroup_set.all %}
-                        {{ prop_diss_education_group.education_group.most_recent_acronym }}
-                          {% if not forloop.last %}
-                          -
-                          {% endif %}
+                      {% for prop_offer in proposition_dissertation.propositionoffer_set.all %}
+                        <span class="label label-default" >
+                          {{ prop_offer.offer_proposition }}
+                        </span>
+                        &nbsp;
                       {% endfor %}
                   </td>
                 </tr>
