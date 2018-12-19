@@ -54,14 +54,14 @@
             <label class="alert alert-info" style="margin-left:10%;width:80%;text-align:center;">{% trans 'No result'%}
             </label>
             {% else %}
-            <table class="table table-hover">
-                <tr>
+            <table class="table table-hover" id="tb_memoire">
+                <thead>
                     <th>{% trans 'Title' %}</th>
                     <th>{% trans 'Author'%}</th>
                     <th>{% trans 'Status'%}</th>
                     <th>{% trans 'Start Program/Year'%}</th>
                     <th>{% trans 'Dissertation subject'%}</th>
-                </tr>
+                </thead>
                 {% for dissert_role in disserts_role %}
                 <tr>
                     <td><a href="{% url 'manager_dissertations_detail' pk=dissert_role.dissertation.pk %}">
@@ -104,7 +104,7 @@
                         {{ dissert_role.dissertation.get_status_display }}
                     </span>
                     </td>
-                    <td>{{ dissert_role.dissertation.offer_year_start }}</td>
+                    <td>{{ dissert_role.dissertation.education_group_year_start.academic_yea }}</td>
                     <td>{{ dissert_role.dissertation.proposition_dissertation }}</td>
                 </tr>
                 {% endfor %}
@@ -113,4 +113,44 @@
       </div>
     </div>
   </div>
+{% endblock %}
+{% block script %}
+<script type="text/javascript" src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/dataTables.bootstrap.min.js' %}"></script>
+<script>
+ $(document).ready(function()
+ {
+     $('#tb_memoire').DataTable(
+         {
+             "paging" : true,
+             "ordering" : true,
+             "info"  : false,
+             "searching" : true,
+             "language":
+             {
+
+             "sProcessing":     "{% trans 'datatable_processing'%}",
+             "sSearch":         "{% trans 'datatable_search'%}",
+             "sLengthMenu":     "{% trans 'datatable_lengthmenu'%}",
+             "sInfo":           "{% trans 'datatable_info'%}",
+             "sInfoEmpty":      "{% trans 'datatable_infoempty'%}",
+             "sInfoFiltered":   "{% trans 'datatable_infofiltered'%}",
+             "sInfoPostFix":    "{% trans 'datatable_infopostfix'%}",
+             "sLoadingRecords": "{% trans 'datatable_loadingrecords'%}",
+             "sZeroRecords":    "{% trans 'datatable_zerorecords'%}",
+             "sEmptyTable":     "{% trans 'datatable_emptytable'%}",
+             "oPaginate": {
+                 "sFirst":      "{% trans 'datatable_first'%}",
+                 "sPrevious":   "{% trans 'datatable_previous'%}",
+                 "sNext":       "{% trans 'datatable_next'%}",
+                 "sLast":       "{% trans 'datatable_last'%}"
+                         },
+         "oAria": {
+             "sSortAscending":  "{% trans 'datatable_sortascending'%}",
+             "sSortDescending": "{% trans 'datatable_sortdescending'%}",
+                 }
+             }
+         })
+ ;});
+</script>
 {% endblock %}
