@@ -69,8 +69,6 @@ urlpatterns = [
         name='manager_dissertations_jury_new'),
     url(r'^manager_dissertations_list$', dissertation.manager_dissertations_list,
         name='manager_dissertations_list'),
-    url(r'^manager_dissertations_new$', dissertation.manager_dissertations_new,
-        name='manager_dissertations_new'),
     url(r'^manager_dissertations_role_delete/(?P<pk>[0-9]+)$', dissertation.manager_dissertations_role_delete,
         name='manager_dissertations_role_delete'),
     url(r'^manager_dissertations_search$', dissertation.manager_dissertations_search,
