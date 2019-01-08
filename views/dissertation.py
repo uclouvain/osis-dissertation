@@ -331,34 +331,6 @@ def manager_dissertations_list(request):
                           'offer_props':offer_props})
 
 
-@login_required
-@user_passes_test(adviser.is_manager)
-def manager_dissertations_new(request):
-    person = mdl.person.find_by_user(request.user)
-    adv = adviser.search_by_person(person)
-    offers = faculty_adviser.search_by_adviser(adv)
-    if request.method == "POST":
-        form = ManagerDissertationForm(request.POST)
-        if form.is_valid():
-            dissert = form.save()
-            justification = _("manager created dissertation")
-            dissertation_update.add(request, dissert, dissert.status, justification=justification)
-            return redirect('manager_dissertations_detail', pk=dissert.pk)
-        else:
-            form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offers(offers)
-            form.fields["author"].queryset = mdl.student.find_by_offer(offers)
-            form.fields["offer_year_start"].queryset = mdl.offer_year.find_by_offer(offers)
-
-    else:
-        form = ManagerDissertationForm(initial={'active': True})
-        form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offers(offers)
-        form.fields["author"].queryset = mdl.student.find_by_offer(offers)
-        form.fields["offer_year_start"].queryset = mdl.offer_year.find_by_offer(offers)
-    return layout.render(request, 'manager_dissertations_new.html',
-                         {'form': form,
-                          'defend_periode_choices': dissertation.DEFEND_PERIODE_CHOICES})
-
-
 def generate_xls(disserts):
     workbook = Workbook(encoding='utf-8')
     worksheet1 = workbook.active
