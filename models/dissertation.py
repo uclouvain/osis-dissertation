@@ -164,8 +164,15 @@ def search_by_offer(offers, active=True):
     return Dissertation.objects.filter(offer_year_start__offer__in=offers).filter(active=active)
 
 
+def search_by_education_group(education_groups, active=True):
+    return Dissertation.objects.filter(education_group_year_start__education_group__in=education_groups, active=active)
+
+
 def search_by_offer_and_status(offers, status):
     return search_by_offer(offers).filter(status=status)
+
+def search_by_education_group_and_status(education_groups, status):
+    return search_by_education_group(education_groups).filter(status=status)
 
 
 def get_next_status(dissert, operation):

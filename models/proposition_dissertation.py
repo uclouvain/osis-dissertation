@@ -165,6 +165,6 @@ def search_by_offers(offers):
     proposition_ids = proposition_offer.find_by_offers(offers).values('proposition_dissertation_id')
     return PropositionDissertation.objects.filter(pk__in=proposition_ids, active=True, visibility=True)
 
-def find_by_education_group(education_groups):
-   proposition_ids = proposition_offer.find_by_education_group(education_groups).values('proposition_dissertation_id')
+def find_by_education_groups(education_groups):
+   proposition_ids = proposition_offer.find_by_education_groups(education_groups).values('proposition_dissertation_id')
    return PropositionDissertation.objects.filter(pk__in=proposition_ids, active=True, visibility=True)

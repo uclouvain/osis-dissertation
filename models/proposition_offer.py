@@ -70,3 +70,4 @@ def find_by_education_groups(education_groups):
 
 def find_by_proposition_dissertation(proposition_dissertation):
     return PropositionOffer.objects.filter(proposition_dissertation=proposition_dissertation)
+

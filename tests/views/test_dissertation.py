@@ -75,19 +75,24 @@ class DissertationViewTestCase(TestCase):
         self.offer2 = OfferFactory(title="test_offer2")
         self.academic_year1 = AcademicYearFactory()
         self.academic_year2 = AcademicYearFactory(year=self.academic_year1.year - 1)
+        self.education_group_year_start = EducationGroupYearFactory(academic_year=self.academic_year1)
         self.offer_year_start1 = OfferYearFactory(acronym="test_offer1", offer=self.offer1,
                                                   academic_year=self.academic_year1)
         self.offer_year_start2 = OfferYearFactory(acronym="test_offer2", offer=self.offer2,
                                                   academic_year=self.academic_year1)
         self.offer_proposition1 = OfferPropositionFactory(offer=self.offer1,
                                                           global_email_to_commission=True,
-                                                          evaluation_first_year=True)
+                                                          evaluation_first_year=True,
+                                                          education_group=self.education_group_year_start.education_group)
+        education_group_year1 = EducationGroupYearFactory(education_group=self.offer_proposition1.education_group)
         self.offer_proposition2 = OfferPropositionFactory(offer=self.offer2, global_email_to_commission=False)
+        education_group_year2 = EducationGroupYearFactory(education_group=self.offer_proposition2.education_group)
         self.proposition_dissertation = PropositionDissertationFactory(author=self.teacher,
                                                                        creator=a_person_teacher,
                                                                        title='Proposition 1212121'
                                                                        )
-        FacultyAdviserFactory(adviser=self.manager, offer=self.offer1)
+
+
         self.dissertation_test_email = DissertationFactory(author=self.student,
                                                            title='Dissertation_test_email',
                                                            offer_year_start=self.offer_year_start1,
@@ -95,15 +100,28 @@ class DissertationViewTestCase(TestCase):
                                                            status='DRAFT',
                                                            active=True,
                                                            dissertation_role__adviser=self.teacher,
-                                                           dissertation_role__status='PROMOTEUR'
+                                                           dissertation_role__status='PROMOTEUR',
+                                                           education_group_year_start=self.education_group_year_start,
                                                            )
 
-        FacultyAdviserFactory(adviser=self.manager, offer=self.offer1)
+
+        FacultyAdviserFactory(
+            adviser=self.manager,
+            offer=self.offer1,
+            education_group=education_group_year1.education_group
+        )
         self.manager2 = AdviserManagerFactory()
-        FacultyAdviserFactory(adviser=self.manager, offer=self.offer2)
+        FacultyAdviserFactory(
+            adviser=self.manager,
+            offer=self.offer2,
+            education_group= education_group_year2.education_group
+        )
+        FacultyAdviserFactory(
+            adviser=self.manager,
+            education_group=self.education_group_year_start.education_group
+        )
         roles = ['PROMOTEUR', 'CO_PROMOTEUR', 'READER', 'PROMOTEUR', 'ACCOMPANIST', 'PRESIDENT']
         status = ['DRAFT', 'COM_SUBMIT', 'EVA_SUBMIT', 'TO_RECEIVE', 'DIR_SUBMIT', 'DIR_SUBMIT']
-        self.education_group_year_start = EducationGroupYearFactory()
         self.dissertations_list = list()
         for x in range(0, 6):
             proposition_dissertation = PropositionDissertationFactory(author=self.teacher,

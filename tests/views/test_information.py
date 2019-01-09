@@ -26,6 +26,8 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.test import TestCase
 from django.core.urlresolvers import reverse
+
+from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
 from base.tests.factories.student import StudentFactory
@@ -176,6 +178,7 @@ class InformationManagerViewTestCase(TestCase):
         offer_year_start = OfferYearFactory(acronym="test_offer")
         offer = offer_year_start.offer
         offer_proposition = OfferPropositionFactory(offer=offer)
+        EducationGroupYearFactory(education_group=offer_proposition.education_group)
         FacultyAdviserFactory(adviser=self.manager, offer=offer)
         roles = [dissertation_role_status.PROMOTEUR, dissertation_role_status.CO_PROMOTEUR, dissertation_role_status.READER, dissertation_role_status.PROMOTEUR, dissertation_role_status.ACCOMPANIST, dissertation_role_status.PRESIDENT]
         status = [dissertation_status.DRAFT, dissertation_status.COM_SUBMIT, dissertation_status.EVA_SUBMIT, dissertation_status.TO_RECEIVE, dissertation_status.DIR_SUBMIT, dissertation_status.DIR_SUBMIT]

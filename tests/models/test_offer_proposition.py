@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from base.tests.factories.education_group_year import EducationGroupYearFactory
 from dissertation.models.offer_proposition import OfferProposition
 from dissertation.models.offer_proposition import get_by_offer, get_by_dissertation, get_by_offer_proposition_group, find_by_id
 from dissertation.models.offer_proposition_group import OfferPropositionGroup
@@ -39,6 +40,7 @@ def create_offer_proposition(acronym, offer,offer_proposition_group=None):
         acronym=acronym,
         offer=offer,
         offer_proposition_group=offer_proposition_group)
+    EducationGroupYearFactory(education_group=offer_proposition.education_group)
     return offer_proposition
 
 def create_offer(title):

@@ -122,6 +122,10 @@ def search_by_offer(offers):
         .order_by('acronym')
 
 
+def search_by_education_group(education_groups):
+    return OfferProposition.objects.filter(education_group__in=education_groups).distinct()
+
+
 def show_validation_commission(offer_props):
     # True si validation_commission_exists est True pour au moins une offer_prop dans offer_props
     # False sinon

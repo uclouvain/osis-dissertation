@@ -25,6 +25,8 @@
 ##############################################################################
 
 import factory.fuzzy
+
+from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.student import StudentFactory
 from dissertation.tests.factories.dissertation_location import DissertationLocationFactory
@@ -43,6 +45,7 @@ class DissertationFactory(factory.DjangoModelFactory):
     defend_periode = factory.Iterator(dissertation.DEFEND_PERIODE_CHOICES, getter=lambda c: c[0])
     defend_year = factory.Faker('year')
     offer_year_start = factory.SubFactory(OfferYearFactory)
+    education_group_year_start = factory.SubFactory(EducationGroupYearFactory)
     proposition_dissertation = factory.SubFactory(PropositionDissertationFactory)
     description = factory.Faker('text', max_nb_chars=500)
     active = True

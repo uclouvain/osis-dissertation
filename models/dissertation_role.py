@@ -163,32 +163,8 @@ def list_teachers_action_needed(offers):
                                    .distinct('adviser')
 
 
-def get_promoteur_by_dissertation_str(dissert):
-    promoteur = search_by_dissertation_and_role(dissert, 'PROMOTEUR')
-    if promoteur:
-        return str(promoteur[0].adviser)
-    else:
-        return 'none'
-
-
-def get_promoteur_by_dissertation(dissert):
-    promoteur = search_by_dissertation_and_role(dissert, 'PROMOTEUR')
-    if promoteur:
-        return promoteur[0].adviser
-    else:
-        return 'none'
-
-
 def find_all_promotor_by_dissertation(dissert):
     return search_by_dissertation_and_role(dissert, 'PROMOTEUR')
-
-
-def get_copromoteur_by_dissertation(dissert):
-    copromoteur = search_by_dissertation_and_role(dissert, 'CO_PROMOTEUR')
-    if copromoteur:
-        return str(copromoteur[0].adviser)
-    else:
-        return 'none'
 
 
 def get_tab_count_role_by_offer(list_roles):

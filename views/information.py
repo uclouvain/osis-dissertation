@@ -25,10 +25,10 @@
 ##############################################################################
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
-from dissertation.models.adviser import Adviser, search_adviser
 from dissertation.models import adviser
 from dissertation.models import dissertation_role
 from dissertation.models import faculty_adviser
+from dissertation.models.enums import dissertation_role_status
 from base import models as mdl
 from dissertation.forms import AdviserForm, ManagerAdviserForm, ManagerAddAdviserForm, ManagerAddAdviserPreForm, \
     ManagerAddAdviserPerson, AddAdviserForm
@@ -316,12 +316,28 @@ def manager_informations_detail_list(request, pk):
     if adv is None:
         return redirect('manager_informations')
 
-    adv_list_disserts_pro = dissertation_role.search_by_adviser_and_role_and_offers(adv, 'PROMOTEUR', offers)
-    adv_list_disserts_copro = dissertation_role.search_by_adviser_and_role_and_offers(adv, 'CO_PROMOTEUR', offers)
-    adv_list_disserts_reader = dissertation_role.search_by_adviser_and_role_and_offers(adv, 'READER', offers)
-    adv_list_disserts_accompanist = dissertation_role.search_by_adviser_and_role_and_offers(adv, 'ACCOMPANIST', offers)
-    adv_list_disserts_internship = dissertation_role.search_by_adviser_and_role_and_offers(adv, 'INTERNSHIP', offers)
-    adv_list_disserts_president = dissertation_role.search_by_adviser_and_role_and_offers(adv, 'PRESIDENT', offers)
+    adv_list_disserts_pro = dissertation_role.search_by_adviser_and_role_and_offers(adv,
+                                                                                    dissertation_role_status.PROMOTEUR,
+                                                                                    offers)
+    adv_list_disserts_copro = dissertation_role.search_by_adviser_and_role_and_offers(
+                                                                                adv,
+                                                                                dissertation_role_status.CO_PROMOTEUR,
+                                                                                offers)
+    adv_list_disserts_reader = dissertation_role.search_by_adviser_and_role_and_offers(adv,
+                                                                                       dissertation_role_status.READER,
+                                                                                       offers)
+    adv_list_disserts_accompanist = dissertation_role.search_by_adviser_and_role_and_offers(
+                                                                                adv,
+                                                                                dissertation_role_status.ACCOMPANIST,
+                                                                                offers)
+    adv_list_disserts_internship = dissertation_role.search_by_adviser_and_role_and_offers(
+                                                                                adv,
+                                                                                dissertation_role_status.INTERNSHIP,
+                                                                                offers)
+    adv_list_disserts_president = dissertation_role.search_by_adviser_and_role_and_offers(
+                                                                                adv,
+                                                                                dissertation_role_status.PRESIDENT,
+                                                                                offers)
 
     return layout.render(request, "manager_informations_detail_list.html", locals())
 

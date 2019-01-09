@@ -27,6 +27,7 @@
 from django.test import TestCase
 import datetime
 from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
 from base.tests.factories.student import StudentFactory
@@ -69,6 +70,7 @@ class DissertationModelTestCase(TestCase):
         self.offer_year_start1 = OfferYearFactory(acronym="test_offer1",
                                                   offer=self.offer1,
                                                   academic_year=self.academic_year1)
+        self.education_group_year_start = EducationGroupYearFactory()
         self.dissertation_test_email = DissertationFactory(author=self.student,
                                                            title='Dissertation_test_email',
                                                            offer_year_start=self.offer_year_start1,
@@ -81,6 +83,7 @@ class DissertationModelTestCase(TestCase):
         self.dissertation = DissertationFactory(author=self.student,
                                                 title='Dissertation_1',
                                                 offer_year_start=self.offer_year_start1,
+                                                education_group_year_start=self.education_group_year_start,
                                                 proposition_dissertation=self.proposition_dissertation,
                                                 status=dissertation_status.DIR_SUBMIT,
                                                 active=True,
@@ -477,3 +480,7 @@ class DissertationModelTestCase(TestCase):
                                                              status=dissertation_status.DIR_KO,
                                                              proposition_dissertation=self.proposition_dissertation_x)
         self.assertEqual(dissertation.count_by_proposition(self.proposition_dissertation_x), 1)
+
+    def test_search_by_education_group(self):
+        dissert = dissertation.search_by_education_group([self.education_group_year_start.education_group])
+        self.assertEqual(dissert[0], self.dissertation)
