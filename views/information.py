@@ -66,7 +66,7 @@ def informations_detail_stats(request):
 
     advisers_copro = dissertation_role.search_by_adviser_and_role_stats(adv, 'CO_PROMOTEUR')
     count_advisers_copro = dissertation_role.count_by_adviser_and_role_stats(adv, 'CO_PROMOTEUR')
-    tab_offer_count_copro = dissertation_role.get_tab_count_role_by_offer(advisers_copro)
+    tab_offer_count_copro = dissertation_role.get_tab_count_role_by_education_group(advisers_copro)
 
     advisers_reader = dissertation_role.search_by_adviser_and_role_stats(adv, 'READER')
     count_advisers_reader = dissertation_role.count_by_adviser_and_role_stats(adv, 'READER')
@@ -299,8 +299,8 @@ def manager_informations_edit(request, pk):
 def manager_informations_list_request(request):
     person = mdl.person.find_by_user(request.user)
     adv = adviser.search_by_person(person)
-    offers = faculty_adviser.search_by_adviser(adv)
-    advisers_need_request = dissertation_role.list_teachers_action_needed(offers)
+    education_groups = faculty_adviser.find_education_groups_by_adviser(adv)
+    advisers_need_request = dissertation_role.list_teachers_action_needed(education_groups)
 
     return layout.render(request, "manager_informations_list_request.html",
                          {'advisers_need_request': advisers_need_request})
@@ -347,11 +347,11 @@ def manager_informations_detail_list(request, pk):
 def manager_informations_detail_list_wait(request, pk):
     person = mdl.person.find_by_user(request.user)
     connected_adviser = adviser.search_by_person(person)
-    offers = faculty_adviser.search_by_adviser(connected_adviser)
+    education_groups = faculty_adviser.find_education_groups_by_adviser(connected_adviser)
     adv = adviser.get_by_id(pk)
     if adv is None:
         return redirect('manager_informations')
-    disserts_role = dissertation_role.search_by_adviser_and_role_and_waiting(adv, offers)
+    disserts_role = dissertation_role.search_by_adviser_and_role_and_waiting(adv, education_groups)
 
     return layout.render(request, "manager_informations_detail_list_wait.html",
                          {'disserts_role': disserts_role, 'adviser': adv})
