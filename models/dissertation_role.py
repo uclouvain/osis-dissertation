@@ -144,6 +144,12 @@ def search_by_adviser_and_role_and_offers(adviser, role, offers):
     return search_by_adviser_and_role(adviser, role).filter(dissertation__offer_year_start__offer__in=offers)
 
 
+def search_by_adviser_and_role_and_education_groups(adviser, role, education_groups):
+    return search_by_adviser_and_role(adviser, role).filter(
+        dissertation__education_group_year_start__education_group__in= education_groups
+    )
+
+
 def search_by_adviser_and_role_and_status(adviser, role, status):
     return DissertationRole.objects.filter(status=role)\
                                    .filter(adviser=adviser)\
