@@ -328,8 +328,8 @@ def manager_informations_detail_list(request, pk):
     )
     adv_list_disserts_reader = dissertation_role.search_by_adviser_and_role_and_education_groups(
         adv,
-       dissertation_role_status.READER,
-       education_groups
+        dissertation_role_status.READER,
+        education_groups
     )
     adv_list_disserts_accompanist = dissertation_role.search_by_adviser_and_role_and_education_groups(
         adv,

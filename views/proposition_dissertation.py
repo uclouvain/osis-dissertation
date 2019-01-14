@@ -262,7 +262,7 @@ def manager_proposition_dissertations_search(request):
     propositions_dissertations = proposition_dissertation.search(request.GET['search'],
                                                                  active=True,
                                                                  education_groups=education_groups
-                                                                )
+                                                                 )
     propositions_dissertations = [_append_dissertations_count(prop) for prop in propositions_dissertations]
 
     if 'bt_xlsx' in request.GET:
