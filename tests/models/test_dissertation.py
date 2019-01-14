@@ -464,13 +464,15 @@ class DissertationModelTestCase(TestCase):
 
     def test_count_by_proposition(self):
         self.proposition_dissertation_x = PropositionDissertationFactory()
-        self.current_academic_yr = AcademicYearFactory(year=NOW.year,
+        self.current_academic_yr = AcademicYearFactory(year=datetime.date.today().year,
                                                        start_date=datetime.datetime(NOW.year, NOW.month, 1),
                                                        end_date=datetime.datetime(NOW.year + 1, NOW.month, 28))
-        self.dissertation_active = DissertationFactory(active=True,
-                                                       status=dissertation_status.COM_SUBMIT,
-                                                       proposition_dissertation=self.proposition_dissertation_x,
-                                                       offer_year_start__academic_year=self.current_academic_yr)
+        self.dissertation_active = DissertationFactory(
+            active=True,
+            status=dissertation_status.COM_SUBMIT,
+            proposition_dissertation=self.proposition_dissertation_x,
+            education_group_year_start__academic_year=self.current_academic_yr
+        )
         self.dissertation_false = DissertationFactory(active=False,
                                                       proposition_dissertation=self.proposition_dissertation_x)
         self.dissertation_active_draft = DissertationFactory(active=True,
