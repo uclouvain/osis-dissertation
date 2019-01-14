@@ -100,7 +100,7 @@ class PropositionDissertation(SerializableModel):
         ordering = ["author__person__last_name", "author__person__middle_name", "author__person__first_name", "title"]
 
 
-def search(terms, active=None, visibility=None, connected_adviser=None, offers=None):
+def search(terms, active=None, visibility=None, connected_adviser=None, education_groups=None):
     queryset = PropositionDissertation.objects.all()
     if terms:
         queryset = queryset.filter(
@@ -115,8 +115,8 @@ def search(terms, active=None, visibility=None, connected_adviser=None, offers=N
     if active:
         queryset = queryset.filter(active=active)
 
-    if offers:
-        proposition_ids = proposition_offer.find_by_offers(offers).values('proposition_dissertation_id')
+    if education_groups:
+        proposition_ids = proposition_offer.find_by_education_groups(education_groups).values('proposition_dissertation_id')
         queryset = queryset.filter(pk__in=proposition_ids)
 
     if visibility and connected_adviser:

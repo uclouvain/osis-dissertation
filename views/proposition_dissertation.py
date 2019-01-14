@@ -90,8 +90,8 @@ def is_valid(request, form):
 def manager_proposition_dissertations(request):
     person = mdl.person.find_by_user(request.user)
     adv = adviser.search_by_person(person)
-    offers = faculty_adviser.search_by_adviser(adv)
-    propositions_dissertations = proposition_dissertation.search_by_offers(offers)
+    education_groups = faculty_adviser.find_education_groups_by_adviser(adv)
+    propositions_dissertations = proposition_dissertation.find_by_education_groups(education_groups)
     propositions_dissertations = [_append_dissertations_count(prop) for prop in propositions_dissertations]
 
     return layout.render(request, 'manager_proposition_dissertations_list.html',
@@ -258,8 +258,8 @@ def manager_proposition_dissertation_new(request):
 def manager_proposition_dissertations_search(request):
     person = mdl.person.find_by_user(request.user)
     adv = adviser.search_by_person(person)
-    offers = faculty_adviser.search_by_adviser(adv)
-    propositions_dissertations = proposition_dissertation.search(request.GET['search'], active=True, offers=offers)
+    education_groups = faculty_adviser.find_education_groups_by_adviser(adv)
+    propositions_dissertations = proposition_dissertation.search(request.GET['search'], active=True, education_groups=education_groups)
     propositions_dissertations = [_append_dissertations_count(prop) for prop in propositions_dissertations]
 
     if 'bt_xlsx' in request.GET:
@@ -274,9 +274,9 @@ def manager_proposition_dissertations_search(request):
         levels_choices = dict(PropositionDissertation.LEVELS_CHOICES)
         collaboration_choices = dict(PropositionDissertation.COLLABORATION_CHOICES)
         for proposition in propositions_dissertations:
-            offers = ""
-            for offer in proposition.propositionoffer_set.all():
-                offers += "{} ".format(str(offer))
+            education_groups = ""
+            for education_group in proposition.propositionoffer_set.all():
+                education_groups += "{} ".format(str(education_group))
             worksheet1.append([proposition.created_date,
                                str(proposition.author),
                                proposition.title,
@@ -286,7 +286,7 @@ def manager_proposition_dissertations_search(request):
                                '{}/{}'.format(proposition.dissertations_count, proposition.max_number_student),
                                proposition.visibility,
                                proposition.active,
-                               offers,
+                               education_groups,
                                proposition.description
                                ])
         response = HttpResponse(
