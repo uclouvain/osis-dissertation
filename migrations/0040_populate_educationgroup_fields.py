@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 
-import pudb
 from django.db import migrations
 
 
