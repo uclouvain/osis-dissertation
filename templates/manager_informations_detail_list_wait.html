@@ -104,7 +104,7 @@
                         {{ dissert_role.dissertation.get_status_display }}
                     </span>
                     </td>
-                    <td>{{ dissert_role.dissertation.education_group_year_start.academic_yea }}</td>
+                    <td>{{ dissert_role.dissertation.education_group_year_start.academic_year }}</td>
                     <td>{{ dissert_role.dissertation.proposition_dissertation }}</td>
                 </tr>
                 {% endfor %}
@@ -119,38 +119,38 @@
 <script type="text/javascript" src="{% static 'js/dataTables.bootstrap.min.js' %}"></script>
 <script>
  $(document).ready(function()
- {
-     $('#tb_memoire').DataTable(
-         {
-             "paging" : true,
-             "ordering" : true,
-             "info"  : false,
-             "searching" : true,
-             "language":
-             {
+    {
+        $('#tb_memoire').DataTable(
+            {
+                "paging" : true,
+                "ordering" : true,
+                "info"  : false,
+                "searching" : true,
+                "language":
+                {
 
-             "sProcessing":     "{% trans 'datatable_processing'%}",
-             "sSearch":         "{% trans 'datatable_search'%}",
-             "sLengthMenu":     "{% trans 'datatable_lengthmenu'%}",
-             "sInfo":           "{% trans 'datatable_info'%}",
-             "sInfoEmpty":      "{% trans 'datatable_infoempty'%}",
-             "sInfoFiltered":   "{% trans 'datatable_infofiltered'%}",
-             "sInfoPostFix":    "{% trans 'datatable_infopostfix'%}",
-             "sLoadingRecords": "{% trans 'datatable_loadingrecords'%}",
-             "sZeroRecords":    "{% trans 'datatable_zerorecords'%}",
-             "sEmptyTable":     "{% trans 'datatable_emptytable'%}",
-             "oPaginate": {
-                 "sFirst":      "{% trans 'datatable_first'%}",
-                 "sPrevious":   "{% trans 'datatable_previous'%}",
-                 "sNext":       "{% trans 'datatable_next'%}",
-                 "sLast":       "{% trans 'datatable_last'%}"
-                         },
-         "oAria": {
-             "sSortAscending":  "{% trans 'datatable_sortascending'%}",
-             "sSortDescending": "{% trans 'datatable_sortdescending'%}",
-                 }
-             }
-         })
+                    "sProcessing":     "{% trans 'Processing...'%}",
+                    "sSearch":         "{% trans 'Search:'%}",
+                    "sLengthMenu":     "&nbsp;&nbsp;&nbsp;_MENU_ &eacute;l&eacute;ments",
+                    "sInfo":           "{% trans 'Showing _START_ to _END_ of _TOTAL_ entries'%}",
+                    "sInfoEmpty":      "{% trans 'Showing 0 to 0 of 0 entries'%}",
+                    "sInfoFiltered":   "{% trans '(filtered from _MAX_ total entries)'%}",
+                    "sInfoPostFix":    "{% trans 'datatable_infopostfix'%}",
+                    "sLoadingRecords": "{% trans 'Loading...'%}",
+                    "sZeroRecords":    "{% trans 'No matching records found'%}",
+                    "sEmptyTable":     "{% trans 'No data available in table'%}",
+                "oPaginate": {
+                    "sFirst":      "{% trans 'First'%}",
+                    "sPrevious":   "{% trans 'Previous'%}",
+                    "sNext":       "{% trans 'Next'%}",
+                    "sLast":       "{% trans 'Last'%}"
+                            },
+            "oAria": {
+                    "sSortAscending":  "{% trans ': activate to sort column ascending'%}",
+                    "sSortDescending": "{% trans ': activate to sort column descending'%}",
+                    }
+                }
+            })
  ;});
 </script>
 {% endblock %}
