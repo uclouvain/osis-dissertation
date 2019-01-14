@@ -116,7 +116,8 @@ def search(terms, active=None, visibility=None, connected_adviser=None, educatio
         queryset = queryset.filter(active=active)
 
     if education_groups:
-        proposition_ids = proposition_offer.find_by_education_groups(education_groups).values('proposition_dissertation_id')
+        proposition_ids = proposition_offer.find_by_education_groups(education_groups)\
+            .values('proposition_dissertation_id')
         queryset = queryset.filter(pk__in=proposition_ids)
 
     if visibility and connected_adviser:
@@ -166,5 +167,5 @@ def search_by_offers(offers):
     return PropositionDissertation.objects.filter(pk__in=proposition_ids, active=True, visibility=True)
 
 def find_by_education_groups(education_groups):
-   proposition_ids = proposition_offer.find_by_education_groups(education_groups).values('proposition_dissertation_id')
-   return PropositionDissertation.objects.filter(pk__in=proposition_ids, active=True, visibility=True)
+    proposition_ids = proposition_offer.find_by_education_groups(education_groups).values('proposition_dissertation_id')
+    return PropositionDissertation.objects.filter(pk__in=proposition_ids, active=True, visibility=True)

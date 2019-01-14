@@ -50,7 +50,7 @@ class AddAdviserForm(ModelForm):
 class DissertationForm(ModelForm):
     class Meta:
         model = Dissertation
-        fields = ('title', 'author', 'offer_year_start', 'proposition_dissertation', 'description')
+        fields = ('title', 'author', 'education_group_year_start', 'proposition_dissertation', 'description')
 
 
 class PropositionDissertationForm(ModelForm):
@@ -95,15 +95,15 @@ class ManagerAdviserForm(ModelForm):
 class ManagerDissertationForm(ModelForm):
     class Meta:
         model = Dissertation
-        fields = ('title', 'author', 'offer_year_start', 'proposition_dissertation', 'description',
+        fields = ('title', 'author', 'education_group_year_start', 'proposition_dissertation', 'description',
                   'defend_year', 'defend_periode', 'location')
 
 
 class ManagerDissertationEditForm(ModelForm):
     class Meta:
         model = Dissertation
-        fields = ('title', 'author', 'education_group_year_start', 'proposition_dissertation', 'description', 'defend_year',
-                  'defend_periode', 'location')
+        fields = ('title', 'author', 'education_group_year_start', 'proposition_dissertation', 'description',
+                  'defend_year', 'defend_periode', 'location')
 
 
 class ManagerDissertationRoleForm(ModelForm):
@@ -116,7 +116,7 @@ class ManagerDissertationRoleForm(ModelForm):
 class ManagerOfferPropositionForm(ModelForm):
     class Meta:
         model = OfferProposition
-        fields = ('offer', 'acronym', 'adviser_can_suggest_reader', 'validation_commission_exists',
+        fields = ('education_group', 'acronym', 'adviser_can_suggest_reader', 'validation_commission_exists',
                   'student_can_manage_readers', 'evaluation_first_year', 'start_visibility_proposition',
                   'end_visibility_proposition', 'start_visibility_dissertation', 'end_visibility_dissertation',
                   'start_jury_visibility', 'end_jury_visibility', 'start_edit_title', 'end_edit_title',

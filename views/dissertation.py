@@ -250,8 +250,8 @@ def manager_dissertations_edit(request, pk):
     return layout.render(
         request, 'manager_dissertations_edit.html',
         {'form': form,
-        'dissert': dissert,
-        'defend_periode_choices': dissertation.DEFEND_PERIODE_CHOICES})
+         'dissert': dissert,
+         'defend_periode_choices': dissertation.DEFEND_PERIODE_CHOICES})
 
 
 @login_required
@@ -734,7 +734,6 @@ def manager_students_list(request):
         education_group__in=education_groups,
         academic_year=mdl.academic_year.starting_academic_year()
     )
-    #offers_years = mdl.offer_year.find_by_offers_and_year(education_groups, mdl.academic_year.starting_academic_year())
     offer_enroll = mdl.offer_enrollment.OfferEnrollment.objects.filter(
         education_group_year__in=education_groups_years
     ).select_related(

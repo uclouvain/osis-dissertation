@@ -316,28 +316,36 @@ def manager_informations_detail_list(request, pk):
     if adv is None:
         return redirect('manager_informations')
 
-    adv_list_disserts_pro = dissertation_role.search_by_adviser_and_role_and_education_groups(adv,
-                                                                                    dissertation_role_status.PROMOTEUR,
-                                                                                    education_groups)
+    adv_list_disserts_pro = dissertation_role.search_by_adviser_and_role_and_education_groups(
+        adv,
+        dissertation_role_status.PROMOTEUR,
+        education_groups
+    )
     adv_list_disserts_copro = dissertation_role.search_by_adviser_and_role_and_education_groups(
-                                                                                adv,
-                                                                                dissertation_role_status.CO_PROMOTEUR,
-                                                                                education_groups)
-    adv_list_disserts_reader = dissertation_role.search_by_adviser_and_role_and_education_groups(adv,
-                                                                                       dissertation_role_status.READER,
-                                                                                       education_groups)
+        adv,
+        dissertation_role_status.CO_PROMOTEUR,
+        education_groups
+    )
+    adv_list_disserts_reader = dissertation_role.search_by_adviser_and_role_and_education_groups(
+        adv,
+       dissertation_role_status.READER,
+       education_groups
+    )
     adv_list_disserts_accompanist = dissertation_role.search_by_adviser_and_role_and_education_groups(
-                                                                                adv,
-                                                                                dissertation_role_status.ACCOMPANIST,
-                                                                                education_groups)
+        adv,
+        dissertation_role_status.ACCOMPANIST,
+        education_groups
+    )
     adv_list_disserts_internship = dissertation_role.search_by_adviser_and_role_and_education_groups(
-                                                                                adv,
-                                                                                dissertation_role_status.INTERNSHIP,
-                                                                                education_groups)
+        adv,
+        dissertation_role_status.INTERNSHIP,
+        education_groups
+    )
     adv_list_disserts_president = dissertation_role.search_by_adviser_and_role_and_education_groups(
-                                                                                adv,
-                                                                                dissertation_role_status.PRESIDENT,
-                                                                                education_groups)
+        adv,
+        dissertation_role_status.PRESIDENT,
+        education_groups
+    )
 
     return layout.render(request, "manager_informations_detail_list.html", locals())
 
