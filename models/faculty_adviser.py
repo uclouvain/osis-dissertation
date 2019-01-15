@@ -71,6 +71,4 @@ def search_by_adviser(a_adviser):
 
 
 def find_education_groups_by_adviser(a_adviser):
-    objects = FacultyAdviser.objects.filter(adviser=a_adviser)
-    education_groups = [obj.education_group for obj in list(objects)]
-    return education_groups
+    return FacultyAdviser.objects.filter(adviser=a_adviser).values_list('education_group', flat=True)
