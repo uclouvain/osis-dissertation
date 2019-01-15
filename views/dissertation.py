@@ -216,7 +216,7 @@ def manager_dissertations_edit(request, pk):
     dissert = dissertation.find_by_id(pk)
     person = mdl.person.find_by_user(request.user)
     adv = adviser.search_by_person(person)
-    offers = faculty_adviser.search_by_adviser(adv)
+    education_groups = faculty_adviser.find_education_groups_by_adviser(adv)
     if request.method == "POST":
         form = ManagerDissertationEditForm(request.POST, instance=dissert)
         if form.is_valid():
@@ -225,19 +225,33 @@ def manager_dissertations_edit(request, pk):
             dissertation_update.add(request, dissert, dissert.status, justification=justification)
             return redirect('manager_dissertations_detail', pk=dissert.pk)
         else:
-            form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offers(offers)
-            form.fields["author"].queryset = mdl.student.find_by_offer(offers)
-            form.fields["offer_year_start"].queryset = mdl.offer_year.find_by_offer(offers)
+            form.fields["proposition_dissertation"].queryset = proposition_dissertation.find_by_education_groups(
+                education_groups)
+            form.fields["author"].queryset = mdl.student.Student.objects.filter(
+                offerenrollment__education_group_year__education_group__in=education_groups
+            ).order_by(
+                'person__last_name', 'person__first_name'
+            ).distinct()
+            form.fields["education_group_year_start"].queryset = \
+                mdl.education_group_year.EducationGroupYear.objects.filter(education_group__in=education_groups)
     else:
         form = ManagerDissertationEditForm(instance=dissert)
-        form.fields["proposition_dissertation"].queryset = proposition_dissertation.search_by_offers(offers)
-        form.fields["author"].queryset = mdl.student.find_by_offer(offers)
-        form.fields["offer_year_start"].queryset = mdl.offer_year.find_by_offer(offers)
+        form.fields["proposition_dissertation"].queryset = proposition_dissertation.find_by_education_groups(
+            education_groups
+        )
+        form.fields["author"].queryset = mdl.student.Student.objects.filter(
+                offerenrollment__education_group_year__education_group__in=education_groups
+            ).order_by(
+                'person__last_name', 'person__first_name'
+            ).distinct()
+        form.fields["education_group_year_start"].queryset = mdl.education_group_year.EducationGroupYear.objects.filter(
+                education_group__in=education_groups)
 
-    return layout.render(request, 'manager_dissertations_edit.html',
-                         {'form': form,
-                          'dissert': dissert,
-                          'defend_periode_choices': dissertation.DEFEND_PERIODE_CHOICES})
+    return layout.render(
+        request, 'manager_dissertations_edit.html',
+        {'form': form,
+         'dissert': dissert,
+         'defend_periode_choices': dissertation.DEFEND_PERIODE_CHOICES})
 
 
 @login_required
@@ -315,9 +329,9 @@ def manager_dissertations_jury_new_ajax(request):
 def manager_dissertations_list(request):
     person = mdl.person.find_by_user(request.user)
     adv = adviser.search_by_person(person)
-    offers = faculty_adviser.search_by_adviser(adv)
-    disserts = dissertation.search_by_offer(offers)
-    offer_props = offer_proposition.search_by_offer(offers)
+    education_groups = faculty_adviser.find_education_groups_by_adviser(adv)
+    disserts = dissertation.search_by_education_group(education_groups)
+    offer_props = offer_proposition.search_by_education_group(education_groups)
     start_date=timezone.now().replace(year=timezone.now().year - 10)
     end_date=timezone.now().replace(year=timezone.now().year + 1)
     academic_year_10y = academic_year.find_academic_years(end_date,start_date)
@@ -371,7 +385,7 @@ def construct_line(dissert, include_description=True):
             str(dissert.author),
             title,
             dissert.status,
-            str(dissert.offer_year_start),
+            str(dissert.education_group_year_start),
             defend_year
             ]
 
@@ -399,9 +413,9 @@ def get_ordered_roles(dissert):
 def manager_dissertations_search(request):
     person = mdl.person.find_by_user(request.user)
     adv = adviser.search_by_person(person)
-    offers = faculty_adviser.search_by_adviser(adv)
+    education_groups = faculty_adviser.find_education_groups_by_adviser(adv)
     disserts = dissertation.search(terms=request.GET.get('search',''), active=True)
-    disserts = disserts.filter(offer_year_start__offer__in=offers)
+    disserts = disserts.filter(education_group_year_start__education_group__in=education_groups)
     offer_prop_search = request.GET.get('offer_prop_search','')
     academic_year_search=request.GET.get('academic_year','')
     status_search=request.GET.get('status_search','')
@@ -409,15 +423,15 @@ def manager_dissertations_search(request):
     if offer_prop_search!='':
         offer_prop_search=int(offer_prop_search)
         offer_prop=offer_proposition.find_by_id(offer_prop_search)
-        disserts = disserts.filter(offer_year_start__offer=offer_prop.offer)
+        disserts = disserts.filter(education_group_year_start__education_group=offer_prop.education_group)
     if academic_year_search!='':
         academic_year_search = int(academic_year_search)
         disserts = disserts.filter(
-            offer_year_start__academic_year=academic_year.find_academic_year_by_id(academic_year_search)
+            education_group_year_start__academic_year=academic_year.find_academic_year_by_id(academic_year_search)
         )
     if status_search!='':
         disserts = disserts.filter(status=status_search)
-    offer_props = offer_proposition.search_by_offer(offers)
+    offer_props = offer_proposition.search_by_education_group(education_groups)
     show_validation_commission = offer_proposition.show_validation_commission(offer_props)
     show_evaluation_first_year = offer_proposition.show_evaluation_first_year(offer_props)
     start_date=timezone.now().replace(year=timezone.now().year - 10)
@@ -605,11 +619,11 @@ def manager_dissertations_to_dir_ko(request, pk):
 def manager_dissertations_wait_list(request):
     person = mdl.person.find_by_user(request.user)
     adv = adviser.search_by_person(person)
-    offers = faculty_adviser.search_by_adviser(adv)
-    offer_props = offer_proposition.search_by_offer(offers)
+    education_groups = faculty_adviser.find_education_groups_by_adviser(adv)
+    offer_props = offer_proposition.search_by_education_group(education_groups)
     show_validation_commission = offer_proposition.show_validation_commission(offer_props)
     show_evaluation_first_year = offer_proposition.show_evaluation_first_year(offer_props)
-    disserts = dissertation.search_by_offer_and_status(offers, "DIR_SUBMIT")
+    disserts = dissertation.search_by_education_group_and_status(education_groups, "DIR_SUBMIT")
 
     return layout.render(request, 'manager_dissertations_wait_list.html',
                          {'dissertations': disserts,
@@ -622,8 +636,8 @@ def manager_dissertations_wait_list(request):
 def manager_dissertations_wait_comm_list(request):
     person = mdl.person.find_by_user(request.user)
     adv = adviser.search_by_person(person)
-    offers = faculty_adviser.search_by_adviser(adv)
-    offer_props = offer_proposition.search_by_offer(offers)
+    education_groups = faculty_adviser.find_education_groups_by_adviser(adv)
+    offer_props = offer_proposition.search_by_education_group(education_groups)
     all_advisers_array = str(adviser.convert_advisers_to_array(adviser.find_all_advisers()))
     show_validation_commission = offer_proposition.show_validation_commission(offer_props)
     show_evaluation_first_year = offer_proposition.show_evaluation_first_year(offer_props)
@@ -639,16 +653,16 @@ def manager_dissertations_wait_comm_list(request):
 def manager_dissertations_wait_comm_jsonlist(request):
     person = mdl.person.find_by_user(request.user)
     adv = adviser.search_by_person(person)
-    offers = faculty_adviser.search_by_adviser(adv)
-    disserts = dissertation.search_by_offer_and_status(offers, "COM_SUBMIT")
+    education_groups = faculty_adviser.find_education_groups_by_adviser(adv)
+    disserts = dissertation.search_by_education_group_and_status(education_groups, "COM_SUBMIT")
     dissert_waiting_list_json = [
         {
             'pk': dissert.pk,
             'title': dissert.title,
             'author': "{p.last_name} {p.first_name} ".format(p=dissert.author.person),
             'status': dissert.status,
-            'offer_year': str(dissert.offer_year_start.academic_year),
-            'offer': dissert.offer_year_start.acronym,
+            'education_group_year': str(dissert.education_group_year_start.academic_year),
+            'education_groups': dissert.education_group_year_start.acronym,
             'proposition_dissertation': str(dissert.proposition_dissertation),
             'description': dissert.description
         } for dissert in disserts
@@ -682,11 +696,11 @@ def manager_dissertation_role_list_json(request, pk):
 def manager_dissertations_wait_eval_list(request):
     person = mdl.person.find_by_user(request.user)
     adv = adviser.search_by_person(person)
-    offers = faculty_adviser.search_by_adviser(adv)
-    offer_props = offer_proposition.search_by_offer(offers)
+    education_groups = faculty_adviser.find_education_groups_by_adviser(adv)
+    offer_props = offer_proposition.search_by_education_group(education_groups)
     show_validation_commission = offer_proposition.show_validation_commission(offer_props)
     show_evaluation_first_year = offer_proposition.show_evaluation_first_year(offer_props)
-    disserts = dissertation.search_by_offer_and_status(offers, "EVA_SUBMIT")
+    disserts = dissertation.search_by_education_group_and_status(education_groups, "EVA_SUBMIT")
 
     return layout.render(request, 'manager_dissertations_wait_eval_list.html',
                          {'dissertations': disserts,
@@ -699,11 +713,11 @@ def manager_dissertations_wait_eval_list(request):
 def manager_dissertations_wait_recep_list(request):
     person = mdl.person.find_by_user(request.user)
     adv = adviser.search_by_person(person)
-    offers = faculty_adviser.search_by_adviser(adv)
-    offer_props = offer_proposition.search_by_offer(offers)
+    education_groups = faculty_adviser.find_education_groups_by_adviser(adv)
+    offer_props = offer_proposition.search_by_education_group(education_groups)
     show_validation_commission = offer_proposition.show_validation_commission(offer_props)
     show_evaluation_first_year = offer_proposition.show_evaluation_first_year(offer_props)
-    disserts = dissertation.search_by_offer_and_status(offers, "TO_RECEIVE")
+    disserts = dissertation.search_by_education_group_and_status(education_groups, "TO_RECEIVE")
 
     return layout.render(request, 'manager_dissertations_wait_recep_list.html',
                          {'dissertations': disserts,
@@ -715,11 +729,16 @@ def manager_dissertations_wait_recep_list(request):
 @user_passes_test(adviser.is_manager)
 def manager_students_list(request):
     current_manager = adviser.search_by_person(mdl.person.find_by_user(request.user))
-    offers = faculty_adviser.search_by_adviser(current_manager)
-    offers_years = mdl.offer_year.find_by_offers_and_year(offers, mdl.academic_year.starting_academic_year())
-    offer_enroll = offer_enrollment.find_by_offers_years(offers_years).\
-        select_related('student', 'offer_year').prefetch_related('student__dissertation_set')
-
+    education_groups = faculty_adviser.find_education_groups_by_adviser(current_manager)
+    education_groups_years = mdl.education_group_year.EducationGroupYear.objects.filter(
+        education_group__in=education_groups,
+        academic_year=mdl.academic_year.starting_academic_year()
+    )
+    offer_enroll = mdl.offer_enrollment.OfferEnrollment.objects.filter(
+        education_group_year__in=education_groups_years
+    ).select_related(
+        'student', 'education_group_year'
+    ).prefetch_related('student__dissertation_set')
     return layout.render(request, 'manager_students_list.html', {'offer_enrollements': offer_enroll})
 
 

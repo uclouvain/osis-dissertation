@@ -141,18 +141,6 @@ def find_by_person(a_person):
     return adviser
 
 
-def search_adviser(terms):
-    queryset = Adviser.objects.all().filter(type='PRF')
-    if terms:
-        queryset = queryset.filter(
-            (
-                Q(person__first_name__icontains=terms) |
-                Q(person__last_name__icontains=terms)
-            ) &
-            Q(type='PRF')).distinct()
-    return queryset
-
-
 def list_teachers():
     return Adviser.objects.filter(type='PRF') \
         .order_by('person__last_name', 'person__first_name')

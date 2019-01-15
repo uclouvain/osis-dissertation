@@ -24,6 +24,8 @@
 #
 ##############################################################################
 import factory
+
+from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.offer import OfferFactory
 from dissertation.tests.factories.offer_proposition_group import OfferPropositionGroupFactory
 
@@ -34,7 +36,7 @@ class OfferPropositionFactory(factory.DjangoModelFactory):
 
     acronym = factory.Sequence(lambda n: 'OfferProposition {}'.format(n))
     offer = factory.SubFactory(OfferFactory)
-
+    education_group = factory.SubFactory(EducationGroupFactory)
     student_can_manage_readers = True
     adviser_can_suggest_reader = True
     evaluation_first_year = True

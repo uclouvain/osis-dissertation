@@ -87,11 +87,10 @@
                     </td>
                     <td>
                         {% for prop_offer in proposition_dissertation.propositionoffer_set.all %}
-                            {% if forloop.last %}
-                                {{ prop_offer.offer_proposition.acronym }}
-                            {% else %}
-                                {{ prop_offer.offer_proposition.acronym }} -
-                            {% endif %}
+                            <span class="label label-default" >
+                                {{ prop_offer.offer_proposition }}
+                            </span>
+                            &nbsp;
                         {% endfor %}
                     </td>
                   </tr>

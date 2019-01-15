@@ -25,10 +25,10 @@
 ##############################################################################
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
-from dissertation.models.adviser import Adviser, search_adviser
 from dissertation.models import adviser
 from dissertation.models import dissertation_role
 from dissertation.models import faculty_adviser
+from dissertation.models.enums import dissertation_role_status
 from base import models as mdl
 from dissertation.forms import AdviserForm, ManagerAdviserForm, ManagerAddAdviserForm, ManagerAddAdviserPreForm, \
     ManagerAddAdviserPerson, AddAdviserForm
@@ -62,15 +62,15 @@ def informations_detail_stats(request):
     advisers_pro = dissertation_role.search_by_adviser_and_role_stats(adv, 'PROMOTEUR')
     count_advisers_pro = dissertation_role.count_by_adviser_and_role_stats(adv, 'PROMOTEUR')
     count_advisers_pro_request = dissertation_role.count_by_adviser(adv, 'PROMOTEUR', 'DIR_SUBMIT')
-    tab_offer_count_pro = dissertation_role.get_tab_count_role_by_offer(advisers_pro)
+    tab_education_group_count_pro = dissertation_role.get_tab_count_role_by_education_group(advisers_pro)
 
     advisers_copro = dissertation_role.search_by_adviser_and_role_stats(adv, 'CO_PROMOTEUR')
     count_advisers_copro = dissertation_role.count_by_adviser_and_role_stats(adv, 'CO_PROMOTEUR')
-    tab_offer_count_copro = dissertation_role.get_tab_count_role_by_offer(advisers_copro)
+    tab_education_group_count_copro = dissertation_role.get_tab_count_role_by_education_group(advisers_copro)
 
     advisers_reader = dissertation_role.search_by_adviser_and_role_stats(adv, 'READER')
     count_advisers_reader = dissertation_role.count_by_adviser_and_role_stats(adv, 'READER')
-    tab_offer_count_read = dissertation_role.get_tab_count_role_by_offer(advisers_reader)
+    tab_education_group_count_read = dissertation_role.get_tab_count_role_by_education_group(advisers_reader)
 
     return layout.render(request, 'informations_detail_stats.html',
                          {'adviser': adv,
@@ -78,9 +78,9 @@ def informations_detail_stats(request):
                           'count_advisers_pro': count_advisers_pro,
                           'count_advisers_reader': count_advisers_reader,
                           'count_advisers_pro_request': count_advisers_pro_request,
-                          'tab_offer_count_pro': tab_offer_count_pro,
-                          'tab_offer_count_read': tab_offer_count_read,
-                          'tab_offer_count_copro': tab_offer_count_copro})
+                          'tab_offer_count_pro': tab_education_group_count_pro,
+                          'tab_offer_count_read': tab_education_group_count_read,
+                          'tab_offer_count_copro': tab_education_group_count_copro})
 
 
 @login_required
@@ -299,8 +299,8 @@ def manager_informations_edit(request, pk):
 def manager_informations_list_request(request):
     person = mdl.person.find_by_user(request.user)
     adv = adviser.search_by_person(person)
-    offers = faculty_adviser.search_by_adviser(adv)
-    advisers_need_request = dissertation_role.list_teachers_action_needed(offers)
+    education_groups = faculty_adviser.find_education_groups_by_adviser(adv)
+    advisers_need_request = dissertation_role.list_teachers_action_needed(education_groups)
 
     return layout.render(request, "manager_informations_list_request.html",
                          {'advisers_need_request': advisers_need_request})
@@ -311,17 +311,41 @@ def manager_informations_list_request(request):
 def manager_informations_detail_list(request, pk):
     person = mdl.person.find_by_user(request.user)
     connected_adviser = adviser.search_by_person(person)
-    offers = faculty_adviser.search_by_adviser(connected_adviser)
+    education_groups = faculty_adviser.find_education_groups_by_adviser(connected_adviser)
     adv = adviser.get_by_id(pk)
     if adv is None:
         return redirect('manager_informations')
 
-    adv_list_disserts_pro = dissertation_role.search_by_adviser_and_role_and_offers(adv, 'PROMOTEUR', offers)
-    adv_list_disserts_copro = dissertation_role.search_by_adviser_and_role_and_offers(adv, 'CO_PROMOTEUR', offers)
-    adv_list_disserts_reader = dissertation_role.search_by_adviser_and_role_and_offers(adv, 'READER', offers)
-    adv_list_disserts_accompanist = dissertation_role.search_by_adviser_and_role_and_offers(adv, 'ACCOMPANIST', offers)
-    adv_list_disserts_internship = dissertation_role.search_by_adviser_and_role_and_offers(adv, 'INTERNSHIP', offers)
-    adv_list_disserts_president = dissertation_role.search_by_adviser_and_role_and_offers(adv, 'PRESIDENT', offers)
+    adv_list_disserts_pro = dissertation_role.search_by_adviser_and_role_and_education_groups(
+        adv,
+        dissertation_role_status.PROMOTEUR,
+        education_groups
+    )
+    adv_list_disserts_copro = dissertation_role.search_by_adviser_and_role_and_education_groups(
+        adv,
+        dissertation_role_status.CO_PROMOTEUR,
+        education_groups
+    )
+    adv_list_disserts_reader = dissertation_role.search_by_adviser_and_role_and_education_groups(
+        adv,
+        dissertation_role_status.READER,
+        education_groups
+    )
+    adv_list_disserts_accompanist = dissertation_role.search_by_adviser_and_role_and_education_groups(
+        adv,
+        dissertation_role_status.ACCOMPANIST,
+        education_groups
+    )
+    adv_list_disserts_internship = dissertation_role.search_by_adviser_and_role_and_education_groups(
+        adv,
+        dissertation_role_status.INTERNSHIP,
+        education_groups
+    )
+    adv_list_disserts_president = dissertation_role.search_by_adviser_and_role_and_education_groups(
+        adv,
+        dissertation_role_status.PRESIDENT,
+        education_groups
+    )
 
     return layout.render(request, "manager_informations_detail_list.html", locals())
 
@@ -331,11 +355,11 @@ def manager_informations_detail_list(request, pk):
 def manager_informations_detail_list_wait(request, pk):
     person = mdl.person.find_by_user(request.user)
     connected_adviser = adviser.search_by_person(person)
-    offers = faculty_adviser.search_by_adviser(connected_adviser)
+    education_groups = faculty_adviser.find_education_groups_by_adviser(connected_adviser)
     adv = adviser.get_by_id(pk)
     if adv is None:
         return redirect('manager_informations')
-    disserts_role = dissertation_role.search_by_adviser_and_role_and_waiting(adv, offers)
+    disserts_role = dissertation_role.search_by_adviser_and_role_and_waiting(adv, education_groups)
 
     return layout.render(request, "manager_informations_detail_list_wait.html",
                          {'disserts_role': disserts_role, 'adviser': adv})
@@ -350,15 +374,15 @@ def manager_informations_detail_stats(request, pk):
     advisers_pro = dissertation_role.search_by_adviser_and_role_stats(adv, 'PROMOTEUR')
     count_advisers_pro = dissertation_role.count_by_adviser_and_role_stats(adv, 'PROMOTEUR')
     count_advisers_pro_request = dissertation_role.count_by_adviser(adv, 'PROMOTEUR', 'DIR_SUBMIT')
-    tab_offer_count_pro = dissertation_role.get_tab_count_role_by_offer(advisers_pro)
+    tab_education_group_count_pro = dissertation_role.get_tab_count_role_by_education_group(advisers_pro)
 
     advisers_copro = dissertation_role.search_by_adviser_and_role_stats(adv, 'CO_PROMOTEUR')
     count_advisers_copro = dissertation_role.count_by_adviser_and_role_stats(adv, 'CO_PROMOTEUR')
-    tab_offer_count_copro = dissertation_role.get_tab_count_role_by_offer(advisers_copro)
+    tab_education_group_count_copro = dissertation_role.get_tab_count_role_by_education_group(advisers_copro)
 
     advisers_reader = dissertation_role.search_by_adviser_and_role_stats(adv, 'READER')
     count_advisers_reader = dissertation_role.count_by_adviser_and_role_stats(adv, 'READER')
-    tab_offer_count_read = dissertation_role.get_tab_count_role_by_offer(advisers_reader)
+    tab_education_group_count_read = dissertation_role.get_tab_count_role_by_education_group(advisers_reader)
 
     return layout.render(request, 'manager_informations_detail_stats.html',
                          {'adviser': adv,
@@ -366,6 +390,6 @@ def manager_informations_detail_stats(request, pk):
                           'count_advisers_pro': count_advisers_pro,
                           'count_advisers_reader': count_advisers_reader,
                           'count_advisers_pro_request': count_advisers_pro_request,
-                          'tab_offer_count_pro': tab_offer_count_pro,
-                          'tab_offer_count_read': tab_offer_count_read,
-                          'tab_offer_count_copro': tab_offer_count_copro})
+                          'tab_offer_count_pro': tab_education_group_count_pro,
+                          'tab_offer_count_read': tab_education_group_count_read,
+                          'tab_offer_count_copro': tab_education_group_count_copro})

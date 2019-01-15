@@ -53,17 +53,6 @@ def search(dissertation=None, description=None):
     return out
 
 
-def find_first(dissertation=None, description=None):
-    results = search(dissertation, description)
-    if results.exists():
-        return results[0]
-    return None
-
-
-def find_by_document(document_file):
-    return DissertationDocumentFile.objects.filter(document_file=document_file)
-
-
 def find_by_dissertation(dissertation):
     return DissertationDocumentFile.objects.filter(dissertation=dissertation)
 

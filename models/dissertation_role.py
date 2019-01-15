@@ -104,8 +104,8 @@ def search_by_adviser_and_role_stats(adviser, role):
                                            )
 
 
-def search_by_adviser_and_role_and_waiting(adviser, offers):
-    return list_teachers_action_needed(offers).filter(adviser=adviser)
+def search_by_adviser_and_role_and_waiting(adviser, education_groups):
+    return list_teachers_action_needed(education_groups).filter(adviser=adviser)
 
 
 def count_by_adviser_and_role_stats(adviser, role):
@@ -144,6 +144,12 @@ def search_by_adviser_and_role_and_offers(adviser, role, offers):
     return search_by_adviser_and_role(adviser, role).filter(dissertation__offer_year_start__offer__in=offers)
 
 
+def search_by_adviser_and_role_and_education_groups(adviser, role, education_groups):
+    return search_by_adviser_and_role(adviser, role).filter(
+        dissertation__education_group_year_start__education_group__in=education_groups
+    )
+
+
 def search_by_adviser_and_role_and_status(adviser, role, status):
     return DissertationRole.objects.filter(status=role)\
                                    .filter(adviser=adviser)\
@@ -155,40 +161,20 @@ def search_by_adviser_and_role_and_status(adviser, role, status):
                                             )
 
 
-def list_teachers_action_needed(offers):
-    return DissertationRole.objects.filter(status='PROMOTEUR')\
-                                   .filter(dissertation__status='DIR_SUBMIT')\
-                                   .filter(dissertation__offer_year_start__offer__in=offers)\
-                                   .filter(dissertation__active=True)\
-                                   .distinct('adviser')
-
-
-def get_promoteur_by_dissertation_str(dissert):
-    promoteur = search_by_dissertation_and_role(dissert, 'PROMOTEUR')
-    if promoteur:
-        return str(promoteur[0].adviser)
-    else:
-        return 'none'
-
-
-def get_promoteur_by_dissertation(dissert):
-    promoteur = search_by_dissertation_and_role(dissert, 'PROMOTEUR')
-    if promoteur:
-        return promoteur[0].adviser
-    else:
-        return 'none'
+def list_teachers_action_needed(education_groups):
+    return DissertationRole.objects.filter(
+        status='PROMOTEUR'
+    ).filter(
+        dissertation__status='DIR_SUBMIT'
+    ).filter(
+        dissertation__education_group_year_start__education_group__in=education_groups
+    ).filter(
+        dissertation__active=True
+    ).distinct('adviser')
 
 
 def find_all_promotor_by_dissertation(dissert):
     return search_by_dissertation_and_role(dissert, 'PROMOTEUR')
-
-
-def get_copromoteur_by_dissertation(dissert):
-    copromoteur = search_by_dissertation_and_role(dissert, 'CO_PROMOTEUR')
-    if copromoteur:
-        return str(copromoteur[0].adviser)
-    else:
-        return 'none'
 
 
 def get_tab_count_role_by_offer(list_roles):
@@ -198,6 +184,17 @@ def get_tab_count_role_by_offer(list_roles):
             tab[role.dissertation.offer_year_start.offer] += 1
         else:
             tab[role.dissertation.offer_year_start.offer] = 1
+
+    return tab
+
+
+def get_tab_count_role_by_education_group(list_roles):
+    tab = {}
+    for role in list_roles:
+        if role.dissertation.education_group_year_start.education_group in tab:
+            tab[role.dissertation.education_group_year_start.education_group] += 1
+        else:
+            tab[role.dissertation.education_group_year_start.education_group] = 1
 
     return tab
 

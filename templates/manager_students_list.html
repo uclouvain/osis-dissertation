@@ -57,7 +57,7 @@
                         <tr>
                             <td>{{ offer_enrollement.student }}</td>
                             <td>
-                                <span class="label label-default">{{ offer_enrollement.offer_year}}</span>
+                                <span class="label label-default">{{ offer_enrollement.education_group_year}}</span>
                             </td>
                             <td>
                             {% for dissertation in  offer_enrollement.student.dissertation_set.all %}
@@ -90,7 +90,7 @@
                             {% endfor %}
                             </td>
                             <td>
-                            {% for dissertation in  offer_enrollement.student.dissertation_set.all %}
+                            {% for dissertation in offer_enrollement.student.dissertation_set.all %}
 
                                     <div class="row">
                                         <div class="pull-left col-xs-9 div_in_datatable">
@@ -98,7 +98,7 @@
                                             {{ dissertation|truncatechars:60 }}</a>
                                         </div>
                                         <div class="pull-left col-xs-2 div_in_datatable">
-                                            <span class="label label-default pull-right">[{{ dissertation.offer_year_start.acronym }}]</span>
+                                            <span class="label label-default pull-right">[{{ dissertation.education_group_year_start.acronym}}]</span>
                                             <br>
                                         </div>
                                     </div>
@@ -170,7 +170,7 @@
                 initComplete: function () {
                     this.api().columns([1]).every( function () {
                         var column = this;
-                        var select = $('<select class="search_select_filter form-control input-sm"><option value="">{% trans 'filter by offer'%}</option></select>')
+                        var select = $('<select class="search_select_filter form-control input-sm"><option value="">{% trans 'filter by education_group'%}</option></select>')
                             .appendTo( $('#students-list_filter'))
                             .on( 'change', function () {
                                 var val = $.fn.dataTable.util.escapeRegex(

@@ -24,14 +24,15 @@
 #
 ##############################################################################
 
-from dissertation.models.offer_proposition_group import OfferPropositionGroup
-from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
+from datetime import date
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils import timezone
+
 from base.models import offer
-from base.models.education_group_year import EducationGroupYear
-from datetime import date
+from dissertation.models.offer_proposition_group import OfferPropositionGroup
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
 class OfferPropositionAdmin(SerializableModelAdmin):
@@ -40,16 +41,16 @@ class OfferPropositionAdmin(SerializableModelAdmin):
                     'offer_proposition_group',
                     'recent_acronym_education_group')
     raw_id_fields = ('offer', 'education_group')
-    search_fields = ('uuid',)
+    search_fields = ('uuid', 'acronym', 'offer__id', 'education_group__id')
 
 
 class OfferProposition(SerializableModel):
     acronym = models.CharField(max_length=200)
     offer = models.ForeignKey(offer.Offer)
-    education_group = models.ForeignKey('base.EducationGroup',
-                                        null=True,
-                                        blank=True,
-                                        on_delete=models.SET_NULL)
+    education_group = models.OneToOneField('base.EducationGroup',
+                                           null=True,
+                                           blank=True,
+                                           on_delete=models.PROTECT)
     student_can_manage_readers = models.BooleanField(default=True)
     adviser_can_suggest_reader = models.BooleanField(default=False)
     evaluation_first_year = models.BooleanField(default=False)
@@ -100,7 +101,7 @@ class OfferProposition(SerializableModel):
         return start <= date.today() <= end
 
     def __str__(self):
-        return self.acronym
+        return str(self.recent_acronym_education_group)
 
     class Meta:
         ordering = ['offer_proposition_group', 'acronym']
@@ -119,6 +120,10 @@ def search_by_offer(offers):
     return OfferProposition.objects.filter(offer__in=offers) \
         .distinct() \
         .order_by('acronym')
+
+
+def search_by_education_group(education_groups):
+    return OfferProposition.objects.filter(education_group__in=education_groups).distinct()
 
 
 def show_validation_commission(offer_props):

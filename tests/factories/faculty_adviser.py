@@ -24,6 +24,8 @@
 #
 ##############################################################################
 import factory
+
+from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.offer import OfferFactory
 from dissertation.tests.factories.adviser import AdviserManagerFactory
 
@@ -34,3 +36,4 @@ class FacultyAdviserFactory(factory.DjangoModelFactory):
 
     adviser = factory.SubFactory(AdviserManagerFactory)
     offer = factory.SubFactory(OfferFactory)
+    education_group = factory.SubFactory(EducationGroupFactory)

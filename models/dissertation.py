@@ -29,16 +29,18 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
+
 from base.models import academic_year, education_group_year
 from base.models import offer_year, student
 from dissertation.models import proposition_dissertation, offer_proposition, dissertation_location
+from dissertation.models.enums import dissertation_status
 from dissertation.utils import emails_dissert
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
-from dissertation.models.enums import dissertation_status
 
 
 class DissertationAdmin(SerializableModelAdmin):
-    list_display = ('uuid', 'title', 'author', 'status', 'active', 'proposition_dissertation', 'modification_date')
+    list_display = ('uuid', 'title', 'author', 'status', 'active', 'proposition_dissertation', 'modification_date',
+                    'education_group_year_start')
     raw_id_fields = ('author',
                      'offer_year_start',
                      'proposition_dissertation',
@@ -46,7 +48,7 @@ class DissertationAdmin(SerializableModelAdmin):
                      'education_group_year_start')
     search_fields = ('uuid', 'title', 'author__person__last_name', 'author__person__first_name',
                      'proposition_dissertation__title', 'proposition_dissertation__author__person__last_name',
-                     'proposition_dissertation__author__person__first_name')
+                     'proposition_dissertation__author__person__first_name', 'education_group_year_start__acronym')
 
 
 DEFEND_PERIODE_CHOICES = (
@@ -67,12 +69,12 @@ class Dissertation(SerializableModel):
     )
     defend_periode = models.CharField(max_length=12, choices=DEFEND_PERIODE_CHOICES, blank=True, null=True)
     defend_year = models.IntegerField(blank=True, null=True)
-    offer_year_start = models.ForeignKey(offer_year.OfferYear)
+    offer_year_start = models.ForeignKey(offer_year.OfferYear, null=True, blank=True)
     education_group_year_start = models.ForeignKey(
         education_group_year.EducationGroupYear,
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name='dissertations')
     proposition_dissertation = models.ForeignKey(proposition_dissertation.PropositionDissertation)
     description = models.TextField(blank=True, null=True)
@@ -163,8 +165,16 @@ def search_by_offer(offers, active=True):
     return Dissertation.objects.filter(offer_year_start__offer__in=offers).filter(active=active)
 
 
+def search_by_education_group(education_groups, active=True):
+    return Dissertation.objects.filter(education_group_year_start__education_group__in=education_groups, active=active)
+
+
 def search_by_offer_and_status(offers, status):
     return search_by_offer(offers).filter(status=status)
+
+
+def search_by_education_group_and_status(education_groups, status):
+    return search_by_education_group(education_groups).filter(status=status)
 
 
 def get_next_status(dissert, operation):
@@ -235,7 +245,7 @@ def count_by_proposition(proposition):
     current_academic_year = academic_year.starting_academic_year()
     return Dissertation.objects.filter(proposition_dissertation=proposition) \
         .filter(active=True) \
-        .filter(offer_year_start__academic_year=current_academic_year) \
+        .filter(education_group_year_start__academic_year=current_academic_year) \
         .exclude(status=dissertation_status.DRAFT) \
         .exclude(status=dissertation_status.DIR_KO) \
         .count()

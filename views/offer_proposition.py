@@ -44,8 +44,8 @@ from base.views import layout
 def manager_offer_parameters(request):
     person = mdl.person.find_by_user(request.user)
     adv = adviser.search_by_person(person)
-    offers = faculty_adviser.search_by_adviser(adv)
-    offer_props = offer_proposition.search_by_offer(offers)
+    education_groups = faculty_adviser.find_education_groups_by_adviser(adv)
+    offer_props = offer_proposition.search_by_education_group(education_groups)
     return layout.render(request, 'manager_offer_parameters.html', {'offer_propositions': offer_props})
 
 

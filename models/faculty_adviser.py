@@ -25,6 +25,7 @@
 ##############################################################################
 from django.contrib import admin
 from django.db import models
+
 from base.models import education_group
 from base.models import offer
 from base.models import offer_year
@@ -32,16 +33,18 @@ from . import adviser
 
 
 class FacultyAdviserAdmin(admin.ModelAdmin):
-    list_display = ('adviser', 'offer_most_recent_offer_year', 'get_adviser_type', 'education_group')
+    list_display = ('adviser', 'offer_most_recent_offer_year', 'get_adviser_type', 'education_group',
+                    'recent_acronym_education_group')
     raw_id_fields = ('adviser', 'offer', 'education_group')
-    search_fields = ('adviser__person__last_name', 'adviser__person__first_name', 'offer__id')
-    readonly_fields = ('offer_most_recent_offer_year',)
+    search_fields = ('adviser__person__last_name', 'adviser__person__first_name', 'offer__id',
+                     'education_group__id')
+    readonly_fields = ('recent_acronym_education_group',)
 
 
 class FacultyAdviser(models.Model):
     adviser = models.ForeignKey(adviser.Adviser)
     offer = models.ForeignKey(offer.Offer)
-    education_group = models.ForeignKey(education_group.EducationGroup, null=True, blank=True, on_delete=models.CASCADE)
+    education_group = models.ForeignKey(education_group.EducationGroup, null=True, blank=True, on_delete=models.PROTECT)
 
     def __str__(self):
         return "{} - Offer {}".format(str(self.adviser), str(self.offer.id))
@@ -54,8 +57,18 @@ class FacultyAdviser(models.Model):
         most_recent_offer_year_title = most_recent_offer_year.title if most_recent_offer_year is not None else ""
         return "{} - {}".format(str(most_recent_offer_year), most_recent_offer_year_title)
 
+    @property
+    def recent_acronym_education_group(self):
+        if self.education_group:
+            return self.education_group.most_recent_acronym
+        return None
+
 
 def search_by_adviser(a_adviser):
     objects = FacultyAdviser.objects.filter(adviser=a_adviser)
     offers = [obj.offer for obj in list(objects)]
     return offers
+
+
+def find_education_groups_by_adviser(a_adviser):
+    return FacultyAdviser.objects.filter(adviser=a_adviser).values_list('education_group', flat=True)
