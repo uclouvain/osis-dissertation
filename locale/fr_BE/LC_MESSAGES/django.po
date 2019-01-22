@@ -427,7 +427,7 @@ msgid "Settings"
 msgstr "Paramètres"
 
 msgid "Settings for"
-msgstr ""
+msgstr "Paramètres pour"
 
 #: templates/dissertations.html:128
 msgid "Settings of the Dissertation application"

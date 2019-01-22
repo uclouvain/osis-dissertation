@@ -64,6 +64,10 @@ def manager_offer_parameters_edit(request):
         if form.errors:
             errors = form.non_field_errors().as_ul()
             display_error_messages(request, errors, extra_tags='safe')
+            return render(request, "manager_offer_parameters_edit.html", {
+                'list_offer_proposition': list_offer_prop,
+                'form': forms[0]
+            })
 
     if all(list_form_valid):
         for form in forms:
