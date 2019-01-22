@@ -24,9 +24,8 @@
 #
 ##############################################################################
 
-from django.shortcuts import redirect, get_object_or_404, get_list_or_404, render
+from django.shortcuts import redirect, get_list_or_404, render
 from django.contrib.auth.decorators import login_required
-from django.utils.translation import gettext
 
 from base import models as mdl
 from base.views.common import display_error_messages
@@ -35,7 +34,6 @@ from dissertation.models import faculty_adviser
 from dissertation.models import offer_proposition
 from dissertation.forms import ManagerOfferPropositionForm
 from django.contrib.auth.decorators import user_passes_test
-from base.views import layout
 
 ###########################
 #      MANAGER VIEWS      #
@@ -73,7 +71,7 @@ def manager_offer_parameters_edit(request):
         for form in forms:
             form.save()
         return redirect('manager_offer_parameters')
-    return render(request, "manager_offer_parameters_edit.html",
-                         {'list_offer_proposition': list_offer_prop,
-                          'form': forms[0]})
-
+    return render(request, "manager_offer_parameters_edit.html", {
+        'list_offer_proposition': list_offer_prop,
+        'form': forms[0]
+    })

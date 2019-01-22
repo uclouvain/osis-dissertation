@@ -67,13 +67,12 @@ class OfferProposition(SerializableModel):
     offer_proposition_group = models.ForeignKey(OfferPropositionGroup, null=True, blank=True)
     global_email_to_commission = models.BooleanField(default=False)
 
-
     def clean(self):
         if self.start_jury_visibility > self.end_jury_visibility \
-            or self.start_visibility_proposition > self.end_visibility_proposition \
-            or self.start_visibility_dissertation > self.end_visibility_dissertation \
-            or self.start_edit_title > self.end_edit_title:
-                raise ValidationError(_("End date must be greater than the start date"))
+                or self.start_visibility_proposition > self.end_visibility_proposition \
+                or self.start_visibility_dissertation > self.end_visibility_dissertation \
+                or self.start_edit_title > self.end_edit_title:
+            raise ValidationError(_("End date must be greater than the start date"))
 
     @property
     def recent_acronym_education_group(self):
