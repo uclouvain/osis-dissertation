@@ -24,8 +24,9 @@
 #
 ##############################################################################
 from django import forms
-from django.forms import ModelForm
+from django.forms import ModelForm, DateInput
 from base import models as mdl
+from base.forms.utils.datefield import DatePickerInput
 from dissertation.models.adviser import Adviser
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.offer_proposition import OfferProposition

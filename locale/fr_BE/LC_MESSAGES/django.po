@@ -169,6 +169,9 @@ msgstr "Revue de littérature"
 msgid "Empirical research"
 msgstr "Recherche empirique"
 
+msgid "End date must be greater than the start date"
+msgstr "La date de fin doit être supérieure à la date de début"
+
 #: models/proposition_dissertation.py:45
 msgid "Theoretical analysis"
 msgstr "Analyse théorique"
@@ -422,6 +425,9 @@ msgstr "Liste des projets de mémoires."
 #: templates/manager_offer_parameters_edit.html:39
 msgid "Settings"
 msgstr "Paramètres"
+
+msgid "Settings for"
+msgstr ""
 
 #: templates/dissertations.html:128
 msgid "Settings of the Dissertation application"
@@ -2029,6 +2035,12 @@ msgstr "Mémoire supprimé"
 #: views/dissertation.py:495 views/dissertation.py:519
 msgid "Manager deleted jury"
 msgstr "Le manager a supprimés un membre du jury."
+
+msgid "modify selected programs"
+msgstr "Modifier les programmes sélectionnés"
+
+msgid "multiple modification"
+msgstr "Modification multiples"
 
 #: views/dissertation.py:923
 msgid "Teacher deleted jury"

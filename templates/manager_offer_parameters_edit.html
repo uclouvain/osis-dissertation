@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
+{% load format %}
 
 {% comment "License" %}
  * OSIS stands for Open Student Information System. It's an application
@@ -60,7 +61,7 @@
                             </label>
                         </div>
                         <input type="text" class="form-control datepicker"
-                           value="{{ form.start_visibility_proposition.value|date:'d/m/Y' }}"
+                           value="{{ form.start_visibility_proposition.value| default_if_none:''| date_in_form_format }}"
                            name="start_visibility_proposition" id="txt_start_visibility_proposition">
                     </div>
                 </div>
@@ -73,7 +74,7 @@
                             </label>
                         </div>
                         <input type="text" class="form-control datepicker"
-                           value="{{ form.end_visibility_proposition.value|date:'d/m/Y'}}"
+                           value="{{ form.end_visibility_proposition.value| default_if_none:''| date_in_form_format }}"
                            name="end_visibility_proposition" id="txt_end_visibility_proposition">
                     </div>
                 </div>
@@ -93,7 +94,7 @@
                             </label>
                         </div>
                         <input type="text" class="form-control datepicker"
-                           value="{{ form.start_visibility_dissertation.value|date:'d/m/Y' }}"
+                           value="{{ form.start_visibility_dissertation.value| default_if_none:''| date_in_form_format }}"
                            name="start_visibility_dissertation" id="txt_start_visibility_dissertation">
                     </div>
                 </div>
@@ -106,7 +107,7 @@
                             </label>
                         </div>
                         <input type="text" class="form-control datepicker"
-                           value="{{ form.end_visibility_dissertation.value|date:'d/m/Y' }}"
+                           value="{{ form.end_visibility_dissertation.value| default_if_none:''| date_in_form_format }}"
                            name="end_visibility_dissertation" id="txt_end_visibility_dissertation">
                     </div>
                 </div>
@@ -126,7 +127,7 @@
                             </label>
                         </div>
                         <input type="text" class="form-control datepicker"
-                           value="{{ form.start_jury_visibility.value|date:'d/m/Y' }}"
+                           value="{{ form.start_jury_visibility.value| default_if_none:''| date_in_form_format }}"
                            name="start_jury_visibility" id="txt_start_jury_visibility">
                     </div>
                 </div>
@@ -139,7 +140,7 @@
                             </label>
                         </div>
                         <input type="text" class="form-control datepicker"
-                           value="{{ form.end_jury_visibility.value|date:'d/m/Y' }}"
+                           value="{{ form.end_jury_visibility.value| default_if_none:''| date_in_form_format }}"
                            name="end_jury_visibility" id="txt_end_jury_visibility">
                     </div>
                 </div>
@@ -159,7 +160,7 @@
                             </label>
                         </div>
                         <input type="text" class="form-control datepicker"
-                           value="{{ form.start_edit_title.value|date:'d/m/Y' }}"
+                           value="{{ form.start_edit_title.value| default_if_none:''| date_in_form_format }}"
                            name="start_edit_title" id="txt_start_edit_title">
                     </div>
                 </div>
@@ -172,7 +173,7 @@
                             </label>
                         </div>
                         <input type="text" class="form-control datepicker"
-                           value="{{ form.end_edit_title.value|date:'d/m/Y' }}"
+                           value="{{ form.end_edit_title.value| default_if_none:''| date_in_form_format }}"
                            name="end_edit_title" id="txt_end_edit_title">
                     </div>
                 </div>

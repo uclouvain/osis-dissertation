@@ -66,14 +66,13 @@ def manager_offer_parameters_edit(request):
         forms.append(form)
         list_form_valid.append(form.is_valid())
         if form.errors:
-            errors = gettext("Error in %(obj)s") % {"obj": form.instance}
-            display_error_messages(request, errors)
+            errors = form.non_field_errors().as_ul()
+            display_error_messages(request, errors, extra_tags='safe')
 
     if all(list_form_valid):
         for form in forms:
             form.save()
         return redirect('manager_offer_parameters')
-
     return render(request, "manager_offer_parameters_edit.html",
                          {'list_offer_proposition': list_offer_prop,
                           'form': forms[0]})

@@ -26,9 +26,10 @@
 
 from datetime import date
 
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 
 from base.models import offer
 from dissertation.models.offer_proposition_group import OfferPropositionGroup
@@ -65,6 +66,14 @@ class OfferProposition(SerializableModel):
     end_edit_title = models.DateField(default=timezone.now)
     offer_proposition_group = models.ForeignKey(OfferPropositionGroup, null=True, blank=True)
     global_email_to_commission = models.BooleanField(default=False)
+
+
+    def clean(self):
+        if self.start_jury_visibility > self.end_jury_visibility \
+            or self.start_visibility_proposition > self.end_visibility_proposition \
+            or self.start_visibility_dissertation > self.end_visibility_dissertation \
+            or self.start_edit_title > self.end_edit_title:
+                raise ValidationError(_("End date must be greater than the start date"))
 
     @property
     def recent_acronym_education_group(self):

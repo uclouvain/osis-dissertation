@@ -27,7 +27,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 
-from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
