@@ -54,8 +54,6 @@ def manager_offer_parameters(request):
 @login_required
 @user_passes_test(adviser.is_manager)
 def manager_offer_parameters_edit(request):
-    if not request.GET['pk']:
-        return redirect('manager_offer_parameters')
     list_offer_prop = get_list_or_404(OfferProposition, pk__in=request.GET.getlist('pk'))
     list_form_valid = []
     forms = []

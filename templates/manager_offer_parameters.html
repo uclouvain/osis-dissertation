@@ -220,10 +220,24 @@
               </tbody>
       </table>
       <button type="submit"
-                     id="" class="btn btn-primary pull-left"
-                     role="button" title="{% trans 'multiple modification'%}">
+                     id="multiple_selection" class="btn btn-primary pull-left"
+                     role="button" title="{% trans 'multiple modification'%}" disabled>
                      <span class="glyphicon glyphicon-wrench"
                      aria-hidden="true"></span> {% trans 'modify selected programs'%}</button>
       </form>
     </div>
+{% endblock %}
+{% block script %}
+<script type="text/javascript" src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
+<script>
+$(function() {
+    $('input[type="checkbox"]').click(function() {
+        if($(this).is(':checked')) {
+            $("#multiple_selection").removeAttr('disabled');
+        } else {
+            $("#multiple_selection").attr('disabled', 'disabled');
+        }
+    });
+});
+</script>
 {% endblock %}
