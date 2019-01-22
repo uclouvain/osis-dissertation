@@ -24,21 +24,28 @@
 #
 ##############################################################################
 import time
+from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
+from django.db.models import Count, OuterRef, Subquery, Q, Prefetch
 from django.http import HttpResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from openpyxl import Workbook
 from openpyxl.writer.excel import save_virtual_workbook
 
 from base import models as mdl
+from base.models import academic_year
+from base.models.education_group_year import EducationGroupYear
 from base.views import layout
 from dissertation.forms import PropositionDissertationForm, ManagerPropositionDissertationForm, \
     ManagerPropositionRoleForm, ManagerPropositionDissertationEditForm
 from dissertation.models import adviser, faculty_adviser, offer_proposition, proposition_dissertation, \
     proposition_document_file, proposition_offer, proposition_role, offer_proposition_group
 from dissertation.models import dissertation
+from dissertation.models.dissertation import Dissertation
+from dissertation.models.enums import dissertation_status
+from dissertation.models.offer_proposition import OfferProposition
 from dissertation.models.proposition_dissertation import PropositionDissertation
 from dissertation.models.proposition_offer import PropositionOffer
 from dissertation.models.proposition_role import PropositionRole
@@ -88,14 +95,34 @@ def is_valid(request, form):
 @login_required
 @user_passes_test(adviser.is_manager)
 def manager_proposition_dissertations(request):
-    person = mdl.person.find_by_user(request.user)
-    adv = adviser.search_by_person(person)
-    education_groups = faculty_adviser.find_education_groups_by_adviser(adv)
-    propositions_dissertations = proposition_dissertation.find_by_education_groups(education_groups)
-    propositions_dissertations = [_append_dissertations_count(prop) for prop in propositions_dissertations]
+    now = datetime.now()
+    current_academic_year = academic_year.starting_academic_year()
+    prefetch_propositions = Prefetch(
+        "offer_propositions",
+        queryset=OfferProposition.objects.annotate(last_acronym=Subquery(
+            EducationGroupYear.objects.filter(
+                education_group__offerproposition=OuterRef('pk'),
+                academic_year=current_academic_year).values('acronym')[:1]
+        ))
+    )
 
-    return layout.render(request, 'manager_proposition_dissertations_list.html',
-                         {'propositions_dissertations': propositions_dissertations})
+    propositions_dissertations = PropositionDissertation.objects.filter(
+        active=True,
+        visibility=True,
+        offer_propositions__start_visibility_proposition__lte=now,
+        offer_propositions__end_visibility_proposition__gte=now,
+        offer_propositions__education_group__facultyadviser__adviser__person__user=request.user
+    ).annotate(dissertations_count=Count(
+        'dissertations',
+        filter=Q(
+            active=True,
+            education_group_year_start__academic_year=current_academic_year
+        ) & ~Q(status__in=(dissertation_status.DRAFT, dissertation_status.DIR_KO))
+    )).select_related('author__person', 'creator').prefetch_related(prefetch_propositions)
+    return render(request,
+                  'manager_proposition_dissertations_list.html',
+                  {'propositions_dissertations': propositions_dissertations}
+                  )
 
 
 def _append_dissertations_count(prop):

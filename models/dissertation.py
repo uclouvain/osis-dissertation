@@ -76,7 +76,8 @@ class Dissertation(SerializableModel):
         blank=True,
         on_delete=models.PROTECT,
         related_name='dissertations')
-    proposition_dissertation = models.ForeignKey(proposition_dissertation.PropositionDissertation)
+    proposition_dissertation = models.ForeignKey(proposition_dissertation.PropositionDissertation,
+                                                 related_name='dissertations')
     description = models.TextField(blank=True, null=True)
     active = models.BooleanField(default=True)
     creation_date = models.DateTimeField(auto_now_add=True, editable=False)

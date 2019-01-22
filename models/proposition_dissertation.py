@@ -24,6 +24,9 @@
 #
 ##############################################################################
 from django.core.exceptions import ObjectDoesNotExist
+
+from dissertation.models.offer_proposition import OfferProposition
+from dissertation.models.proposition_offer import PropositionOffer
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from django.db import models
 from django.db.models import Q
@@ -70,6 +73,11 @@ class PropositionDissertation(SerializableModel):
     visibility = models.BooleanField(default=True)
     active = models.BooleanField(default=True)
     created_date = models.DateTimeField(default=timezone.now)
+    offer_propositions = models.ManyToManyField(
+        OfferProposition,
+        through=PropositionOffer,
+        verbose_name=_('Links to offer_proposition')
+    )
 
     def __str__(self):
         first_name = ""
@@ -167,5 +175,12 @@ def search_by_offers(offers):
     return PropositionDissertation.objects.filter(pk__in=proposition_ids, active=True, visibility=True)
 
 def find_by_education_groups(education_groups):
-    proposition_ids = proposition_offer.find_by_education_groups(education_groups).values('proposition_dissertation_id')
+    now = timezone.now()
+    proposition_ids = PropositionOffer.objects.filter(
+        proposition_dissertation__active=True,
+        proposition_dissertation__visibility=True,
+        offer_proposition__education_group__in=education_groups,
+        offer_proposition__start_visibility_proposition__lte=now,
+        offer_proposition__end_visibility_proposition__gte=now
+    ).distinct().values('proposition_dissertation_id')
     return PropositionDissertation.objects.filter(pk__in=proposition_ids, active=True, visibility=True)
