@@ -104,5 +104,5 @@ class OfferPropositionViewTestCase(TestCase):
             "end_edit_title": "2019-12-12"
         })
         self.assertEqual(response.status_code, HttpResponse.status_code)
-        response = self.client.post(reverse("manager_offer_parameters_edit")+ "?pk=")
-        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
+        response = self.client.get(reverse("manager_offer_parameters_edit") + "?pk=12")
+        self.assertEqual(response.status_code, HttpResponse.status_code)

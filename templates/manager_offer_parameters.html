@@ -231,11 +231,19 @@
 <script type="text/javascript" src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
 <script>
 $(function() {
+    var count = 0;
     $('input[type="checkbox"]').click(function() {
+
         if($(this).is(':checked')) {
-            $("#multiple_selection").removeAttr('disabled');
+            count +=1;
+            if (count > 0) {
+               $("#multiple_selection").removeAttr('disabled');
+            }
         } else {
-            $("#multiple_selection").attr('disabled', 'disabled');
+            count -=1;
+            if (count == 0) {
+               $("#multiple_selection").attr('disabled', 'disabled');
+            }
         }
     });
 });
