@@ -40,10 +40,9 @@ from base.models.education_group_year import EducationGroupYear
 from base.views import layout
 from dissertation.forms import PropositionDissertationForm, ManagerPropositionDissertationForm, \
     ManagerPropositionRoleForm, ManagerPropositionDissertationEditForm
-from dissertation.models import adviser, faculty_adviser, offer_proposition, proposition_dissertation, \
+from dissertation.models import adviser, offer_proposition, proposition_dissertation, \
     proposition_document_file, proposition_offer, proposition_role, offer_proposition_group
 from dissertation.models import dissertation
-from dissertation.models.dissertation import Dissertation
 from dissertation.models.enums import dissertation_status
 from dissertation.models.offer_proposition import OfferProposition
 from dissertation.models.proposition_dissertation import PropositionDissertation
@@ -283,14 +282,39 @@ def manager_proposition_dissertation_new(request):
 @login_required
 @user_passes_test(adviser.is_manager)
 def manager_proposition_dissertations_search(request):
-    person = mdl.person.find_by_user(request.user)
-    adv = adviser.search_by_person(person)
-    education_groups = faculty_adviser.find_education_groups_by_adviser(adv)
-    propositions_dissertations = proposition_dissertation.search(request.GET['search'],
-                                                                 active=True,
-                                                                 education_groups=education_groups
-                                                                 )
-    propositions_dissertations = [_append_dissertations_count(prop) for prop in propositions_dissertations]
+    terms = request.GET['search']
+
+    now = datetime.now()
+    current_academic_year = academic_year.starting_academic_year()
+    prefetch_propositions = Prefetch(
+        "offer_propositions",
+        queryset=OfferProposition.objects.annotate(last_acronym=Subquery(
+            EducationGroupYear.objects.filter(
+                education_group__offerproposition=OuterRef('pk'),
+                academic_year=current_academic_year).values('acronym')[:1]
+        ))
+    )
+
+    propositions_dissertations = PropositionDissertation.objects.filter(
+        active=True,
+        visibility=True,
+        offer_propositions__start_visibility_proposition__lte=now,
+        offer_propositions__end_visibility_proposition__gte=now,
+        offer_propositions__education_group__facultyadviser__adviser__person__user=request.user
+    ).filter(
+            Q(title__icontains=terms) |
+            Q(description__icontains=terms) |
+            Q(author__person__first_name__icontains=terms) |
+            Q(author__person__middle_name__icontains=terms) |
+            Q(author__person__last_name__icontains=terms) |
+            Q(propositionoffer__offer_proposition__acronym__icontains=terms)).annotate(
+        dissertations_count=Count(
+        'dissertations',
+        filter=Q(
+            active=True,
+            education_group_year_start__academic_year=current_academic_year
+        ) & ~Q(status__in=(dissertation_status.DRAFT, dissertation_status.DIR_KO))
+    )).select_related('author__person', 'creator').prefetch_related(prefetch_propositions)
 
     if 'bt_xlsx' in request.GET:
         filename = "EXPORT_propositions_{}.xlsx".format(time.strftime("%Y-%m-%d_%H:%M"))

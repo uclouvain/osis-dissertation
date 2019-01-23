@@ -58,10 +58,14 @@
                 <thead>
                     <tr>
                         <th>{% trans 'Teacher' %}</th>
+                        <th>{% trans 'How many active dissertations for this current academic year (all programs)' %}</th>
                         <th>{% trans 'How many active dissertations (all programs)' %}</th>
                         <th>{% trans 'How many dissertations as promotor' %}</th>
                         <th>{% trans 'How many dissertations as copromotor' %}</th>
                         <th>{% trans 'How many dissertations as reader' %}</th>
+                        <th>{% trans 'How many active dissertations as accompanist' %}</th>
+                        <th>{% trans 'How many dissertations as internship' %}</th>
+                        <th>{% trans 'How many dissertations as president' %}</th>
                         <th>{% trans 'How many dissertations need answer' %}</th>
                     </tr>
                 </thead>
@@ -69,16 +73,16 @@
                     {% for adviser in advisers %}
                         <tr>
                             <td><a href="{% url 'manager_informations_detail' pk=adviser.pk %}">{{ adviser }}</a></td>
+                            <td>{{adviser.dissertations_count_actif_this_academic_year}}</td>
+{#                            <td>{{adviser.dissertations_count_actif}}</td>#}
+{#                            <td>{{adviser.dissertations_count_actif_promotor}}</td>#}
+{#                            <td>{{adviser.dissertations_count_actif_co_promotor}}</td>#}
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
 
-                            {% with ad_stat=adviser.get_stat_dissertation_role %}
-
-                            <td>{{ad_stat.0.0}}</td>
-                            <td>{{ad_stat.0.1}}</td>
-                            <td>{{ad_stat.0.2}}</td>
-                            <td>{{ad_stat.0.3}}</td>
-                            <td>{{ad_stat.0.4}}</td>
-
-                            {% endwith %}
                         </tr>
                     {% endfor %}
                 </tbody>

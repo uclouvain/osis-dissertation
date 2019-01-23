@@ -27,12 +27,12 @@ import json
 import time
 
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.http import HttpResponse,JsonResponse
-from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
-from django.shortcuts import get_object_or_404
+from django.db.models import Q
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404, render
 from django.shortcuts import redirect
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
 from openpyxl import Workbook
 from openpyxl.utils.exceptions import IllegalCharacterError
@@ -40,16 +40,19 @@ from openpyxl.writer.excel import save_virtual_workbook
 from rest_framework import status
 
 from base import models as mdl
-from base.models import academic_year, offer_enrollment
+from base.models import academic_year
+from base.models.academic_year import AcademicYear
 from base.views import layout
-from dissertation.forms import ManagerDissertationForm, ManagerDissertationEditForm, ManagerDissertationRoleForm, \
+from dissertation.forms import ManagerDissertationEditForm, ManagerDissertationRoleForm, \
     ManagerDissertationUpdateForm, AdviserForm
 from dissertation.models import adviser, dissertation, dissertation_document_file, dissertation_role, \
     dissertation_update, faculty_adviser, offer_proposition, proposition_dissertation, proposition_role
+from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_role import DissertationRole, MAX_DISSERTATION_ROLE_FOR_ONE_DISSERTATION
 from dissertation.models.enums import dissertation_role_status
 from dissertation.models.enums import dissertation_status
 from dissertation.models.enums.dissertation_status import DISSERTATION_STATUS
+from dissertation.models.offer_proposition import OfferProposition
 from dissertation.perms import adviser_can_manage, autorized_dissert_promotor_or_manager, check_for_dissert, \
     adviser_is_in_jury
 
@@ -77,7 +80,7 @@ def dissertations(request):
     if mdl.student.find_by_person(person) and not \
             mdl.tutor.find_by_person(person) and not \
             adviser.find_by_person(person):
-            return redirect('home')
+        return redirect('home')
 
     elif adviser.find_by_person(person):
         adv = adviser.search_by_person(person)
@@ -132,11 +135,11 @@ def manager_dissertations_detail(request, pk):
     filename = files[-1].document_file.file_name if files else ""
 
     if count_proposition_role == 0 and count_dissertation_role == 0:
-            justification = "%s %s %s" % (_("Auto add jury"),
-                                          dissertation_role_status.PROMOTEUR,
-                                          str(dissert.proposition_dissertation.author))
-            dissertation_update.add(request, dissert, dissert.status, justification=justification)
-            dissertation_role.add(dissertation_role_status.PROMOTEUR, dissert.proposition_dissertation.author, dissert)
+        justification = "%s %s %s" % (_("Auto add jury"),
+                                      dissertation_role_status.PROMOTEUR,
+                                      str(dissert.proposition_dissertation.author))
+        dissertation_update.add(request, dissert, dissert.status, justification=justification)
+        dissertation_role.add(dissertation_role_status.PROMOTEUR, dissert.proposition_dissertation.author, dissert)
     elif count_dissertation_role == 0:
         for role in proposition_roles:
             justification = "%s %s %s" % (_("Auto add jury"), role.status, str(role.adviser))
@@ -146,7 +149,7 @@ def manager_dissertations_detail(request, pk):
     if dissert.status == dissertation_status.DRAFT:
         jury_manager_visibility = True
         jury_manager_can_edit = False
-        jury_manager_message =  _("Dissertation status is draft, managers can't edit jury.")
+        jury_manager_message = _("Dissertation status is draft, managers can't edit jury.")
         jury_teacher_visibility = False
         jury_teacher_can_edit = False
         jury_teacher_message = _("Dissertation status is draft, teachers can't edit jury.")
@@ -240,12 +243,12 @@ def manager_dissertations_edit(request, pk):
             education_groups
         )
         form.fields["author"].queryset = mdl.student.Student.objects.filter(
-                offerenrollment__education_group_year__education_group__in=education_groups
-            ).order_by(
-                'person__last_name', 'person__first_name'
-            ).distinct()
+            offerenrollment__education_group_year__education_group__in=education_groups
+        ).order_by(
+            'person__last_name', 'person__first_name'
+        ).distinct()
         form.fields["education_group_year_start"].queryset = mdl.education_group_year.EducationGroupYear.objects.filter(
-                education_group__in=education_groups)
+            education_group__in=education_groups)
 
     return layout.render(
         request, 'manager_dissertations_edit.html',
@@ -304,7 +307,7 @@ def manager_dissertations_jury_new(request, pk):
 def manager_dissertations_jury_new_ajax(request):
     pk_dissert = request.POST.get("pk_dissertation", '')
     status_choice = request.POST.get("status_choice", '')
-    id_adviser_of_dissert_role=request.POST.get("adviser_pk", '')
+    id_adviser_of_dissert_role = request.POST.get("adviser_pk", '')
     if not id_adviser_of_dissert_role or not status_choice or not pk_dissert:
         return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)
     else:
@@ -327,22 +330,23 @@ def manager_dissertations_jury_new_ajax(request):
 @login_required
 @user_passes_test(adviser.is_manager)
 def manager_dissertations_list(request):
-    person = mdl.person.find_by_user(request.user)
-    adv = adviser.search_by_person(person)
-    education_groups = faculty_adviser.find_education_groups_by_adviser(adv)
-    disserts = dissertation.search_by_education_group(education_groups)
-    offer_props = offer_proposition.search_by_education_group(education_groups)
-    start_date=timezone.now().replace(year=timezone.now().year - 10)
-    end_date=timezone.now().replace(year=timezone.now().year + 1)
-    academic_year_10y = academic_year.find_academic_years(end_date,start_date)
+    disserts = Dissertation.objects.filter(
+        education_group_year_start__education_group__facultyadviser__adviser__person__user=request.user,
+        active=True).select_related('author__person',
+                                    'education_group_year_start__academic_year',
+                                    'proposition_dissertation__author__person')
+    offer_props = OfferProposition.objects.filter(
+        education_group__facultyadviser__adviser__person__user=request.user).distinct()
+    year = timezone.now().year
+    academic_year_10y = AcademicYear.objects.filter(year__gte=year-10, year__lte=year+1)
     show_validation_commission = offer_proposition.show_validation_commission(offer_props)
     show_evaluation_first_year = offer_proposition.show_evaluation_first_year(offer_props)
-    return layout.render(request, 'manager_dissertations_list.html',
-                         {'dissertations': disserts,
-                          'show_validation_commission': show_validation_commission,
-                          'show_evaluation_first_year': show_evaluation_first_year,
-                          'academic_year_10y': academic_year_10y,
-                          'offer_props':offer_props})
+    return render(request, 'manager_dissertations_list.html',
+                  {'dissertations': disserts,
+                   'show_validation_commission': show_validation_commission,
+                   'show_evaluation_first_year': show_evaluation_first_year,
+                   'academic_year_10y': academic_year_10y,
+                   'offer_props': offer_props})
 
 
 def generate_xls(disserts):
@@ -411,32 +415,45 @@ def get_ordered_roles(dissert):
 @login_required
 @user_passes_test(adviser.is_manager)
 def manager_dissertations_search(request):
-    person = mdl.person.find_by_user(request.user)
-    adv = adviser.search_by_person(person)
-    education_groups = faculty_adviser.find_education_groups_by_adviser(adv)
-    disserts = dissertation.search(terms=request.GET.get('search',''), active=True)
-    disserts = disserts.filter(education_group_year_start__education_group__in=education_groups)
-    offer_prop_search = request.GET.get('offer_prop_search','')
-    academic_year_search=request.GET.get('academic_year','')
-    status_search=request.GET.get('status_search','')
+    terms = request.GET.get('search', '')
+    disserts = Dissertation.objects.filter(
+        education_group_year_start__education_group__facultyadviser__adviser__person__user=request.user,
+        active=True).filter(
+            Q(author__person__first_name__icontains=terms) |
+            Q(author__person__middle_name__icontains=terms) |
+            Q(author__person__last_name__icontains=terms) |
+            Q(description__icontains=terms) |
+            Q(proposition_dissertation__title__icontains=terms) |
+            Q(proposition_dissertation__author__person__first_name__icontains=terms) |
+            Q(proposition_dissertation__author__person__middle_name__icontains=terms) |
+            Q(proposition_dissertation__author__person__last_name__icontains=terms) |
+            Q(status__icontains=terms) |
+            Q(title__icontains=terms) |
+            Q(education_group_year_start__acronym__icontains=terms)
+        ).select_related('author__person',
+                         'education_group_year_start__academic_year',
+                         'proposition_dissertation__author__person')
+    offer_prop_search = request.GET.get('offer_prop_search', '')
+    academic_year_search = request.GET.get('academic_year', '')
+    status_search = request.GET.get('status_search', '')
 
-    if offer_prop_search!='':
-        offer_prop_search=int(offer_prop_search)
-        offer_prop=offer_proposition.find_by_id(offer_prop_search)
+    if offer_prop_search != '':
+        offer_prop_search = int(offer_prop_search)
+        offer_prop = offer_proposition.find_by_id(offer_prop_search)
         disserts = disserts.filter(education_group_year_start__education_group=offer_prop.education_group)
-    if academic_year_search!='':
+    if academic_year_search != '':
         academic_year_search = int(academic_year_search)
         disserts = disserts.filter(
             education_group_year_start__academic_year=academic_year.find_academic_year_by_id(academic_year_search)
         )
-    if status_search!='':
+    if status_search != '':
         disserts = disserts.filter(status=status_search)
-    offer_props = offer_proposition.search_by_education_group(education_groups)
+    offer_props = OfferProposition.objects.filter(
+        education_group__facultyadviser__adviser__person__user=request.user).distinct()
     show_validation_commission = offer_proposition.show_validation_commission(offer_props)
     show_evaluation_first_year = offer_proposition.show_evaluation_first_year(offer_props)
-    start_date=timezone.now().replace(year=timezone.now().year - 10)
-    end_date=timezone.now().replace(year=timezone.now().year + 1)
-    academic_year_10y = academic_year.find_academic_years(end_date,start_date)
+    year = timezone.now().year
+    academic_year_10y = AcademicYear.objects.filter(year__gte=year - 10, year__lte=year + 1)
 
     if 'bt_xlsx' in request.GET:
         xls = generate_xls(disserts)
@@ -447,15 +464,15 @@ def manager_dissertations_search(request):
 
     else:
         return layout.render(request, "manager_dissertations_list.html",
-                                      {'dissertations': disserts,
-                                       'show_validation_commission': show_validation_commission,
-                                       'show_evaluation_first_year': show_evaluation_first_year,
-                                       'academic_year_10y': academic_year_10y,
-                                       'offer_props':offer_props,
-                                       'offer_prop_search':offer_prop_search,
-                                       'academic_year_search':academic_year_search,
-                                       'status_search':status_search
-                                       })
+                             {'dissertations': disserts,
+                              'show_validation_commission': show_validation_commission,
+                              'show_evaluation_first_year': show_evaluation_first_year,
+                              'academic_year_10y': academic_year_10y,
+                              'offer_props': offer_props,
+                              'offer_prop_search': offer_prop_search,
+                              'academic_year_search': academic_year_search,
+                              'status_search': status_search
+                              })
 
 
 @login_required
@@ -685,7 +702,7 @@ def manager_dissertation_role_list_json(request, pk):
             'last_name': str(dissert_role.adviser.person.last_name),
             'status': str(dissert_role.status),
             'dissert_pk': dissert_role.dissertation.pk
-        }for dissert_role in dissert_roles
+        } for dissert_role in dissert_roles
     ]
     json_list = json.dumps(dissert_commission_sous_list)
     return HttpResponse(json_list, content_type='application/json')
