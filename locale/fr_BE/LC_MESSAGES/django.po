@@ -2036,10 +2036,10 @@ msgstr "Mémoire supprimé"
 msgid "Manager deleted jury"
 msgstr "Le manager a supprimés un membre du jury."
 
-msgid "modify selected programs"
+msgid "Modify selected programs"
 msgstr "Modifier les programmes sélectionnés"
 
-msgid "multiple modification"
+msgid "Multiple modification"
 msgstr "Modification multiples"
 
 #: views/dissertation.py:923

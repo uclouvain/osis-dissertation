@@ -1975,10 +1975,10 @@ msgstr ""
 msgid "Manager deleted jury"
 msgstr ""
 
-msgid "modify selected programs"
+msgid "Modify selected programs"
 msgstr ""
 
-msgid "multiple modification"
+msgid "Multiple modification"
 msgstr ""
 
 #: views/dissertation.py:923
