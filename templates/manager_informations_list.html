@@ -74,15 +74,14 @@
                         <tr>
                             <td><a href="{% url 'manager_informations_detail' pk=adviser.pk %}">{{ adviser }}</a></td>
                             <td>{{adviser.dissertations_count_actif_this_academic_year}}</td>
-{#                            <td>{{adviser.dissertations_count_actif}}</td>#}
-{#                            <td>{{adviser.dissertations_count_actif_promotor}}</td>#}
-{#                            <td>{{adviser.dissertations_count_actif_co_promotor}}</td>#}
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-
+                            <td>{{adviser.dissertations_count_all_actif}}</td>
+                            <td>{{adviser.dissertations_count_promotor_actif}}</td>
+                            <td>{{adviser.dissertations_count_copromoteur_actif}}</td>
+                            <td>{{adviser.dissertations_count_reader_actif}}</td>
+                            <td>{{adviser.dissertations_count_accompanist_actif}}</td>
+                            <td>{{adviser.dissertations_count_internship_actif}}</td>
+                            <td>{{adviser.dissertations_count_president_actif}}</td>
+                            <td>{{adviser.dissertations_count_need_to_respond_actif}}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -107,7 +106,6 @@
                 "searching" : true,
                 "language":
                 {
-
                     "sProcessing":     "{% trans 'Processing...'%}",
                     "sSearch":         "{% trans 'Search:'%}",
                     "sLengthMenu":     "&nbsp;&nbsp;&nbsp;_MENU_ &eacute;l&eacute;ments",
@@ -133,6 +131,10 @@
                 },
                 "columns": [
                     null,
+                    { "orderable": false },
+                    { "orderable": false },
+                    { "orderable": false },
+                    { "orderable": false },
                     { "orderable": false },
                     { "orderable": false },
                     { "orderable": false },

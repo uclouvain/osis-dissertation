@@ -23,18 +23,23 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
+from django.db import models
+from django.db.models import Q
+from django.shortcuts import redirect, render
+
+from base import models as mdl
+from base.models.academic_year import current_academic_year
+from base.models.enums import person_source_type
+from base.views import layout
+from dissertation.forms import AdviserForm, ManagerAdviserForm, ManagerAddAdviserForm, ManagerAddAdviserPreForm, \
+    ManagerAddAdviserPerson, AddAdviserForm
 from dissertation.models import adviser
 from dissertation.models import dissertation_role
 from dissertation.models import faculty_adviser
-from dissertation.models.enums import dissertation_role_status
-from base import models as mdl
-from dissertation.forms import AdviserForm, ManagerAdviserForm, ManagerAddAdviserForm, ManagerAddAdviserPreForm, \
-    ManagerAddAdviserPerson, AddAdviserForm
-from django.contrib.auth.decorators import user_passes_test
-from base.views import layout
-from base.models.enums import person_source_type
+from dissertation.models.adviser import Adviser
+from dissertation.models.enums import dissertation_role_status, dissertation_status
 
 
 ###########################
@@ -169,8 +174,101 @@ def informations_add(request):
 @login_required
 @user_passes_test(adviser.is_manager)
 def manager_informations(request):
-    advisers = adviser.list_teachers()
-    return layout.render(request, 'manager_informations_list.html', {'advisers': advisers})
+    dissert_status_exclued = (dissertation_status.DRAFT,
+                              dissertation_status.DIR_KO,
+                              dissertation_status.DIR_SUBMIT,
+                              dissertation_status.ENDED_WIN,
+                              dissertation_status.ENDED_LOS,
+                              dissertation_status.ENDED)
+
+    advisers = Adviser.objects.filter(type='PRF').select_related('person').prefetch_related('dissertations').order_by(
+        'person__last_name',
+        'person__first_name') \
+        .annotate(
+        dissertations_count_actif_this_academic_year=models.Sum(
+            models.Case(
+                models.When(Q(
+                    dissertations__active=True,
+                    dissertations__education_group_year_start__academic_year=current_academic_year(),
+                ) & ~Q(dissertations__status=dissert_status_exclued), then=1), default=0, output_field=models.IntegerField()
+            )),
+        dissertations_count_all_actif=models.Sum(
+            models.Case(
+                models.When(Q(
+                    dissertations__active=True,
+                ) & ~Q(dissertations__status=dissert_status_exclued), then=1), default=0,
+                output_field=models.IntegerField()
+            )),
+        dissertations_count_promotor_actif=models.Sum(
+            models.Case(
+                models.When(Q(
+                    dissertations__active=True,
+                    dissertations_roles__status=dissertation_role_status.PROMOTEUR
+                ) & ~Q(dissertations__status=dissert_status_exclued), then=1), default=0,
+                output_field=models.IntegerField()
+            )),
+        dissertations_count_copromoteur_actif=models.Sum(
+            models.Case(
+                models.When(Q(
+                    dissertations__active=True,
+                    dissertations_roles__status=dissertation_role_status.CO_PROMOTEUR
+                ) & ~Q(dissertations__status=dissert_status_exclued), then=1), default=0,
+                output_field=models.IntegerField()
+            )),
+        dissertations_count_reader_actif=models.Sum(
+            models.Case(
+                models.When(Q(
+                    dissertations__active=True,
+                    dissertations_roles__status=dissertation_role_status.READER
+                ) & ~Q(dissertations__status=dissert_status_exclued), then=1), default=0,
+                output_field=models.IntegerField()
+            )),
+        dissertations_count_accompanist_actif=models.Sum(
+            models.Case(
+                models.When(Q(
+                    dissertations__active=True,
+                    dissertations_roles__status=dissertation_role_status.ACCOMPANIST
+                ) & ~Q(dissertations__status=dissert_status_exclued), then=1), default=0,
+                output_field=models.IntegerField()
+            )),
+        dissertations_count_internship_actif=models.Sum(
+            models.Case(
+                models.When(Q(
+                    dissertations__active=True,
+                    dissertations_roles__status=dissertation_role_status.INTERNSHIP
+                ) & ~Q(dissertations__status=dissert_status_exclued), then=1), default=0,
+                output_field=models.IntegerField()
+            )),
+        dissertations_count_president_actif=models.Sum(
+            models.Case(
+                models.When(Q(
+                    dissertations__active=True,
+                    dissertations_roles__status=dissertation_role_status.PRESIDENT
+                ) & ~Q(dissertations__status=dissert_status_exclued), then=1), default=0,
+                output_field=models.IntegerField()
+            )),
+        dissertations_count_need_to_respond_actif=models.Sum(
+            models.Case(
+                models.When(Q(
+                    dissertations__active=True,
+                    dissertations__status=dissertation_status.DIR_SUBMIT,
+                    dissertations_roles__status=dissertation_role_status.PROMOTEUR
+                ), then=1), default=0,
+                output_field=models.IntegerField()
+            ))
+
+    )
+    #
+    #
+    # Count(
+    #     'dissertations',
+    #     filter=Q(
+    #         active=True,
+    #         education_group_year_start__academic_year=current_academic_year,
+    #         status=dissertation_status.COM_SUBMIT
+    #     ), distinct=True))
+
+    return render(request, 'manager_informations_list.html', {'advisers': advisers})
 
 
 @login_required
