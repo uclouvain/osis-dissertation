@@ -29,6 +29,7 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.offer import OfferFactory
 from base.tests.factories.offer_year import OfferYearFactory
@@ -73,9 +74,13 @@ class DissertationViewTestCase(TestCase):
         self.student = StudentFactory.create(person=a_person_student)
         self.offer1 = OfferFactory(title="test_offer1")
         self.offer2 = OfferFactory(title="test_offer2")
+        self.education_group = EducationGroupFactory()
         self.academic_year1 = AcademicYearFactory()
         self.academic_year2 = AcademicYearFactory(year=self.academic_year1.year - 1)
-        self.education_group_year_start = EducationGroupYearFactory(academic_year=self.academic_year1)
+        self.education_group_year_start = EducationGroupYearFactory(
+            academic_year=self.academic_year1,
+            education_group=self.education_group
+        )
         self.offer_year_start1 = OfferYearFactory(acronym="test_offer1", offer=self.offer1,
                                                   academic_year=self.academic_year1)
         self.offer_year_start2 = OfferYearFactory(acronym="test_offer2", offer=self.offer2,

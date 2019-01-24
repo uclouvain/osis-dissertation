@@ -75,9 +75,9 @@ class InformationTeacherViewTestCase(TestCase):
                                         'count_advisers_pro': dissertation_role.count_by_adviser_and_role_stats(self.teacher, dissertation_role_status.PROMOTEUR),
                                         'count_advisers_reader': dissertation_role.count_by_adviser_and_role_stats(self.teacher, dissertation_role_status.READER),
                                         'count_advisers_pro_request': dissertation_role.count_by_adviser(self.teacher, dissertation_role_status.PROMOTEUR, 'DIR_SUBMIT'),
-                                        'tab_offer_count_pro': dissertation_role.get_tab_count_role_by_offer(advisers_pro),
-                                        'tab_offer_count_read': dissertation_role.get_tab_count_role_by_offer(advisers_reader),
-                                        'tab_offer_count_copro': dissertation_role.get_tab_count_role_by_offer(advisers_copro)
+                                        'tab_offer_count_pro': dissertation_role.get_tab_count_role_by_education_group(advisers_pro),
+                                        'tab_offer_count_read': dissertation_role.get_tab_count_role_by_education_group(advisers_reader),
+                                        'tab_offer_count_copro': dissertation_role.get_tab_count_role_by_education_group(advisers_copro)
                                     }
                                     )
         self.assertEqual(response.status_code, HttpResponse.status_code)
@@ -359,11 +359,11 @@ class InformationManagerViewTestCase(TestCase):
                                         'count_advisers_pro_request': dissertation_role.count_by_adviser(self.teacher,
                                                                                                          dissertation_role_status.PROMOTEUR,
                                                                                                          'DIR_SUBMIT'),
-                                        'tab_offer_count_pro': dissertation_role.get_tab_count_role_by_offer(
+                                        'tab_offer_count_pro': dissertation_role.get_tab_count_role_by_education_group(
                                             advisers_pro),
-                                        'tab_offer_count_read': dissertation_role.get_tab_count_role_by_offer(
+                                        'tab_offer_count_read': dissertation_role.get_tab_count_role_by_education_group(
                                             advisers_reader),
-                                        'tab_offer_count_copro': dissertation_role.get_tab_count_role_by_offer(
+                                        'tab_offer_count_copro': dissertation_role.get_tab_count_role_by_education_group(
                                             advisers_copro)
                                     }
                                     )
@@ -385,11 +385,11 @@ class InformationManagerViewTestCase(TestCase):
                                         'count_advisers_pro_request': dissertation_role.count_by_adviser(self.teacher,
                                                                                                          dissertation_role_status.PROMOTEUR,
                                                                                                          'DIR_SUBMIT'),
-                                        'tab_offer_count_pro': dissertation_role.get_tab_count_role_by_offer(
+                                        'tab_offer_count_pro': dissertation_role.get_tab_count_role_by_education_group(
                                             advisers_pro),
-                                        'tab_offer_count_read': dissertation_role.get_tab_count_role_by_offer(
+                                        'tab_offer_count_read': dissertation_role.get_tab_count_role_by_education_group(
                                             advisers_reader),
-                                        'tab_offer_count_copro': dissertation_role.get_tab_count_role_by_offer(
+                                        'tab_offer_count_copro': dissertation_role.get_tab_count_role_by_education_group(
                                             advisers_copro)
                                     }
                                     )

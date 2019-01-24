@@ -102,7 +102,7 @@ class Adviser(SerializableModel):
                      Q(dissertation__status='DEFENDED'))
 
         list_stat[2] = advisers_copro.count()
-        tab_offer_count_copro = dissertation_role.get_tab_count_role_by_offer(advisers_copro)
+        tab_offer_count_copro = dissertation_role.get_tab_count_role_by_education_group(advisers_copro)
 
         advisers_reader = queryset.filter(Q(adviser=self) &
                                           Q(status='READER') &
@@ -112,7 +112,7 @@ class Adviser(SerializableModel):
                      Q(dissertation__status='DEFENDED'))
 
         list_stat[3] = advisers_reader.count()
-        tab_offer_count_read = dissertation_role.get_tab_count_role_by_offer(advisers_reader)
+        tab_offer_count_read = dissertation_role.get_tab_count_role_by_education_group(advisers_reader)
 
         advisers_pro = queryset.filter(status='PROMOTEUR') \
             .filter(Q(dissertation__active=True)) \
@@ -120,7 +120,7 @@ class Adviser(SerializableModel):
                      Q(dissertation__status='ENDED') |
                      Q(dissertation__status='DEFENDED'))
 
-        tab_offer_count_pro = dissertation_role.get_tab_count_role_by_offer(advisers_pro)
+        tab_offer_count_pro = dissertation_role.get_tab_count_role_by_education_group(advisers_pro)
 
         return list_stat, tab_offer_count_read, tab_offer_count_copro, tab_offer_count_pro
 
