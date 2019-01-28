@@ -81,6 +81,7 @@ class DissertationViewTestCase(TestCase):
             academic_year=self.academic_year1,
             education_group=self.education_group
         )
+        self.faculty_manager = FacultyAdviserFactory(adviser=self.manager, education_group=self.education_group)
         self.offer_year_start1 = OfferYearFactory(acronym="test_offer1", offer=self.offer1,
                                                   academic_year=self.academic_year1)
         self.offer_year_start2 = OfferYearFactory(acronym="test_offer2", offer=self.offer2,
@@ -96,8 +97,6 @@ class DissertationViewTestCase(TestCase):
                                                                        creator=a_person_teacher,
                                                                        title='Proposition 1212121'
                                                                        )
-
-
         self.dissertation_test_email = DissertationFactory(author=self.student,
                                                            title='Dissertation_test_email',
                                                            offer_year_start=self.offer_year_start1,
