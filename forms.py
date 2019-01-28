@@ -24,8 +24,9 @@
 #
 ##############################################################################
 from django import forms
-from django.forms import ModelForm
+from django.forms import ModelForm, DateInput
 from base import models as mdl
+from base.forms.utils.datefield import DatePickerInput
 from dissertation.models.adviser import Adviser
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.offer_proposition import OfferProposition
@@ -116,12 +117,11 @@ class ManagerDissertationRoleForm(ModelForm):
 class ManagerOfferPropositionForm(ModelForm):
     class Meta:
         model = OfferProposition
-        fields = ('education_group', 'acronym', 'adviser_can_suggest_reader', 'validation_commission_exists',
+        fields = ('adviser_can_suggest_reader', 'validation_commission_exists',
                   'student_can_manage_readers', 'evaluation_first_year', 'start_visibility_proposition',
                   'end_visibility_proposition', 'start_visibility_dissertation', 'end_visibility_dissertation',
                   'start_jury_visibility', 'end_jury_visibility', 'start_edit_title', 'end_edit_title',
                   'global_email_to_commission')
-        widgets = {'education_group': forms.HiddenInput(), 'acronym': forms.HiddenInput()}
 
 
 class ManagerPropositionDissertationForm(ModelForm):
