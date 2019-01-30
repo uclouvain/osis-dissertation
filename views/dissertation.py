@@ -635,15 +635,17 @@ def manager_dissertations_to_dir_ko(request, pk):
 @login_required
 @user_passes_test(adviser.is_manager)
 def manager_dissertations_wait_list(request):
-    person = mdl.person.find_by_user(request.user)
-    adv = adviser.search_by_person(person)
-    education_groups = faculty_adviser.find_education_groups_by_adviser(adv)
-    offer_props = offer_proposition.search_by_education_group(education_groups)
+    offer_props = OfferProposition.objects.filter(
+        education_group__facultyadviser__adviser__person__user=request.user).distinct()
     show_validation_commission = offer_proposition.show_validation_commission(offer_props)
     show_evaluation_first_year = offer_proposition.show_evaluation_first_year(offer_props)
-    disserts = dissertation.search_by_education_group_and_status(education_groups, "DIR_SUBMIT")
-
-    return layout.render(request, 'manager_dissertations_wait_list.html',
+    disserts = Dissertation.objects.filter(
+        education_group_year_start__education_group__facultyadviser__adviser__person__user=request.user,
+        status=dissertation_status.DIR_SUBMIT,
+        active=True).select_related('author__person',
+                                    'education_group_year_start__academic_year',
+                                    'proposition_dissertation__author__person')
+    return render(request, 'manager_dissertations_wait_list.html',
                          {'dissertations': disserts,
                           'show_validation_commission': show_validation_commission,
                           'show_evaluation_first_year': show_evaluation_first_year})
