@@ -643,8 +643,8 @@ def manager_dissertations_wait_list(request):
         education_group_year_start__education_group__facultyadviser__adviser__person__user=request.user,
         status=dissertation_status.DIR_SUBMIT,
         active=True).select_related('author__person',
-                                    'education_group_year_start__academic_year',
-                                    'proposition_dissertation__author__person')
+                                    'education_group_year_start__academic_year'
+                                    )
     return render(request, 'manager_dissertations_wait_list.html',
                          {'dissertations': disserts,
                           'show_validation_commission': show_validation_commission,
@@ -654,11 +654,9 @@ def manager_dissertations_wait_list(request):
 @login_required
 @user_passes_test(adviser.is_manager)
 def manager_dissertations_wait_comm_list(request):
-    person = mdl.person.find_by_user(request.user)
-    adv = adviser.search_by_person(person)
-    education_groups = faculty_adviser.find_education_groups_by_adviser(adv)
-    offer_props = offer_proposition.search_by_education_group(education_groups)
-    all_advisers_array = str(adviser.convert_advisers_to_array(adviser.find_all_advisers()))
+    offer_props = OfferProposition.objects.filter(
+        education_group__facultyadviser__adviser__person__user=request.user).distinct()
+    all_advisers_array = str(adviser.convert_advisers_to_array(adviser.Adviser.objects.all().select_related('person')))
     show_validation_commission = offer_proposition.show_validation_commission(offer_props)
     show_evaluation_first_year = offer_proposition.show_evaluation_first_year(offer_props)
     return layout.render(request, 'manager_dissertations_wait_commission_list.html',
@@ -671,10 +669,13 @@ def manager_dissertations_wait_comm_list(request):
 @login_required
 @user_passes_test(adviser.is_manager)
 def manager_dissertations_wait_comm_jsonlist(request):
-    person = mdl.person.find_by_user(request.user)
-    adv = adviser.search_by_person(person)
-    education_groups = faculty_adviser.find_education_groups_by_adviser(adv)
-    disserts = dissertation.search_by_education_group_and_status(education_groups, "COM_SUBMIT")
+    disserts = Dissertation.objects.filter(
+        education_group_year_start__education_group__facultyadviser__adviser__person__user=request.user,
+        status=dissertation_status.COM_SUBMIT,
+        active=True).select_related('author__person',
+                                    'education_group_year_start__academic_year',
+                                    'education_group_year_start__education_group',
+                                    'proposition_dissertation__author__person')
     dissert_waiting_list_json = [
         {
             'pk': dissert.pk,
