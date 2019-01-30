@@ -31,7 +31,7 @@ from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from dissertation.tests.factories.offer_proposition import OfferPropositionFactory
 from dissertation.utils.tasks_library import offer_proposition_extend_dates, check_dates_of_offer_proposition, \
-    add_year_to_date
+    incr_year
 
 
 class UtilsTestCase(TestCase):
@@ -87,13 +87,13 @@ class UtilsTestCase(TestCase):
         )
 
     def test_add_year_to_date(self):
-        self.assertEqual(add_year_to_date(self.date_before_today), self.date_end_before_today)
+        self.assertEqual(incr_year(self.date_before_today), self.date_end_before_today)
 
     def test_check_dates_of_offer_proposition(self):
         result = check_dates_of_offer_proposition(self.offer_proposition_outdated)
         self.assertIn(self.education_group_year_outdated.acronym, result)
-        expected_start_year = add_year_to_date(self.date_before_today)
-        expected_end_year = add_year_to_date(self.date_end_before_today)
+        expected_start_year = incr_year(self.date_before_today)
+        expected_end_year = incr_year(self.date_end_before_today)
 
         self.assertEqual(self.offer_proposition_outdated.start_visibility_proposition, expected_start_year)
         self.assertEqual(self.offer_proposition_outdated.end_visibility_proposition, expected_end_year)
@@ -109,8 +109,8 @@ class UtilsTestCase(TestCase):
         self.assertIn(self.education_group_year_outdated.acronym, result)
         self.assertIn(self.education_group2_year_outdated.acronym, result)
         self.offer_proposition_outdated.refresh_from_db()
-        expected_start_year = add_year_to_date(self.date_before_today)
-        expected_end_year = add_year_to_date(self.date_end_before_today)
+        expected_start_year = incr_year(self.date_before_today)
+        expected_end_year = incr_year(self.date_end_before_today)
 
         self.assertEqual(self.offer_proposition_outdated.start_visibility_proposition, expected_start_year)
         self.assertEqual(self.offer_proposition_outdated.end_visibility_proposition, expected_end_year)

@@ -18,40 +18,35 @@ def offer_proposition_extend_dates():
 
 def check_dates_of_offer_proposition(offer_prop):
     logs = ''
-    date_now = date.today()
-    if offer_prop.end_visibility_proposition < date_now:
-        logs += "start_visibility_proposition: {} end_visibility_proposition:{}". \
-            format(offer_prop.start_visibility_proposition, offer_prop.end_visibility_proposition)
-        offer_prop.start_visibility_proposition = add_year_to_date(offer_prop.start_visibility_proposition)
-        offer_prop.end_visibility_proposition = add_year_to_date(offer_prop.end_visibility_proposition)
-        logs += "new data : start_visibility_proposition:{} new end_visibility_proposition: {} \n". \
-            format(offer_prop.start_visibility_proposition, offer_prop.end_visibility_proposition)
-    if offer_prop.end_visibility_dissertation < date_now:
-        logs += "start_visibility_dissertation: {} end_visibility_dissertation:{}". \
-            format(offer_prop.start_visibility_dissertation, offer_prop.end_visibility_dissertation)
-        offer_prop.start_visibility_dissertation = add_year_to_date(offer_prop.start_visibility_dissertation)
-        offer_prop.end_visibility_dissertation = add_year_to_date(offer_prop.end_visibility_dissertation)
-        logs += "new  data : start_visibility_dissertation: {} end_visibility_dissertation:{} \n". \
-            format(offer_prop.start_visibility_dissertation, offer_prop.end_visibility_dissertation)
-    if offer_prop.end_jury_visibility < date_now:
-        logs += "start_jury_visibility: {} end_jury_visibility:{}". \
-            format(offer_prop.start_jury_visibility, offer_prop.end_jury_visibility)
-        offer_prop.start_jury_visibility = add_year_to_date(offer_prop.start_jury_visibility)
-        offer_prop.end_jury_visibility = add_year_to_date(offer_prop.end_jury_visibility)
-        logs += "new data : start_jury_visibility: {} end_jury_visibility:{} \n". \
-            format(offer_prop.start_jury_visibility, offer_prop.end_jury_visibility)
+    logs += check_end(offer_prop, start_arg="start_visibility_proposition", end_arg="end_visibility_proposition")
+    logs += check_end(offer_prop, start_arg="start_visibility_dissertation", end_arg="end_visibility_dissertation")
+    logs += check_end(offer_prop, start_arg="start_jury_visibility", end_arg="end_jury_visibility")
+    logs += check_end(offer_prop, start_arg="start_edit_title", end_arg="end_edit_title")
 
-    if offer_prop.end_edit_title < date_now:
-        logs += "start_edit_title: {} end_edit_title:{}". \
-            format(offer_prop.start_edit_title, offer_prop.end_edit_title)
-        offer_prop.start_edit_title = add_year_to_date(offer_prop.start_edit_title)
-        offer_prop.end_edit_title = add_year_to_date(offer_prop.start_edit_title)
-        logs += "new data : start_edit_title: {} end_edit_title:{} \n". \
-            format(offer_prop.start_edit_title, offer_prop.end_edit_title)
-        logs = str(offer_prop.education_group.most_recent_acronym) + "\n" +logs
+    if logs:
+        logs = str(offer_prop.education_group.most_recent_acronym) + "\n" + logs
+
     offer_prop.save()
     return logs
 
 
-def add_year_to_date(date_too):
-    return date_too + relativedelta(years=YEAR)
+def check_end(offer_prop, start_arg, end_arg):
+    date_now = date.today()
+
+    offer_start = getattr(offer_prop, start_arg)
+    offer_end = getattr(offer_prop, end_arg)
+    logs = ''
+    if offer_end < date_now:
+        logs += "{} : {} {}:{}".format(
+            start_arg, offer_start, end_arg, offer_end
+        )
+
+        offer_start = incr_year(offer_start)
+        offer_end = incr_year(offer_end)
+
+        logs += "new data : {}:{} new {}: {} \n".format(start_arg, offer_start, end_arg, offer_end)
+    return logs
+
+
+def incr_year(date_too):
+    return date_too + relativedelta(years=1)
