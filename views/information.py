@@ -39,12 +39,15 @@ from dissertation.models import adviser
 from dissertation.models import dissertation_role
 from dissertation.models import faculty_adviser
 from dissertation.models.adviser import Adviser
+from dissertation.models.dissertation_role import DissertationRole
 from dissertation.models.enums import dissertation_role_status, dissertation_status
+from dissertation.models.faculty_adviser import FacultyAdviser
 
 
 ###########################
 #      TEACHER VIEWS      #
 ###########################
+
 
 
 @login_required
@@ -180,8 +183,9 @@ def manager_informations(request):
                               dissertation_status.ENDED_WIN,
                               dissertation_status.ENDED_LOS,
                               dissertation_status.ENDED)
-
-    advisers = Adviser.objects.filter(type='PRF').select_related('person').prefetch_related('dissertations').order_by(
+    advisers = Adviser.objects.filter(type='PRF').select_related('person').\
+        prefetch_related('dissertations'). \
+        order_by(
         'person__last_name',
         'person__first_name') \
         .annotate(
@@ -190,12 +194,22 @@ def manager_informations(request):
                 models.When(Q(
                     dissertations__active=True,
                     dissertations__education_group_year_start__academic_year=current_academic_year(),
-                ) & ~Q(dissertations__status=dissert_status_exclued), then=1), default=0, output_field=models.IntegerField()
+                ) & ~Q(dissertations__status=dissert_status_exclued), then=1),
+                default=0, output_field=models.IntegerField()
             )),
         dissertations_count_all_actif=models.Sum(
             models.Case(
                 models.When(Q(
                     dissertations__active=True,
+                ) & ~Q(dissertations__status=dissert_status_exclued), then=1), default=0,
+                output_field=models.IntegerField()
+            )),
+        dissertations_count_all_actif_in_your_education_groups=models.Sum(
+            models.Case(
+                models.When(Q(
+                    dissertations__active=True,
+                    dissertations__education_group_year_start__education_group__facultyadviser__adviser__person__user=
+                    request.user,
                 ) & ~Q(dissertations__status=dissert_status_exclued), then=1), default=0,
                 output_field=models.IntegerField()
             )),
@@ -258,16 +272,6 @@ def manager_informations(request):
             ))
 
     )
-    #
-    #
-    # Count(
-    #     'dissertations',
-    #     filter=Q(
-    #         active=True,
-    #         education_group_year_start__academic_year=current_academic_year,
-    #         status=dissertation_status.COM_SUBMIT
-    #     ), distinct=True))
-
     return render(request, 'manager_informations_list.html', {'advisers': advisers})
 
 
@@ -395,11 +399,29 @@ def manager_informations_edit(request, pk):
 @login_required
 @user_passes_test(adviser.is_manager)
 def manager_informations_list_request(request):
-    person = mdl.person.find_by_user(request.user)
-    adv = adviser.search_by_person(person)
-    education_groups = faculty_adviser.find_education_groups_by_adviser(adv)
-    advisers_need_request = dissertation_role.list_teachers_action_needed(education_groups)
+    educ_groups_of_fac_manager = FacultyAdviser.objects.filter(adviser=request.user.person.adviser).values_list(
+        'education_group',
+        flat=True)
+    advisers_need_request = Adviser.objects. \
+        select_related('person').prefetch_related('dissertations').filter(type='PRF', ).\
+        filter(Q(dissertations__active=True,
+                 dissertations__status=dissertation_status.DIR_SUBMIT,
+                 dissertations_roles__status=dissertation_role_status.PROMOTEUR,
+                 dissertations__education_group_year_start__education_group__in=educ_groups_of_fac_manager
+                 )). \
+        order_by('person__last_name', 'person__first_name') \
+        .annotate(dissertations_count_need_to_respond_actif=models.Sum(
+            models.Case(
+                models.When(Q(
+                    dissertations__active=True,
+                    dissertations__status=dissertation_status.DIR_SUBMIT,
+                    dissertations_roles__status=dissertation_role_status.PROMOTEUR,
+                    dissertations__education_group_year_start__education_group__in=educ_groups_of_fac_manager
+                ), then=1), default=0,
+                output_field=models.IntegerField()
+            ))
 
+    )
     return layout.render(request, "manager_informations_list_request.html",
                          {'advisers_need_request': advisers_need_request})
 
@@ -451,14 +473,17 @@ def manager_informations_detail_list(request, pk):
 @login_required
 @user_passes_test(adviser.is_manager)
 def manager_informations_detail_list_wait(request, pk):
-    person = mdl.person.find_by_user(request.user)
-    connected_adviser = adviser.search_by_person(person)
+    connected_adviser = request.user.person.adviser
     education_groups = faculty_adviser.find_education_groups_by_adviser(connected_adviser)
     adv = adviser.get_by_id(pk)
     if adv is None:
         return redirect('manager_informations')
-    disserts_role = dissertation_role.search_by_adviser_and_role_and_waiting(adv, education_groups)
-
+    disserts_role = DissertationRole.objects.filter(
+        status='PROMOTEUR',
+        dissertation__status='DIR_SUBMIT',
+        dissertation__education_group_year_start__education_group__in=education_groups,
+        dissertation__active=True
+    ).select_related('adviser__person').distinct('adviser')
     return layout.render(request, "manager_informations_detail_list_wait.html",
                          {'disserts_role': disserts_role, 'adviser': adv})
 

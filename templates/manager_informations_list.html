@@ -57,9 +57,10 @@
             <table class="table table-hover display responsive no-wrap" width="100%" id="table-advisers">
                 <thead>
                     <tr>
-                        <th>{% trans 'Teacher' %}</th>
+                        <th>{% trans 'Teachers' %}</th>
                         <th>{% trans 'How many active dissertations for this current academic year (all programs)' %}</th>
                         <th>{% trans 'How many active dissertations (all programs)' %}</th>
+                        <th>{% trans 'How many active dissertations (your programs)' %}</th>
                         <th>{% trans 'How many dissertations as promotor' %}</th>
                         <th>{% trans 'How many dissertations as copromotor' %}</th>
                         <th>{% trans 'How many dissertations as reader' %}</th>
@@ -75,6 +76,7 @@
                             <td><a href="{% url 'manager_informations_detail' pk=adviser.pk %}">{{ adviser }}</a></td>
                             <td>{{adviser.dissertations_count_actif_this_academic_year}}</td>
                             <td>{{adviser.dissertations_count_all_actif}}</td>
+                            <td>{{adviser.dissertations_count_all_actif_in_your_education_groups}}</td>
                             <td>{{adviser.dissertations_count_promotor_actif}}</td>
                             <td>{{adviser.dissertations_count_copromoteur_actif}}</td>
                             <td>{{adviser.dissertations_count_reader_actif}}</td>

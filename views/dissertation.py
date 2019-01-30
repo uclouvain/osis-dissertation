@@ -42,6 +42,7 @@ from rest_framework import status
 from base import models as mdl
 from base.models import academic_year
 from base.models.academic_year import AcademicYear
+from base.models.student import Student
 from base.views import layout
 from dissertation.forms import ManagerDissertationEditForm, ManagerDissertationRoleForm, \
     ManagerDissertationUpdateForm, AdviserForm
@@ -745,18 +746,15 @@ def manager_dissertations_wait_recep_list(request):
 @login_required
 @user_passes_test(adviser.is_manager)
 def manager_students_list(request):
-    current_manager = adviser.search_by_person(mdl.person.find_by_user(request.user))
-    education_groups = faculty_adviser.find_education_groups_by_adviser(current_manager)
-    education_groups_years = mdl.education_group_year.EducationGroupYear.objects.filter(
-        education_group__in=education_groups,
-        academic_year=mdl.academic_year.starting_academic_year()
-    )
-    offer_enroll = mdl.offer_enrollment.OfferEnrollment.objects.filter(
-        education_group_year__in=education_groups_years
-    ).select_related(
-        'student', 'education_group_year'
-    ).prefetch_related('student__dissertation_set')
-    return layout.render(request, 'manager_students_list.html', {'offer_enrollements': offer_enroll})
+    student_with_enrollement_in_education_groups = Student.objects.filter(
+        offerenrollment__education_group_year__education_group__facultyadviser__adviser__person__user=request.user,
+        offerenrollment__education_group_year__academic_year=mdl.academic_year.starting_academic_year()
+    ).select_related('person').\
+        prefetch_related('dissertation_set__education_group_year_start__education_group',
+                         'offerenrollment_set__education_group_year').distinct()
+    return render(request,
+                  'manager_students_list.html',
+                  {'students': student_with_enrollement_in_education_groups})
 
 
 ###########################

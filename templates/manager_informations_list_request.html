@@ -43,14 +43,16 @@
       <table class="table table-hover">
         <tr>
           <th>{% trans 'Teacher' %}</th>
+          <th>{% trans 'How many dissertations need answer' %}</th>
         </tr>
         {% for adviser_need_request in advisers_need_request %}
           <tr>
             <td>
-                <a href="{% url 'manager_informations_detail_list_wait' pk=adviser_need_request.adviser.pk %}">
-                    {{ adviser_need_request.adviser }}
+                <a href="{% url 'manager_informations_detail_list_wait' pk=adviser_need_request.pk %}">
+                    {{ adviser_need_request }}
                 </a>
             </td>
+            <td>{{ adviser_need_request.dissertations_count_need_to_respond_actif }}</td>
           </tr>
         {% endfor %}
       </table>
