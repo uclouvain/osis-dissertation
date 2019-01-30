@@ -1273,6 +1273,9 @@ msgstr ""
 msgid "Programs"
 msgstr ""
 
+msgid "Programs and enrollements status"
+msgstr ""
+
 #: templates/manager_dissertations_edit.html:85
 #: templates/manager_dissertations_list.html:143
 #: templates/manager_dissertations_new.html:80
@@ -1625,7 +1628,22 @@ msgid "Teachers having to answer request"
 msgstr ""
 
 #: templates/manager_informations_list.html:61
+msgid "How many active dissertations for this current academic year (all programs)"
+msgstr ""
+
 msgid "How many active dissertations (all programs)"
+msgstr ""
+
+msgid "How many active dissertations (your programs)"
+msgstr ""
+
+msgid "How many active dissertations as accompanist"
+msgstr ""
+
+msgid "How many dissertations as internship"
+msgstr ""
+
+msgid "How many dissertations as president"
 msgstr ""
 
 #: templates/manager_informations_list.html:62

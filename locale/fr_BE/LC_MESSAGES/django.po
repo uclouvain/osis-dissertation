@@ -1314,6 +1314,9 @@ msgstr "Mémoire reporté"
 msgid "Programs"
 msgstr "Programmes"
 
+msgid "Programs and enrollements status"
+msgstr "Programmes et status d'inscription(s)"
+
 #: templates/manager_dissertations_edit.html:85
 #: templates/manager_dissertations_list.html:143
 #: templates/manager_dissertations_new.html:80
@@ -1676,6 +1679,24 @@ msgstr "Enseignants devant répondre à une demande"
 #: templates/manager_informations_list.html:61
 msgid "How many active dissertations (all programs)"
 msgstr "Nombre de mémoires actifs (tous programmes)"
+
+msgid "How many active dissertations for this current academic year (all programs)"
+msgstr "Nombre de mémoires actifs commeencé cette année académique (tous programmes)"
+
+msgid "How many active dissertations (all programs)"
+msgstr "Nombre de mémoires actifs (tous programmes)"
+
+msgid "How many active dissertations (your programs)"
+msgstr "Nombre de mémoires actifs dans vos programmes "
+
+msgid "How many active dissertations as accompanist"
+msgstr "Nombre de mémoires en tant qu'accompagnateur"
+
+msgid "How many dissertations as internship"
+msgstr "Nombre de mémoires en tant que maître de stage"
+
+msgid "How many dissertations as president"
+msgstr "Nombre de mémoires en tant que president"
 
 #: templates/manager_informations_list.html:62
 msgid "How many dissertations as promotor"
