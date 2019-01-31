@@ -29,6 +29,7 @@ from django.db import models
 from base.models import education_group
 from base.models import offer
 from base.models import offer_year
+from base.models.education_group import EducationGroup
 from . import adviser
 
 
@@ -65,10 +66,9 @@ class FacultyAdviser(models.Model):
 
 
 def search_by_adviser(a_adviser):
-    objects = FacultyAdviser.objects.filter(adviser=a_adviser)
-    education_groups = [obj.education_group for obj in list(objects)]
-    return education_groups
+    return EducationGroup.objects.filter(facultyadviser__adviser=a_adviser)
 
 
 def find_education_groups_by_adviser(a_adviser):
-    return FacultyAdviser.objects.filter(adviser=a_adviser).values_list('education_group', flat=True)
+    return FacultyAdviser.objects.filter(adviser=a_adviser).select_related('education_group').\
+        values_list('education_group', flat=True)

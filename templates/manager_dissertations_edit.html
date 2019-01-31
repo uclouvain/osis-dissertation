@@ -66,7 +66,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6" {% if form.education_group_year_start.errors %} style="color:red;" {% endif %}>
+            <div class="col-md-6 form-group" {% if form.education_group_year_start.errors %} style="color:red;" {% endif %}>
                 <div class="panel-group">
                     <label for="txt_offer_year_start" style="margin-left:-6px;">
                         {% trans 'Programs' %}
@@ -74,11 +74,10 @@
                             <br>{{ error|escape }}
                         {% endfor %}
                     </label>
-                    <select class="form-control" id="txt_offer_year_start"  name="offer_year_start" style="margin:-6px;">
-                        <option value={{ form.education_group_year_start }}
-                    </select>
+                    {{ form.education_group_year_start }}
                 </div>
             </div>
+
             <div class="col-md-6">
                 <div class="panel-group" {% if form.proposition_dissertation.errors %} style="color:red;" {% endif %}>
                     <label for="txt_proposition_dissertation" style="margin-left:-6px;">
