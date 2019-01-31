@@ -12,7 +12,7 @@ def offer_proposition_extend_dates():
     logs = ''
     for offer_proposition in all_offer_propositions:
         logs += check_dates_of_offer_proposition(offer_proposition)
-    if not logs :
+    if not logs:
         logs = 'no action'
     return logs
 
