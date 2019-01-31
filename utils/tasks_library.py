@@ -12,7 +12,7 @@ def offer_proposition_extend_dates():
     logs = ''
     for offer_proposition in all_offer_propositions:
         logs += check_dates_of_offer_proposition(offer_proposition)
-    if logs == '':
+    if not logs :
         logs = 'no action'
     return logs
 
@@ -34,12 +34,12 @@ def check_date_end(offer_prop, start_arg, end_arg):
     offer_end = getattr(offer_prop, end_arg)
     logs = ''
     if offer_end < date_now:
-        logs += "{} : {} {}:{}".format(
+        logs += "{} : {}  {} : {}".format(
             start_arg, offer_start, end_arg, offer_end
         )
         setattr(offer_prop, start_arg, incr_year(offer_start))
         setattr(offer_prop, end_arg, incr_year(offer_end))
-        logs += "new data : {}:{} new {}: {} \n".format(start_arg, offer_start, end_arg, offer_end)
+        logs += "new data : {} : {} new {} : {} \n".format(start_arg, offer_start, end_arg, offer_end)
         offer_prop.save()
     return logs
 
