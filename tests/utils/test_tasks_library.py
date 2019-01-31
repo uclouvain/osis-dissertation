@@ -31,7 +31,7 @@ from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from dissertation.tests.factories.offer_proposition import OfferPropositionFactory
 from dissertation.utils.tasks_library import offer_proposition_extend_dates, check_dates_of_offer_proposition, \
-    incr_year
+    incr_year, check_date_end
 
 
 class UtilsTestCase(TestCase):
@@ -103,6 +103,13 @@ class UtilsTestCase(TestCase):
         self.assertEqual(self.offer_proposition_outdated.end_jury_visibility, expected_end_year)
         self.assertEqual(self.offer_proposition_outdated.start_edit_title, expected_start_year)
         self.assertEqual(self.offer_proposition_outdated.end_edit_title, expected_end_year)
+
+    def test_check_date_end(self):
+        expected_start_year = incr_year(self.date_before_today)
+        expected_end_year = incr_year(self.date_end_before_today)
+        check_date_end(self.offer_proposition_outdated, 'start_visibility_proposition', 'end_visibility_proposition')
+        self.assertEqual(self.offer_proposition_outdated.start_visibility_proposition, expected_start_year)
+        self.assertEqual(self.offer_proposition_outdated.end_visibility_proposition, expected_end_year)
 
     def test_offer_proposition_extend_dates(self):
         result = offer_proposition_extend_dates()

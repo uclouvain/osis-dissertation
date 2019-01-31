@@ -26,7 +26,6 @@
 from celery.schedules import crontab
 
 from backoffice.celery import app as celery_app
-
 from dissertation.utils.tasks_library import offer_proposition_extend_dates
 
 celery_app.conf.beat_schedule.update({
@@ -38,4 +37,4 @@ celery_app.conf.beat_schedule.update({
 
 @celery_app.task
 def tasks_check_dates_of_offer_proposition():
-    offer_proposition_extend_dates()
+    return offer_proposition_extend_dates()

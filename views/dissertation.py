@@ -27,12 +27,11 @@ import json
 import time
 
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.http import HttpResponse,JsonResponse
-from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
 from openpyxl import Workbook
 from openpyxl.utils.exceptions import IllegalCharacterError
@@ -40,9 +39,9 @@ from openpyxl.writer.excel import save_virtual_workbook
 from rest_framework import status
 
 from base import models as mdl
-from base.models import academic_year, offer_enrollment
+from base.models import academic_year
 from base.views import layout
-from dissertation.forms import ManagerDissertationForm, ManagerDissertationEditForm, ManagerDissertationRoleForm, \
+from dissertation.forms import ManagerDissertationEditForm, ManagerDissertationRoleForm, \
     ManagerDissertationUpdateForm, AdviserForm
 from dissertation.models import adviser, dissertation, dissertation_document_file, dissertation_role, \
     dissertation_update, faculty_adviser, offer_proposition, proposition_dissertation, proposition_role
@@ -954,5 +953,4 @@ def dissertations_jury_new(request, pk):
                     'dissert': dissert,
                 }
             )
-
     return redirect('dissertations_detail', pk=dissert.pk)
