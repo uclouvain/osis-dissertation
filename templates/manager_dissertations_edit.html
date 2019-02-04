@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% load staticfiles %}
+{% load staticfiles bootstrap3 %}
 {% load i18n %}
 
 {% comment "License" %}
@@ -68,13 +68,7 @@
         <div class="row">
             <div class="col-md-6 form-group" {% if form.education_group_year_start.errors %} style="color:red;" {% endif %}>
                 <div class="panel-group">
-                    <label for="txt_offer_year_start" style="margin-left:-6px;">
-                        {% trans 'Programs' %}
-                        {% for error in form.education_group_year_start.errors %}
-                            <br>{{ error|escape }}
-                        {% endfor %}
-                    </label>
-                    {{ form.education_group_year_start }}
+                        {% bootstrap_field form.education_group_year_start %}
                 </div>
             </div>
 
