@@ -65,10 +65,6 @@ class FacultyAdviser(models.Model):
         return None
 
 
-def search_by_adviser(a_adviser):
-    return EducationGroup.objects.filter(facultyadviser__adviser=a_adviser)
-
-
 def find_education_groups_by_adviser(a_adviser):
     return FacultyAdviser.objects.filter(adviser=a_adviser).select_related('education_group').\
         values_list('education_group', flat=True)

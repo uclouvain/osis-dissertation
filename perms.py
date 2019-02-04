@@ -44,8 +44,9 @@ def user_is_dissertation_promotor(user, dissert):
 
 
 def adviser_can_manage(dissert, advis):
-    education_group_of_adviser = faculty_adviser.search_by_adviser(advis)
-    return (dissert.education_group_year_start.education_group in education_group_of_adviser) and advis.type == 'MGR'
+    return advis.facultyadviser_set.filter(
+        education_group=dissert.education_group_year_start.education_group
+    ).exists() and advis.type == 'MGR'
 
 
 def adviser_is_in_jury(user, pk):
