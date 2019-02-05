@@ -34,8 +34,10 @@ from base.models import academic_year
 from base.models import offer_year, student
 from base.models.education_group_year import EducationGroupYear
 from dissertation.models import proposition_dissertation, offer_proposition, dissertation_location
+from dissertation.models.dissertation_document_file import DissertationDocumentFile
 from dissertation.models.enums import dissertation_status
 from dissertation.utils import emails_dissert
+from osis_common.models.document_file import DocumentFile
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
@@ -84,6 +86,7 @@ class Dissertation(SerializableModel):
     creation_date = models.DateTimeField(auto_now_add=True, editable=False)
     modification_date = models.DateTimeField(auto_now=True)
     location = models.ForeignKey(dissertation_location.DissertationLocation, blank=True, null=True)
+    dissertation_documents_files = models.ManyToManyField(DocumentFile, through=DissertationDocumentFile)
 
     def __str__(self):
         return self.title

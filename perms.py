@@ -25,6 +25,7 @@
 ##############################################################################
 from functools import wraps
 
+from django.contrib.auth.models import User
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import available_attrs
@@ -41,15 +42,15 @@ def user_is_dissertation_promotor(user, dissert):
 
 
 def adviser_can_manage(dissert, advis):
-   return advis.facultyadviser_set.filter(
-       education_group=dissert.education_group_year_start.education_group
-   ).exists() and advis.type == 'MGR'
+    return advis.facultyadviser_set.filter(
+        education_group=dissert.education_group_year_start.education_group
+    ).exists() and advis.type == 'MGR'
 
 
 def adviser_is_in_jury(user, pk):
     dissert = get_object_or_404(Dissertation, pk=pk)
     if user.person.adviser:
-        return DissertationRole.objects.filter(dissertation=dissert).filter(user.person.adviser).count() > 0
+        return DissertationRole.objects.filter(dissertation=dissert, adviser=user.person.adviser).count() > 0
     else:
         return False
 
@@ -58,7 +59,8 @@ def autorized_dissert_promotor_or_manager(user, pk):
     dissert = get_object_or_404(Dissertation.objects.select_related('education_group_year_start__education_group').
                                 prefetch_related('advisers'), pk=pk)
     if user.person.adviser:
-        return user_is_dissertation_promotor(user, dissert) or adviser_can_manage(dissert, user.person.adviser)
+        return user_is_dissertation_promotor(user, dissert) or \
+               adviser_can_manage(dissert, user.person.adviser)
     else:
         return False
 
@@ -67,10 +69,14 @@ def check_for_dissert(test_func):
     def f_check_for_dissert_or_redirect(view_func):
         @wraps(view_func, assigned=available_attrs(view_func))
         def _wrapped_view(request, *args, **kwargs):
-            if test_func(request.user, kwargs['pk']):
+            if test_func(return_user_with_adviser(request.user), kwargs['pk']):
                 return view_func(request, *args, **kwargs)
             else:
                 return HttpResponseForbidden()
         return _wrapped_view
 
     return f_check_for_dissert_or_redirect
+
+
+def return_user_with_adviser(user):
+    return get_object_or_404(User.objects.select_related('person__adviser'), pk=user.pk)
