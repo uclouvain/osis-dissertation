@@ -36,184 +36,216 @@
     <h2>{% trans 'Settings' %}</h2>
   </div>
   <div class="panel panel-default">
+      <form method="GET" class="get-form" action="{% url 'manager_offer_parameters_edit' %}" name="form_education_group">
       <table class="table .table-hover">
         <thead>
             <tr>
+              <th></th>
               <th>{% trans 'Program'%}</th>
               <th>{% trans 'Dates settings'%}</th>
               <th>{% trans 'Other settings'%}</th>
             </tr>
         </thead>
-        <tbody>
-        {% for offer_proposition in offer_propositions %}
-          <tr>
-            <th scope="row">
-                <a href="{% url 'manager_offer_parameters_edit' pk=offer_proposition.pk %}">
-                    {{ offer_proposition.acronym }}
-                </a>
-            </th>
-            <td>
-                <table>
-                    <tr>
-                        <td style="padding-right: 1em">
-                            {% trans 'Subjects currently visible' %}
-                        </td>
-                        <td style="padding-right: 1em">
-                            {% if offer_proposition.in_periode_visibility_proposition %}
-                                <span class="glyphicon glyphicon-ok"
-                                      style="color: green" aria-hidden="true"></span>
-                            {% else %}
-                                <span class="glyphicon glyphicon-remove"
-                                      style="color: red" aria-hidden="true"></span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            ({% trans 'from' %}
-                            {{ offer_proposition.start_visibility_proposition|date:"d/m/Y" }}
-                            {% trans 'to' %}
-                            {{ offer_proposition.end_visibility_proposition|date:"d/m/Y" }})
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding-right: 1em">
-                            {% trans 'Currently possible to create dissertations' %}
-                        </td>
-                        <td style="padding-right: 1em">
-                            {% if offer_proposition.in_periode_visibility_dissertation %}
-                                <span class="glyphicon glyphicon-ok"
-                                      style="color: green" aria-hidden="true"></span>
-                            {% else %}
-                                <span class="glyphicon glyphicon-remove"
-                                      style="color: red" aria-hidden="true"></span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            ({% trans 'from' %}
-                            {{ offer_proposition.start_visibility_dissertation|date:"d/m/Y" }}
-                            {% trans 'to' %}
-                            {{ offer_proposition.end_visibility_dissertation|date:"d/m/Y" }})
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding-right: 1em">
-                            {% trans 'Jury currently visible' %}
-                        </td>
-                        <td style="padding-right: 1em">
-                            {% if offer_proposition.in_periode_jury_visibility %}
-                                <span class="glyphicon glyphicon-ok"
-                                      style="color: green" aria-hidden="true"></span>
-                            {% else %}
-                                <span class="glyphicon glyphicon-remove"
-                                      style="color: red" aria-hidden="true"></span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            ({% trans 'from' %}
-                            {{ offer_proposition.start_jury_visibility|date:"d/m/Y" }}
-                            {% trans 'to' %}
-                            {{ offer_proposition.end_jury_visibility|date:"d/m/Y" }})
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding-right: 1em">
-                            {% trans 'Title currently editable' %}
-                        </td>
-                        <td style="padding-right: 1em">
-                            {% if offer_proposition.in_periode_edit_title %}
-                                <span class="glyphicon glyphicon-ok"
-                                      style="color: green" aria-hidden="true"></span>
-                            {% else %}
-                                <span class="glyphicon glyphicon-remove"
-                                      style="color: red" aria-hidden="true"></span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            ({% trans 'from' %}
-                            {{ offer_proposition.start_edit_title|date:"d/m/Y" }}
-                            {% trans 'to' %}
-                            {{ offer_proposition.end_edit_title|date:"d/m/Y" }})
-                        </td>
-                    </tr>
-                </table>
-            </td>
+              {% for offer_proposition in offer_propositions %}
+              <tr>
+                  <td>
+                      <input type="checkbox" name="pk" value={{ offer_proposition.pk }}>
+                  </td>
+                  <td scope="row">
+                      <span>
+                          {{ offer_proposition.acronym }}
+                      </span>
+                  </td>
+                  <td>
+                      <table>
+                          <tr>
+                              <td style="padding-right: 1em">
+                                  {% trans 'Subjects currently visible' %}
+                              </td>
+                              <td style="padding-right: 1em">
+                                  {% if offer_proposition.in_periode_visibility_proposition %}
+                                  <span class="glyphicon glyphicon-ok"
+                                        style="color: green" aria-hidden="true"></span>
+                                  {% else %}
+                                  <span class="glyphicon glyphicon-remove"
+                                        style="color: red" aria-hidden="true"></span>
+                                  {% endif %}
+                              </td>
+                              <td>
+                                  ({% trans 'from' %}
+                                  {{ offer_proposition.start_visibility_proposition|date:"d/m/Y" }}
+                                  {% trans 'to' %}
+                                  {{ offer_proposition.end_visibility_proposition|date:"d/m/Y" }})
+                              </td>
+                          </tr>
+                          <tr>
+                              <td style="padding-right: 1em">
+                                  {% trans 'Currently possible to create dissertations' %}
+                              </td>
+                              <td style="padding-right: 1em">
+                                  {% if offer_proposition.in_periode_visibility_dissertation %}
+                                  <span class="glyphicon glyphicon-ok"
+                                        style="color: green" aria-hidden="true"></span>
+                                  {% else %}
+                                  <span class="glyphicon glyphicon-remove"
+                                        style="color: red" aria-hidden="true"></span>
+                                  {% endif %}
+                              </td>
+                              <td>
+                                  ({% trans 'from' %}
+                                  {{ offer_proposition.start_visibility_dissertation|date:"d/m/Y" }}
+                                  {% trans 'to' %}
+                                  {{ offer_proposition.end_visibility_dissertation|date:"d/m/Y" }})
+                              </td>
+                          </tr>
+                          <tr>
+                              <td style="padding-right: 1em">
+                                  {% trans 'Jury currently visible' %}
+                              </td>
+                              <td style="padding-right: 1em">
+                                  {% if offer_proposition.in_periode_jury_visibility %}
+                                  <span class="glyphicon glyphicon-ok"
+                                        style="color: green" aria-hidden="true"></span>
+                                  {% else %}
+                                  <span class="glyphicon glyphicon-remove"
+                                        style="color: red" aria-hidden="true"></span>
+                                  {% endif %}
+                              </td>
+                              <td>
+                                  ({% trans 'from' %}
+                                  {{ offer_proposition.start_jury_visibility|date:"d/m/Y" }}
+                                  {% trans 'to' %}
+                                  {{ offer_proposition.end_jury_visibility|date:"d/m/Y" }})
+                              </td>
+                          </tr>
+                          <tr>
+                              <td style="padding-right: 1em">
+                                  {% trans 'Title currently editable' %}
+                              </td>
+                              <td style="padding-right: 1em">
+                                  {% if offer_proposition.in_periode_edit_title %}
+                                  <span class="glyphicon glyphicon-ok"
+                                        style="color: green" aria-hidden="true"></span>
+                                  {% else %}
+                                  <span class="glyphicon glyphicon-remove"
+                                        style="color: red" aria-hidden="true"></span>
+                                  {% endif %}
+                              </td>
+                              <td>
+                                  ({% trans 'from' %}
+                                  {{ offer_proposition.start_edit_title|date:"d/m/Y" }}
+                                  {% trans 'to' %}
+                                  {{ offer_proposition.end_edit_title|date:"d/m/Y" }})
+                              </td>
+                          </tr>
+                      </table>
+                  </td>
 
-            <td>
-                <table>
-                    <tr>
-                        <td style="padding-right: 1em">
-                            {% trans 'Students can manage readers'%}
-                        </td>
-                        <td>
-                            {% if offer_proposition.student_can_manage_readers %}
-                                <span class="glyphicon glyphicon-ok"
-                                      style="color: green" aria-hidden="true"></span>
-                            {% else %}
-                                <span class="glyphicon glyphicon-remove"
-                                      style="color: red" aria-hidden="true"></span>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding-right: 1em">
-                            {% trans 'Adviser can manage jury members'%}
-                        </td>
-                        <td>
-                            {% if offer_proposition.adviser_can_suggest_reader %}
-                                <span class="glyphicon glyphicon-ok"
-                                      style="color: green" aria-hidden="true"></span>
-                            {% else %}
-                                <span class="glyphicon glyphicon-remove"
-                                      style="color: red" aria-hidden="true"></span>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding-right: 1em">
-                            {% trans 'First year evaluation'%}
-                        </td>
-                        <td>
-                            {% if offer_proposition.evaluation_first_year %}
-                                <span class="glyphicon glyphicon-ok"
-                                      style="color: green" aria-hidden="true"></span>
-                            {% else %}
-                                <span class="glyphicon glyphicon-remove"
-                                      style="color: red" aria-hidden="true"></span>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding-right: 1em">
-                            {% trans 'Validation commission exists'%}
-                        </td>
-                        <td>
-                            {% if offer_proposition.validation_commission_exists %}
-                                <span class="glyphicon glyphicon-ok"
-                                      style="color: green" aria-hidden="true"></span>
-                            {% else %}
-                                <span class="glyphicon glyphicon-remove"
-                                      style="color: red" aria-hidden="true"></span>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding-right: 1em">
-                            {% trans 'Send an email to reading commission when acceptation of evaluation commission'%}
-                        </td>
-                        <td>
-                            {% if offer_proposition.global_email_to_commission %}
-                                <span class="glyphicon glyphicon-ok"
-                                      style="color: green" aria-hidden="true"></span>
-                            {% else %}
-                                <span class="glyphicon glyphicon-remove"
-                                      style="color: red" aria-hidden="true"></span>
-                            {% endif %}
-                        </td>
-                    </tr>
-                </table>
-            </td>
-          </tr>
-        {% endfor %}
-        </tbody>
+                  <td>
+                      <table>
+                          <tr>
+                              <td style="padding-right: 1em">
+                                  {% trans 'Students can manage readers'%}
+                              </td>
+                              <td>
+                                  {% if offer_proposition.student_can_manage_readers %}
+                                  <span class="glyphicon glyphicon-ok"
+                                        style="color: green" aria-hidden="true"></span>
+                                  {% else %}
+                                  <span class="glyphicon glyphicon-remove"
+                                        style="color: red" aria-hidden="true"></span>
+                                  {% endif %}
+                              </td>
+                          </tr>
+                          <tr>
+                              <td style="padding-right: 1em">
+                                  {% trans 'Adviser can manage jury members'%}
+                              </td>
+                              <td>
+                                  {% if offer_proposition.adviser_can_suggest_reader %}
+                                  <span class="glyphicon glyphicon-ok"
+                                        style="color: green" aria-hidden="true"></span>
+                                  {% else %}
+                                  <span class="glyphicon glyphicon-remove"
+                                        style="color: red" aria-hidden="true"></span>
+                                  {% endif %}
+                              </td>
+                          </tr>
+                          <tr>
+                              <td style="padding-right: 1em">
+                                  {% trans 'First year evaluation'%}
+                              </td>
+                              <td>
+                                  {% if offer_proposition.evaluation_first_year %}
+                                  <span class="glyphicon glyphicon-ok"
+                                        style="color: green" aria-hidden="true"></span>
+                                  {% else %}
+                                  <span class="glyphicon glyphicon-remove"
+                                        style="color: red" aria-hidden="true"></span>
+                                  {% endif %}
+                              </td>
+                          </tr>
+                          <tr>
+                              <td style="padding-right: 1em">
+                                  {% trans 'Validation commission exists'%}
+                              </td>
+                              <td>
+                                  {% if offer_proposition.validation_commission_exists %}
+                                  <span class="glyphicon glyphicon-ok"
+                                        style="color: green" aria-hidden="true"></span>
+                                  {% else %}
+                                  <span class="glyphicon glyphicon-remove"
+                                        style="color: red" aria-hidden="true"></span>
+                                  {% endif %}
+                              </td>
+                          </tr>
+                          <tr>
+                              <td style="padding-right: 1em">
+                                  {% trans 'Send an email to reading commission when acceptation of evaluation commission'%}
+                              </td>
+                              <td>
+                                  {% if offer_proposition.global_email_to_commission %}
+                                  <span class="glyphicon glyphicon-ok"
+                                        style="color: green" aria-hidden="true"></span>
+                                  {% else %}
+                                  <span class="glyphicon glyphicon-remove"
+                                        style="color: red" aria-hidden="true"></span>
+                                  {% endif %}
+                              </td>
+                          </tr>
+                      </table>
+                  </td>
+              </tr>
+              {% endfor %}
+              </tbody>
       </table>
+      <button type="submit"
+                     id="multiple_selection" class="btn btn-primary pull-left"
+                     role="button" title="{% trans 'Multiple modification'%}" disabled>
+                     <span class="glyphicon glyphicon-wrench"
+                     aria-hidden="true"></span> {% trans 'Modify selected programs'%}</button>
+      </form>
     </div>
+{% endblock %}
+{% block script %}
+<script type="text/javascript" src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
+<script>
+$(function() {
+    var count = 0;
+    $('input[type="checkbox"]').click(function() {
+
+        if($(this).is(':checked')) {
+            count +=1;
+            if (count > 0) {
+               $("#multiple_selection").removeAttr('disabled');
+            }
+        } else {
+            count -=1;
+            if (count == 0) {
+               $("#multiple_selection").attr('disabled', 'disabled');
+            }
+        }
+    });
+});
+</script>
 {% endblock %}
