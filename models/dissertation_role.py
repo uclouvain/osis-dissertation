@@ -177,17 +177,6 @@ def find_all_promotor_by_dissertation(dissert):
     return search_by_dissertation_and_role(dissert, 'PROMOTEUR')
 
 
-def get_tab_count_role_by_offer(list_roles):
-    tab = {}
-    for role in list_roles:
-        if role.dissertation.offer_year_start.offer in tab:
-            tab[role.dissertation.offer_year_start.offer] += 1
-        else:
-            tab[role.dissertation.offer_year_start.offer] = 1
-
-    return tab
-
-
 def get_tab_count_role_by_education_group(list_roles):
     tab = {}
     for role in list_roles:

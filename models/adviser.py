@@ -23,15 +23,17 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
-from dissertation.models.enums import dissertation_role_status
-from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from base.models import person
+from base.models.education_group import EducationGroup
 from dissertation.models import dissertation_role
+from dissertation.models.dissertation import Dissertation
+from dissertation.models.dissertation_role import DissertationRole
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
 class AdviserAdmin(SerializableModelAdmin):
@@ -52,6 +54,8 @@ class Adviser(SerializableModel):
     available_by_phone = models.BooleanField(default=False)
     available_at_office = models.BooleanField(default=False)
     comment = models.TextField(default='', blank=True)
+    education_groups = models.ManyToManyField(EducationGroup, through="FacultyAdviser", related_name="advisers")
+    dissertations = models.ManyToManyField(Dissertation, through=DissertationRole, related_name='advisers')
 
     def __str__(self):
         first_name = ""
@@ -102,7 +106,7 @@ class Adviser(SerializableModel):
                      Q(dissertation__status='DEFENDED'))
 
         list_stat[2] = advisers_copro.count()
-        tab_offer_count_copro = dissertation_role.get_tab_count_role_by_offer(advisers_copro)
+        tab_offer_count_copro = dissertation_role.get_tab_count_role_by_education_group(advisers_copro)
 
         advisers_reader = queryset.filter(Q(adviser=self) &
                                           Q(status='READER') &
@@ -112,7 +116,7 @@ class Adviser(SerializableModel):
                      Q(dissertation__status='DEFENDED'))
 
         list_stat[3] = advisers_reader.count()
-        tab_offer_count_read = dissertation_role.get_tab_count_role_by_offer(advisers_reader)
+        tab_offer_count_read = dissertation_role.get_tab_count_role_by_education_group(advisers_reader)
 
         advisers_pro = queryset.filter(status='PROMOTEUR') \
             .filter(Q(dissertation__active=True)) \
@@ -120,7 +124,7 @@ class Adviser(SerializableModel):
                      Q(dissertation__status='ENDED') |
                      Q(dissertation__status='DEFENDED'))
 
-        tab_offer_count_pro = dissertation_role.get_tab_count_role_by_offer(advisers_pro)
+        tab_offer_count_pro = dissertation_role.get_tab_count_role_by_education_group(advisers_pro)
 
         return list_stat, tab_offer_count_read, tab_offer_count_copro, tab_offer_count_pro
 
