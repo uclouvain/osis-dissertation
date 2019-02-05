@@ -29,37 +29,38 @@ from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import available_attrs
 
-from base import models as mdl
-from base.models import person
-from dissertation.models import dissertation_role, adviser, faculty_adviser
 from dissertation.models.dissertation import Dissertation
+from dissertation.models.dissertation_role import DissertationRole
 from dissertation.models.enums import dissertation_role_status
 
 
 def user_is_dissertation_promotor(user, dissert):
-    pers = person.find_by_user(user)
-    this_adviser = adviser.search_by_person(pers)
-    return dissertation_role.find_by_dissertation(dissert). \
+    this_adviser = user.person.adviser
+    return DissertationRole.objects.filter(dissertation=dissert). \
         filter(status=dissertation_role_status.PROMOTEUR).filter(adviser=this_adviser).exists()
 
 
 def adviser_can_manage(dissert, advis):
-    offers_of_adviser = faculty_adviser.search_by_adviser(advis)
-    return (dissert.offer_year_start.offer in offers_of_adviser) and advis.type == 'MGR'
+   return advis.facultyadviser_set.filter(
+       education_group=dissert.education_group_year_start.education_group
+   ).exists() and advis.type == 'MGR'
 
 
 def adviser_is_in_jury(user, pk):
     dissert = get_object_or_404(Dissertation, pk=pk)
-    perso = mdl.person.find_by_user(user)
-    advis = adviser.search_by_person(perso)
-    return dissertation_role.count_by_adviser_dissertation(advis, dissert) > 0
+    if user.person.adviser:
+        return DissertationRole.objects.filter(dissertation=dissert).filter(user.person.adviser).count() > 0
+    else:
+        return False
 
 
 def autorized_dissert_promotor_or_manager(user, pk):
-    dissert = get_object_or_404(Dissertation, pk=pk)
-    perso = mdl.person.find_by_user(user)
-    advis = adviser.search_by_person(perso)
-    return user_is_dissertation_promotor(user, dissert) or adviser_can_manage(dissert, advis)
+    dissert = get_object_or_404(Dissertation.objects.select_related('education_group_year_start__education_group').
+                                prefetch_related('advisers'), pk=pk)
+    if user.person.adviser:
+        return user_is_dissertation_promotor(user, dissert) or adviser_can_manage(dissert, user.person.adviser)
+    else:
+        return False
 
 
 def check_for_dissert(test_func):

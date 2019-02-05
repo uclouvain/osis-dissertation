@@ -23,11 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from dissertation.utils.request import find_adviser_list_json
 from django.conf.urls import url
+
+from dissertation.utils import request
+from dissertation.utils.request import find_adviser_list_json
 from dissertation.views import dissertation, proposition_dissertation, information, offer_proposition, \
     upload_dissertation_file, upload_proposition_file
-from dissertation.utils import request
 
 urlpatterns = [
     url(r'^$', dissertation.dissertations, name='dissertations'),
@@ -41,8 +42,6 @@ urlpatterns = [
         name='dissertations_list'),
     url(r'^dissertations_role_delete/(?P<pk>[0-9]+)$', dissertation.dissertations_role_delete,
         name='dissertations_role_delete'),
-    url(r'^dissertations_search$', dissertation.dissertations_search,
-        name='dissertations_search'),
     url(r'^dissertations_to_dir_ko/(?P<pk>[0-9]+)$', dissertation.dissertations_to_dir_ko,
         name='dissertations_to_dir_ko'),
     url(r'^dissertations_to_dir_ok/(?P<pk>[0-9]+)$', dissertation.dissertations_to_dir_ok,

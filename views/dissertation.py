@@ -51,6 +51,7 @@ from dissertation.models import adviser, dissertation, dissertation_document_fil
     dissertation_update, faculty_adviser, offer_proposition, proposition_dissertation, proposition_role
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_role import DissertationRole, MAX_DISSERTATION_ROLE_FOR_ONE_DISSERTATION
+from dissertation.models.dissertation_update import DissertationUpdate
 from dissertation.models.enums import dissertation_role_status
 from dissertation.models.enums import dissertation_status
 from dissertation.models.enums.dissertation_status import DISSERTATION_STATUS
@@ -203,15 +204,13 @@ def manager_dissertations_detail(request, pk):
 @user_passes_test(adviser.is_manager)
 @check_for_dissert(autorized_dissert_promotor_or_manager)
 def manager_dissertations_detail_updates(request, pk):
-    dissert = dissertation.find_by_id(pk)
-    person = mdl.person.find_by_user(request.user)
-    adv = adviser.search_by_person(person)
-    dissertation_updates = dissertation_update.search_by_dissertation(dissert)
-
-    return layout.render(request, 'manager_dissertations_detail_updates.html',
-                         {'dissertation': dissert,
-                          'adviser': adv,
-                          'dissertation_updates': dissertation_updates})
+    dissert = get_object_or_404(Dissertation, pk=pk)
+    dissertation_updates = DissertationUpdate.objects.filter(dissertation=dissert).order_by('created').\
+        select_related('person', 'dissertation')
+    return render(request, 'manager_dissertations_detail_updates.html',
+                  {'dissertation': dissert,
+                   'adviser': adviser,
+                   'dissertation_updates': dissertation_updates})
 
 
 @login_required
@@ -784,7 +783,7 @@ def dissertations_list(request):
         'dissertation__status',
         'dissertation__author__person__last_name',
         'dissertation__author__person__first_name'
-        )
+    )
     adviser_list_dissertations = dissert_role.filter(status=dissertation_role_status.PROMOTEUR)
     adviser_list_dissertations_copro = dissert_role.filter(status=dissertation_role_status.CO_PROMOTEUR)
     adviser_list_dissertations_reader = dissert_role.filter(status=dissertation_role_status.READER)
@@ -792,17 +791,6 @@ def dissertations_list(request):
     adviser_list_dissertations_internship = dissert_role.filter(status=dissertation_role_status.INTERNSHIP)
     adviser_list_dissertations_president = dissert_role.filter(status=dissertation_role_status.PRESIDENT)
     return render(request, "dissertations_list.html", locals())
-
-
-@login_required
-@user_passes_test(adviser.is_teacher)
-def dissertations_search(request):
-    person = mdl.person.find_by_user(request.user)
-    adv = adviser.search_by_person(person)
-    disserts = dissertation.search_by_proposition_author(terms=request.GET['search'],
-                                                         active=True,
-                                                         proposition_author=adv)
-    return layout.render(request, "dissertations_list.html", {'dissertations': disserts})
 
 
 def teacher_can_see_dissertation(adv, dissert):
@@ -853,16 +841,14 @@ def dissertations_detail_updates(request, pk):
     dissert = dissertation.find_by_id(pk)
     person = mdl.person.find_by_user(request.user)
     adv = adviser.search_by_person(person)
-    dissertation_updates = dissertation_update.search_by_dissertation(dissert)
-    return layout.render(
-        request,
-        'dissertations_detail_updates.html',
-        {
-            'dissertation': dissert,
-            'adviser': adv,
-            'dissertation_updates': dissertation_updates
-        }
-    )
+    dissertation_updates = DissertationUpdate.objects.filter(dissertation=dissert).\
+        order_by('created').select_related('person')
+    return render(request,'dissertations_detail_updates.html',
+                  {'dissertation': dissert,
+                   'adviser': adv,
+                   'dissertation_updates': dissertation_updates
+                   }
+                  )
 
 
 @login_required
