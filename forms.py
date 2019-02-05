@@ -25,14 +25,18 @@
 ##############################################################################
 from django import forms
 from django.forms import ModelForm
+from django.utils import timezone
+
 from base import models as mdl
+from base.models.education_group_year import EducationGroupYear
+from base.models.student import Student
 from dissertation.models.adviser import Adviser
 from dissertation.models.dissertation import Dissertation
+from dissertation.models.dissertation_role import DissertationRole
+from dissertation.models.dissertation_update import DissertationUpdate
 from dissertation.models.offer_proposition import OfferProposition
 from dissertation.models.proposition_dissertation import PropositionDissertation
 from dissertation.models.proposition_role import PropositionRole
-from dissertation.models.dissertation_role import DissertationRole
-from dissertation.models.dissertation_update import DissertationUpdate
 
 
 class AdviserForm(ModelForm):
@@ -100,6 +104,29 @@ class ManagerDissertationForm(ModelForm):
 
 
 class ManagerDissertationEditForm(ModelForm):
+
+    def __init__(self, data, *args, **kwargs):
+        user = kwargs.pop("user")
+        super().__init__(data, *args, **kwargs)
+        now = timezone.now()
+        self.fields["proposition_dissertation"].queryset = PropositionDissertation.objects.filter(
+            active=True,
+            visibility=True,
+            offer_propositions__start_visibility_proposition__lte=now,
+            offer_propositions__end_visibility_proposition__gte=now,
+            offer_propositions__education_group__advisers__person__user=user
+        ).select_related("author__person")
+        self.fields["author"].queryset = Student.objects.filter(
+            offerenrollment__education_group_year__education_group__advisers__person__user=user
+        ).order_by(
+            'person__last_name', 'person__first_name'
+        ).select_related("person").distinct()
+        self.fields["education_group_year_start"].queryset = EducationGroupYear.objects.filter(
+            education_group__advisers__person__user=user
+        ).select_related("academic_year")
+        self.fields["education_group_year_start"].required = True
+        self.fields['defend_periode'].required = True
+
     class Meta:
         model = Dissertation
         fields = ('title', 'author', 'education_group_year_start', 'proposition_dissertation', 'description',

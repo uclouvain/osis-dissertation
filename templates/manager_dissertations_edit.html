@@ -44,26 +44,10 @@
       <form method="POST" class="post-form">
         {% csrf_token %}
         <div class="form-group">
-            <label for="txt_author" {% if form.author.errors %} style="color:red;" {% endif %}>
-                {% trans 'Author' %}
-                {% for error in form.author.errors %}
-                    <br>{{ error|escape }}
-                {% endfor %}
-            </label>
-            <select class="form-control" id="txt_author"  name="author" style="margin:-6px;">
-                <option value={{ form.author }}
-            </select>
+            {% bootstrap_field form.author %}
         </div>
         <div class="form-group">
-            <div class="panel-group" {% if form.title.errors %} style="color:red;" {% endif %}>
-                <label for="txt_title" style="margin-left:-6px;">
-                    {% trans 'Title' %}
-                    {% for error in form.title.errors %}
-                        <br>{{ error|escape }}
-                    {% endfor %}
-                </label>
-                <input class="form-control" id="txt_title"  name="title" style="margin:-6px;" value="{{ form.title.value | default_if_none:'' }}">
-            </div>
+            {% bootstrap_field form.title %}
         </div>
         <div class="row">
             <div class="col-md-6 form-group" {% if form.education_group_year_start.errors %} style="color:red;" {% endif %}>
@@ -73,63 +57,22 @@
             </div>
 
             <div class="col-md-6">
-                <div class="panel-group" {% if form.proposition_dissertation.errors %} style="color:red;" {% endif %}>
-                    <label for="txt_proposition_dissertation" style="margin-left:-6px;">
-                        {% trans 'Dissertation subject' %}
-                        {% for error in form.proposition_dissertation.errors %}
-                            <br>{{ error|escape }}
-                        {% endfor %}
-                    </label>
-                    <select class="form-control" id="txt_proposition_dissertation"  name="proposition_dissertation" style="margin:-6px;">
-                        <option value={{ form.proposition_dissertation }}
-                    </select>
-                </div>
+                {% bootstrap_field  form.proposition_dissertation %}
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
-                <div class="panel-group" {% if form.defend_periode.errors %} style="color:red;" {% endif %}>
-                    <label for="txt_defend_periode" style="margin-left:-6px;">
-                        {% trans 'Defense period' %}
-                        {% for error in form.defend_periode.errors %}
-                            <br>{{ error|escape }}
-                        {% endfor %}
-                    </label>
-                    <select class="form-control" id="txt_defend_periode"  name="defend_periode" style="margin:-6px;">
-                        {% for defend_periode in defend_periode_choices %}
-                            <option value="{{ defend_periode.0 }}" {% if form.defend_periode.value == defend_periode.0 %}selected{% endif %}>{{ defend_periode.1}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+                {% bootstrap_field form.defend_periode %}
             </div>
             <div class="col-md-6">
-                <div class="panel-group" {% if form.defend_year.errors %} style="color:red;" {% endif %}>
-                    <label for="txt_defend_year" style="margin-left:-6px;">
-                        {% trans 'Defense year' %}
-                        {% for error in form.defend_year.errors %}
-                            <br>{{ error|escape }}
-                        {% endfor %}
-                    </label>
-                    <input class="form-control" id="txt_defend_year"  name="defend_year" style="margin:-6px;" value="{{ form.defend_year.value | default_if_none:'' }}">
-                </div>
+                {% bootstrap_field form.defend_year %}
             </div>
         </div>
         <div class="form-group">
-            <label for="txt_location" {% if form.location.errors %} style="color:red;" {% endif %}>
-                {% trans 'Dissertation location' %}
-                {% for error in form.location.errors %}
-                    <br>{{ error|escape }}
-                {% endfor %}
-            </label>
-            <select class="form-control" id="txt_location"  name="location" style="margin:-6px;">
-                <option value={{ form.location }}
-            </select>
+            {% bootstrap_field form.location %}
         </div>
         <div class="form-group {% if field.errors %}error{% endif %}">
-            <div class="panel-group">
-                <label for="txt_description" style="margin-left:-6px;">{% trans 'Description' %}</label>
-                <textarea class="form-control" id="txt_description"  name="description" rows="10" style="margin:-6px;">{{ form.description.value | default_if_none:''}}</textarea>
-            </div>
+            {% bootstrap_field form.description %}
         </div>
         <div style="text-align:right">
             <button type="submit" class="save btn btn-primary" onclick="return confirm('{% trans 'You are ready to save this dissertation. Continue ?' %}')">

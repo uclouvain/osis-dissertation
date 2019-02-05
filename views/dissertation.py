@@ -27,7 +27,6 @@ import json
 import time
 
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.core.exceptions import ValidationError
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.shortcuts import redirect
@@ -41,12 +40,12 @@ from rest_framework import status
 
 from base import models as mdl
 from base.models import academic_year
-from base.models.education_group_year import EducationGroupYear
 from base.views import layout
 from dissertation.forms import ManagerDissertationEditForm, ManagerDissertationRoleForm, \
     ManagerDissertationUpdateForm, AdviserForm
 from dissertation.models import adviser, dissertation, dissertation_document_file, dissertation_role, \
     dissertation_update, faculty_adviser, offer_proposition, proposition_dissertation, proposition_role
+from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_role import DissertationRole, MAX_DISSERTATION_ROLE_FOR_ONE_DISSERTATION
 from dissertation.models.enums import dissertation_role_status
 from dissertation.models.enums import dissertation_status
@@ -214,55 +213,16 @@ def manager_dissertations_detail_updates(request, pk):
 @user_passes_test(adviser.is_manager)
 @check_for_dissert(autorized_dissert_promotor_or_manager)
 def manager_dissertations_edit(request, pk):
-    dissert = dissertation.find_by_id(pk)
-    person = mdl.person.find_by_user(request.user)
-    adv = adviser.search_by_person(person)
-    education_groups = faculty_adviser.find_education_groups_by_adviser(adv)
-    education_groups_years = EducationGroupYear.objects.filter(education_group__in=education_groups)
-
-    if request.method == "POST":
-        form = ManagerDissertationEditForm(request.POST, instance=dissert)
-        try:
-            check_education_group_year = int(form['education_group_year_start'].value()) in \
-                                         list(education_groups_years.values_list('id', flat=True))
-        except ValidationError:
-            check_education_group_year = False
-            form.add_error(field='education_group_year_start', error='Value error: None')
-        except ValueError:
-            check_education_group_year = False
-            form.add_error(field='education_group_year_start', error='Empty Field')
-
-        if form.is_valid() and check_education_group_year:
-            dissert = form.save()
-            justification = _("manager has edited the dissertation")
-            dissertation_update.add(request, dissert, dissert.status, justification=justification)
-            return redirect('manager_dissertations_detail', pk=dissert.pk)
-        else:
-            form.fields["proposition_dissertation"].queryset = proposition_dissertation.find_by_education_groups(
-                education_groups)
-            form.fields["author"].queryset = mdl.student.Student.objects.filter(
-                offerenrollment__education_group_year__education_group__in=education_groups
-            ).order_by(
-                'person__last_name', 'person__first_name'
-            ).distinct()
-            form.fields["education_group_year_start"].queryset = education_groups_years
-    else:
-        form = ManagerDissertationEditForm(instance=dissert)
-        form.fields["proposition_dissertation"].queryset = proposition_dissertation.find_by_education_groups(
-            education_groups
-        )
-        form.fields["author"].queryset = mdl.student.Student.objects.filter(
-                offerenrollment__education_group_year__education_group__in=education_groups
-            ).order_by(
-                'person__last_name', 'person__first_name'
-            ).distinct()
-        form.fields["education_group_year_start"].queryset = mdl.education_group_year.EducationGroupYear.objects.filter(
-                education_group__in=education_groups)
-
+    dissert = get_object_or_404(Dissertation, pk=pk)
+    form = ManagerDissertationEditForm(request.POST or None, instance=dissert, user=request.user)
+    if form.is_valid():
+        dissert = form.save()
+        justification = _("manager has edited the dissertation")
+        dissertation_update.add(request, dissert, dissert.status, justification=justification)
+        return redirect('manager_dissertations_detail', pk=dissert.pk)
     return render(request, 'manager_dissertations_edit.html',
                   {'form': form,
-                   'dissert': dissert,
-                   'defend_periode_choices': dissertation.DEFEND_PERIODE_CHOICES})
+                   'dissert': dissert})
 
 
 @login_required

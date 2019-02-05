@@ -29,8 +29,7 @@ from django.db import models
 from base.models import education_group
 from base.models import offer
 from base.models import offer_year
-from base.models.education_group import EducationGroup
-from . import adviser
+from dissertation.models.adviser import Adviser
 
 
 class FacultyAdviserAdmin(admin.ModelAdmin):
@@ -43,7 +42,7 @@ class FacultyAdviserAdmin(admin.ModelAdmin):
 
 
 class FacultyAdviser(models.Model):
-    adviser = models.ForeignKey(adviser.Adviser)
+    adviser = models.ForeignKey(Adviser)
     offer = models.ForeignKey(offer.Offer)
     education_group = models.ForeignKey(education_group.EducationGroup, null=True, blank=True, on_delete=models.PROTECT)
 
@@ -68,3 +67,4 @@ class FacultyAdviser(models.Model):
 def find_education_groups_by_adviser(a_adviser):
     return FacultyAdviser.objects.filter(adviser=a_adviser).select_related('education_group').\
         values_list('education_group', flat=True)
+

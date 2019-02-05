@@ -24,6 +24,9 @@
 #
 ##############################################################################
 from django.core.exceptions import ObjectDoesNotExist
+
+from dissertation.models.offer_proposition import OfferProposition
+from dissertation.models.proposition_offer import PropositionOffer
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from django.db import models
 from django.db.models import Q
@@ -70,19 +73,19 @@ class PropositionDissertation(SerializableModel):
     visibility = models.BooleanField(default=True)
     active = models.BooleanField(default=True)
     created_date = models.DateTimeField(default=timezone.now)
+    offer_propositions = models.ManyToManyField(
+        OfferProposition,
+        through=PropositionOffer,
+        verbose_name=_('Links to offer_propositions'),
+        related_name='offer_propositions'
+    )
 
     def __str__(self):
-        first_name = ""
-        middle_name = ""
-        last_name = ""
-        if self.author.person.first_name:
-            first_name = self.author.person.first_name
-        if self.author.person.middle_name:
-            middle_name = self.author.person.middle_name
-        if self.author.person.last_name:
-            last_name = self.author.person.last_name + ","
-        author = u"%s %s %s" % (last_name.upper(), first_name, middle_name)
-        return "%s - %s" % (author, str(self.title))
+        first_name = self.author.person.first_name or ""
+        middle_name = self.author.person.middle_name or ""
+        last_name = self.author.person.last_name or ""
+        author = "%s, %s %s" % (last_name.upper(), first_name, middle_name)
+        return "%s - %s" % (author, self.title)
 
     def deactivate(self):
         self.active = False
