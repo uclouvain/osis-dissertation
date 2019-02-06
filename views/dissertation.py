@@ -614,7 +614,7 @@ def manager_dissertations_accept_eval_list(request, pk):
 @user_passes_test(adviser.is_manager)
 @check_for_dissert(autorized_dissert_promotor_or_manager)
 def manager_dissertations_to_dir_ko(request, pk):
-    dissert = dissertation.find_by_id(pk)
+    dissert = get_object_or_404(Dissertation.objects.select_related('author__person'), pk=pk)
     old_status = dissert.status
     new_status_display_result = new_status_display(dissert, "refuse")
     if request.method == "POST":
@@ -627,9 +627,8 @@ def manager_dissertations_to_dir_ko(request, pk):
             return redirect('manager_dissertations_detail', pk=pk)
     else:
         form = ManagerDissertationUpdateForm()
-
-    return layout.render(request, 'manager_dissertations_add_justification.html',
-                         {'form': form, 'dissert': dissert, 'new_status_display': new_status_display_result})
+    return render(request, 'manager_dissertations_add_justification.html',
+                  {'form': form, 'dissert': dissert, 'new_status_display': new_status_display_result})
 
 
 @login_required
@@ -872,7 +871,7 @@ def dissertations_detail_updates(request, pk):
 @user_passes_test(adviser.is_teacher)
 @check_for_dissert(autorized_dissert_promotor_or_manager)
 def dissertations_to_dir_ok(request, pk):
-    dissert = dissertation.find_by_id(pk)
+    dissert = get_object_or_404(Dissertation.objects.select_related('author__person'), pk=pk)
     old_status = dissert.status
     new_status_display_result = new_status_display(dissert, "accept")
     if request.method == "POST":
@@ -885,7 +884,7 @@ def dissertations_to_dir_ok(request, pk):
             return redirect('dissertations_detail', pk=pk)
     else:
         form = ManagerDissertationUpdateForm()
-    return layout.render(
+    return render(
         request,
         'dissertations_add_justification.html',
         {
@@ -900,7 +899,7 @@ def dissertations_to_dir_ok(request, pk):
 @user_passes_test(adviser.is_teacher)
 @check_for_dissert(autorized_dissert_promotor_or_manager)
 def dissertations_to_dir_ko(request, pk):
-    dissert = dissertation.find_by_id(pk)
+    dissert = get_object_or_404(Dissertation.objects.select_related('author__person'), pk=pk)
     old_status = dissert.status
     new_status_display_result = new_status_display(dissert, "refuse")
     if request.method == "POST":
