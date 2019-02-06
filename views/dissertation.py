@@ -856,7 +856,7 @@ def dissertations_detail(request, pk):
 @login_required
 @check_for_dissert(adviser_is_in_jury)
 def dissertations_detail_updates(request, pk):
-    dissert = get_object_or_404(Dissertation,pk=pk)
+    dissert = get_object_or_404(Dissertation, pk=pk)
     adv = request.user.person.adviser
     dissertation_updates = DissertationUpdate.objects.filter(dissertation=dissert).\
         order_by('created').select_related('person')
