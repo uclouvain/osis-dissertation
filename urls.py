@@ -123,7 +123,7 @@ urlpatterns = [
         name='manager_informations_list_request'),
 
     url(r'^manager_offer_parameters/$', offer_proposition.manager_offer_parameters, name='manager_offer_parameters'),
-    url(r'^manager_offer_parameters/(?P<pk>[0-9]+)/edit/$', offer_proposition.manager_offer_parameters_edit,
+    url(r'^manager_offer_parameters/edit/$', offer_proposition.manager_offer_parameters_edit,
         name='manager_offer_parameters_edit'),
 
     url(r'^manager_proposition_dissertations/$', proposition_dissertation.manager_proposition_dissertations,
@@ -176,6 +176,7 @@ urlpatterns = [
     url(r'^proposition_dissertations_role_delete/(?P<pk>[0-9]+)$',
         proposition_dissertation.proposition_dissertations_role_delete,
         name='proposition_dissertations_role_delete'),
+
     url(r'^students_list_in_offer_year/([0-9]+)/$', request.get_students_list_in_offer_year, name='students_list'),
 
     url(r'^upload/proposition_download/(?P<proposition_pk>[0-9]+)$', upload_proposition_file.download, name='proposition_download'),

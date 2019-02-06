@@ -24,19 +24,20 @@
 #
 ##############################################################################
 
-from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
+from django.shortcuts import redirect, get_list_or_404, render
+
 from base import models as mdl
+from base.views.common import display_error_messages
+from dissertation.forms import ManagerOfferPropositionForm
 from dissertation.models import adviser
 from dissertation.models import faculty_adviser
 from dissertation.models import offer_proposition
-from dissertation.forms import ManagerOfferPropositionForm
-from django.contrib.auth.decorators import user_passes_test
-from base.views import layout
-
 ###########################
 #      MANAGER VIEWS      #
 ###########################
+from dissertation.models.offer_proposition import OfferProposition
 
 
 @login_required
@@ -46,22 +47,32 @@ def manager_offer_parameters(request):
     adv = adviser.search_by_person(person)
     education_groups = faculty_adviser.find_education_groups_by_adviser(adv)
     offer_props = offer_proposition.search_by_education_group(education_groups)
-    return layout.render(request, 'manager_offer_parameters.html', {'offer_propositions': offer_props})
+    return render(request, 'manager_offer_parameters.html', {'offer_propositions': offer_props})
 
 
 @login_required
 @user_passes_test(adviser.is_manager)
-def manager_offer_parameters_edit(request, pk):
-    offer_prop = offer_proposition.find_by_id(pk)
-    if offer_prop is None:
-        return redirect('dissertations')
-    if request.method == "POST":
-        form = ManagerOfferPropositionForm(request.POST, instance=offer_prop)
-        if form.is_valid():
+def manager_offer_parameters_edit(request):
+    list_offer_prop = get_list_or_404(OfferProposition, pk__in=request.GET.getlist('pk'))
+    list_form_valid = []
+    forms = []
+    for offer_prop in list_offer_prop:
+        form = ManagerOfferPropositionForm(request.POST or None, instance=offer_prop)
+        forms.append(form)
+        list_form_valid.append(form.is_valid())
+        if form.errors:
+            errors = form.non_field_errors().as_ul()
+            display_error_messages(request, errors, extra_tags='safe')
+            return render(request, "manager_offer_parameters_edit.html", {
+                'list_offer_proposition': list_offer_prop,
+                'form': forms[0]
+            })
+
+    if all(list_form_valid):
+        for form in forms:
             form.save()
-            return redirect('manager_offer_parameters')
-    else:
-        form = ManagerOfferPropositionForm(instance=offer_prop)
-    return layout.render(request, "manager_offer_parameters_edit.html",
-                         {'offer_proposition': offer_prop,
-                          'form': form})
+        return redirect('manager_offer_parameters')
+    return render(request, "manager_offer_parameters_edit.html", {
+        'list_offer_proposition': list_offer_prop,
+        'form': forms[0]
+    })

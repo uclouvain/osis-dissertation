@@ -48,7 +48,7 @@ from base.views import layout
 from dissertation.forms import ManagerDissertationEditForm, ManagerDissertationRoleForm, \
     ManagerDissertationUpdateForm, AdviserForm
 from dissertation.models import adviser, dissertation, dissertation_document_file, dissertation_role, \
-    dissertation_update, faculty_adviser, offer_proposition, proposition_dissertation, proposition_role
+    dissertation_update, offer_proposition, proposition_role
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_document_file import DissertationDocumentFile
 from dissertation.models.dissertation_role import DissertationRole, MAX_DISSERTATION_ROLE_FOR_ONE_DISSERTATION
@@ -139,11 +139,11 @@ def manager_dissertations_detail(request, pk):
     filename = files[-1].document_file.file_name if files else ""
 
     if count_proposition_role == 0 and count_dissertation_role == 0:
-        justification = "%s %s %s" % (_("Auto add jury"),
-                                      dissertation_role_status.PROMOTEUR,
-                                      str(dissert.proposition_dissertation.author))
-        dissertation_update.add(request, dissert, dissert.status, justification=justification)
-        dissertation_role.add(dissertation_role_status.PROMOTEUR, dissert.proposition_dissertation.author, dissert)
+            justification = "%s %s %s" % (_("Auto add jury"),
+                                          dissertation_role_status.PROMOTEUR,
+                                          str(dissert.proposition_dissertation.author))
+            dissertation_update.add(request, dissert, dissert.status, justification=justification)
+            dissertation_role.add(dissertation_role_status.PROMOTEUR, dissert.proposition_dissertation.author, dissert)
     elif count_dissertation_role == 0:
         for role in proposition_roles:
             justification = "%s %s %s" % (_("Auto add jury"), role.status, str(role.adviser))
@@ -153,7 +153,7 @@ def manager_dissertations_detail(request, pk):
     if dissert.status == dissertation_status.DRAFT:
         jury_manager_visibility = True
         jury_manager_can_edit = False
-        jury_manager_message = _("Dissertation status is draft, managers can't edit jury.")
+        jury_manager_message =  _("Dissertation status is draft, managers can't edit jury.")
         jury_teacher_visibility = False
         jury_teacher_can_edit = False
         jury_teacher_message = _("Dissertation status is draft, teachers can't edit jury.")
@@ -217,45 +217,16 @@ def manager_dissertations_detail_updates(request, pk):
 @user_passes_test(adviser.is_manager)
 @check_for_dissert(autorized_dissert_promotor_or_manager)
 def manager_dissertations_edit(request, pk):
-    dissert = dissertation.find_by_id(pk)
-    person = mdl.person.find_by_user(request.user)
-    adv = adviser.search_by_person(person)
-    education_groups = faculty_adviser.find_education_groups_by_adviser(adv)
-    if request.method == "POST":
-        form = ManagerDissertationEditForm(request.POST, instance=dissert)
-        if form.is_valid():
-            dissert = form.save()
-            justification = _("manager has edited the dissertation")
-            dissertation_update.add(request, dissert, dissert.status, justification=justification)
-            return redirect('manager_dissertations_detail', pk=dissert.pk)
-        else:
-            form.fields["proposition_dissertation"].queryset = proposition_dissertation.find_by_education_groups(
-                education_groups)
-            form.fields["author"].queryset = mdl.student.Student.objects.filter(
-                offerenrollment__education_group_year__education_group__in=education_groups
-            ).order_by(
-                'person__last_name', 'person__first_name'
-            ).distinct()
-            form.fields["education_group_year_start"].queryset = \
-                mdl.education_group_year.EducationGroupYear.objects.filter(education_group__in=education_groups)
-    else:
-        form = ManagerDissertationEditForm(instance=dissert)
-        form.fields["proposition_dissertation"].queryset = proposition_dissertation.find_by_education_groups(
-            education_groups
-        )
-        form.fields["author"].queryset = mdl.student.Student.objects.filter(
-            offerenrollment__education_group_year__education_group__in=education_groups
-        ).order_by(
-            'person__last_name', 'person__first_name'
-        ).distinct()
-        form.fields["education_group_year_start"].queryset = mdl.education_group_year.EducationGroupYear.objects.filter(
-            education_group__in=education_groups)
-
-    return layout.render(
-        request, 'manager_dissertations_edit.html',
-        {'form': form,
-         'dissert': dissert,
-         'defend_periode_choices': dissertation.DEFEND_PERIODE_CHOICES})
+    dissert = get_object_or_404(Dissertation, pk=pk)
+    form = ManagerDissertationEditForm(request.POST or None, instance=dissert, user=request.user)
+    if form.is_valid():
+        dissert = form.save()
+        justification = _("manager has edited the dissertation")
+        dissertation_update.add(request, dissert, dissert.status, justification=justification)
+        return redirect('manager_dissertations_detail', pk=dissert.pk)
+    return render(request, 'manager_dissertations_edit.html',
+                  {'form': form,
+                   'dissert': dissert})
 
 
 @login_required
@@ -308,7 +279,7 @@ def manager_dissertations_jury_new(request, pk):
 def manager_dissertations_jury_new_ajax(request):
     pk_dissert = request.POST.get("pk_dissertation", '')
     status_choice = request.POST.get("status_choice", '')
-    id_adviser_of_dissert_role = request.POST.get("adviser_pk", '')
+    id_adviser_of_dissert_role=request.POST.get("adviser_pk", '')
     if not id_adviser_of_dissert_role or not status_choice or not pk_dissert:
         return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)
     else:
@@ -439,16 +410,16 @@ def manager_dissertations_search(request):
     academic_year_search = request.GET.get('academic_year', '')
     status_search = request.GET.get('status_search', '')
 
-    if offer_prop_search != '':
-        offer_prop_search = int(offer_prop_search)
-        offer_prop = offer_proposition.find_by_id(offer_prop_search)
+    if offer_prop_search!='':
+        offer_prop_search=int(offer_prop_search)
+        offer_prop=offer_proposition.find_by_id(offer_prop_search)
         disserts = disserts.filter(education_group_year_start__education_group=offer_prop.education_group)
-    if academic_year_search != '':
+    if academic_year_search!='':
         academic_year_search = int(academic_year_search)
         disserts = disserts.filter(
             education_group_year_start__academic_year=academic_year.find_academic_year_by_id(academic_year_search)
         )
-    if status_search != '':
+    if status_search!='':
         disserts = disserts.filter(status=status_search)
     offer_props = OfferProposition.objects.filter(
         education_group__facultyadviser__adviser__person__user=request.user).distinct()
@@ -465,16 +436,16 @@ def manager_dissertations_search(request):
         return response
 
     else:
-        return layout.render(request, "manager_dissertations_list.html",
-                             {'dissertations': disserts,
-                              'show_validation_commission': show_validation_commission,
-                              'show_evaluation_first_year': show_evaluation_first_year,
-                              'academic_year_10y': academic_year_10y,
-                              'offer_props': offer_props,
-                              'offer_prop_search': offer_prop_search,
-                              'academic_year_search': academic_year_search,
-                              'status_search': status_search
-                              })
+        return render(request, "manager_dissertations_list.html",
+                      {'dissertations': disserts,
+                       'show_validation_commission': show_validation_commission,
+                       'show_evaluation_first_year': show_evaluation_first_year,
+                       'academic_year_10y': academic_year_10y,
+                       'offer_props': offer_props,
+                       'offer_prop_search': offer_prop_search,
+                       'academic_year_search': academic_year_search,
+                       'status_search': status_search
+                       })
 
 
 @login_required

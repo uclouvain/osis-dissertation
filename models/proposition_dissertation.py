@@ -81,17 +81,11 @@ class PropositionDissertation(SerializableModel):
     )
 
     def __str__(self):
-        first_name = ""
-        middle_name = ""
-        last_name = ""
-        if self.author.person.first_name:
-            first_name = self.author.person.first_name
-        if self.author.person.middle_name:
-            middle_name = self.author.person.middle_name
-        if self.author.person.last_name:
-            last_name = self.author.person.last_name + ","
-        author = u"%s %s %s" % (last_name.upper(), first_name, middle_name)
-        return "%s - %s" % (author, str(self.title))
+        first_name = self.author.person.first_name or ""
+        middle_name = self.author.person.middle_name or ""
+        last_name = self.author.person.last_name or ""
+        author = "%s, %s %s" % (last_name.upper(), first_name, middle_name)
+        return "%s - %s" % (author, self.title)
 
     def deactivate(self):
         self.active = False

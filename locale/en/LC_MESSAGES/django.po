@@ -169,6 +169,9 @@ msgstr ""
 msgid "Empirical research"
 msgstr ""
 
+msgid "End date must be greater than the start date"
+msgstr ""
+
 #: models/proposition_dissertation.py:45
 msgid "Theoretical analysis"
 msgstr ""
@@ -421,6 +424,9 @@ msgstr ""
 #: templates/manager_offer_parameters_edit.html:34
 #: templates/manager_offer_parameters_edit.html:39
 msgid "Settings"
+msgstr ""
+
+msgid "Settings for"
 msgstr ""
 
 #: templates/dissertations.html:128
@@ -1985,6 +1991,12 @@ msgstr ""
 
 #: views/dissertation.py:495 views/dissertation.py:519
 msgid "Manager deleted jury"
+msgstr ""
+
+msgid "Modify selected programs"
+msgstr ""
+
+msgid "Multiple modification"
 msgstr ""
 
 #: views/dissertation.py:923
