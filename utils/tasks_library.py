@@ -4,8 +4,6 @@ from dateutil.relativedelta import relativedelta
 
 from dissertation.models.offer_proposition import OfferProposition
 
-YEAR = 1
-
 
 def offer_proposition_extend_dates():
     all_offer_propositions = OfferProposition.objects.all()
