@@ -30,7 +30,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Count, OuterRef, Subquery, Q, Prefetch
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from openpyxl import Workbook
 from openpyxl.writer.excel import save_virtual_workbook
 
@@ -43,7 +43,7 @@ from dissertation.forms import PropositionDissertationForm, ManagerPropositionDi
 from dissertation.models import adviser, offer_proposition, proposition_dissertation, \
     proposition_document_file, proposition_offer, proposition_role, offer_proposition_group
 from dissertation.models import dissertation
-from dissertation.models.enums import dissertation_status
+from dissertation.models.enums import dissertation_status, dissertation_role_status
 from dissertation.models.offer_proposition import OfferProposition
 from dissertation.models.proposition_dissertation import PropositionDissertation
 from dissertation.models.proposition_offer import PropositionOffer
@@ -100,7 +100,7 @@ def manager_proposition_dissertations(request):
         "offer_propositions",
         queryset=OfferProposition.objects.annotate(last_acronym=Subquery(
             EducationGroupYear.objects.filter(
-                education_group__offerproposition=OuterRef('pk'),
+                education_group__offer_proposition=OuterRef('pk'),
                 academic_year=current_academic_year).values('acronym')[:1]
         ))
     )
@@ -143,12 +143,10 @@ def manager_proposition_dissertation_delete(request, pk):
 @login_required
 @user_passes_test(adviser.is_manager)
 def manager_proposition_dissertation_detail(request, pk):
-    proposition = proposition_dissertation.find_by_id(pk)
-    if proposition is None:
-        return redirect('manager_proposition_dissertations')
-    offer_propositions = proposition_offer.find_by_proposition_dissertation(proposition)
-    person = mdl.person.find_by_user(request.user)
-    adv = adviser.search_by_person(person)
+    proposition = get_object_or_404(PropositionDissertation.objects.select_related('author__person', 'creator').
+                                    prefetch_related('offer_propositions__education_group__educationgroupyear_set',
+                                                     'propositionrole_set__adviser__person'), pk=pk)
+    adv = request.user.person.adviser
     count_use = dissertation.count_by_proposition(proposition)
     percent = count_use * 100 / proposition.max_number_student if proposition.max_number_student else 0
     count_proposition_role = proposition_role.count_by_proposition(proposition)
@@ -157,29 +155,26 @@ def manager_proposition_dissertation_detail(request, pk):
     for file in files:
         filename = file.document_file.file_name
     if count_proposition_role < 1:
-        proposition_role.add('PROMOTEUR', proposition.author, proposition)
-    proposition_roles = proposition_role.search_by_proposition(proposition)
-    return layout.render(request, 'manager_proposition_dissertation_detail.html',
-                         {'proposition_dissertation': proposition,
-                          'offer_propositions': offer_propositions,
-                          'adviser': adv,
-                          'count_use': count_use,
-                          'percent': round(percent, 2),
-                          'proposition_roles': proposition_roles,
-                          'count_proposition_role': count_proposition_role,
-                          'filename': filename})
+        proposition_role.add(dissertation_role_status.PROMOTEUR, proposition.author, proposition)
+    return render(request, 'manager_proposition_dissertation_detail.html',
+                  {'proposition_dissertation': proposition,
+                   'adviser': adv,
+                   'count_use': count_use,
+                   'percent': round(percent, 2),
+                   'count_proposition_role': count_proposition_role,
+                   'filename': filename})
 
 
 @login_required
 @user_passes_test(adviser.is_manager)
 def manage_proposition_dissertation_edit(request, pk):
-    proposition = proposition_dissertation.find_by_id(pk)
-    if proposition is None:
-        return redirect('manager_proposition_dissertations')
-    offer_propositions = offer_proposition.find_all_ordered_by_acronym()
+    proposition = get_object_or_404(PropositionDissertation.objects.select_related('author__person', 'creator').
+                                    prefetch_related('offer_propositions__education_group__educationgroupyear_set',
+                                                     'propositionrole_set__adviser__person'), pk=pk)
+    offer_propositions = OfferProposition.objects.select_related('offer_proposition_group').order_by('acronym')
     offer_propositions_group = offer_proposition_group.find_all_ordered_by_name_short()
     offer_propositions_error = None
-    proposition_offers = proposition_offer.find_by_proposition_dissertation(proposition)
+    proposition_offers = proposition.propositionoffer_set.all()
     if request.method == "POST":
         form = ManagerPropositionDissertationEditForm(request.POST, instance=proposition)
         if is_valid(request, form):
@@ -190,17 +185,16 @@ def manage_proposition_dissertation_edit(request, pk):
             proposition_offers = None
     else:
         form = ManagerPropositionDissertationEditForm(instance=proposition)
-    return layout.render(request, 'manager_proposition_dissertation_edit.html',
-                         {'prop_dissert': proposition,
-                          'form': form,
-                          'author': proposition.author,
-                          'types_choices': PropositionDissertation.TYPES_CHOICES,
-                          'levels_choices': PropositionDissertation.LEVELS_CHOICES,
-                          'collaborations_choices': PropositionDissertation.COLLABORATION_CHOICES,
-                          'offer_propositions': offer_propositions,
-                          'offer_propositions_error': offer_propositions_error,
-                          'proposition_offers': proposition_offers,
-                          'offer_proposition_group': offer_propositions_group})
+    return render(request, 'manager_proposition_dissertation_edit.html',
+                  {'prop_dissert': proposition,
+                   'form': form,
+                   'author': proposition.author,
+                   'types_choices': PropositionDissertation.TYPES_CHOICES,
+                   'levels_choices': PropositionDissertation.LEVELS_CHOICES,
+                   'collaborations_choices': PropositionDissertation.COLLABORATION_CHOICES,
+                   'offer_propositions': offer_propositions,
+                   'offer_propositions_error': offer_propositions_error,
+                   'offer_proposition_group': offer_propositions_group})
 
 
 @login_required
@@ -290,7 +284,7 @@ def manager_proposition_dissertations_search(request):
         "offer_propositions",
         queryset=OfferProposition.objects.annotate(last_acronym=Subquery(
             EducationGroupYear.objects.filter(
-                education_group__offerproposition=OuterRef('pk'),
+                education_group__offer_proposition=OuterRef('pk'),
                 academic_year=current_academic_year).values('acronym')[:1]
         ))
     )
@@ -309,12 +303,12 @@ def manager_proposition_dissertations_search(request):
             Q(author__person__last_name__icontains=terms) |
             Q(propositionoffer__offer_proposition__acronym__icontains=terms)).annotate(
         dissertations_count=Count(
-        'dissertations',
-        filter=Q(
-            active=True,
-            education_group_year_start__academic_year=current_academic_year
-        ) & ~Q(status__in=(dissertation_status.DRAFT, dissertation_status.DIR_KO))
-    )).select_related('author__person', 'creator').prefetch_related(prefetch_propositions)
+            'dissertations',
+            filter=Q(
+                active=True,
+                education_group_year_start__academic_year=current_academic_year
+            ) & ~Q(status__in=(dissertation_status.DRAFT, dissertation_status.DIR_KO))
+        )).select_related('author__person', 'creator').prefetch_related(prefetch_propositions)
 
     if 'bt_xlsx' in request.GET:
         filename = "EXPORT_propositions_{}.xlsx".format(time.strftime("%Y-%m-%d_%H:%M"))
@@ -366,9 +360,23 @@ def get_current_adviser(request):
 @login_required
 @user_passes_test(adviser.is_teacher)
 def proposition_dissertations(request):
-    propositions_dissertations = proposition_dissertation.get_all_for_teacher(get_current_adviser(request))
-    return layout.render(request, 'proposition_dissertations_list.html',
-                         {'propositions_dissertations': propositions_dissertations})
+    current_academic_year = academic_year.starting_academic_year()
+    prefetch_propositions = Prefetch(
+        "offer_propositions",
+        queryset=OfferProposition.objects.annotate(last_acronym=Subquery(
+            EducationGroupYear.objects.filter(
+                education_group__offer_proposition=OuterRef('pk'),
+                academic_year=current_academic_year).values('acronym')[:1]
+        ))
+    )
+    propositions_dissertations = PropositionDissertation.objects.filter(
+        active=True,
+        visibility=True,
+    ).select_related('author__person', 'creator').prefetch_related(prefetch_propositions)
+    return render(request,
+                  'manager_proposition_dissertations_list.html',
+                  {'propositions_dissertations': propositions_dissertations}
+                  )
 
 
 @login_required

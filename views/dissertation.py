@@ -43,12 +43,14 @@ from base import models as mdl
 from base.models import academic_year
 from base.models.academic_year import AcademicYear
 from base.models.education_group import EducationGroup
+from base.models.person import Person
 from base.models.student import Student
 from base.views import layout
 from dissertation.forms import ManagerDissertationEditForm, ManagerDissertationRoleForm, \
     ManagerDissertationUpdateForm, AdviserForm
 from dissertation.models import adviser, dissertation, dissertation_document_file, dissertation_role, \
     dissertation_update, offer_proposition, proposition_role
+from dissertation.models.adviser import Adviser
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_document_file import DissertationDocumentFile
 from dissertation.models.dissertation_role import DissertationRole, MAX_DISSERTATION_ROLE_FOR_ONE_DISSERTATION
@@ -79,7 +81,7 @@ def new_status_display(dissert, opperation):
 
 @login_required
 def dissertations(request):
-    person = mdl.person.find_by_user(request.user)
+    person = get_object_or_404(Person.objects.select_related('adviser'), pk=request.user.person.pk)
 
     if mdl.student.find_by_person(person) and not \
             mdl.tutor.find_by_person(person) and not \
@@ -87,32 +89,34 @@ def dissertations(request):
         return redirect('home')
 
     elif adviser.find_by_person(person):
-        adv = adviser.search_by_person(person)
-        count_advisers_pro_request = dissertation_role.count_by_adviser(adv, 'PROMOTEUR', 'DIR_SUBMIT')
+        count_advisers_pro_request = dissertation_role.count_by_adviser(person.adviser,
+                                                                        dissertation_role_status.PROMOTEUR,
+                                                                        dissertation_status.DIR_SUBMIT)
 
-        return layout.render(request, "dissertations.html",
+        return render(request, "dissertations.html",
                              {'section': 'dissertations',
                               'person': person,
-                              'adviser': adv,
+                              'adviser': person.adviser,
                               'count_advisers_pro_request': count_advisers_pro_request})
     else:
-        if request.method == "POST":
-            form = AdviserForm(request.POST)
-            if form.is_valid():
-                adv = adviser.Adviser(person=person, available_by_email=False, available_by_phone=False,
-                                      available_at_office=False)
-                adv.save()
-                adv = adviser.search_by_person(person)
-                count_advisers_pro_request = dissertation_role.count_by_adviser(adv, 'PROMOTEUR', 'DIR_SUBMIT')
 
-                return layout.render(request, "dissertations.html",
-                                     {'section': 'dissertations',
-                                      'person': person,
-                                      'adviser': adv,
-                                      'count_advisers_pro_request': count_advisers_pro_request})
+        form = AdviserForm(request.POST or None)
+        if form.is_valid():
+            adv = Adviser(person=person,
+                          available_by_email=False,
+                          available_by_phone=False,
+                          available_at_office=False)
+            adv.save()
+            count_advisers_pro_request = dissertation_role.count_by_adviser(adv,
+                                                                            dissertation_role_status.PROMOTEUR,
+                                                                            dissertation_status.DIR_SUBMIT)
+            return render(request, "dissertations.html",
+                          {'section': 'dissertations',
+                           'person': person,
+                           'adviser': adv,
+                           'count_advisers_pro_request': count_advisers_pro_request})
         else:
-            form = AdviserForm()
-            return layout.render(request, 'dissertations_welcome.html', {'form': form})
+            return render(request, 'dissertations_welcome.html', {'form': form})
 
 
 ###########################
@@ -686,7 +690,7 @@ def manager_dissertation_role_list_json(request, pk):
 @user_passes_test(adviser.is_manager)
 def manager_dissertations_wait_eval_list(request):
     education_groups = EducationGroup.objects.filter(facultyadviser__adviser__person__user=request.user)
-    offer_props = offer_proposition.search_by_education_group(education_groups)
+    offer_props = OfferProposition.objects.filter(education_group__in=education_groups).distinct()
     show_validation_commission = offer_proposition.show_validation_commission(offer_props)
     show_evaluation_first_year = offer_proposition.show_evaluation_first_year(offer_props)
     disserts = Dissertation.objects.filter(

@@ -32,6 +32,8 @@ from base.models.education_group import EducationGroup
 from base.models.utils.utils import get_object_or_none
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_role import DissertationRole
+from dissertation.models.proposition_dissertation import PropositionDissertation
+from dissertation.models.proposition_role import PropositionRole
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
@@ -55,6 +57,9 @@ class Adviser(SerializableModel):
     comment = models.TextField(default='', blank=True)
     education_groups = models.ManyToManyField(EducationGroup, through="FacultyAdviser", related_name="advisers")
     dissertations = models.ManyToManyField(Dissertation, through=DissertationRole, related_name='advisers')
+    proposition_dissertation = models.ManyToManyField(PropositionDissertation,
+                                                      through=PropositionRole,
+                                                      related_name='advisers')
 
     def __str__(self):
         first_name = ""
