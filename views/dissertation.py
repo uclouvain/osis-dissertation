@@ -129,7 +129,7 @@ def manager_dissertations_detail(request, pk):
     if offer_prop is None:
         return redirect('manager_dissertations_list')
     files = dissertation_document_file.find_by_dissertation(dissert)
-    filename = files[-1].document_file.file_name if files else ""
+    filename = files.last().document_file.file_name if files else ""
 
     if count_proposition_role == 0 and count_dissertation_role == 0:
             justification = "%s %s %s" % (_("Auto add jury"),
@@ -146,7 +146,7 @@ def manager_dissertations_detail(request, pk):
     if dissert.status == dissertation_status.DRAFT:
         jury_manager_visibility = True
         jury_manager_can_edit = False
-        jury_manager_message =  _("Dissertation status is draft, managers can't edit jury.")
+        jury_manager_message = _("Dissertation status is draft, managers can't edit jury.")
         jury_teacher_visibility = False
         jury_teacher_can_edit = False
         jury_teacher_message = _("Dissertation status is draft, teachers can't edit jury.")

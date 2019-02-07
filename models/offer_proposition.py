@@ -116,6 +116,15 @@ def get_by_offer(an_offer):
     return offer_proposition
 
 
+def get_by_education_group(education_group):
+    try:
+        offer_proposition = OfferProposition.objects.get(education_group=education_group)
+    except ObjectDoesNotExist:
+        offer_proposition = None
+
+    return offer_proposition
+
+
 def search_by_offer(offers):
     return OfferProposition.objects.filter(offer__in=offers) \
         .distinct() \
@@ -139,7 +148,7 @@ def show_evaluation_first_year(offer_props):
 
 
 def get_by_dissertation(dissert):
-    return get_by_offer(dissert.offer_year_start.offer)
+    return get_by_education_group(dissert.education_group_year_start.education_group)
 
 
 def find_by_id(offer_proposition_id):

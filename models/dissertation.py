@@ -126,7 +126,8 @@ class Dissertation(SerializableModel):
         elif self.status == dissertation_status.COM_SUBMIT or self.status == dissertation_status.COM_KO:
             next_status = get_next_status(self, "accept")
             emails_dissert.send_email(self, 'dissertation_accepted_by_com', [self.author])
-            if offer_proposition.get_by_offer(self.offer_year_start.offer).global_email_to_commission is True:
+            if offer_proposition.get_by_education_group(self.education_group_year_start.education_group)\
+                    .global_email_to_commission is True:
                 emails_dissert.send_email_to_jury_members(self)
             self.set_status(next_status)
         elif self.status == dissertation_status.EVA_SUBMIT or \
@@ -208,7 +209,7 @@ def get_next_status(dissert, operation):
 
     elif operation == "accept":
 
-        offer_prop = offer_proposition.get_by_offer(dissert.offer_year_start.offer)
+        offer_prop = offer_proposition.get_by_education_group(dissert.education_group_year_start.education_group)
 
         if offer_prop is None:
             return dissert.status
