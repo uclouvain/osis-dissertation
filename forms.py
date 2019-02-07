@@ -115,7 +115,7 @@ class ManagerDissertationEditForm(ModelForm):
             offer_propositions__start_visibility_proposition__lte=now,
             offer_propositions__end_visibility_proposition__gte=now,
             offer_propositions__education_group__advisers__person__user=user
-        ).select_related("author__person")
+        ).select_related("author__person").distinct()
         self.fields["author"].queryset = Student.objects.filter(
             offerenrollment__education_group_year__education_group__advisers__person__user=user
         ).order_by(
