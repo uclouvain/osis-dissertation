@@ -43,6 +43,7 @@ from dissertation.forms import PropositionDissertationForm, ManagerPropositionDi
 from dissertation.models import adviser, offer_proposition, proposition_dissertation, \
     proposition_document_file, proposition_offer, proposition_role, offer_proposition_group
 from dissertation.models import dissertation
+from dissertation.models.dissertation import Dissertation
 from dissertation.models.enums import dissertation_status, dissertation_role_status
 from dissertation.models.offer_proposition import OfferProposition
 from dissertation.models.proposition_dissertation import PropositionDissertation
@@ -392,11 +393,25 @@ def proposition_dissertation_delete(request, pk):
 @login_required
 @user_passes_test(adviser.is_teacher)
 def proposition_dissertation_detail(request, pk):
-    proposition = proposition_dissertation.find_by_id(pk)
-    if proposition is None:
-        return redirect('proposition_dissertations')
-    offer_propositions = proposition_offer.find_by_proposition_dissertation(proposition)
-    count_use = dissertation.count_by_proposition(proposition)
+    current_academic_year = academic_year.starting_academic_year()
+    prefetch_propositions = Prefetch(
+        "offer_propositions",
+        queryset=OfferProposition.objects.annotate(last_acronym=Subquery(
+            EducationGroupYear.objects.filter(
+                education_group__offer_proposition=OuterRef('pk'),
+                academic_year=current_academic_year).values('acronym')[:1]
+        ))
+    )
+    prefetch_disserts = Prefetch("dissertations", queryset=Dissertation.objects.filter(active=True) \
+        .filter(education_group_year_start__academic_year=current_academic_year) \
+        .exclude(status=dissertation_status.DRAFT) \
+        .exclude(status=dissertation_status.DIR_KO))
+
+    proposition = get_object_or_404(
+        PropositionDissertation.objects.select_related('author__person', 'creator')
+        .prefetch_related(prefetch_propositions, prefetch_disserts), pk=pk)
+    offer_propositions = proposition.propositionoffer_set.all
+    count_use = proposition.dissertations.all().count()
     percent = count_use * 100 / proposition.max_number_student if proposition.max_number_student else 0
     count_proposition_role = proposition_role.count_by_proposition(proposition)
     files = proposition_document_file.find_by_proposition(proposition)
