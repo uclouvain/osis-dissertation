@@ -409,27 +409,28 @@ def proposition_dissertation_detail(request, pk):
 
     proposition = get_object_or_404(
         PropositionDissertation.objects.select_related('author__person', 'creator')
-        .prefetch_related(prefetch_propositions, prefetch_disserts), pk=pk)
+        .prefetch_related(prefetch_propositions, prefetch_disserts, 'propositionrole_set__adviser__person'), pk=pk)
     offer_propositions = proposition.propositionoffer_set.all
     count_use = proposition.dissertations.all().count()
     percent = count_use * 100 / proposition.max_number_student if proposition.max_number_student else 0
-    count_proposition_role = proposition_role.count_by_proposition(proposition)
+    count_proposition_role = proposition.propositionrole_set.all().count()
     files = proposition_document_file.find_by_proposition(proposition)
     filename = ""
     for file in files:
         filename = file.document_file.file_name
     if count_proposition_role < 1:
-        proposition_role.add('PROMOTEUR', proposition.author, proposition)
-    proposition_roles = proposition_role.search_by_proposition(proposition)
-    return layout.render(request, 'proposition_dissertation_detail.html',
-                         {'proposition_dissertation': proposition,
-                          'offer_propositions': offer_propositions,
-                          'adviser': get_current_adviser(request),
-                          'count_use': count_use,
-                          'percent': round(percent, 2),
-                          'proposition_roles': proposition_roles,
-                          'count_proposition_role': count_proposition_role,
-                          'filename': filename})
+        proposition_role.add(dissertation_role_status.PROMOTEUR, proposition.author, proposition)
+    proposition_roles = PropositionRole.objects.filter(proposition_dissertation=proposition)\
+        .select_related('adviser__person')
+    return render(request, 'proposition_dissertation_detail.html',
+                  {'proposition_dissertation': proposition,
+                   'offer_propositions': offer_propositions,
+                   'adviser': get_current_adviser(request),
+                   'count_use': count_use,
+                   'percent': round(percent, 2),
+                   'proposition_roles': proposition_roles,
+                   'count_proposition_role': count_proposition_role,
+                   'filename': filename})
 
 
 @login_required
@@ -472,9 +473,21 @@ def proposition_dissertation_edit(request, pk):
 @login_required
 @user_passes_test(adviser.is_teacher)
 def my_dissertation_propositions(request):
-    propositions_dissertations = proposition_dissertation.get_mine_for_teacher(get_current_adviser(request))
-    return layout.render(request, 'proposition_dissertations_list_my.html',
-                         {'propositions_dissertations': propositions_dissertations})
+    current_academic_year = academic_year.starting_academic_year()
+    prefetch_propositions = Prefetch(
+        "offer_propositions",
+        queryset=OfferProposition.objects.annotate(last_acronym=Subquery(
+            EducationGroupYear.objects.filter(
+                education_group__offer_proposition=OuterRef('pk'),
+                academic_year=current_academic_year).values('acronym')[:1]
+        ))
+    )
+    propositions_dissertations = PropositionDissertation.objects.filter(
+        active=True,
+        author=request.user.person.adviser
+    ).select_related('author__person', 'creator').prefetch_related(prefetch_propositions)
+    return render(request, 'proposition_dissertations_list_my.html',
+                  {'propositions_dissertations': propositions_dissertations})
 
 
 @login_required
