@@ -183,7 +183,6 @@ def manage_proposition_dissertation_edit(request, pk):
             return redirect('manager_proposition_dissertation_detail', pk=proposition.pk)
         if not detect_in_request(request, 'txt_checkbox_', 'on'):
             offer_propositions_error = 'select_at_least_one_item'
-            proposition_offers = None
     else:
         form = ManagerPropositionDissertationEditForm(instance=proposition)
     return render(request, 'manager_proposition_dissertation_edit.html',
@@ -297,12 +296,12 @@ def manager_proposition_dissertations_search(request):
         offer_propositions__end_visibility_proposition__gte=now,
         offer_propositions__education_group__facultyadviser__adviser__person__user=request.user
     ).filter(
-            Q(title__icontains=terms) |
-            Q(description__icontains=terms) |
-            Q(author__person__first_name__icontains=terms) |
-            Q(author__person__middle_name__icontains=terms) |
-            Q(author__person__last_name__icontains=terms) |
-            Q(propositionoffer__offer_proposition__acronym__icontains=terms)).annotate(
+        Q(title__icontains=terms) |
+        Q(description__icontains=terms) |
+        Q(author__person__first_name__icontains=terms) |
+        Q(author__person__middle_name__icontains=terms) |
+        Q(author__person__last_name__icontains=terms) |
+        Q(propositionoffer__offer_proposition__acronym__icontains=terms)).annotate(
         dissertations_count=Count(
             'dissertations',
             filter=Q(
@@ -347,6 +346,7 @@ def manager_proposition_dissertations_search(request):
     else:
         return layout.render(request, "manager_proposition_dissertations_list.html",
                              {'propositions_dissertations': propositions_dissertations})
+
 
 ###########################
 #      TEACHER VIEWS      #
@@ -402,14 +402,22 @@ def proposition_dissertation_detail(request, pk):
                 academic_year=current_academic_year).values('acronym')[:1]
         ))
     )
-    prefetch_disserts = Prefetch("dissertations", queryset=Dissertation.objects.filter(active=True) \
-        .filter(education_group_year_start__academic_year=current_academic_year) \
-        .exclude(status=dissertation_status.DRAFT) \
-        .exclude(status=dissertation_status.DIR_KO))
+    prefetch_disserts = Prefetch(
+        "dissertations",
+        queryset=Dissertation.objects.filter(
+            active=True
+        ).filter(
+            education_group_year_start__academic_year=current_academic_year
+        ).exclude(status__in=(dissertation_status.DRAFT, dissertation_status.DIR_KO))
+    )
 
     proposition = get_object_or_404(
-        PropositionDissertation.objects.select_related('author__person', 'creator')
-        .prefetch_related(prefetch_propositions, prefetch_disserts, 'propositionrole_set__adviser__person'), pk=pk)
+        PropositionDissertation.objects.select_related(
+            'author__person', 'creator'
+        ).prefetch_related(
+            prefetch_propositions, prefetch_disserts, 'propositionrole_set__adviser__person'
+        ), pk=pk
+    )
     offer_propositions = proposition.propositionoffer_set.all
     count_use = proposition.dissertations.all().count()
     percent = count_use * 100 / proposition.max_number_student if proposition.max_number_student else 0
@@ -420,7 +428,7 @@ def proposition_dissertation_detail(request, pk):
         filename = file.document_file.file_name
     if count_proposition_role < 1:
         proposition_role.add(dissertation_role_status.PROMOTEUR, proposition.author, proposition)
-    proposition_roles = PropositionRole.objects.filter(proposition_dissertation=proposition)\
+    proposition_roles = PropositionRole.objects.filter(proposition_dissertation=proposition) \
         .select_related('adviser__person')
     return render(request, 'proposition_dissertation_detail.html',
                   {'proposition_dissertation': proposition,

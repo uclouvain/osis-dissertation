@@ -49,7 +49,6 @@ from dissertation.models.faculty_adviser import FacultyAdviser
 ###########################
 
 
-
 @login_required
 @user_passes_test(adviser.is_teacher)
 def informations(request):
@@ -183,7 +182,7 @@ def manager_informations(request):
                               dissertation_status.ENDED_WIN,
                               dissertation_status.ENDED_LOS,
                               dissertation_status.ENDED)
-    advisers = Adviser.objects.filter(type='PRF').select_related('person').\
+    advisers = Adviser.objects.filter(type='PRF').select_related('person'). \
         prefetch_related('dissertations'). \
         order_by(
         'person__last_name',
@@ -403,7 +402,7 @@ def manager_informations_list_request(request):
         'education_group',
         flat=True)
     advisers_need_request = Adviser.objects. \
-        select_related('person').prefetch_related('dissertations').filter(type='PRF', ).\
+        select_related('person').prefetch_related('dissertations').filter(type='PRF', ). \
         filter(Q(dissertations__active=True,
                  dissertations__status=dissertation_status.DIR_SUBMIT,
                  dissertations_roles__status=dissertation_role_status.PROMOTEUR,
@@ -411,15 +410,15 @@ def manager_informations_list_request(request):
                  )). \
         order_by('person__last_name', 'person__first_name') \
         .annotate(dissertations_count_need_to_respond_actif=models.Sum(
-            models.Case(
-                models.When(Q(
-                    dissertations__active=True,
-                    dissertations__status=dissertation_status.DIR_SUBMIT,
-                    dissertations_roles__status=dissertation_role_status.PROMOTEUR,
-                    dissertations__education_group_year_start__education_group__in=educ_groups_of_fac_manager
-                ), then=1), default=0,
-                output_field=models.IntegerField()
-            ))
+        models.Case(
+            models.When(Q(
+                dissertations__active=True,
+                dissertations__status=dissertation_status.DIR_SUBMIT,
+                dissertations_roles__status=dissertation_role_status.PROMOTEUR,
+                dissertations__education_group_year_start__education_group__in=educ_groups_of_fac_manager
+            ), then=1), default=0,
+            output_field=models.IntegerField()
+        ))
 
     )
     return layout.render(request, "manager_informations_list_request.html",
