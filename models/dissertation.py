@@ -129,7 +129,7 @@ class Dissertation(SerializableModel):
             next_status = get_next_status(self, "accept")
             emails_dissert.send_email(self, 'dissertation_accepted_by_com', [self.author])
             if get_object_or_none(OfferProposition, education_group=self.education_group_year_start.education_group)\
-                    .global_email_to_commission is True:
+                    .global_email_to_commission:
                 emails_dissert.send_email_to_jury_members(self)
             self.set_status(next_status)
         elif self.status == dissertation_status.EVA_SUBMIT or \
