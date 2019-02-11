@@ -25,16 +25,20 @@
 ##############################################################################
 
 import json
-from django.test import TestCase
+
 from django.core.urlresolvers import reverse
+from django.test import TestCase
 from django.utils.translation import ugettext_lazy as _
-from base.tests.factories.academic_year import AcademicYearFactory
+
+from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
 from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.offer import OfferFactory
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
 from base.tests.factories.student import StudentFactory
+from dissertation.models import adviser
+from dissertation.models import dissertation_role
 from dissertation.models.enums import dissertation_status
 from dissertation.tests.factories.adviser import AdviserManagerFactory, AdviserTeacherFactory
 from dissertation.tests.factories.dissertation import DissertationFactory
@@ -42,11 +46,9 @@ from dissertation.tests.factories.faculty_adviser import FacultyAdviserFactory
 from dissertation.tests.factories.offer_proposition import OfferPropositionFactory
 from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
 from dissertation.tests.factories.proposition_offer import PropositionOfferFactory
+from dissertation.views.dissertation import new_status_display
 from osis_common.models import message_history
 from osis_common.models import message_template
-from dissertation.models import adviser
-from dissertation.models import dissertation_role
-from dissertation.views.dissertation import new_status_display
 
 ERROR_405_BAD_REQUEST = 405
 ERROR_404_PAGE_NO_FOUND = 404

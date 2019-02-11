@@ -34,7 +34,7 @@ from base.models import academic_year
 from base.models import offer_year, student
 from base.models.education_group_year import EducationGroupYear
 from base.models.utils.utils import get_object_or_none
-from dissertation.models import offer_proposition, dissertation_location
+from dissertation.models import dissertation_location
 from dissertation.models.enums import dissertation_status
 from dissertation.models.offer_proposition import OfferProposition
 from dissertation.models.proposition_dissertation import PropositionDissertation
