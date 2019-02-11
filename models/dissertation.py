@@ -33,8 +33,10 @@ from django.utils.translation import ugettext_lazy as _
 from base.models import academic_year
 from base.models import offer_year, student
 from base.models.education_group_year import EducationGroupYear
-from dissertation.models import offer_proposition, dissertation_location
+from base.models.utils.utils import get_object_or_none
+from dissertation.models import dissertation_location
 from dissertation.models.enums import dissertation_status
+from dissertation.models.offer_proposition import OfferProposition
 from dissertation.models.proposition_dissertation import PropositionDissertation
 from dissertation.utils import emails_dissert
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
@@ -126,7 +128,8 @@ class Dissertation(SerializableModel):
         elif self.status == dissertation_status.COM_SUBMIT or self.status == dissertation_status.COM_KO:
             next_status = get_next_status(self, "accept")
             emails_dissert.send_email(self, 'dissertation_accepted_by_com', [self.author])
-            if offer_proposition.get_by_offer(self.offer_year_start.offer).global_email_to_commission is True:
+            if get_object_or_none(OfferProposition, education_group=self.education_group_year_start.education_group)\
+                    .global_email_to_commission:
                 emails_dissert.send_email_to_jury_members(self)
             self.set_status(next_status)
         elif self.status == dissertation_status.EVA_SUBMIT or \
@@ -208,7 +211,10 @@ def get_next_status(dissert, operation):
 
     elif operation == "accept":
 
-        offer_prop = offer_proposition.get_by_offer(dissert.offer_year_start.offer)
+        offer_prop = get_object_or_none(
+            OfferProposition,
+            education_group=dissert.education_group_year_start.education_group
+        )
 
         if offer_prop is None:
             return dissert.status
