@@ -26,7 +26,7 @@
 
 from django.test import TestCase
 import datetime
-from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
 from base.tests.factories.education_group import EducationGroupFactory
 
 from base.tests.factories.education_group_year import EducationGroupYearFactory

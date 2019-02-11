@@ -30,7 +30,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.utils.translation import ugettext_lazy as _
 
-from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
+from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.offer import OfferFactory
