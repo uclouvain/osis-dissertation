@@ -28,6 +28,7 @@ from django.test import TestCase
 import datetime
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.education_group import EducationGroupFactory
+
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
@@ -419,14 +420,12 @@ class DissertationModelTestCase(TestCase):
 
     def test_count_by_proposition(self):
         self.proposition_dissertation_x = PropositionDissertationFactory()
-        self.current_academic_yr = AcademicYearFactory(year=datetime.date.today().year,
-                                                       start_date=datetime.datetime(NOW.year, NOW.month, 1),
-                                                       end_date=datetime.datetime(NOW.year + 1, NOW.month, 28))
+        self.current_academic_year = create_current_academic_year()
         self.dissertation_active = DissertationFactory(
             active=True,
             status=dissertation_status.COM_SUBMIT,
             proposition_dissertation=self.proposition_dissertation_x,
-            education_group_year_start__academic_year=self.current_academic_yr
+            education_group_year_start__academic_year=self.current_academic_year
         )
         self.dissertation_false = DissertationFactory(active=False,
                                                       proposition_dissertation=self.proposition_dissertation_x)
