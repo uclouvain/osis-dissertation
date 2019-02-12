@@ -925,5 +925,4 @@ def dissertations_jury_new(request, pk):
                     'dissert': dissert,
                 }
             )
-
     return redirect('dissertations_detail', pk=dissert.pk)
