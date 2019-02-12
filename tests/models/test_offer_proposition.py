@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from dissertation.models.offer_proposition import OfferProposition
 from dissertation.models.offer_proposition import get_by_offer, get_by_dissertation, get_by_offer_proposition_group, find_by_id
@@ -53,14 +54,22 @@ class OfferPropositionTestCase(TestCase):
     def setUp(self):
         self.offer_proposition_with_good_dates = OfferPropositionFactory()
         self.offer_with_offer_proposition = OfferFactory()
+        self.education_group_with_offer_proposition = EducationGroupFactory()
         self.offer_without_offer_proposition = OfferFactory()
         self.offer_proposition_group = OfferPropositionGroupFactory()
         self.offer_proposition = OfferPropositionFactory(
             offer=self.offer_with_offer_proposition,
-            offer_proposition_group= self.offer_proposition_group
+            education_group=self.education_group_with_offer_proposition,
+            offer_proposition_group=self.offer_proposition_group
         )
         self.offer_year = OfferYearFactory(offer=self.offer_with_offer_proposition)
-        self.dissertation = DissertationFactory(offer_year_start=self.offer_year)
+        self.education_group_year = EducationGroupYearFactory(
+            education_group=self.education_group_with_offer_proposition
+        )
+        self.dissertation = DissertationFactory(
+            offer_year_start=self.offer_year,
+            education_group_year_start= self.education_group_year
+        )
 
     def test_offer_proposition_exist(self):
         OfferPropositionGroupFactory.create(name_short="PSP", name_long="Faculté de Psychologie")

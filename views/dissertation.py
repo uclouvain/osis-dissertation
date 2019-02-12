@@ -28,7 +28,7 @@ import time
 
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.shortcuts import redirect
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
@@ -45,6 +45,7 @@ from dissertation.forms import ManagerDissertationEditForm, ManagerDissertationR
     ManagerDissertationUpdateForm, AdviserForm
 from dissertation.models import adviser, dissertation, dissertation_document_file, dissertation_role, \
     dissertation_update, faculty_adviser, offer_proposition, proposition_dissertation, proposition_role
+from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_role import DissertationRole, MAX_DISSERTATION_ROLE_FOR_ONE_DISSERTATION
 from dissertation.models.enums import dissertation_role_status
 from dissertation.models.enums import dissertation_status
@@ -128,7 +129,7 @@ def manager_dissertations_detail(request, pk):
     if offer_prop is None:
         return redirect('manager_dissertations_list')
     files = dissertation_document_file.find_by_dissertation(dissert)
-    filename = files[-1].document_file.file_name if files else ""
+    filename = files.last().document_file.file_name if files else ""
 
     if count_proposition_role == 0 and count_dissertation_role == 0:
             justification = "%s %s %s" % (_("Auto add jury"),
@@ -145,7 +146,7 @@ def manager_dissertations_detail(request, pk):
     if dissert.status == dissertation_status.DRAFT:
         jury_manager_visibility = True
         jury_manager_can_edit = False
-        jury_manager_message =  _("Dissertation status is draft, managers can't edit jury.")
+        jury_manager_message = _("Dissertation status is draft, managers can't edit jury.")
         jury_teacher_visibility = False
         jury_teacher_can_edit = False
         jury_teacher_message = _("Dissertation status is draft, teachers can't edit jury.")
@@ -212,45 +213,16 @@ def manager_dissertations_detail_updates(request, pk):
 @user_passes_test(adviser.is_manager)
 @check_for_dissert(autorized_dissert_promotor_or_manager)
 def manager_dissertations_edit(request, pk):
-    dissert = dissertation.find_by_id(pk)
-    person = mdl.person.find_by_user(request.user)
-    adv = adviser.search_by_person(person)
-    education_groups = faculty_adviser.find_education_groups_by_adviser(adv)
-    if request.method == "POST":
-        form = ManagerDissertationEditForm(request.POST, instance=dissert)
-        if form.is_valid():
-            dissert = form.save()
-            justification = _("manager has edited the dissertation")
-            dissertation_update.add(request, dissert, dissert.status, justification=justification)
-            return redirect('manager_dissertations_detail', pk=dissert.pk)
-        else:
-            form.fields["proposition_dissertation"].queryset = proposition_dissertation.find_by_education_groups(
-                education_groups)
-            form.fields["author"].queryset = mdl.student.Student.objects.filter(
-                offerenrollment__education_group_year__education_group__in=education_groups
-            ).order_by(
-                'person__last_name', 'person__first_name'
-            ).distinct()
-            form.fields["education_group_year_start"].queryset = \
-                mdl.education_group_year.EducationGroupYear.objects.filter(education_group__in=education_groups)
-    else:
-        form = ManagerDissertationEditForm(instance=dissert)
-        form.fields["proposition_dissertation"].queryset = proposition_dissertation.find_by_education_groups(
-            education_groups
-        )
-        form.fields["author"].queryset = mdl.student.Student.objects.filter(
-                offerenrollment__education_group_year__education_group__in=education_groups
-            ).order_by(
-                'person__last_name', 'person__first_name'
-            ).distinct()
-        form.fields["education_group_year_start"].queryset = mdl.education_group_year.EducationGroupYear.objects.filter(
-                education_group__in=education_groups)
-
-    return layout.render(
-        request, 'manager_dissertations_edit.html',
-        {'form': form,
-         'dissert': dissert,
-         'defend_periode_choices': dissertation.DEFEND_PERIODE_CHOICES})
+    dissert = get_object_or_404(Dissertation, pk=pk)
+    form = ManagerDissertationEditForm(request.POST or None, instance=dissert, user=request.user)
+    if form.is_valid():
+        dissert = form.save()
+        justification = _("manager has edited the dissertation")
+        dissertation_update.add(request, dissert, dissert.status, justification=justification)
+        return redirect('manager_dissertations_detail', pk=dissert.pk)
+    return render(request, 'manager_dissertations_edit.html',
+                  {'form': form,
+                   'dissert': dissert})
 
 
 @login_required

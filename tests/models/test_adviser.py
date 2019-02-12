@@ -27,6 +27,8 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from base.models.person import Person
 from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.education_group import EducationGroupFactory
+from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
 from base.tests.factories.offer import OfferFactory
@@ -69,27 +71,25 @@ class UtilsTestCase(TestCase):
         self.teacher4 = AdviserTeacherFactory()
         a_person_student = PersonWithoutUserFactory(last_name="Durant")
         self.student = StudentFactory(person=a_person_student)
-        self.offer1 = OfferFactory(title="test_offer1")
-        self.offer2 = OfferFactory(title="test_offer2")
+        self.offer1 = EducationGroupFactory()
+        self.offer2 = EducationGroupFactory()
         self.academic_year1 = AcademicYearFactory()
         self.academic_year2 = AcademicYearFactory(year=self.academic_year1.year - 1)
-        self.offer_year_start1 = OfferYearFactory(acronym="test_offer1", offer=self.offer1,
-                                                  academic_year=self.academic_year1)
-        self.offer_year_start2 = OfferYearFactory(acronym="test_offer2", offer=self.offer2,
-                                                  academic_year=self.academic_year1)
-        self.offer_proposition1 = OfferPropositionFactory(offer=self.offer1,
+        self.offer_year_start1 = EducationGroupYearFactory(acronym="test_offer1", education_group=self.offer1,
+                                                           academic_year=self.academic_year1)
+        self.offer_proposition1 = OfferPropositionFactory(education_group=self.offer1,
                                                           global_email_to_commission=True,
                                                           evaluation_first_year=True)
-        self.offer_proposition2 = OfferPropositionFactory(offer=self.offer2, global_email_to_commission=False)
+        self.offer_proposition2 = OfferPropositionFactory(education_group=self.offer2, global_email_to_commission=False)
         self.proposition_dissertation = PropositionDissertationFactory(author=self.teacher,
                                                                        creator=self.a_person_teacher,
                                                                        title='Proposition 1212121'
                                                                        )
-        self.faculty_adviser1 = FacultyAdviserFactory(adviser=self.manager, offer=self.offer1)
-        self.faculty_adviser2 = FacultyAdviserFactory(adviser=self.manager, offer=self.offer2)
+        self.faculty_adviser1 = FacultyAdviserFactory(adviser=self.manager, education_group=self.offer1)
+        self.faculty_adviser2 = FacultyAdviserFactory(adviser=self.manager, education_group=self.offer2)
         self.dissertation1 = DissertationFactory(author=self.student,
                                                  title='Dissertation_test_email',
-                                                 offer_year_start=self.offer_year_start1,
+                                                 education_group_year_start=self.offer_year_start1,
                                                  proposition_dissertation=self.proposition_dissertation,
                                                  status='DIR_SUBMIT',
                                                  active=True,
