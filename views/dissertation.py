@@ -800,7 +800,7 @@ def manager_students_list(request):
     current_manager = adviser.search_by_person(mdl.person.find_by_user(request.user))
     offers = faculty_adviser.search_by_adviser(current_manager)
     offers_years = mdl.offer_year.find_by_offers_and_year(offers, mdl.academic_year.starting_academic_year())
-    offer_enroll = offer_enrollment.find_by_offers_years(offers_years).\
+    offer_enroll = offer_enrollment.OfferEnrollment.objects.filter(offer_year__in=offers_years).\
         select_related('student', 'offer_year').prefetch_related('student__dissertation_set')
 
     return layout.render(request, 'manager_students_list.html', {'offer_enrollements': offer_enroll})
