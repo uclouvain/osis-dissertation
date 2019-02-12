@@ -88,7 +88,7 @@
                   <td>
                       {% for prop_offer in proposition_dissertation.propositionoffer_set.all %}
                         <span class="label label-default" >
-                          {{ prop_offer.offer_proposition }}
+                          {{ prop_offer.last_acronym }}
                         </span>
                         &nbsp;
                       {% endfor %}

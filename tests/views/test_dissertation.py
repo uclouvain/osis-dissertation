@@ -92,9 +92,11 @@ class DissertationViewTestCase(TestCase):
                                                           global_email_to_commission=True,
                                                           evaluation_first_year=True,
                                                           education_group=self.education_group_year_start.education_group)
-        education_group_year1 = EducationGroupYearFactory(education_group=self.offer_proposition1.education_group)
+        education_group_year1 = EducationGroupYearFactory(acronym="test_offer1",
+                                                          education_group=self.offer_proposition1.education_group)
         self.offer_proposition2 = OfferPropositionFactory(offer=self.offer2, global_email_to_commission=False)
-        education_group_year2 = EducationGroupYearFactory(education_group=self.offer_proposition2.education_group)
+        education_group_year2 = EducationGroupYearFactory(acronym="test_offer2",
+                                                          education_group=self.offer_proposition2.education_group)
         self.proposition_dissertation = PropositionDissertationFactory(author=self.teacher,
                                                                        creator=a_person_teacher,
                                                                        title='Proposition 1212121'
@@ -109,7 +111,6 @@ class DissertationViewTestCase(TestCase):
                                                            dissertation_role__status='PROMOTEUR',
                                                            education_group_year_start=self.education_group_year_start,
                                                            )
-
 
         FacultyAdviserFactory(
             adviser=self.manager,

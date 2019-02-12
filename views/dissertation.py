@@ -310,7 +310,7 @@ def manager_dissertations_list(request):
         education_group_year_start__education_group__facultyadviser__adviser__person__user=request.user,
         active=True).select_related('author__person',
                                     'education_group_year_start__academic_year',
-                                    'proposition_dissertation__author__person')
+                                    'proposition_dissertation__author__person').distinct()
     offer_props = OfferProposition.objects.filter(
         education_group__facultyadviser__adviser__person__user=request.user).distinct()
     year = timezone.now().year
@@ -409,7 +409,7 @@ def manager_dissertations_search(request):
             Q(education_group_year_start__acronym__icontains=terms)
         ).select_related('author__person',
                          'education_group_year_start__academic_year',
-                         'proposition_dissertation__author__person')
+                         'proposition_dissertation__author__person').distinct()
     offer_prop_search = request.GET.get('offer_prop_search', '')
     academic_year_search = request.GET.get('academic_year', '')
     status_search = request.GET.get('status_search', '')
@@ -649,7 +649,7 @@ def manager_dissertations_wait_comm_jsonlist(request):
         active=True).select_related('author__person',
                                     'education_group_year_start__academic_year',
                                     'education_group_year_start__education_group',
-                                    'proposition_dissertation__author__person')
+                                    'proposition_dissertation__author__person').distinct()
     dissert_waiting_list_json = [
         {
             'pk': dissert.pk,
