@@ -94,10 +94,10 @@ def dissertations(request):
                                                                         dissertation_status.DIR_SUBMIT)
 
         return render(request, "dissertations.html",
-                             {'section': 'dissertations',
-                              'person': person,
-                              'adviser': person.adviser,
-                              'count_advisers_pro_request': count_advisers_pro_request})
+                      {'section': 'dissertations',
+                       'person': person,
+                       'adviser': person.adviser,
+                       'count_advisers_pro_request': count_advisers_pro_request})
     else:
 
         form = AdviserForm(request.POST or None)
@@ -143,11 +143,11 @@ def manager_dissertations_detail(request, pk):
     filename = files[-1].document_file.file_name if files else ""
 
     if count_proposition_role == 0 and count_dissertation_role == 0:
-            justification = "%s %s %s" % (_("Auto add jury"),
-                                          dissertation_role_status.PROMOTEUR,
-                                          str(dissert.proposition_dissertation.author))
-            dissertation_update.add(request, dissert, dissert.status, justification=justification)
-            dissertation_role.add(dissertation_role_status.PROMOTEUR, dissert.proposition_dissertation.author, dissert)
+        justification = "%s %s %s" % (_("Auto add jury"),
+                                      dissertation_role_status.PROMOTEUR,
+                                      str(dissert.proposition_dissertation.author))
+        dissertation_update.add(request, dissert, dissert.status, justification=justification)
+        dissertation_role.add(dissertation_role_status.PROMOTEUR, dissert.proposition_dissertation.author, dissert)
     elif count_dissertation_role == 0:
         for role in proposition_roles:
             justification = "%s %s %s" % (_("Auto add jury"), role.status, str(role.adviser))
@@ -157,7 +157,7 @@ def manager_dissertations_detail(request, pk):
     if dissert.status == dissertation_status.DRAFT:
         jury_manager_visibility = True
         jury_manager_can_edit = False
-        jury_manager_message =  _("Dissertation status is draft, managers can't edit jury.")
+        jury_manager_message = _("Dissertation status is draft, managers can't edit jury.")
         jury_teacher_visibility = False
         jury_teacher_can_edit = False
         jury_teacher_message = _("Dissertation status is draft, teachers can't edit jury.")
@@ -210,7 +210,7 @@ def manager_dissertations_detail(request, pk):
 @check_for_dissert(autorized_dissert_promotor_or_manager)
 def manager_dissertations_detail_updates(request, pk):
     dissert = get_object_or_404(Dissertation, pk=pk)
-    dissertation_updates = DissertationUpdate.objects.filter(dissertation=dissert).order_by('created').\
+    dissertation_updates = DissertationUpdate.objects.filter(dissertation=dissert).order_by('created'). \
         select_related('person', 'dissertation')
     return render(request, 'manager_dissertations_detail_updates.html',
                   {'dissertation': dissert,
@@ -283,7 +283,7 @@ def manager_dissertations_jury_new(request, pk):
 def manager_dissertations_jury_new_ajax(request):
     pk_dissert = request.POST.get("pk_dissertation", '')
     status_choice = request.POST.get("status_choice", '')
-    id_adviser_of_dissert_role=request.POST.get("adviser_pk", '')
+    id_adviser_of_dissert_role = request.POST.get("adviser_pk", '')
     if not id_adviser_of_dissert_role or not status_choice or not pk_dissert:
         return HttpResponse(status=status.HTTP_405_METHOD_NOT_ALLOWED)
     else:
@@ -314,7 +314,7 @@ def manager_dissertations_list(request):
     offer_props = OfferProposition.objects.filter(
         education_group__facultyadviser__adviser__person__user=request.user).distinct()
     year = timezone.now().year
-    academic_year_10y = AcademicYear.objects.filter(year__gte=year-10, year__lte=year+1)
+    academic_year_10y = AcademicYear.objects.filter(year__gte=year - 10, year__lte=year + 1)
     show_validation_commission = offer_proposition.show_validation_commission(offer_props)
     show_evaluation_first_year = offer_proposition.show_evaluation_first_year(offer_props)
     return render(request, 'manager_dissertations_list.html',
@@ -376,7 +376,7 @@ def construct_line(dissert, include_description=True):
 
 def get_ordered_roles(dissert):
     roles = []
-    for role in DissertationRole.objects.filter(dissertation=dissert).\
+    for role in DissertationRole.objects.filter(dissertation=dissert). \
             order_by('status').select_related('adviser__person'):
         if role.status == dissertation_role_status.PROMOTEUR:
             roles.insert(0, str(role.adviser))
@@ -414,16 +414,16 @@ def manager_dissertations_search(request):
     academic_year_search = request.GET.get('academic_year', '')
     status_search = request.GET.get('status_search', '')
 
-    if offer_prop_search!='':
-        offer_prop_search=int(offer_prop_search)
-        offer_prop=offer_proposition.find_by_id(offer_prop_search)
+    if offer_prop_search != '':
+        offer_prop_search = int(offer_prop_search)
+        offer_prop = offer_proposition.find_by_id(offer_prop_search)
         disserts = disserts.filter(education_group_year_start__education_group=offer_prop.education_group)
-    if academic_year_search!='':
+    if academic_year_search != '':
         academic_year_search = int(academic_year_search)
         disserts = disserts.filter(
             education_group_year_start__academic_year=academic_year.find_academic_year_by_id(academic_year_search)
         )
-    if status_search!='':
+    if status_search != '':
         disserts = disserts.filter(status=status_search)
     offer_props = OfferProposition.objects.filter(
         education_group__facultyadviser__adviser__person__user=request.user).distinct()
@@ -620,9 +620,9 @@ def manager_dissertations_wait_list(request):
                                                               'education_group_year_start__academic_year',
                                                               'proposition_dissertation__author__person')
     return render(request, 'manager_dissertations_wait_list.html',
-                         {'dissertations': disserts,
-                          'show_validation_commission': show_validation_commission,
-                          'show_evaluation_first_year': show_evaluation_first_year})
+                  {'dissertations': disserts,
+                   'show_validation_commission': show_validation_commission,
+                   'show_evaluation_first_year': show_evaluation_first_year})
 
 
 @login_required
@@ -669,8 +669,8 @@ def manager_dissertations_wait_comm_jsonlist(request):
 @user_passes_test(adviser.is_manager)
 def manager_dissertation_role_list_json(request, pk):
     dissert = get_object_or_404(Dissertation, pk=pk)
-    dissert_roles = DissertationRole.objects.filter(dissertation=dissert).\
-        order_by('status').\
+    dissert_roles = DissertationRole.objects.filter(dissertation=dissert). \
+        order_by('status'). \
         select_related('dissertation', 'adviser__person')
     dissert_commission_sous_list = [
         {
@@ -732,7 +732,7 @@ def manager_students_list(request):
     student_with_enrollement_in_education_groups = Student.objects.filter(
         offerenrollment__education_group_year__education_group__facultyadviser__adviser__person__user=request.user,
         offerenrollment__education_group_year__academic_year=mdl.academic_year.starting_academic_year()
-    ).select_related('person').\
+    ).select_related('person'). \
         prefetch_related('dissertation_set__education_group_year_start__education_group',
                          'dissertation_set__education_group_year_start__academic_year',
                          'offerenrollment_set__education_group_year__academic_year').distinct()
@@ -749,7 +749,7 @@ def manager_students_list(request):
 @user_passes_test(adviser.is_teacher)
 def dissertations_list(request):
     adv = request.user.person.adviser
-    dissert_role = DissertationRole.objects\
+    dissert_role = DissertationRole.objects \
         .filter(adviser=adv, dissertation__active=True) \
         .exclude(dissertation__status__in=[dissertation_status.DRAFT,
                                            dissertation_status.ENDED,
@@ -804,7 +804,7 @@ def dissertations_detail(request, pk):
     if teacher_can_see_dissertation(adv, dissert):
         count_dissertation_role = DissertationRole.objects.filter(dissertation=dissert).count()
         offer_prop = dissert.education_group_year_start.education_group.offer_proposition
-        promotors_count = DissertationRole.objects.filter(dissertation=dissert).\
+        promotors_count = DissertationRole.objects.filter(dissertation=dissert). \
             filter(status=dissertation_role_status.PROMOTEUR).count()
 
         files = DissertationDocumentFile.objects.filter(dissertation=dissert)
@@ -812,17 +812,17 @@ def dissertations_detail(request, pk):
         for file in files:
             filename = file.document_file.file_name
 
-        dissertation_roles = DissertationRole.objects.filter(dissertation=dissert).order_by('status').\
+        dissertation_roles = DissertationRole.objects.filter(dissertation=dissert).order_by('status'). \
             select_related('adviser__person')
         return render(request, 'dissertations_detail.html',
-                             {'dissertation': dissert,
-                              'adviser': adv,
-                              'dissertation_roles': dissertation_roles,
-                              'count_dissertation_role': count_dissertation_role,
-                              'offer_prop': offer_prop,
-                              'promotors_count': promotors_count,
-                              'teacher_is_promotor': teacher_is_promotor(adv, dissert),
-                              'filename': filename})
+                      {'dissertation': dissert,
+                       'adviser': adv,
+                       'dissertation_roles': dissertation_roles,
+                       'count_dissertation_role': count_dissertation_role,
+                       'offer_prop': offer_prop,
+                       'promotors_count': promotors_count,
+                       'teacher_is_promotor': teacher_is_promotor(adv, dissert),
+                       'filename': filename})
     else:
         return redirect('dissertations_list')
 
@@ -832,7 +832,7 @@ def dissertations_detail(request, pk):
 def dissertations_detail_updates(request, pk):
     dissert = get_object_or_404(Dissertation, pk=pk)
     adv = request.user.person.adviser
-    dissertation_updates = DissertationUpdate.objects.filter(dissertation=dissert).\
+    dissertation_updates = DissertationUpdate.objects.filter(dissertation=dissert). \
         order_by('created').select_related('person')
     return render(request, 'dissertations_detail_updates.html',
                   {'dissertation': dissert,
@@ -906,9 +906,9 @@ def dissertations_wait_list(request):
         active=True,
         status=dissertation_status.DIR_SUBMIT,
     ).filter(Q(
-            dissertationrole__adviser=adv,
-            dissertationrole__status=dissertation_role_status.PROMOTEUR
-        )).order_by('author__person__last_name')\
+        dissertationrole__adviser=adv,
+        dissertationrole__status=dissertation_role_status.PROMOTEUR
+    )).order_by('author__person__last_name') \
         .select_related('author__person',
                         'education_group_year_start__academic_year',
                         'proposition_dissertation__author__person')
