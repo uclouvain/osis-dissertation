@@ -772,12 +772,11 @@ def dissertations_list(request):
                                         dissertation__active=True,
                                         dissertation__status__in=[dissertation_status.ENDED,
                                                                   dissertation_status.ENDED_WIN,
-                                                                  dissertation_status.ENDED_LOS]). \
-            select_related('dissertation__author__person',
-                           'dissertation__education_group_year_start__academic_year',
-                           'dissertation__proposition_dissertation__author__person'
-                           ).order_by('dissertation__creation_date'
-                                      )
+                                                                  dissertation_status.ENDED_LOS]).select_related(
+            'dissertation__author__person',
+            'dissertation__education_group_year_start__academic_year',
+            'dissertation__proposition_dissertation__author__person'
+        ).order_by('dissertation__creation_date')
     return render(request, "dissertations_list.html", locals())
 
 

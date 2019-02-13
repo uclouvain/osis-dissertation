@@ -287,35 +287,34 @@ def manager_informations_add(request):
                 if not data['email']:  # empty search -> step 1
                     form = ManagerAddAdviserPreForm()
                     message = "empty_data"
-                    return layout.render(request, 'manager_informations_add_search.html', {'form': form,
-                                                                                           'message': message})
+                    return render(request, 'manager_informations_add_search.html', {'form': form,
+                                                                                    'message': message})
 
                 elif person and adviser.find_by_person(person):  # person already adviser -> step 1
                     form = ManagerAddAdviserPreForm()
                     email = "%s (%s)" % (list(person)[0], data['email'])
                     message = "person_already_adviser"
-                    return layout.render(request, 'manager_informations_add_search.html', {'form': form,
-                                                                                           'message': message,
-                                                                                           'email': email})
+                    return render(request, 'manager_informations_add_search.html', {'form': form,
+                                                                                    'message': message,
+                                                                                    'email': email})
                 elif mdl.person.count_by_email(data['email']) > 0:  # person found and not adviser -> go forward
                     pers = list(person)[0]
                     select_form = ManagerAddAdviserForm()
-                    return layout.render(request, 'manager_informations_add.html', {'form': select_form, 'pers': pers})
+                    return render(request, 'manager_informations_add.html', {'form': select_form, 'pers': pers})
 
                 else:  # person not found by email -> step 1
                     form = ManagerAddAdviserPreForm()
                     email = data['email']
                     message = "person_not_found_by_mail"
                     message_add = "add_new_person_explanation"
-                    return layout.render(request, 'manager_informations_add_search.html', {'form': form,
-                                                                                           'message': message,
-                                                                                           'email': email,
-                                                                                           'message_add': message_add})
+                    return render(request, 'manager_informations_add_search.html', {'form': form,
+                                                                                    'message': message,
+                                                                                    'email': email,
+                                                                                    'message_add': message_add})
             else:  # invalid form (invalid format for email)
                 form = ManagerAddAdviserPreForm()
                 message = "invalid_data"
-                return layout.render(request, 'manager_informations_add_search.html', {'form': form,
-                                                                                       'message': message})
+                return render(request, 'manager_informations_add_search.html', {'form': form, 'message': message})
 
         else:  # step 3 : everything ok, register the person as adviser
             form = ManagerAddAdviserForm(request.POST)
@@ -328,7 +327,7 @@ def manager_informations_add(request):
 
     else:  # step 1 : initial form to search person by email
         form = ManagerAddAdviserPreForm()
-        return layout.render(request, 'manager_informations_add_search.html', {'form': form})
+        return render(request, 'manager_informations_add_search.html', {'form': form})
 
 
 @login_required
@@ -350,13 +349,13 @@ def manager_informations_add_person(request):
                 return redirect('manager_informations_detail', pk=adv.pk)
             else:
                 form = ManagerAddAdviserPerson()
-                return layout.render(request, 'manager_information_add_person.html', {'form': form})
+                return render(request, 'manager_information_add_person.html', {'form': form})
         else:
             form = ManagerAddAdviserPerson()
-            return layout.render(request, 'manager_information_add_person.html', {'form': form})
+            return render(request, 'manager_information_add_person.html', {'form': form})
     else:
         form = ManagerAddAdviserPerson()
-        return layout.render(request, 'manager_information_add_person.html', {'form': form})
+        return render(request, 'manager_information_add_person.html', {'form': form})
 
 
 @login_required
@@ -365,10 +364,10 @@ def manager_informations_detail(request, pk):
     adv = adviser.get_by_id(pk)
     if adv is None:
         return redirect('manager_informations')
-    return layout.render(request, 'manager_informations_detail.html',
-                         {'adviser': adv,
-                          'first_name': adv.person.first_name.title(),
-                          'last_name': adv.person.last_name.title()})
+    return render(request, 'manager_informations_detail.html',
+                  {'adviser': adv,
+                   'first_name': adv.person.first_name.title(),
+                   'last_name': adv.person.last_name.title()})
 
 
 @login_required
@@ -385,14 +384,14 @@ def manager_informations_edit(request, pk):
             return redirect('manager_informations_detail', pk=adv.pk)
     else:
         form = ManagerAdviserForm(instance=adv)
-    return layout.render(request, "manager_informations_edit.html",
-                         {'adviser': adv,
-                          'form': form,
-                          'first_name': adv.person.first_name.title(),
-                          'last_name': adv.person.last_name.title(),
-                          'email': adv.person.email,
-                          'phone': adv.person.phone,
-                          'phone_mobile': adv.person.phone_mobile})
+    return render(request, "manager_informations_edit.html",
+                  {'adviser': adv,
+                   'form': form,
+                   'first_name': adv.person.first_name.title(),
+                   'last_name': adv.person.last_name.title(),
+                   'email': adv.person.email,
+                   'phone': adv.person.phone,
+                   'phone_mobile': adv.person.phone_mobile})
 
 
 @login_required
@@ -410,19 +409,18 @@ def manager_informations_list_request(request):
                  )). \
         order_by('person__last_name', 'person__first_name') \
         .annotate(dissertations_count_need_to_respond_actif=models.Sum(
-        models.Case(
-            models.When(Q(
-                dissertations__active=True,
-                dissertations__status=dissertation_status.DIR_SUBMIT,
-                dissertations_roles__status=dissertation_role_status.PROMOTEUR,
-                dissertations__education_group_year_start__education_group__in=educ_groups_of_fac_manager
-            ), then=1), default=0,
-            output_field=models.IntegerField()
-        ))
+            models.Case(
+                models.When(Q(
+                    dissertations__active=True,
+                    dissertations__status=dissertation_status.DIR_SUBMIT,
+                    dissertations_roles__status=dissertation_role_status.PROMOTEUR,
+                    dissertations__education_group_year_start__education_group__in=educ_groups_of_fac_manager
+                ), then=1), default=0, output_field=models.IntegerField()
+                ))
 
-    )
-    return layout.render(request, "manager_informations_list_request.html",
-                         {'advisers_need_request': advisers_need_request})
+            )
+    return render(request, "manager_informations_list_request.html",
+                  {'advisers_need_request': advisers_need_request})
 
 
 @login_required
@@ -466,7 +464,7 @@ def manager_informations_detail_list(request, pk):
         education_groups
     )
 
-    return layout.render(request, "manager_informations_detail_list.html", locals())
+    return render(request, "manager_informations_detail_list.html", locals())
 
 
 @login_required
@@ -483,8 +481,8 @@ def manager_informations_detail_list_wait(request, pk):
         dissertation__education_group_year_start__education_group__in=education_groups,
         dissertation__active=True
     ).select_related('adviser__person').distinct('adviser')
-    return layout.render(request, "manager_informations_detail_list_wait.html",
-                         {'disserts_role': disserts_role, 'adviser': adv})
+    return render(request, "manager_informations_detail_list_wait.html",
+                  {'disserts_role': disserts_role, 'adviser': adv})
 
 
 @login_required
@@ -506,12 +504,12 @@ def manager_informations_detail_stats(request, pk):
     count_advisers_reader = dissertation_role.count_by_adviser_and_role_stats(adv, 'READER')
     tab_education_group_count_read = dissertation_role.get_tab_count_role_by_education_group(advisers_reader)
 
-    return layout.render(request, 'manager_informations_detail_stats.html',
-                         {'adviser': adv,
-                          'count_advisers_copro': count_advisers_copro,
-                          'count_advisers_pro': count_advisers_pro,
-                          'count_advisers_reader': count_advisers_reader,
-                          'count_advisers_pro_request': count_advisers_pro_request,
-                          'tab_offer_count_pro': tab_education_group_count_pro,
-                          'tab_offer_count_read': tab_education_group_count_read,
-                          'tab_offer_count_copro': tab_education_group_count_copro})
+    return render(request, 'manager_informations_detail_stats.html',
+                  {'adviser': adv,
+                   'count_advisers_copro': count_advisers_copro,
+                   'count_advisers_pro': count_advisers_pro,
+                   'count_advisers_reader': count_advisers_reader,
+                   'count_advisers_pro_request': count_advisers_pro_request,
+                   'tab_offer_count_pro': tab_education_group_count_pro,
+                   'tab_offer_count_read': tab_education_group_count_read,
+                   'tab_offer_count_copro': tab_education_group_count_copro})

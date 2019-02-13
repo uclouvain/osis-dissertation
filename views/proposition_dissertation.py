@@ -86,6 +86,16 @@ def generate_proposition_offers(request, proposition):
 def is_valid(request, form):
     return form.is_valid() and detect_in_request(request, 'txt_checkbox_', 'on')
 
+def return_prefetch_propositions():
+    current_academic_year = academic_year.starting_academic_year()
+    return Prefetch(
+        "offer_propositions",
+        queryset=OfferProposition.objects.annotate(last_acronym=Subquery(
+            EducationGroupYear.objects.filter(
+                education_group__offer_proposition=OuterRef('pk'),
+                academic_year=current_academic_year).values('acronym')[:1]
+        ))
+    )
 
 ###########################
 #      MANAGER VIEWS      #
@@ -97,14 +107,7 @@ def is_valid(request, form):
 def manager_proposition_dissertations(request):
     now = datetime.now()
     current_academic_year = academic_year.starting_academic_year()
-    prefetch_propositions = Prefetch(
-        "offer_propositions",
-        queryset=OfferProposition.objects.annotate(last_acronym=Subquery(
-            EducationGroupYear.objects.filter(
-                education_group__offer_proposition=OuterRef('pk'),
-                academic_year=current_academic_year).values('acronym')[:1]
-        ))
-    )
+    prefetch_propositions = return_prefetch_propositions()
 
     propositions_dissertations = PropositionDissertation.objects.filter(
         active=True,
@@ -280,15 +283,7 @@ def manager_proposition_dissertations_search(request):
 
     now = datetime.now()
     current_academic_year = academic_year.starting_academic_year()
-    prefetch_propositions = Prefetch(
-        "offer_propositions",
-        queryset=OfferProposition.objects.annotate(last_acronym=Subquery(
-            EducationGroupYear.objects.filter(
-                education_group__offer_proposition=OuterRef('pk'),
-                academic_year=current_academic_year).values('acronym')[:1]
-        ))
-    )
-
+    prefetch_propositions = return_prefetch_propositions()
     propositions_dissertations = PropositionDissertation.objects.filter(
         active=True,
         visibility=True,
@@ -361,15 +356,7 @@ def get_current_adviser(request):
 @login_required
 @user_passes_test(adviser.is_teacher)
 def proposition_dissertations(request):
-    current_academic_year = academic_year.starting_academic_year()
-    prefetch_propositions = Prefetch(
-        "offer_propositions",
-        queryset=OfferProposition.objects.annotate(last_acronym=Subquery(
-            EducationGroupYear.objects.filter(
-                education_group__offer_proposition=OuterRef('pk'),
-                academic_year=current_academic_year).values('acronym')[:1]
-        ))
-    )
+    prefetch_propositions = return_prefetch_propositions()
     propositions_dissertations = PropositionDissertation.objects.filter(
         active=True,
         visibility=True,
@@ -394,14 +381,7 @@ def proposition_dissertation_delete(request, pk):
 @user_passes_test(adviser.is_teacher)
 def proposition_dissertation_detail(request, pk):
     current_academic_year = academic_year.starting_academic_year()
-    prefetch_propositions = Prefetch(
-        "offer_propositions",
-        queryset=OfferProposition.objects.annotate(last_acronym=Subquery(
-            EducationGroupYear.objects.filter(
-                education_group__offer_proposition=OuterRef('pk'),
-                academic_year=current_academic_year).values('acronym')[:1]
-        ))
-    )
+    prefetch_propositions = return_prefetch_propositions()
     prefetch_disserts = Prefetch(
         "dissertations",
         queryset=Dissertation.objects.filter(
@@ -481,15 +461,7 @@ def proposition_dissertation_edit(request, pk):
 @login_required
 @user_passes_test(adviser.is_teacher)
 def my_dissertation_propositions(request):
-    current_academic_year = academic_year.starting_academic_year()
-    prefetch_propositions = Prefetch(
-        "offer_propositions",
-        queryset=OfferProposition.objects.annotate(last_acronym=Subquery(
-            EducationGroupYear.objects.filter(
-                education_group__offer_proposition=OuterRef('pk'),
-                academic_year=current_academic_year).values('acronym')[:1]
-        ))
-    )
+    prefetch_propositions = return_prefetch_propositions()
     propositions_dissertations = PropositionDissertation.objects.filter(
         active=True,
         author=request.user.person.adviser
