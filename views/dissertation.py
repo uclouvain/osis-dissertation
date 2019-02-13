@@ -45,7 +45,6 @@ from base.models.academic_year import AcademicYear
 from base.models.education_group import EducationGroup
 from base.models.person import Person
 from base.models.student import Student
-from base.views import layout
 from dissertation.forms import ManagerDissertationEditForm, ManagerDissertationRoleForm, \
     ManagerDissertationUpdateForm, AdviserForm
 from dissertation.models import adviser, dissertation, dissertation_document_file, dissertation_role, \
@@ -187,22 +186,22 @@ def manager_dissertations_detail(request, pk):
 
     promotors_count = dissertation_role.count_by_status_dissertation(dissertation_role_status.PROMOTEUR, dissert)
 
-    return layout.render(request, 'manager_dissertations_detail.html',
-                         {'dissertation': dissert,
-                          'adviser': adv,
-                          'dissertation_roles': dissertation_roles,
-                          'count_dissertation_role': count_dissertation_role,
-                          'jury_manager_visibility': jury_manager_visibility,
-                          'jury_manager_can_edit': jury_manager_can_edit,
-                          'jury_manager_message': jury_manager_message,
-                          'jury_teacher_visibility': jury_teacher_visibility,
-                          'jury_teacher_can_edit': jury_teacher_can_edit,
-                          'jury_teacher_message': jury_teacher_message,
-                          'jury_student_visibility': jury_student_visibility,
-                          'jury_student_can_edit': jury_student_can_edit,
-                          'jury_student_message': jury_student_message,
-                          'promotors_count': promotors_count,
-                          'filename': filename})
+    return render(request, 'manager_dissertations_detail.html',
+                  {'dissertation': dissert,
+                   'adviser': adv,
+                   'dissertation_roles': dissertation_roles,
+                   'count_dissertation_role': count_dissertation_role,
+                   'jury_manager_visibility': jury_manager_visibility,
+                   'jury_manager_can_edit': jury_manager_can_edit,
+                   'jury_manager_message': jury_manager_message,
+                   'jury_teacher_visibility': jury_teacher_visibility,
+                   'jury_teacher_can_edit': jury_teacher_can_edit,
+                   'jury_teacher_message': jury_teacher_message,
+                   'jury_student_visibility': jury_student_visibility,
+                   'jury_student_can_edit': jury_student_can_edit,
+                   'jury_student_message': jury_student_message,
+                   'promotors_count': promotors_count,
+                   'filename': filename})
 
 
 @login_required
@@ -247,7 +246,7 @@ def manager_dissertations_jury_edit(request, pk):
             return redirect('manager_dissertations_detail', pk=dissert_role.dissertation.pk)
     else:
         form = ManagerDissertationRoleForm(instance=dissert_role)
-    return layout.render(request, 'manager_dissertations_jury_edit.html', {'form': form})
+    return render(request, 'manager_dissertations_jury_edit.html', {'form': form})
 
 
 @login_required
@@ -272,7 +271,7 @@ def manager_dissertations_jury_new(request, pk):
                 form = ManagerDissertationRoleForm(initial={'dissertation': dissert})
         else:
             form = ManagerDissertationRoleForm(initial={'dissertation': dissert})
-        return layout.render(request, 'manager_dissertations_jury_edit.html', {'form': form, 'dissert': dissert})
+        return render(request, 'manager_dissertations_jury_edit.html', {'form': form, 'dissert': dissert})
     else:
         return redirect('manager_dissertations_detail', pk=dissert.pk)
 
@@ -520,8 +519,8 @@ def manager_dissertations_to_dir_submit(request, pk):
             return redirect('manager_dissertations_detail', pk=pk)
     else:
         form = ManagerDissertationUpdateForm()
-    return layout.render(request, 'manager_dissertations_add_justification.html',
-                         {'form': form, 'dissert': dissert, 'new_status_display': new_status_display_str})
+    return render(request, 'manager_dissertations_add_justification.html',
+                  {'form': form, 'dissert': dissert, 'new_status_display': new_status_display_str})
 
 
 @login_required
@@ -555,8 +554,8 @@ def manager_dissertations_to_dir_ok(request, pk):
     else:
         form = ManagerDissertationUpdateForm()
 
-    return layout.render(request, 'manager_dissertations_add_justification.html',
-                         {'form': form, 'dissert': dissert, 'new_status_display': new_status_display_result})
+    return render(request, 'manager_dissertations_add_justification.html',
+                  {'form': form, 'dissert': dissert, 'new_status_display': new_status_display_result})
 
 
 @login_required
@@ -633,11 +632,11 @@ def manager_dissertations_wait_comm_list(request):
     all_advisers_array = str(adviser.convert_advisers_to_array(adviser.Adviser.objects.all().select_related('person')))
     show_validation_commission = offer_proposition.show_validation_commission(offer_props)
     show_evaluation_first_year = offer_proposition.show_evaluation_first_year(offer_props)
-    return layout.render(request, 'manager_dissertations_wait_commission_list.html',
-                         {'show_validation_commission': show_validation_commission,
-                          'STATUS_CHOICES': dissertation_role_status.STATUS_CHOICES,
-                          'show_evaluation_first_year': show_evaluation_first_year,
-                          'all_advisers_array': all_advisers_array})
+    return render(request, 'manager_dissertations_wait_commission_list.html',
+                  {'show_validation_commission': show_validation_commission,
+                   'STATUS_CHOICES': dissertation_role_status.STATUS_CHOICES,
+                   'show_evaluation_first_year': show_evaluation_first_year,
+                   'all_advisers_array': all_advisers_array})
 
 
 @login_required
@@ -720,10 +719,10 @@ def manager_dissertations_wait_recep_list(request):
                                                               'education_group_year_start__academic_year',
                                                               'proposition_dissertation__author__person')
 
-    return layout.render(request, 'manager_dissertations_wait_recep_list.html',
-                         {'dissertations': disserts,
-                          'show_validation_commission': show_validation_commission,
-                          'show_evaluation_first_year': show_evaluation_first_year})
+    return render(request, 'manager_dissertations_wait_recep_list.html',
+                  {'dissertations': disserts,
+                   'show_validation_commission': show_validation_commission,
+                   'show_evaluation_first_year': show_evaluation_first_year})
 
 
 @login_required
@@ -887,7 +886,7 @@ def dissertations_to_dir_ko(request, pk):
             return redirect('dissertations_detail', pk=pk)
     else:
         form = ManagerDissertationUpdateForm()
-    return layout.render(
+    return render(
         request,
         'dissertations_add_justification.html',
         {
@@ -962,7 +961,7 @@ def dissertations_jury_new(request, pk):
                     form = ManagerDissertationRoleForm(initial={'dissertation': dissert})
             else:
                 form = ManagerDissertationRoleForm(initial={'dissertation': dissert})
-            return layout.render(
+            return render(
                 request,
                 'dissertations_jury_edit.html',
                 {
