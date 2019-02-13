@@ -383,7 +383,7 @@ class DissertationViewTestCase(TestCase):
     def test_email_dissert_commission_accept_3(self):
         dissert = DissertationFactory(author=self.student,
                                       title='Dissertation_test_email',
-                                      offer_year_start=self.offer_year_start2,
+                                      education_group_year_start=self.education_group_year2,
                                       proposition_dissertation=self.proposition_dissertation,
                                       status='COM_SUBMIT',
                                       active=True,
@@ -495,16 +495,19 @@ class DissertationViewTestCase(TestCase):
         self.assertEqual(response.status_code, HTTP_OK)
 
     def test_new_status_display(self):
-        self.offer2 = OfferFactory()
+        self.education_group2 = EducationGroupFactory()
         self.offer_prop2 = OfferPropositionFactory(
-            offer=self.offer2,
+            education_group=self.education_group2,
             validation_commission_exists=False,
             evaluation_first_year=False
         )
-        self.offer_year_start2 = OfferYearFactory(offer=self.offer2, academic_year=self.academic_year1)
+        self.education_group_year_start2 = EducationGroupYearFactory(
+            education_group=self.education_group2,
+            academic_year=self.academic_year1
+        )
         self.dissertation_x = DissertationFactory(
             status=dissertation_status.DIR_SUBMIT,
-            offer_year_start=self.offer_year_start2
+            education_group_year_start=self.education_group_year_start2,
         )
         self.dissertation_x.status = dissertation_status.DIR_SUBMIT
         self.assertEqual(new_status_display(self.dissertation_x, "accept"), _('To be received'))

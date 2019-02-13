@@ -139,7 +139,7 @@ def manager_dissertations_detail(request, pk):
     if offer_prop is None:
         return redirect('manager_dissertations_list')
     files = dissertation_document_file.find_by_dissertation(dissert)
-    filename = files[-1].document_file.file_name if files else ""
+    filename = files.last().document_file.file_name if files else ""
 
     if count_proposition_role == 0 and count_dissertation_role == 0:
         justification = "%s %s %s" % (_("Auto add jury"),
@@ -968,5 +968,4 @@ def dissertations_jury_new(request, pk):
                     'dissert': dissert,
                 }
             )
-
     return redirect('dissertations_detail', pk=dissert.pk)

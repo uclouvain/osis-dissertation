@@ -32,6 +32,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from base.models import offer
+from base.models.utils.utils import get_object_or_none
 from dissertation.models.offer_proposition_group import OfferPropositionGroup
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
@@ -148,7 +149,7 @@ def show_evaluation_first_year(offer_props):
 
 
 def get_by_dissertation(dissert):
-    return get_by_offer(dissert.offer_year_start.offer)
+    return get_object_or_none(OfferProposition, education_group=dissert.education_group_year_start.education_group)
 
 
 def find_by_id(offer_proposition_id):
