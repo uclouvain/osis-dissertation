@@ -182,6 +182,7 @@ def manager_informations(request):
                               dissertation_status.ENDED_WIN,
                               dissertation_status.ENDED_LOS,
                               dissertation_status.ENDED)
+    active_dissert = Q(dissertations__active=True) & ~Q(dissertations__status=dissert_status_exclued)
     advisers = Adviser.objects.filter(type='PRF').select_related('person'). \
         prefetch_related('dissertations'). \
         order_by(
@@ -190,74 +191,64 @@ def manager_informations(request):
         .annotate(
         dissertations_count_actif_this_academic_year=models.Sum(
             models.Case(
-                models.When(Q(
-                    dissertations__active=True,
+                models.When(active_dissert & Q(
                     dissertations__education_group_year_start__academic_year=current_academic_year(),
-                ) & ~Q(dissertations__status=dissert_status_exclued), then=1),
+                ), then=1),
                 default=0, output_field=models.IntegerField()
             )),
         dissertations_count_all_actif=models.Sum(
             models.Case(
-                models.When(Q(
-                    dissertations__active=True,
-                ) & ~Q(dissertations__status=dissert_status_exclued), then=1), default=0,
+                models.When(active_dissert, then=1), default=0,
                 output_field=models.IntegerField()
             )),
         dissertations_count_all_actif_in_your_education_groups=models.Sum(
             models.Case(
-                models.When(Q(
-                    dissertations__active=True,
+                models.When(active_dissert & Q(
                     dissertations__education_group_year_start__education_group__facultyadviser__adviser__person__user=
                     request.user,
-                ) & ~Q(dissertations__status=dissert_status_exclued), then=1), default=0,
+                ), then=1), default=0,
                 output_field=models.IntegerField()
             )),
         dissertations_count_promotor_actif=models.Sum(
             models.Case(
-                models.When(Q(
-                    dissertations__active=True,
+                models.When(active_dissert & Q(
                     dissertations_roles__status=dissertation_role_status.PROMOTEUR
-                ) & ~Q(dissertations__status=dissert_status_exclued), then=1), default=0,
+                ), then=1), default=0,
                 output_field=models.IntegerField()
             )),
         dissertations_count_copromoteur_actif=models.Sum(
             models.Case(
-                models.When(Q(
-                    dissertations__active=True,
+                models.When(active_dissert & Q(
                     dissertations_roles__status=dissertation_role_status.CO_PROMOTEUR
-                ) & ~Q(dissertations__status=dissert_status_exclued), then=1), default=0,
+                ), then=1), default=0,
                 output_field=models.IntegerField()
             )),
         dissertations_count_reader_actif=models.Sum(
             models.Case(
-                models.When(Q(
-                    dissertations__active=True,
+                models.When(active_dissert & Q(
                     dissertations_roles__status=dissertation_role_status.READER
-                ) & ~Q(dissertations__status=dissert_status_exclued), then=1), default=0,
+                ), then=1), default=0,
                 output_field=models.IntegerField()
             )),
         dissertations_count_accompanist_actif=models.Sum(
             models.Case(
-                models.When(Q(
-                    dissertations__active=True,
+                models.When(active_dissert & Q(
                     dissertations_roles__status=dissertation_role_status.ACCOMPANIST
-                ) & ~Q(dissertations__status=dissert_status_exclued), then=1), default=0,
+                ), then=1), default=0,
                 output_field=models.IntegerField()
             )),
         dissertations_count_internship_actif=models.Sum(
             models.Case(
-                models.When(Q(
-                    dissertations__active=True,
+                models.When(active_dissert & Q(
                     dissertations_roles__status=dissertation_role_status.INTERNSHIP
-                ) & ~Q(dissertations__status=dissert_status_exclued), then=1), default=0,
+                ), then=1), default=0,
                 output_field=models.IntegerField()
             )),
         dissertations_count_president_actif=models.Sum(
             models.Case(
-                models.When(Q(
-                    dissertations__active=True,
+                models.When(active_dissert & Q(
                     dissertations_roles__status=dissertation_role_status.PRESIDENT
-                ) & ~Q(dissertations__status=dissert_status_exclued), then=1), default=0,
+                ), then=1), default=0,
                 output_field=models.IntegerField()
             )),
         dissertations_count_need_to_respond_actif=models.Sum(
@@ -269,7 +260,6 @@ def manager_informations(request):
                 ), then=1), default=0,
                 output_field=models.IntegerField()
             ))
-
     )
     return render(request, 'manager_informations_list.html', {'advisers': advisers})
 

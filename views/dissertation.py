@@ -27,7 +27,7 @@ import json
 import time
 
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.db.models import Q
+from django.db.models import Q, F
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.shortcuts import redirect
@@ -53,7 +53,6 @@ from dissertation.models.adviser import Adviser
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_document_file import DissertationDocumentFile
 from dissertation.models.dissertation_role import DissertationRole, MAX_DISSERTATION_ROLE_FOR_ONE_DISSERTATION
-from dissertation.models.dissertation_update import DissertationUpdate
 from dissertation.models.enums import dissertation_role_status
 from dissertation.models.enums import dissertation_status
 from dissertation.models.enums.dissertation_status import DISSERTATION_STATUS
@@ -208,9 +207,9 @@ def manager_dissertations_detail(request, pk):
 @user_passes_test(adviser.is_manager)
 @check_for_dissert(autorized_dissert_promotor_or_manager)
 def manager_dissertations_detail_updates(request, pk):
-    dissert = get_object_or_404(Dissertation, pk=pk)
-    dissertation_updates = DissertationUpdate.objects.filter(dissertation=dissert).order_by('created'). \
-        select_related('person', 'dissertation')
+    dissert = get_object_or_404(Dissertation.objects.prefetch_related('dissertationupdate_set'), pk=pk)
+    dissertation_updates = dissert.dissertationupdate_set.all().order_by('created'). \
+        select_related('person')
     return render(request, 'manager_dissertations_detail_updates.html',
                   {'dissertation': dissert,
                    'dissertation_updates': dissertation_updates})
@@ -667,21 +666,17 @@ def manager_dissertations_wait_comm_jsonlist(request):
 @login_required
 @user_passes_test(adviser.is_manager)
 def manager_dissertation_role_list_json(request, pk):
-    dissert = get_object_or_404(Dissertation, pk=pk)
-    dissert_roles = DissertationRole.objects.filter(dissertation=dissert). \
+    dissert = get_object_or_404(Dissertation.objects.prefetch_related('dissertationrole_set__adviser__person'), pk=pk)
+    dissert_roles = dissert.dissertationrole_set.all(). \
         order_by('status'). \
         select_related('dissertation', 'adviser__person')
-    dissert_commission_sous_list = [
-        {
-            'pk': dissert_role.pk,
-            'first_name': str(dissert_role.adviser.person.first_name),
-            'middle_name': str(dissert_role.adviser.person.middle_name),
-            'last_name': str(dissert_role.adviser.person.last_name),
-            'status': str(dissert_role.status),
-            'dissert_pk': dissert_role.dissertation.pk
-        } for dissert_role in dissert_roles
-    ]
-    json_list = json.dumps(dissert_commission_sous_list)
+    dissert_commission_sous_list = dissert_roles.values('pk', 'status',
+                                                        first_name=F('adviser__person__first_name'),
+                                                        middle_name=F('adviser__person__middle_name'),
+                                                        last_name=F('adviser__person__last_name'),
+                                                        dissert_pk=F('dissertation__pk')
+                                                        )
+    json_list = json.dumps(list(dissert_commission_sous_list))
     return HttpResponse(json_list, content_type='application/json')
 
 
@@ -693,7 +688,7 @@ def manager_dissertations_wait_eval_list(request):
     show_validation_commission = offer_proposition.show_validation_commission(offer_props)
     show_evaluation_first_year = offer_proposition.show_evaluation_first_year(offer_props)
     disserts = Dissertation.objects.filter(
-        education_group_year_start__education_group__in=education_groups,
+        education_group_year_start__education_group__facultyadviser__adviser__person__user=request.user,
         active=True,
         status=dissertation_status.EVA_SUBMIT).select_related('author__person',
                                                               'education_group_year_start__academic_year',
@@ -708,17 +703,16 @@ def manager_dissertations_wait_eval_list(request):
 @login_required
 @user_passes_test(adviser.is_manager)
 def manager_dissertations_wait_recep_list(request):
-    education_groups = EducationGroup.objects.filter(facultyadviser__adviser__person__user=request.user)
-    offer_props = OfferProposition.objects.filter(education_group__in=education_groups).distinct()
+    offer_props = OfferProposition.objects.filter(education_group__facultyadviser__adviser__person__user=request.user).\
+        distinct()
     show_validation_commission = offer_proposition.show_validation_commission(offer_props)
     show_evaluation_first_year = offer_proposition.show_evaluation_first_year(offer_props)
     disserts = Dissertation.objects.filter(
-        education_group_year_start__education_group__in=education_groups,
+        education_group_year_start__education_group__facultyadviser__adviser__person__user=request.user,
         active=True,
         status=dissertation_status.TO_RECEIVE).select_related('author__person',
                                                               'education_group_year_start__academic_year',
                                                               'proposition_dissertation__author__person')
-
     return render(request, 'manager_dissertations_wait_recep_list.html',
                   {'dissertations': disserts,
                    'show_validation_commission': show_validation_commission,
@@ -810,7 +804,7 @@ def dissertations_detail(request, pk):
         for file in files:
             filename = file.document_file.file_name
 
-        dissertation_roles = DissertationRole.objects.filter(dissertation=dissert).order_by('status'). \
+        dissertation_roles = dissert.dissertationrole_set.all().order_by('status'). \
             select_related('adviser__person')
         return render(request, 'dissertations_detail.html',
                       {'dissertation': dissert,
@@ -828,10 +822,9 @@ def dissertations_detail(request, pk):
 @login_required
 @check_for_dissert(adviser_is_in_jury)
 def dissertations_detail_updates(request, pk):
-    dissert = get_object_or_404(Dissertation, pk=pk)
+    dissert = get_object_or_404(Dissertation.objects.prefetch_related('dissertationupdate_set'), pk=pk)
     adv = request.user.person.adviser
-    dissertation_updates = DissertationUpdate.objects.filter(dissertation=dissert). \
-        order_by('created').select_related('person')
+    dissertation_updates = dissert.dissertationupdate_set.all().order_by('created').select_related('person')
     return render(request, 'dissertations_detail_updates.html',
                   {'dissertation': dissert,
                    'adviser': adv,

@@ -35,7 +35,6 @@ from base.models import offer_year, student
 from base.models.education_group_year import EducationGroupYear
 from base.models.utils.utils import get_object_or_none
 from dissertation.models import dissertation_location
-from dissertation.models import offer_proposition, dissertation_location
 from dissertation.models.dissertation_document_file import DissertationDocumentFile
 from dissertation.models.enums import dissertation_status
 from dissertation.models.offer_proposition import OfferProposition
@@ -92,7 +91,7 @@ class Dissertation(SerializableModel):
     proposition_dissertation = models.ForeignKey(PropositionDissertation,
                                                  related_name='dissertations',
                                                  verbose_name=_('Description'))
-    description = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True)
     active = models.BooleanField(default=True)
     creation_date = models.DateTimeField(auto_now_add=True, editable=False)
     modification_date = models.DateTimeField(auto_now=True)
