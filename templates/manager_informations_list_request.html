@@ -26,6 +26,10 @@
  * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/dataTables.bootstrap.min.css' %}">
+{% endblock %}
+
 {% block breadcrumb %}
   <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
   <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
@@ -40,21 +44,72 @@
     <li class="active"><a href="{% url 'manager_informations_list_request' %}">{% trans 'Teachers having to answer request' %}</a></li>
   </ul>
   <div class="panel panel-default">
-      <table class="table table-hover">
-        <tr>
-          <th>{% trans 'Teacher' %}</th>
-          <th>{% trans 'How many dissertations need answer' %}</th>
-        </tr>
-        {% for adviser_need_request in advisers_need_request %}
-          <tr>
-            <td>
-                <a href="{% url 'manager_informations_detail_list_wait' pk=adviser_need_request.pk %}">
-                    {{ adviser_need_request }}
-                </a>
-            </td>
-            <td>{{ adviser_need_request.dissertations_count_need_to_respond_actif }}</td>
-          </tr>
-        {% endfor %}
+      <table class="table table-hover" id="table-advisers">
+          <thead>
+            <tr>
+              <th>{% trans 'Teachers' %}</th>
+              <th>{% trans 'How many dissertations need answer' %}</th>
+            </tr>
+          </thead>
+            {% for adviser_need_request in advisers_need_request %}
+          <tbody>
+              <tr>
+                <td>
+                    <a href="{% url 'manager_informations_detail_list_wait' pk=adviser_need_request.pk %}">
+                        {{ adviser_need_request }}
+                    </a>
+                </td>
+                <td>{{ adviser_need_request.dissertations_count_need_to_respond_actif }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
       </table>
     </div>
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript" src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/dataTables.bootstrap.min.js' %}"></script>
+    <script>
+        $(document).ready(function()
+        {
+            $('#table-advisers').DataTable(
+            {
+                "pageLength": 50,
+                "paging" : true,
+                "ordering" : true,
+                "info"  : false,
+                "searching" : true,
+                "language":
+                {
+                    "sProcessing":     "{% trans 'Processing...'%}",
+                    "sSearch":         "{% trans 'Search:'%}",
+                    "sLengthMenu":     "&nbsp;&nbsp;&nbsp;_MENU_ &eacute;l&eacute;ments",
+                    "sInfo":           "{% trans 'Showing _START_ to _END_ of _TOTAL_ entries'%}",
+                    "sInfoEmpty":      "{% trans 'Showing 0 to 0 of 0 entries'%}",
+                    "sInfoFiltered":   "{% trans '(filtered from _MAX_ total entries)'%}",
+                    "sInfoPostFix":    "{% trans 'datatable_infopostfix'%}",
+                    "sLoadingRecords": "{% trans 'Loading...'%}",
+                    "sZeroRecords":    "{% trans 'No matching records found'%}",
+                    "sEmptyTable":     "{% trans 'No data available in table'%}",
+                    "oPaginate":
+                    {
+                        "sFirst":      "{% trans 'First'%}",
+                        "sPrevious":   "{% trans 'Previous'%}",
+                        "sNext":       "{% trans 'Next'%}",
+                        "sLast":       "{% trans 'Last'%}"
+                    },
+                    "oAria":
+                    {
+                        "sSortAscending":  "{% trans ': activate to sort column ascending'%}",
+                        "sSortDescending": "{% trans ': activate to sort column descending'%}",
+                    }
+                },
+                "columns": [
+                    null,
+                    { "orderable": true }
+                ]
+            });
+        });
+    </script>
 {% endblock %}

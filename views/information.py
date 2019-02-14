@@ -27,7 +27,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.db import models
 from django.db.models import Q
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 
 from base import models as mdl
 from base.models.academic_year import current_academic_year
@@ -390,14 +390,12 @@ def manager_informations_list_request(request):
     educ_groups_of_fac_manager = FacultyAdviser.objects.filter(adviser=request.user.person.adviser).values_list(
         'education_group',
         flat=True)
-    advisers_need_request = Adviser.objects. \
-        select_related('person').prefetch_related('dissertations').filter(type='PRF', ). \
+    advisers_need_request = Adviser.objects.filter(type='PRF', ). \
         filter(Q(dissertations__active=True,
                  dissertations__status=dissertation_status.DIR_SUBMIT,
                  dissertations_roles__status=dissertation_role_status.PROMOTEUR,
                  dissertations__education_group_year_start__education_group__in=educ_groups_of_fac_manager
-                 )). \
-        order_by('person__last_name', 'person__first_name') \
+                 )) \
         .annotate(dissertations_count_need_to_respond_actif=models.Sum(
             models.Case(
                 models.When(Q(
@@ -407,8 +405,8 @@ def manager_informations_list_request(request):
                     dissertations__education_group_year_start__education_group__in=educ_groups_of_fac_manager
                 ), then=1), default=0, output_field=models.IntegerField()
                 ))
-
-            )
+            ).select_related('person').prefetch_related('dissertations'). \
+        order_by('person__last_name', 'person__first_name')
     return render(request, "manager_informations_list_request.html",
                   {'advisers_need_request': advisers_need_request})
 
@@ -460,16 +458,14 @@ def manager_informations_detail_list(request, pk):
 @login_required
 @user_passes_test(adviser.is_manager)
 def manager_informations_detail_list_wait(request, pk):
-    connected_adviser = request.user.person.adviser
-    education_groups = faculty_adviser.find_education_groups_by_adviser(connected_adviser)
-    adv = adviser.get_by_id(pk)
-    if adv is None:
-        return redirect('manager_informations')
+    education_groups = request.user.person.adviser.education_groups
+    adv = get_object_or_404(Adviser, pk=pk)
     disserts_role = DissertationRole.objects.filter(
-        status='PROMOTEUR',
-        dissertation__status='DIR_SUBMIT',
+        status=dissertation_role_status.PROMOTEUR,
+        dissertation__status=dissertation_status.DIR_SUBMIT,
         dissertation__education_group_year_start__education_group__in=education_groups,
-        dissertation__active=True
+        dissertation__active=True,
+        adviser=adv
     ).select_related('adviser__person').distinct('adviser')
     return render(request, "manager_informations_detail_list_wait.html",
                   {'disserts_role': disserts_role, 'adviser': adv})
