@@ -458,7 +458,7 @@ def manager_informations_detail_list(request, pk):
 @login_required
 @user_passes_test(adviser.is_manager)
 def manager_informations_detail_list_wait(request, pk):
-    education_groups = request.user.person.adviser.education_groups
+    education_groups = request.user.person.adviser.education_groups.all()
     adv = get_object_or_404(Adviser, pk=pk)
     disserts_role = DissertationRole.objects.filter(
         status=dissertation_role_status.PROMOTEUR,
@@ -466,7 +466,7 @@ def manager_informations_detail_list_wait(request, pk):
         dissertation__education_group_year_start__education_group__in=education_groups,
         dissertation__active=True,
         adviser=adv
-    ).select_related('adviser__person').distinct('adviser')
+    ).select_related('adviser__person').distinct()
     return render(request, "manager_informations_detail_list_wait.html",
                   {'disserts_role': disserts_role, 'adviser': adv})
 
