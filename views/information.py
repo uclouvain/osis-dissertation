@@ -31,6 +31,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 
 from base import models as mdl
 from base.models.academic_year import current_academic_year
+from base.models.education_group import EducationGroup
 from base.models.enums import person_source_type
 from base.views import layout
 from dissertation.forms import AdviserForm, ManagerAdviserForm, ManagerAddAdviserForm, ManagerAddAdviserPreForm, \
@@ -182,7 +183,10 @@ def manager_informations(request):
                               dissertation_status.ENDED_WIN,
                               dissertation_status.ENDED_LOS,
                               dissertation_status.ENDED)
-    active_dissert = Q(dissertations__active=True) & ~Q(dissertations__status=dissert_status_exclued)
+    active_dissert = Q(dissertations__active=True) & ~Q(dissertations__status__in=dissert_status_exclued)
+
+    education_groups_manager = EducationGroup.objects.filter(facultyadviser__adviser__person__user=request.user)
+
     advisers = Adviser.objects.filter(type='PRF').select_related('person'). \
         prefetch_related('dissertations'). \
         order_by(
@@ -193,19 +197,18 @@ def manager_informations(request):
             models.Case(
                 models.When(active_dissert & Q(
                     dissertations__education_group_year_start__academic_year=current_academic_year(),
-                ), then=1),
-                default=0, output_field=models.IntegerField()
+                ), then=1), default=0,
+                output_field=models.IntegerField()
             )),
         dissertations_count_all_actif=models.Sum(
             models.Case(
                 models.When(active_dissert, then=1), default=0,
                 output_field=models.IntegerField()
-            )),
+             )),
         dissertations_count_all_actif_in_your_education_groups=models.Sum(
             models.Case(
                 models.When(active_dissert & Q(
-                    dissertations__education_group_year_start__education_group__facultyadviser__adviser__person__user=
-                    request.user,
+                    dissertations__education_group_year_start__education_group__in=education_groups_manager,
                 ), then=1), default=0,
                 output_field=models.IntegerField()
             )),
@@ -259,8 +262,7 @@ def manager_informations(request):
                     dissertations_roles__status=dissertation_role_status.PROMOTEUR
                 ), then=1), default=0,
                 output_field=models.IntegerField()
-            ))
-    )
+            )))
     return render(request, 'manager_informations_list.html', {'advisers': advisers})
 
 
