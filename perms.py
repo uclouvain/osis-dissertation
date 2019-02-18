@@ -49,10 +49,7 @@ def adviser_can_manage(dissert, advis):
 
 def adviser_is_in_jury(user, pk):
     dissert = get_object_or_404(Dissertation, pk=pk)
-    if user.person.adviser:
-        return DissertationRole.objects.filter(dissertation=dissert, adviser=user.person.adviser).count() > 0
-    else:
-        return False
+    return DissertationRole.objects.filter(dissertation=dissert, adviser__person__user=user).count() > 0
 
 
 def autorized_dissert_promotor_or_manager(user, pk):
