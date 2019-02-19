@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from dal import autocomplete
 from django import forms
 from django.forms import ModelForm
 from django.utils import timezone
@@ -134,10 +135,17 @@ class ManagerDissertationEditForm(ModelForm):
 
 
 class ManagerDissertationRoleForm(ModelForm):
+
     class Meta:
         model = DissertationRole
         fields = ('dissertation', 'status', 'adviser')
-        widgets = {'dissertation': forms.HiddenInput()}
+        widgets = {'dissertation': forms.HiddenInput(),
+                   'adviser': autocomplete.ModelSelect2(url='adviser-autocomplete', attrs={'style': 'width:100%'})}
+
+    class Media:
+        css = {
+            'all': ('css/select2-bootstrap.css',)
+        }
 
 
 class ManagerOfferPropositionForm(ModelForm):

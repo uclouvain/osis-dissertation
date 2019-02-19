@@ -170,8 +170,9 @@
                 <br>
                 <div class="row">
                     <div class="col-md-3 pull-right" style="text-align: right">
-                        <a href="{% url 'dissertations_jury_new' pk=dissertation.pk %}"
-                             id="lnk_add_dissertation_jury_member" class="btn btn-default btn-sm"
+                        <a data-url="{% url 'dissertations_jury_new' pk=dissertation.pk %}"
+                             id="lnk_add_dissertation_jury_member" data-modal_class="modal-lg"
+                             class="btn btn-default btn-sm trigger_modal"
                              role="button" title="{% trans 'Add a jury member'%}"><span
                                   class="glyphicon glyphicon-plus"
                                   aria-hidden="true"></span> {% trans 'Add a jury member'%}</a>

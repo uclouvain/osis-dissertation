@@ -52,6 +52,10 @@ class PropositionRole(SerializableModel):
                            self.adviser if self.adviser else "")
 
 
+def find_by_proposition_dissertation(proposition_dissertation):
+    return PropositionRole.objects.filter(proposition_dissertation=proposition_dissertation)
+
+
 def count_by_dissertation(dissertation):
     return PropositionRole.objects.filter(proposition_dissertation=dissertation.proposition_dissertation) \
         .count()

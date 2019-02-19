@@ -31,7 +31,7 @@ from django.utils.decorators import available_attrs
 
 from base import models as mdl
 from base.models import person
-from dissertation.models import dissertation_role, adviser, faculty_adviser
+from dissertation.models import dissertation_role, adviser, faculty_adviser, proposition_role
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.enums import dissertation_role_status
 
@@ -40,6 +40,13 @@ def user_is_dissertation_promotor(user, dissert):
     pers = person.find_by_user(user)
     this_adviser = adviser.search_by_person(pers)
     return dissertation_role.find_by_dissertation(dissert). \
+        filter(status=dissertation_role_status.PROMOTEUR).filter(adviser=this_adviser).exists()
+
+
+def user_is_proposition_promotor(user, prop_diss):
+    pers = person.find_by_user(user)
+    this_adviser = adviser.search_by_person(pers)
+    return proposition_role.find_by_proposition_dissertation(prop_diss).\
         filter(status=dissertation_role_status.PROMOTEUR).filter(adviser=this_adviser).exists()
 
 
