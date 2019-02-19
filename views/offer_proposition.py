@@ -24,17 +24,16 @@
 #
 ##############################################################################
 
-from django.shortcuts import redirect, get_list_or_404, render
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
+from django.shortcuts import redirect, get_list_or_404, render
 
 from base import models as mdl
 from base.views.common import display_error_messages
+from dissertation.forms import ManagerOfferPropositionForm
 from dissertation.models import adviser
 from dissertation.models import faculty_adviser
 from dissertation.models import offer_proposition
-from dissertation.forms import ManagerOfferPropositionForm
-from django.contrib.auth.decorators import user_passes_test
-
 ###########################
 #      MANAGER VIEWS      #
 ###########################

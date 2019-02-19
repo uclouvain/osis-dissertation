@@ -24,23 +24,25 @@
 #
 ##############################################################################
 
-from django.test import TestCase
 import datetime
+
+from django.test import TestCase
+
 from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
 from base.tests.factories.education_group import EducationGroupFactory
 
 from base.tests.factories.education_group_year import EducationGroupYearFactory
+from base.tests.factories.offer import OfferFactory
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
 from base.tests.factories.student import StudentFactory
-from base.tests.factories.offer import OfferFactory
 from dissertation.models import dissertation
+from dissertation.models.enums import dissertation_status
 from dissertation.tests.factories.adviser import AdviserTeacherFactory
+from dissertation.tests.factories.dissertation import DissertationFactory
 from dissertation.tests.factories.offer_proposition import OfferPropositionFactory
 from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
 from osis_common.models import message_history, message_template
-from dissertation.tests.factories.dissertation import DissertationFactory
-from dissertation.models.enums import dissertation_status
 
 NOW = datetime.datetime.now()
 

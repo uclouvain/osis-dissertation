@@ -55,47 +55,47 @@
                       <th>{% trans 'Program'%}</th>
                       <th>{% trans 'year beginning'%}</th>
                     </tr>
-                    {% for dissertation in roles_list_dissertations %}
+                    {% for dissert in disserts %}
                       <tr>
                         <td>
-                            <a href="{% url 'dissertations_detail' pk=dissertation.dissertation.pk %}">
-                                {{ dissertation.dissertation.title }}
+                            <a href="{% url 'dissertations_detail' pk=dissert.pk %}">
+                                {{ dissert.title }}
                             </a>
                         </td>
-                        <td>{{ dissertation.dissertation.author }}</td>
+                        <td>{{ dissert.author }}</td>
                         <td>
-                            {% if dissertation.dissertation.status == 'DRAFT' %}
-                            <span class="label label-default">{{ dissertation.dissertation.get_status_display }}</span>
-                            {% elif dissertation.dissertation.status == 'DIR_SUBMIT' %}
-                            <span class="label label-primary">{{ dissertation.dissertation.get_status_display }}</span>
-                            {% elif dissertation.dissertation.status == 'DIR_OK' %}
-                            <span class="label label-success">{{ dissertation.dissertation.get_status_display }}</span>
-                            {% elif dissertation.dissertation.status == 'DIR_KO' %}
-                            <span class="label label-danger">{{ dissertation.dissertation.get_status_display }}</span>
-                            {% elif dissertation.dissertation.status == 'COM_SUBMIT' %}
-                            <span class="label label-primary">{{ dissertation.dissertation.get_status_display }}</span>
-                            {% elif dissertation.dissertation.status == 'COM_OK' %}
-                            <span class="label label-default">{{ dissertation.dissertation.get_status_display }}</span>
-                            {% elif dissertation.dissertation.status == 'COM_KO' %}
-                            <span class="label label-default">{{ dissertation.dissertation.get_status_display }}</span>
-                            {% elif dissertation.dissertation.status == 'EVA_SUBMIT' %}
-                            <span class="label label-primary">{{ dissertation.dissertation.get_status_display }}</span>
-                            {% elif dissertation.dissertation.status == 'EVA_OK' %}
-                            <span class="label label-default">{{ dissertation.dissertation.get_status_display }}</span>
-                            {% elif dissertation.dissertation.status == 'EVA_KO' %}
-                            <span class="label label-default">{{ dissertation.dissertation.get_status_display }}</span>
-                            {% elif dissertation.dissertation.status == 'TO_RECEIVE' %}
-                            <span class="label label-default">{{ dissertation.dissertation.get_status_display }}</span>
-                            {% elif dissertation.dissertation.status == 'TO_DEFEND' %}
-                            <span class="label label-default">{{ dissertation.dissertation.get_status_display }}</span>
-                            {% elif dissertation.dissertation.status == 'DEFENDED' %}
-                            <span class="label label-default">{{ dissertation.dissertation.get_status_display }}</span>
-                            {% elif dissertation.dissertation.status == 'ENDED' %}
-                            <span class="label label-default">{{ dissertation.dissertation.get_status_display }}</span>
+                            {% if dissert.status == 'DRAFT' %}
+                            <span class="label label-default">{{ dissert.get_status_display }}</span>
+                            {% elif dissert.status == 'DIR_SUBMIT' %}
+                            <span class="label label-primary">{{ dissert.get_status_display }}</span>
+                            {% elif dissert.status == 'DIR_OK' %}
+                            <span class="label label-success">{{ dissert.get_status_display }}</span>
+                            {% elif dissert.status == 'DIR_KO' %}
+                            <span class="label label-danger">{{ dissert.get_status_display }}</span>
+                            {% elif dissert.status == 'COM_SUBMIT' %}
+                            <span class="label label-primary">{{ dissert.get_status_display }}</span>
+                            {% elif dissert.status == 'COM_OK' %}
+                            <span class="label label-default">{{ dissert.get_status_display }}</span>
+                            {% elif dissert.status == 'COM_KO' %}
+                            <span class="label label-default">{{ dissert.get_status_display }}</span>
+                            {% elif dissert.status == 'EVA_SUBMIT' %}
+                            <span class="label label-primary">{{ dissert.get_status_display }}</span>
+                            {% elif dissert.status == 'EVA_OK' %}
+                            <span class="label label-default">{{ dissert.get_status_display }}</span>
+                            {% elif dissert.status == 'EVA_KO' %}
+                            <span class="label label-default">{{ dissert.get_status_display }}</span>
+                            {% elif dissert.status == 'TO_RECEIVE' %}
+                            <span class="label label-default">{{ dissert.get_status_display }}</span>
+                            {% elif dissert.status == 'TO_DEFEND' %}
+                            <span class="label label-default">{{ dissert.get_status_display }}</span>
+                            {% elif dissert.status == 'DEFENDED' %}
+                            <span class="label label-default">{{ dissert.get_status_display }}</span>
+                            {% elif dissert.status == 'ENDED' %}
+                            <span class="label label-default">{{ dissert.get_status_display }}</span>
                             {% endif %}
                         </td>
-                        <td>{{ dissertation.dissertation.education_group_year_start.acronym }}</td>
-                        <td>{{ dissertation.dissertation.education_group_year_start.academic_year }}</td>
+                        <td>{{ dissert.education_group_year_start.acronym }}</td>
+                        <td>{{ dissert.education_group_year_start.academic_year }}</td>
                       </tr>
                     {% endfor %}
                   </table>

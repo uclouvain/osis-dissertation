@@ -47,20 +47,26 @@
             <table class="table table-hover" id="students-list">
                 <thead>
                     <tr>
-                        <th class="col-xs-3">{{ students_title|title }}</th>
-                        <th>{% trans 'Programs' %}</th>
+                        <th>{% trans 'Student' %}</th>
+                        <th>{% trans 'Programs and enrollements status'%}</th>
                         <th>{% trans 'Status' %}</th>
                         <th>{% trans 'Dissertation' %}</th>
                 </thead>
                 <tbody>
-                    {% for offer_enrollement in offer_enrollements %}
+                    {% for student in students %}
                         <tr>
-                            <td>{{ offer_enrollement.student }}</td>
+                            <td>{{ student }}</td>
                             <td>
-                                <span class="label label-default">{{ offer_enrollement.education_group_year}}</span>
+                                {% for offerenrollment in student.offerenrollment_set.all %}
+                                    <div class="div_in_datatable">
+                                        <span class="label label-default">{{ offerenrollment.education_group_year.acronym}}.
+                                    {{ offerenrollment.education_group_year.academic_year }}.
+                                    {{ offerenrollment.enrollment_state }}</span>
+                                    </div>
+                                {% endfor %}
                             </td>
                             <td>
-                            {% for dissertation in  offer_enrollement.student.dissertation_set.all %}
+                            {% for dissertation in  student.dissertation_set.all %}
                                 {% if forloop.first %}
                                     <dl class="dl-horizontal">
                                 {% endif %}
@@ -90,19 +96,13 @@
                             {% endfor %}
                             </td>
                             <td>
-                            {% for dissertation in offer_enrollement.student.dissertation_set.all %}
-
-                                    <div class="row">
-                                        <div class="pull-left col-xs-9 div_in_datatable">
-                                            <a href="{% url 'manager_dissertations_detail' pk=dissertation.pk %}"  title="{{ dissertation }}" target="_blank">
-                                            {{ dissertation|truncatechars:60 }}</a>
-                                        </div>
-                                        <div class="pull-left col-xs-2 div_in_datatable">
-                                            <span class="label label-default pull-right">[{{ dissertation.education_group_year_start.acronym}}]</span>
-                                            <br>
-                                        </div>
-                                    </div>
-
+                            {% for dissertation in student.dissertation_set.all %}
+                                <div class="div_in_datatable">
+                                    <a href="{% url 'manager_dissertations_detail' pk=dissertation.pk %}"  title="{{ dissertation }}" target="_blank">
+                                        {{ dissertation|truncatechars:60 }}</a>
+                                        <span class="label label-default pull-right">[{{ dissertation.education_group_year_start}}]</span>
+                                        <br>
+                                </div>
                             {% endfor %}
                             </td>
                         </tr>

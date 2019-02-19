@@ -28,11 +28,12 @@ from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
-from base.models import person
 from base.models.education_group import EducationGroup
-from dissertation.models import dissertation_role
+from base.models.utils.utils import get_object_or_none
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_role import DissertationRole
+from dissertation.models.proposition_dissertation import PropositionDissertation
+from dissertation.models.proposition_role import PropositionRole
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
@@ -56,6 +57,9 @@ class Adviser(SerializableModel):
     comment = models.TextField(default='', blank=True)
     education_groups = models.ManyToManyField(EducationGroup, through="FacultyAdviser", related_name="advisers")
     dissertations = models.ManyToManyField(Dissertation, through=DissertationRole, related_name='advisers')
+    proposition_dissertation = models.ManyToManyField(PropositionDissertation,
+                                                      through=PropositionRole,
+                                                      related_name='advisers')
 
     def __str__(self):
         first_name = ""
@@ -68,68 +72,6 @@ class Adviser(SerializableModel):
         if self.person.last_name:
             last_name = self.person.last_name + ","
         return u"%s %s %s" % (last_name.upper(), first_name, middle_name)
-
-    @property
-    def get_stat_dissertation_role(self):
-        list_stat = [0] * 5
-        # list_stat[0]= count dissertation_role active of adviser
-        # list_stat[1]= count dissertation_role Promoteur active of adviser
-        # list_stat[2]= count dissertation_role coPromoteur active of adviser
-        # list_stat[3]= count dissertation_role reader active of adviser
-        # list_stat[4]= count dissertation_role need request active of adviser
-        list_stat[0] = 0
-        list_stat[1] = 0
-        list_stat[2] = 0
-        list_stat[3] = 0
-        list_stat[4] = 0
-
-        queryset = dissertation_role.DissertationRole.objects.all().filter(Q(adviser=self))
-        list_stat[0] = queryset.filter(dissertation__active=True) \
-            .count()
-
-        list_stat[1] = queryset.filter(status='PROMOTEUR') \
-            .filter(Q(dissertation__active=True)) \
-            .exclude(Q(dissertation__status='DRAFT') |
-                     Q(dissertation__status='ENDED') |
-                     Q(dissertation__status='DEFENDED')) \
-            .count()
-
-        list_stat[4] = queryset.filter(status='PROMOTEUR') \
-            .filter(dissertation__status='DIR_SUBMIT') \
-            .filter(dissertation__active=True) \
-            .count()
-
-        advisers_copro = queryset.filter(status='CO_PROMOTEUR') \
-            .filter(dissertation__active=True) \
-            .exclude(Q(dissertation__status='DRAFT') |
-                     Q(dissertation__status='ENDED') |
-                     Q(dissertation__status='DEFENDED'))
-
-        list_stat[2] = advisers_copro.count()
-        tab_offer_count_copro = dissertation_role.get_tab_count_role_by_education_group(advisers_copro)
-
-        advisers_reader = queryset.filter(Q(adviser=self) &
-                                          Q(status='READER') &
-                                          Q(dissertation__active=True)) \
-            .exclude(Q(dissertation__status='DRAFT') |
-                     Q(dissertation__status='ENDED') |
-                     Q(dissertation__status='DEFENDED'))
-
-        list_stat[3] = advisers_reader.count()
-        tab_offer_count_read = dissertation_role.get_tab_count_role_by_education_group(advisers_reader)
-
-        advisers_pro = queryset.filter(status='PROMOTEUR') \
-            .filter(Q(dissertation__active=True)) \
-            .exclude(Q(dissertation__status='DRAFT') |
-                     Q(dissertation__status='ENDED') |
-                     Q(dissertation__status='DEFENDED'))
-
-        tab_offer_count_pro = dissertation_role.get_tab_count_role_by_education_group(advisers_pro)
-
-        return list_stat, tab_offer_count_read, tab_offer_count_copro, tab_offer_count_pro
-
-    class Meta:
-        ordering = ["person__last_name", "person__middle_name", "person__first_name"]
 
 
 def search_by_person(a_person):
@@ -166,8 +108,7 @@ def add(person, type_arg, available_by_email, available_by_phone, available_at_o
 
 
 def _has_role(user, role):
-    pers = person.find_by_user(user)
-    this_adviser = search_by_person(pers)
+    this_adviser = get_object_or_none(Adviser, person__user=user)
     return this_adviser.type == role if this_adviser else False
 
 

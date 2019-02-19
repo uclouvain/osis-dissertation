@@ -23,9 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.http import HttpResponse, HttpResponseRedirect
-from django.test import TestCase
 from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
+from django.test import TestCase
 
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.offer_year import OfferYearFactory
@@ -340,7 +340,7 @@ class InformationManagerViewTestCase(TestCase):
         response = self.client.get(reverse("manager_informations_detail_list_wait", args=[self.teacher.pk]))
         self.assertEqual(response.status_code, HttpResponse.status_code)
         response = self.client.get(reverse("manager_informations_detail_list_wait", args=[self.teacher.person.user.pk]))
-        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
+        self.assertEqual(response.status_code, HttpResponseNotFound.status_code)
 
     def test_manager_informations_detail_stats(self):
         advisers_pro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, dissertation_role_status.PROMOTEUR)

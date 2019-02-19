@@ -24,24 +24,25 @@
 #
 ##############################################################################
 
-from rest_framework import status
 from django.test import TestCase
+from rest_framework import status
+
 import dissertation.perms
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
+from base.tests.factories.offer import OfferFactory
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
-from base.tests.factories.offer import OfferFactory
 from base.tests.factories.student import StudentFactory
 from dissertation.models.enums import dissertation_role_status
+from dissertation.perms import adviser_can_manage, autorized_dissert_promotor_or_manager
 from dissertation.tests.factories.adviser import AdviserManagerFactory, AdviserTeacherFactory
 from dissertation.tests.factories.dissertation import DissertationFactory
 from dissertation.tests.factories.dissertation_role import DissertationRoleFactory
 from dissertation.tests.factories.faculty_adviser import FacultyAdviserFactory
 from dissertation.tests.factories.offer_proposition import OfferPropositionFactory
 from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
-from dissertation.perms import adviser_can_manage, autorized_dissert_promotor_or_manager
 
 
 class DecoratorsTestCase(TestCase):
