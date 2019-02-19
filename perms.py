@@ -31,6 +31,7 @@ from django.utils.decorators import available_attrs
 
 from base import models as mdl
 from base.models import person
+from base.models.education_group import EducationGroup
 from dissertation.models import dissertation_role, adviser, faculty_adviser, proposition_role
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.enums import dissertation_role_status
@@ -54,6 +55,15 @@ def adviser_can_manage(dissert, advis):
     return advis.facultyadviser_set.filter(
         education_group=dissert.education_group_year_start.education_group
     ).exists() and advis.type == 'MGR'
+
+
+def adviser_can_manage_proposition_dissertation(prop_diss, advis):
+    education_groups_adviser = EducationGroup.objects.filter(facultyadviser__adviser=advis)
+    education_groups_prop_diss = EducationGroup.objects.filter(
+        offer_proposition__offer_propositions=prop_diss
+    )
+    if set(education_groups_adviser).intersection(set(education_groups_prop_diss)):
+        return True
 
 
 def adviser_is_in_jury(user, pk):

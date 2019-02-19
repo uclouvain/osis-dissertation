@@ -52,7 +52,8 @@ class OfferProposition(SerializableModel):
     education_group = models.OneToOneField('base.EducationGroup',
                                            null=True,
                                            blank=True,
-                                           on_delete=models.PROTECT)
+                                           on_delete=models.PROTECT,
+                                           related_name='offer_proposition')
     student_can_manage_readers = models.BooleanField(default=True)
     adviser_can_suggest_reader = models.BooleanField(default=False)
     evaluation_first_year = models.BooleanField(default=False)

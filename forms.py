@@ -176,7 +176,13 @@ class ManagerPropositionRoleForm(ModelForm):
     class Meta:
         model = PropositionRole
         fields = ('proposition_dissertation', 'status', 'adviser')
-        widgets = {'proposition_dissertation': forms.HiddenInput()}
+        widgets = {'proposition_dissertation': forms.HiddenInput(),
+                   'adviser': autocomplete.ModelSelect2(url='adviser-autocomplete', attrs={'style': 'width:100%'})}
+
+    class Media:
+        css = {
+            'all': ('css/select2-bootstrap.css',)
+        }
 
 
 class ManagerDissertationUpdateForm(ModelForm):
