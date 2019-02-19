@@ -25,7 +25,12 @@ from datetime import date
 
 from dateutil.relativedelta import relativedelta
 
+from base.models.education_group_year import EducationGroupYear
+from base.models.offer import Offer
+from dissertation.models.dissertation import Dissertation
+from dissertation.models.faculty_adviser import FacultyAdviser
 from dissertation.models.offer_proposition import OfferProposition
+from dissertation.models.proposition_offer import PropositionOffer
 
 
 def offer_proposition_extend_dates():
@@ -67,3 +72,44 @@ def check_date_end(offer_prop, start_arg, end_arg):
 
 def incr_year(date_too):
     return date_too + relativedelta(years=1)
+
+
+def clean_db_with_no_educationgroup_match():
+    offer_propositions = OfferProposition.objects.filter(education_group=None)
+    faculty_advisers = FacultyAdviser.objects.all()
+    dissertations = Dissertation.objects.all()
+    offer_ids = set([op.offer_id for op in offer_propositions])
+    offer_year_ids = set([dissert.offer_year_start_id for dissert in dissertations])
+
+    def get_map_offer_id_with_educ_grp(offer_ids):
+        education_group_years = EducationGroupYear.objects.all().select_related('education_group') \
+            .values('education_group_id', 'acronym')
+        map_acronym_with_educ_group_id = {rec['acronym']: rec['education_group_id'] for rec in education_group_years}
+        map_offer_id_with_educ_group_id = {}
+        for offer in Offer.objects.filter(pk__in=offer_ids).prefetch_related('offeryear_set'):
+            if offer.offeryear_set.count() < 1:
+                print('WARNING :: No OfferYear found for offer = {}'.format(offer.id))
+                continue
+            off_year = offer.offeryear_set.order_by('-academic_year__year').first()
+            try:
+                educ_group_id = map_acronym_with_educ_group_id[off_year.acronym]
+                map_offer_id_with_educ_group_id[offer.id] = educ_group_id
+            except KeyError as e:
+                print('WARNING :: acronym {} does not have matching education group id.'.format(off_year.acronym))
+        return map_offer_id_with_educ_group_id
+
+    def find_childs_of_offer_prop(offer_prop):
+        offer_prop.offer.offeryear_set.order_by('-academic_year__year').first()
+
+        child_offer_prop = OfferProposition.objects.filter(offer__offeryear_set__academic_year__acronym__
+                                                           ).exclude(offer_prop)
+
+    map_offer_with_matching_education_group = get_map_offer_id_with_educ_grp(offer_ids)
+
+    for off_prop in offer_propositions:
+        educ_group_id = map_offer_with_matching_education_group.get(off_prop.offer_id, None)
+        if educ_group_id:
+            off_prop.education_group_id = educ_group_id
+            off_prop.save()
+        else:
+            porposition_offers_this_off_prop = PropositionOffer.objects.filters(offer_proposition=off_prop)
