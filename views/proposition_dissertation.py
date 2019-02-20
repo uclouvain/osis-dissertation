@@ -239,7 +239,9 @@ class PropositionDissertationJuryNewView(AjaxTemplateMixin, UserPassesTestMixin,
     @property
     def proposition(self):
         if not self._proposition:
-            self._proposition = get_object_or_404(proposition_dissertation.PropositionDissertation, pk=self.kwargs['pk'])
+            self._proposition = get_object_or_404(
+                proposition_dissertation.PropositionDissertation,
+                pk=self.kwargs['pk'])
         return self._proposition
 
     def get_initial(self):

@@ -48,7 +48,6 @@ from base.models.academic_year import AcademicYear
 from base.models.education_group import EducationGroup
 from base.models.person import Person
 from base.models.student import Student
-from base.views import layout
 from base.views.mixins import AjaxTemplateMixin
 from dissertation.forms import ManagerDissertationEditForm, ManagerDissertationRoleForm, \
     ManagerDissertationUpdateForm, AdviserForm
@@ -974,5 +973,4 @@ class AdviserAutocomplete(autocomplete.Select2QuerySetView):
         if self.q:
             qs = qs.filter(Q(person__last_name__icontains=self.q) | Q(person__first_name__icontains=self.q))
         return qs
-
 
