@@ -45,8 +45,6 @@ urlpatterns = [
         name='dissertations_list'),
     url(r'^dissertations_role_delete/(?P<pk>[0-9]+)$', dissertation.dissertations_role_delete,
         name='dissertations_role_delete'),
-    url(r'^dissertations_search$', dissertation.dissertations_search,
-        name='dissertations_search'),
     url(r'^dissertations_to_dir_ko/(?P<pk>[0-9]+)$', dissertation.dissertations_to_dir_ko,
         name='dissertations_to_dir_ko'),
     url(r'^dissertations_to_dir_ok/(?P<pk>[0-9]+)$', dissertation.dissertations_to_dir_ok,

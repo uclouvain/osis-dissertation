@@ -24,15 +24,16 @@
 #
 ##############################################################################
 
-from rest_framework import status
 from django.test import TestCase
+from rest_framework import status
+
 import dissertation.perms
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
+from base.tests.factories.offer import OfferFactory
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
-from base.tests.factories.offer import OfferFactory
 from base.tests.factories.student import StudentFactory
 from dissertation.models.enums import dissertation_role_status
 from dissertation.tests.factories.adviser import AdviserManagerFactory, AdviserTeacherFactory

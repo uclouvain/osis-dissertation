@@ -25,21 +25,20 @@
 ##############################################################################
 from django.contrib.auth.models import User
 from django.test import TestCase
+
 from base.models.person import Person
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
-from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
-from base.tests.factories.offer import OfferFactory
 from base.tests.factories.student import StudentFactory
 from dissertation.models import adviser
 from dissertation.tests.factories.adviser import AdviserManagerFactory, AdviserTeacherFactory
 from dissertation.tests.factories.dissertation import DissertationFactory
+from dissertation.tests.factories.dissertation_role import DissertationRoleFactory
 from dissertation.tests.factories.faculty_adviser import FacultyAdviserFactory
 from dissertation.tests.factories.offer_proposition import OfferPropositionFactory
 from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
-from dissertation.tests.factories.dissertation_role import DissertationRoleFactory
 
 
 def create_adviser(person, type="PRF"):
@@ -102,42 +101,3 @@ class UtilsTestCase(TestCase):
     def test_convert_none_to_empty_str(self):
         self.assertEqual(adviser.none_to_str(None), '')
         self.assertEqual(adviser.none_to_str('toto'), 'toto')
-
-    def test_get_stat_dissertation_role(self):
-        # list_stat[0]= count dissertation_role active of adviser
-        # list_stat[1]= count dissertation_role Promoteur active of adviser
-        # list_stat[2]= count dissertation_role coPromoteur active of adviser
-        # list_stat[3]= count dissertation_role reader active of adviser
-        # list_stat[4]= count dissertation_role need request active of adviser
-        list_stat, tab_offer_count_read, tab_offer_count_copro, tab_offer_count_pro = \
-            self.teacher.get_stat_dissertation_role
-        self.assertEqual(list_stat[0], 1)
-        self.assertEqual(list_stat[1], 1)
-        self.assertEqual(list_stat[2], 0)
-        self.assertEqual(list_stat[3], 0)
-        self.assertEqual(list_stat[4], 1)
-        self.assertEqual(tab_offer_count_pro[self.offer1], 1)
-        self.assertEqual(tab_offer_count_read, {})
-        self.assertEqual(tab_offer_count_copro, {})
-
-        list_stat, tab_offer_count_read, tab_offer_count_copro, tab_offer_count_pro = \
-            self.teacher2.get_stat_dissertation_role
-        self.assertEqual(list_stat[0], 1)
-        self.assertEqual(list_stat[1], 0)
-        self.assertEqual(list_stat[2], 1)
-        self.assertEqual(list_stat[3], 0)
-        self.assertEqual(list_stat[4], 0)
-        self.assertEqual(tab_offer_count_pro, {})
-        self.assertEqual(tab_offer_count_read, {})
-        self.assertEqual(tab_offer_count_copro[self.offer1], 1)
-
-        list_stat, tab_offer_count_read, tab_offer_count_copro, tab_offer_count_pro = \
-            self.teacher3.get_stat_dissertation_role
-        self.assertEqual(list_stat[0], 1)
-        self.assertEqual(list_stat[1], 0)
-        self.assertEqual(list_stat[2], 0)
-        self.assertEqual(list_stat[3], 1)
-        self.assertEqual(list_stat[4], 0)
-        self.assertEqual(tab_offer_count_pro, {})
-        self.assertEqual(tab_offer_count_read[self.offer1], 1)
-        self.assertEqual(tab_offer_count_copro, {})
