@@ -54,7 +54,6 @@ from dissertation.forms import ManagerDissertationEditForm, ManagerDissertationR
 from dissertation.models import adviser, dissertation, dissertation_document_file, dissertation_role, \
     dissertation_update, offer_proposition, proposition_role
 
-dissertation_update, offer_proposition, proposition_role
 from dissertation.models.adviser import Adviser
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_document_file import DissertationDocumentFile
