@@ -972,4 +972,3 @@ class AdviserAutocomplete(autocomplete.Select2QuerySetView):
         if self.q:
             qs = qs.filter(Q(person__last_name__icontains=self.q) | Q(person__first_name__icontains=self.q))
         return qs
-
