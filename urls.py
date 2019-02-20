@@ -30,7 +30,6 @@ from dissertation.utils.request import find_adviser_list_json
 from dissertation.views import dissertation, proposition_dissertation, information, offer_proposition, \
     upload_dissertation_file, upload_proposition_file
 from dissertation.views.dissertation import AdviserAutocomplete
-from dissertation.views.proposition_dissertation import PropositionDissertationJuryNewView
 
 urlpatterns = [
     url(r'^$', dissertation.dissertations, name='dissertations'),
@@ -174,9 +173,6 @@ urlpatterns = [
     url(r'^proposition_dissertation_jury_edit/(?P<pk>[0-9]+)$',
         proposition_dissertation.proposition_dissertations_jury_edit,
         name='proposition_dissertations_jury_edit'),
-    url(r'^proposition_dissertation_jury_new/(?P<pk>[0-9]+)$',
-        proposition_dissertation.proposition_dissertations_jury_new,
-        name='proposition_dissertations_jury_new'),
     url(r'^proposition_dissertations_role_delete/(?P<pk>[0-9]+)$',
         proposition_dissertation.proposition_dissertations_role_delete,
         name='proposition_dissertations_role_delete'),

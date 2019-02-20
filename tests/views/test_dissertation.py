@@ -27,6 +27,7 @@
 import json
 
 from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.test import TestCase
 from django.utils.translation import ugettext_lazy as _
 
@@ -507,3 +508,52 @@ class DissertationViewTestCase(TestCase):
         )
         self.dissertation_x.status = dissertation_status.DIR_SUBMIT
         self.assertEqual(new_status_display(self.dissertation_x, "accept"), _('To be received'))
+
+    def test_dissertation_jury_new_view_with_teacher(self):
+        self.client.force_login(self.teacher2.person.user)
+        response = self.client.post(
+            reverse('dissertations_jury_new', args=[self.dissertation_1.pk]), {"status": "READER",
+                                                                               'adviser': self.teacher.pk,
+                                                                               "dissertation": self.dissertation_1.pk}
+        )
+        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
+
+    def test_dissertation_jury_new_view_with_manager(self):
+        self.client.force_login(self.manager.person.user)
+        response = self.client.post(
+            reverse('dissertations_jury_new', args=[self.dissertation_1.pk]), {"status": "READER",
+                                                                               'adviser': self.teacher.pk,
+                                                                               "dissertation": self.dissertation_1.pk}
+        )
+        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
+
+    def test_dissertation_jury_new_view_promotor_add(self):
+        self.client.force_login(self.manager.person.user)
+        response = self.client.post(
+            reverse('dissertations_jury_new', args=[self.dissertation_1.pk]), {"status": "PROMOTEUR",
+                                                                               'adviser': self.teacher.pk,
+                                                                               "dissertation": self.dissertation_1.pk}
+        )
+        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
+
+
+class TestAdviserAutocomplete(TestCase):
+    def setUp(self):
+        a_person_student = PersonFactory(last_name="Durant")
+        self.student = StudentFactory.create(person=a_person_student)
+        self.url = reverse('adviser-autocomplete')
+        self.person = PersonFactory(first_name="pierre")
+        self.adviser = AdviserTeacherFactory(person=self.person)
+
+    def test_when_filter(self):
+        self.client.force_login(user=self.student.person.user)
+        response = self.client.get(self.url, data={"q": 'pie'})
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+        results = _get_results_from_autocomplete_response(response)
+        expected_results = [{'text': self.adviser.person.first_name, 'id': str(self.adviser.pk)}]
+        self.assertEqual(results[0].get('id'), expected_results[0].get('id'))
+
+
+def _get_results_from_autocomplete_response(response):
+    json_response = str(response.content, encoding='utf8')
+    return json.loads(json_response)['results']

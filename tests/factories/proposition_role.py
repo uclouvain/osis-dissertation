@@ -23,27 +23,17 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import factory.fuzzy
-from django.utils import timezone
+import factory
 
-from base.tests.factories.person import PersonFactory
-from dissertation.models.proposition_dissertation import PropositionDissertation
+from dissertation.models.enums import dissertation_role_status
 from dissertation.tests.factories.adviser import AdviserTeacherFactory
+from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
 
 
-class PropositionDissertationFactory(factory.DjangoModelFactory):
+class PropositionRoleFactory(factory.DjangoModelFactory):
     class Meta:
-        model = 'dissertation.PropositionDissertation'
+        model = 'dissertation.PropositionRole'
 
-    author = factory.SubFactory(AdviserTeacherFactory)
-    creator = factory.SubFactory(PersonFactory)
-    collaboration = factory.Iterator(PropositionDissertation.COLLABORATION_CHOICES, getter=lambda c: c[0])
-    description = factory.Faker('text', max_nb_chars=500)
-    level = factory.Iterator(PropositionDissertation.LEVELS_CHOICES, getter=lambda c: c[0])
-    max_number_student = factory.fuzzy.FuzzyInteger(1, 50)
-    title = factory.Faker('text', max_nb_chars=150)
-    type = factory.Iterator(PropositionDissertation.TYPES_CHOICES, getter=lambda c: c[0])
-    visibility = True
-    active = True
-    created_date = factory.Faker('date_time_this_year', before_now=True, after_now=False,
-                                 tzinfo=timezone.get_current_timezone())
+    status = factory.Iterator(dissertation_role_status.STATUS_CHOICES, getter=lambda c: c[0])
+    adviser = factory.SubFactory(AdviserTeacherFactory)
+    proposition_dissertation = factory.SubFactory(PropositionDissertationFactory)

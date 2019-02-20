@@ -49,7 +49,7 @@ from base.views.mixins import AjaxTemplateMixin
 from dissertation.forms import ManagerDissertationEditForm, ManagerDissertationRoleForm, \
     ManagerDissertationUpdateForm, AdviserForm
 from dissertation.models import adviser, dissertation, dissertation_document_file, dissertation_role, \
-    dissertation_update, faculty_adviser, offer_proposition, proposition_dissertation, proposition_role
+    dissertation_update, faculty_adviser, offer_proposition, proposition_role
 from dissertation.models.adviser import Adviser
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_role import DissertationRole, MAX_DISSERTATION_ROLE_FOR_ONE_DISSERTATION
@@ -246,35 +246,6 @@ def manager_dissertations_jury_edit(request, pk):
     else:
         form = ManagerDissertationRoleForm(instance=dissert_role)
     return layout.render(request, 'manager_dissertations_jury_edit.html', {'form': form})
-
-
-# @login_required
-# @user_passes_test(adviser.is_manager)
-# @check_for_dissert(autorized_dissert_promotor_or_manager)
-# def manager_dissertations_jury_new(request, pk):
-#     dissert = dissertation.find_by_id(pk)
-#     count_dissertation_role = dissertation_role.count_by_dissertation(dissert)
-#     if count_dissertation_role < MAX_DISSERTATION_ROLE_FOR_ONE_DISSERTATION and dissert.status != 'DRAFT':
-#         if request.method == "POST":
-#             form = ManagerDissertationRoleForm(request.POST)
-#             if form.is_valid():
-#                 data = form.cleaned_data
-#                 status = data['status']
-#                 adv = data['adviser']
-#                 diss = data['dissertation']
-#                 justification = "%s %s %s" % (_("Manager add jury"), str(status), str(adv))
-#                 dissertation_update.add(request, dissert, dissert.status, justification=justification)
-#                 dissertation_role.add(status, adv, diss)
-#                 return redirect('manager_dissertations_detail', pk=dissert.pk)
-#             else:
-#                 form = ManagerDissertationRoleForm(initial={'dissertation': dissert})
-#         else:
-#             form = ManagerDissertationRoleForm(initial={'dissertation': dissert})
-#         return layout.render(request, 'manager_dissertations_jury_edit.html', {'form': form, 'dissert': dissert})
-#     else:
-#         return redirect('manager_dissertations_detail', pk=dissert.pk)
-
-
 
 
 @require_http_methods(["POST"])
@@ -897,45 +868,6 @@ def dissertations_role_delete(request, pk):
     return redirect('dissertations_detail', pk=dissert.pk)
 
 
-# @login_required
-# @user_passes_test(adviser.is_teacher)
-# def dissertations_jury_new(request, pk):
-#     dissert = dissertation.find_by_id(pk)
-#     if dissert is None:
-#         return redirect('dissertations_list')
-#     person = mdl.person.find_by_user(request.user)
-#     adv = adviser.search_by_person(person)
-#     offer_prop = offer_proposition.get_by_dissertation(dissert)
-#     if offer_prop is not None and teacher_is_promotor(adv, dissert):
-#         count_dissertation_role = dissertation_role.count_by_dissertation(dissert)
-#         if count_dissertation_role < MAX_DISSERTATION_ROLE_FOR_ONE_DISSERTATION \
-#                 and offer_prop.adviser_can_suggest_reader:
-#             if request.method == "POST":
-#                 form = ManagerDissertationRoleForm(request.POST)
-#                 if form.is_valid():
-#                     data = form.cleaned_data
-#                     status = data['status']
-#                     adv = data['adviser']
-#                     diss = data['dissertation']
-#                     justification = "%s %s %s" % (_("Teacher added jury"), str(status), str(adv))
-#                     dissertation_update.add(request, dissert, dissert.status, justification=justification)
-#                     dissertation_role.add(status, adv, diss)
-#                     return redirect('dissertations_detail', pk=dissert.pk)
-#                 else:
-#                     form = ManagerDissertationRoleForm(initial={'dissertation': dissert})
-#             else:
-#                 form = ManagerDissertationRoleForm(initial={'dissertation': dissert})
-#             return layout.render(
-#                 request,
-#                 'dissertations_jury_edit.html',
-#                 {
-#                     'form': form,
-#                     'dissert': dissert,
-#                 }
-#             )
-#     return redirect('dissertations_detail', pk=dissert.pk)
-
-
 class DissertationJuryNewView(AjaxTemplateMixin, UserPassesTestMixin, CreateView):
     model = DissertationRole
     template_name = 'dissertations_jury_edit_inner.html'
@@ -982,8 +914,14 @@ class DissertationJuryNewView(AjaxTemplateMixin, UserPassesTestMixin, CreateView
             justification = "%s %s %s" % (_("Teacher added jury"), str(status), str(adv))
         else:
             justification = "%s %s %s" % (_("Manager add jury"), str(status), str(adv))
-        dissertation_role.add(status, adv, diss)
-        dissertation_update.add(self.request, diss, status, justification=justification)
+        if status == "PROMOTEUR":
+            dissertation_update.add(self.request, diss, diss.status, justification=justification)
+            dissert_role = DissertationRole.objects.filter(dissertation=diss, status=status)
+            dissert_role.delete()
+            dissertation_role.add(status, adv, diss)
+        else:
+            dissertation_role.add(status, adv, diss)
+            dissertation_update.add(self.request, diss, status, justification=justification)
         return result
 
     def get_success_url(self):
