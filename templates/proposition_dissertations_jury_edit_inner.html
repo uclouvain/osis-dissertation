@@ -14,9 +14,15 @@
       </div>
       <div class="row">
           <div class="col-md-8 col-md-offset-1">
-              {% trans 'If the concerned teacher is not in the list, you can' %}
-              <a href="{% url 'informations_add' %}" id="lnk_informations_add"
-                 title="{% trans 'Informations'%}">{% trans 'Add teacher' %}</a>
+              {% if manager %}
+                  {% trans 'If the concerned teacher is not in the list, you can' %}
+                  <a href="{% url 'manager_informations_add' %}" id="lnk_informations_add"
+                     title="{% trans 'Informations'%}">{% trans 'Add teacher' %}</a>
+              {% else %}
+                  {% trans 'If the concerned teacher is not in the list, you can' %}
+                  <a href="{% url 'informations_add' %}" id="lnk_informations_add"
+                     title="{% trans 'Informations'%}">{% trans 'Add teacher' %}</a>
+              {% endif %}
           </div>
       </div>
   </form>

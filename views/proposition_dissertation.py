@@ -32,6 +32,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db.models import Count, OuterRef, Subquery, Q, Prefetch
 from django.http import HttpResponse
 from django.shortcuts import redirect, render, get_object_or_404
+from django.utils.functional import cached_property
 from django.views.generic import CreateView
 from openpyxl import Workbook
 from openpyxl.writer.excel import save_virtual_workbook
@@ -55,6 +56,8 @@ from dissertation.models.proposition_offer import PropositionOffer
 from dissertation.models.proposition_role import PropositionRole
 from dissertation.perms import user_is_proposition_promotor, \
     adviser_can_manage_proposition_dissertation
+
+MAX_PROPOSITION_ROLE = 4
 
 
 def detect_in_request(request, wanted_key, wanted_value):
@@ -220,12 +223,10 @@ class PropositionDissertationJuryNewView(AjaxTemplateMixin, UserPassesTestMixin,
     model = PropositionRole
     template_name = 'proposition_dissertations_jury_edit_inner.html'
     form_class = ManagerPropositionRoleForm
-    _proposition = None
     raise_exception = True
 
     def test_func(self):
-        prop_diss = self.proposition
-        if proposition_role.count_by_proposition(prop_diss) < 4:
+        if proposition_role.count_by_proposition(self.proposition) < MAX_PROPOSITION_ROLE:
             return True
 
     def dispatch(self, request, *args, **kwargs):
@@ -236,35 +237,33 @@ class PropositionDissertationJuryNewView(AjaxTemplateMixin, UserPassesTestMixin,
                     return super().dispatch(request, *args, **kwargs)
         return redirect('proposition_dissertations')
 
-    @property
+    @cached_property
     def proposition(self):
-        if not self._proposition:
-            self._proposition = get_object_or_404(
-                proposition_dissertation.PropositionDissertation,
-                pk=self.kwargs['pk'])
-        return self._proposition
+        return get_object_or_404(proposition_dissertation.PropositionDissertation, pk=self.kwargs['pk'])
 
     def get_initial(self):
         return {'status': dissertation_role_status, 'proposition_dissertation': self.proposition}
 
-    def form_invalid(self, form):
-        return super().form_invalid(form)
-
     def form_valid(self, form):
-        prop_diss = self.proposition
-        count_proposition_role = proposition_role.count_by_proposition(prop_diss)
+        count_proposition_role = proposition_role.count_by_proposition(self.proposition)
         result = super().form_valid(form)
         data = form.cleaned_data
         status = data['status']
         adv = data['adviser']
         prop = data['proposition_dissertation']
-        if status == "PROMOTEUR":
-            prop_diss.set_author(adv)
+        if status == dissertation_role_status.PROMOTEUR:
+            self.proposition.set_author(adv)
             proposition_role.delete(status, prop)
             proposition_role.add(status, adv, prop)
-        elif count_proposition_role < 4:
+        elif count_proposition_role < MAX_PROPOSITION_ROLE:
             proposition_role.add(status, adv, prop)
         return result
+
+    def get_context_data(self, **kwargs):
+        context = super(PropositionDissertationJuryNewView, self).get_context_data(**kwargs)
+        if adviser.is_manager(self.request.user):
+            context['manager'] = True
+        return context
 
     def get_success_url(self):
         return None

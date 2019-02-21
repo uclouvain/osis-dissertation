@@ -196,6 +196,7 @@
                    {% endif %}
                  </div>
                  {% endfor %}
+                 {% if count_proposition_role < 4 %}
                  <br>
                  <div class="row">
                      <div class="col-md-5 pull-right">
@@ -207,6 +208,7 @@
                                    aria-hidden="true"></span> {% trans 'Add jury member'%}</a>
                      </div>
                  </div>
+                 {% endif %}
              </div>
     </div>
     {% include "new_document.html" %}

@@ -34,6 +34,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.shortcuts import redirect
 from django.utils import timezone
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
 from django.views.generic import CreateView
@@ -907,7 +908,6 @@ class DissertationJuryNewView(AjaxTemplateMixin, UserPassesTestMixin, CreateView
     model = DissertationRole
     template_name = 'dissertations_jury_edit_inner.html'
     form_class = ManagerDissertationRoleForm
-    _dissertation = None
     raise_exception = True
 
     def test_func(self):
@@ -927,37 +927,23 @@ class DissertationJuryNewView(AjaxTemplateMixin, UserPassesTestMixin, CreateView
             return super().dispatch(request, *args, **kwargs)
         return redirect('dissertations')
 
-    @property
+    @cached_property
     def dissertation(self):
-        if not self._dissertation:
-            self._dissertation = get_object_or_404(dissertation.Dissertation, pk=self.kwargs['pk'])
-        return self._dissertation
+        return get_object_or_404(dissertation.Dissertation, pk=self.kwargs['pk'])
 
     def get_initial(self):
-        return {'status': dissertation_role_status, 'dissertation': self._dissertation}
+        return {'status': dissertation_role_status, 'dissertation': self.dissertation}
 
-    def form_invalid(self, form):
-        return super().form_invalid(form)
+    def get_form_kwargs(self):
+        form_kwargs = super().get_form_kwargs()
+        form_kwargs['request'] = self.request
+        return form_kwargs
 
-    def form_valid(self, form):
-        result = super().form_valid(form)
-        data = form.cleaned_data
-        status = data['status']
-        adv = data['adviser']
-        diss = data['dissertation']
-        if adviser.is_teacher(self.request.user):
-            justification = "%s %s %s" % (_("Teacher added jury"), str(status), str(adv))
-        else:
-            justification = "%s %s %s" % (_("Manager add jury"), str(status), str(adv))
-        if status == "PROMOTEUR":
-            dissertation_update.add(self.request, diss, diss.status, justification=justification)
-            dissert_role = DissertationRole.objects.filter(dissertation=diss, status=status)
-            dissert_role.delete()
-            dissertation_role.add(status, adv, diss)
-        else:
-            dissertation_role.add(status, adv, diss)
-            dissertation_update.add(self.request, diss, status, justification=justification)
-        return result
+    def get_context_data(self, **kwargs):
+        context = super(DissertationJuryNewView, self).get_context_data(**kwargs)
+        if adviser.is_manager(self.request.user):
+            context['manager'] = True
+        return context
 
     def get_success_url(self):
         return None

@@ -37,6 +37,7 @@ from dissertation.models import dissertation_role, adviser, faculty_adviser, pro
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_role import DissertationRole
 from dissertation.models.enums import dissertation_role_status
+from dissertation.models.proposition_role import PropositionRole
 
 
 def user_is_dissertation_promotor(user, dissert):
@@ -48,8 +49,10 @@ def user_is_dissertation_promotor(user, dissert):
 def user_is_proposition_promotor(user, prop_diss):
     pers = person.find_by_user(user)
     this_adviser = adviser.search_by_person(pers)
-    return proposition_role.find_by_proposition_dissertation(prop_diss).\
-        filter(status=dissertation_role_status.PROMOTEUR).filter(adviser=this_adviser).exists()
+    return PropositionRole.objects.filter(
+        proposition_dissertation=prop_diss,
+        status=dissertation_role_status.PROMOTEUR,
+        adviser=this_adviser).exists()
 
 
 def adviser_can_manage(dissert, advis):
@@ -59,12 +62,10 @@ def adviser_can_manage(dissert, advis):
 
 
 def adviser_can_manage_proposition_dissertation(prop_diss, advis):
-    education_groups_adviser = EducationGroup.objects.filter(facultyadviser__adviser=advis)
-    education_groups_prop_diss = EducationGroup.objects.filter(
+    education_groups_prop_diss_pk = EducationGroup.objects.filter(
         offer_proposition__offer_propositions=prop_diss
-    )
-    if set(education_groups_adviser).intersection(set(education_groups_prop_diss)):
-        return True
+    ).values_list('id', flat=True)
+    return EducationGroup.objects.filter(facultyadviser__adviser=advis, pk__in=education_groups_prop_diss_pk).exists()
 
 
 def adviser_is_in_jury(user, pk):
