@@ -56,7 +56,7 @@ class PropositionRole(SerializableModel):
     def clean(self):
         if PropositionRole.objects.filter(
                 proposition_dissertation=self.proposition_dissertation
-        ).count() == MAX_PROPOSITION_ROLE:
+        ).count() >= MAX_PROPOSITION_ROLE:
             raise ValidationError("Number of maximum jury reached")
         return super().clean()
 

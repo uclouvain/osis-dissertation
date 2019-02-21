@@ -48,7 +48,7 @@ class PropositionRoleModelTestCase(TestCase):
             self.proposition_role.append(proposition_role)
 
     def test_maximum_jury_reached_exception(self):
-        self.proposition_role5 = PropositionRole.objects.create(proposition_dissertation=self.proposition_dissertation,
-                                                                adviser=self.adviser)
-        self.assertRaises(ValidationError)
+        with self.assertRaises(ValidationError):
+            a = PropositionRoleFactory(proposition_dissertation=self.proposition_dissertation, adviser=self.adviser)
+            a.clean()
 
