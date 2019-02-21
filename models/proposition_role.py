@@ -23,10 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from django.db import models
 from .enums import dissertation_role_status
+
+MAX_PROPOSITION_ROLE = 4
 
 
 class PropositionRoleAdmin(SerializableModelAdmin):
@@ -51,9 +53,12 @@ class PropositionRole(SerializableModel):
         return u"%s %s" % (self.status if self.status else "",
                            self.adviser if self.adviser else "")
 
-
-def find_by_proposition_dissertation(proposition_dissertation):
-    return PropositionRole.objects.filter(proposition_dissertation=proposition_dissertation)
+    def clean(self):
+        if PropositionRole.objects.filter(
+                proposition_dissertation=self.proposition_dissertation
+        ).count() == MAX_PROPOSITION_ROLE:
+            raise ValidationError("Number of maximum jury reached")
+        return super().clean()
 
 
 def count_by_dissertation(dissertation):

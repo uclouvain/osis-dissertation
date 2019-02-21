@@ -244,21 +244,6 @@ class PropositionDissertationJuryNewView(AjaxTemplateMixin, UserPassesTestMixin,
     def get_initial(self):
         return {'status': dissertation_role_status, 'proposition_dissertation': self.proposition}
 
-    def form_valid(self, form):
-        count_proposition_role = proposition_role.count_by_proposition(self.proposition)
-        result = super().form_valid(form)
-        data = form.cleaned_data
-        status = data['status']
-        adv = data['adviser']
-        prop = data['proposition_dissertation']
-        if status == dissertation_role_status.PROMOTEUR:
-            self.proposition.set_author(adv)
-            proposition_role.delete(status, prop)
-            proposition_role.add(status, adv, prop)
-        elif count_proposition_role < MAX_PROPOSITION_ROLE:
-            proposition_role.add(status, adv, prop)
-        return result
-
     def get_context_data(self, **kwargs):
         context = super(PropositionDissertationJuryNewView, self).get_context_data(**kwargs)
         if adviser.is_manager(self.request.user):

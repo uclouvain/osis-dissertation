@@ -30,10 +30,7 @@ from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import available_attrs
 
-from base import models as mdl
-from base.models import person
 from base.models.education_group import EducationGroup
-from dissertation.models import dissertation_role, adviser, faculty_adviser, proposition_role
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_role import DissertationRole
 from dissertation.models.enums import dissertation_role_status
@@ -47,12 +44,10 @@ def user_is_dissertation_promotor(user, dissert):
 
 
 def user_is_proposition_promotor(user, prop_diss):
-    pers = person.find_by_user(user)
-    this_adviser = adviser.search_by_person(pers)
     return PropositionRole.objects.filter(
         proposition_dissertation=prop_diss,
         status=dissertation_role_status.PROMOTEUR,
-        adviser=this_adviser).exists()
+        adviser__person__user=user).exists()
 
 
 def adviser_can_manage(dissert, advis):
