@@ -941,8 +941,7 @@ class DissertationJuryNewView(AjaxTemplateMixin, UserPassesTestMixin, CreateView
 
     def get_context_data(self, **kwargs):
         context = super(DissertationJuryNewView, self).get_context_data(**kwargs)
-        if adviser.is_manager(self.request.user):
-            context['manager'] = True
+        context['manager'] = adviser.is_manager(self.request.user)
         return context
 
     def get_success_url(self):

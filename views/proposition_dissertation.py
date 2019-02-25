@@ -226,8 +226,7 @@ class PropositionDissertationJuryNewView(AjaxTemplateMixin, UserPassesTestMixin,
     raise_exception = True
 
     def test_func(self):
-        if proposition_role.count_by_proposition(self.proposition) < MAX_PROPOSITION_ROLE:
-            return True
+        return proposition_role.count_by_proposition(self.proposition) < MAX_PROPOSITION_ROLE
 
     def dispatch(self, request, *args, **kwargs):
         adv = get_current_adviser(request)
@@ -246,8 +245,7 @@ class PropositionDissertationJuryNewView(AjaxTemplateMixin, UserPassesTestMixin,
 
     def get_context_data(self, **kwargs):
         context = super(PropositionDissertationJuryNewView, self).get_context_data(**kwargs)
-        if adviser.is_manager(self.request.user):
-            context['manager'] = True
+        context['manager'] = adviser.is_manager(self.request.user)
         return context
 
     def get_success_url(self):
