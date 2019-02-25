@@ -196,16 +196,19 @@
                    {% endif %}
                  </div>
                  {% endfor %}
+                 {% if count_proposition_role < 4 %}
                  <br>
                  <div class="row">
                      <div class="col-md-5 pull-right">
-                         <a href="{% url 'manager_proposition_dissertations_jury_new' pk=proposition_dissertation.pk %}"
-                              id="lnk_proposition_add_dissertation_jury_member" class="btn btn-default btn-sm"
+                         <a data-url="{% url 'manager_proposition_dissertations_jury_new' pk=proposition_dissertation.pk %}"
+                              id="lnk_proposition_add_dissertation_jury_member" data-modal_class="modal-lg"
+                              class="btn btn-default btn-sm trigger_modal"
                               role="button" title="{% trans 'Add jury member'%}"><span
                                    class="glyphicon glyphicon-plus"
                                    aria-hidden="true"></span> {% trans 'Add jury member'%}</a>
                      </div>
                  </div>
+                 {% endif %}
              </div>
     </div>
     {% include "new_document.html" %}

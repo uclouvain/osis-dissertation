@@ -36,10 +36,10 @@ from base.tests.factories.offer_year import OfferYearFactory
 from django.test import TestCase
 
 
-def create_offer_proposition(acronym, offer,offer_proposition_group=None):
+def create_offer_proposition(acronym, education_group, offer_proposition_group=None):
     offer_proposition = OfferPropositionFactory.create(
         acronym=acronym,
-        offer=offer,
+        education_group=education_group,
         offer_proposition_group=offer_proposition_group)
     EducationGroupYearFactory(education_group=offer_proposition.education_group)
     return offer_proposition

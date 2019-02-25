@@ -28,9 +28,12 @@ from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db.models import Count, OuterRef, Subquery, Q, Prefetch
 from django.http import HttpResponse
 from django.shortcuts import redirect, render, get_object_or_404
+from django.utils.functional import cached_property
+from django.views.generic import CreateView
 from openpyxl import Workbook
 from openpyxl.writer.excel import save_virtual_workbook
 
@@ -38,17 +41,23 @@ from base import models as mdl
 from base.models import academic_year
 from base.models.education_group_year import EducationGroupYear
 from base.views import layout
+from base.views.mixins import AjaxTemplateMixin
 from dissertation.forms import PropositionDissertationForm, ManagerPropositionDissertationForm, \
     ManagerPropositionRoleForm, ManagerPropositionDissertationEditForm
 from dissertation.models import adviser, offer_proposition, proposition_dissertation, \
     proposition_document_file, proposition_offer, proposition_role, offer_proposition_group
 from dissertation.models import dissertation
 from dissertation.models.dissertation import Dissertation
-from dissertation.models.enums import dissertation_status, dissertation_role_status
+from dissertation.models.enums import dissertation_role_status
+from dissertation.models.enums import dissertation_status
 from dissertation.models.offer_proposition import OfferProposition
 from dissertation.models.proposition_dissertation import PropositionDissertation
 from dissertation.models.proposition_offer import PropositionOffer
 from dissertation.models.proposition_role import PropositionRole
+from dissertation.perms import user_is_proposition_promotor, \
+    adviser_can_manage_proposition_dissertation
+
+MAX_PROPOSITION_ROLE = 4
 
 
 def detect_in_request(request, wanted_key, wanted_value):
@@ -210,32 +219,37 @@ def manager_proposition_dissertations_jury_edit(request, pk):
     return redirect('manager_proposition_dissertation_detail', pk=proposition.pk)
 
 
-@login_required
-@user_passes_test(adviser.is_manager)
-def manager_proposition_dissertations_jury_new(request, pk):
-    proposition = proposition_dissertation.find_by_id(pk)
-    if proposition is None:
-        return redirect('manager_proposition_dissertations')
-    count_proposition_role = PropositionRole.objects.filter(proposition_dissertation=proposition).count()
-    if request.method == "POST":
-        form = ManagerPropositionRoleForm(request.POST)
-        if form.is_valid():
-            data = form.cleaned_data
-            status = data['status']
-            adv = data['adviser']
-            prop = data['proposition_dissertation']
-            if status == "PROMOTEUR":
-                proposition.set_author(adv)
-                proposition_role.delete(status, prop)
-                proposition_role.add(status, adv, prop)
-            elif count_proposition_role < 4:
-                proposition_role.add(status, adv, prop)
-            return redirect('manager_proposition_dissertation_detail', pk=proposition.pk)
-        else:
-            form = ManagerPropositionRoleForm(initial={'proposition_dissertation': proposition})
-    else:
-        form = ManagerPropositionRoleForm(initial={'proposition_dissertation': proposition})
-    return layout.render(request, 'manager_proposition_dissertations_jury_edit.html', {'form': form})
+class PropositionDissertationJuryNewView(AjaxTemplateMixin, UserPassesTestMixin, CreateView):
+    model = PropositionRole
+    template_name = 'proposition_dissertations_jury_edit_inner.html'
+    form_class = ManagerPropositionRoleForm
+    raise_exception = True
+
+    def test_func(self):
+        return proposition_role.count_by_proposition(self.proposition) < MAX_PROPOSITION_ROLE
+
+    def dispatch(self, request, *args, **kwargs):
+        adv = get_current_adviser(request)
+        if adviser_can_manage_proposition_dissertation(self.proposition, adv) \
+                or user_is_proposition_promotor(request.user, self.proposition.pk) \
+                or self.proposition.creator == adv.person:
+                    return super().dispatch(request, *args, **kwargs)
+        return redirect('proposition_dissertations')
+
+    @cached_property
+    def proposition(self):
+        return get_object_or_404(proposition_dissertation.PropositionDissertation, pk=self.kwargs['pk'])
+
+    def get_initial(self):
+        return {'status': dissertation_role_status, 'proposition_dissertation': self.proposition}
+
+    def get_context_data(self, **kwargs):
+        context = super(PropositionDissertationJuryNewView, self).get_context_data(**kwargs)
+        context['manager'] = adviser.is_manager(self.request.user)
+        return context
+
+    def get_success_url(self):
+        return None
 
 
 @login_required
@@ -524,38 +538,6 @@ def proposition_dissertations_jury_edit(request, pk):
         return redirect('proposition_dissertations')
     proposition = prop_role.proposition_dissertation
     return redirect('proposition_dissertation_detail', pk=proposition.pk)
-
-
-@login_required
-@user_passes_test(adviser.is_teacher)
-def proposition_dissertations_jury_new(request, pk):
-    proposition = proposition_dissertation.find_by_id(pk)
-    if proposition is None:
-        return redirect('proposition_dissertations')
-    count_proposition_role = PropositionRole.objects.filter(proposition_dissertation=proposition).count()
-    adv = get_current_adviser(request)
-    if proposition.author == adv or proposition.creator == adv.person:
-        if request.method == "POST":
-            form = ManagerPropositionRoleForm(request.POST)
-            if form.is_valid():
-                data = form.cleaned_data
-                status = data['status']
-                adv = data['adviser']
-                prop = data['proposition_dissertation']
-                if status == "PROMOTEUR":
-                    proposition.set_author(adv)
-                    proposition_role.delete(status, prop)
-                    proposition_role.add(status, adv, prop)
-                elif count_proposition_role < 4:
-                    proposition_role.add(status, adv, prop)
-                return redirect('proposition_dissertation_detail', pk=proposition.pk)
-            else:
-                form = ManagerPropositionRoleForm(initial={'proposition_dissertation': proposition})
-        else:
-            form = ManagerPropositionRoleForm(initial={'proposition_dissertation': proposition})
-        return layout.render(request, 'proposition_dissertations_jury_edit.html', {'form': form})
-    else:
-        return redirect('proposition_dissertation_detail', pk=proposition.pk)
 
 
 @login_required
