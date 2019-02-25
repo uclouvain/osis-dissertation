@@ -90,15 +90,19 @@ class DissertationViewTestCase(TestCase):
                                                   academic_year=self.academic_year1)
         self.offer_year_start2 = OfferYearFactory(acronym="test_offer2", offer=self.offer2,
                                                   academic_year=self.academic_year1)
-        self.offer_proposition1 = OfferPropositionFactory(offer=self.offer1,
-                                                          global_email_to_commission=True,
-                                                          evaluation_first_year=True,
-                                                          education_group=self.education_group_year_start.education_group)
+        self.offer_proposition1 = OfferPropositionFactory(
+            offer=self.offer1,
+            global_email_to_commission=True,
+            evaluation_first_year=True,
+            education_group=self.education_group_year_start.education_group
+        )
         self.education_group_year1 = EducationGroupYearFactory(acronym="test_offer1",
-                                                               education_group=self.offer_proposition1.education_group)
+                                                               education_group=self.offer_proposition1.education_group,
+                                                               academic_year=self.academic_year1)
         self.offer_proposition2 = OfferPropositionFactory(offer=self.offer2, global_email_to_commission=False)
         self.education_group_year2 = EducationGroupYearFactory(acronym="test_offer2",
-                                                               education_group=self.offer_proposition2.education_group)
+                                                               education_group=self.offer_proposition2.education_group,
+                                                               academic_year=self.academic_year1)
         self.proposition_dissertation = PropositionDissertationFactory(author=self.teacher,
                                                                        creator=a_person_teacher,
                                                                        title='Proposition 1212121'
