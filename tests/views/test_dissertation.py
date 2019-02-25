@@ -91,9 +91,6 @@ class DissertationViewTestCase(TestCase):
             global_email_to_commission=True,
             evaluation_first_year=True,
             education_group=self.education_group_year_start.education_group)
-        self.education_group_year1 = EducationGroupYearFactory(acronym="test_offer1",
-                                                               education_group=self.offer_proposition1.education_group,
-                                                               academic_year=self.academic_year1)
         self.offer_proposition2 = OfferPropositionFactory(education_group=self.education_group3, global_email_to_commission=False)
         self.education_group_year2 = EducationGroupYearFactory(acronym="test_offer2",
                                                                education_group=self.offer_proposition2.education_group,
@@ -115,7 +112,7 @@ class DissertationViewTestCase(TestCase):
         FacultyAdviserFactory(
             adviser=self.manager,
             offer=self.offer1,
-            education_group=self.education_group_year1.education_group
+            education_group=self.education_group_year_start.education_group
         )
         self.manager2 = AdviserManagerFactory()
         FacultyAdviserFactory(
