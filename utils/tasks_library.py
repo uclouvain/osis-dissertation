@@ -89,6 +89,7 @@ def clean_db_with_no_educationgroup_match():
                 education_group__offer_proposition=OuterRef('pk'),
                 academic_year=current_academic_year).values('acronym')[:1]
         ))
+    log = ''
 
     def find_childs(offer_prop):
         tab_with_child_pk = []
@@ -98,7 +99,6 @@ def clean_db_with_no_educationgroup_match():
 
     offer_props_with_education_group_none.annotate(pk_child_list=find_childs)
     props_disserts = PropositionDissertation.objects.all().prefetch_related('propositionoffer_set')
-
     # parcours des propositions dissertations
     for prop_dissert in props_disserts:
         # parcours des liaisons proposition_offer de chaque proposition dissertation
@@ -116,10 +116,12 @@ def clean_db_with_no_educationgroup_match():
                 if if_other_proposition_offer_child == False:
                     # pour chaque programme enfant trouvé précédament et dont la PK est déjà stocké
                     for pk_child in pk_child_list:
-                        print('création d\'un enfant : prop_dissert.id :{}, offer_proposition.id :{}'.
-                              format(prop_dissert.id, pk_child))
+                        log = log + 'création d\'un enfant : prop_dissert.id :{}, offer_proposition.id :{}'\
+                            .format(prop_dissert.id, pk_child)
                         PropositionOffer.objects.create(proposition_dissertation=prop_dissert,
                                                         offer_proposition=get_object(pk=pk_child))
                 else:
-                    print('pas besoin de création d\'enfant pour id :{} , {}'.format(prop_dissert.id,
-                                                                                     prop_dissert.title))
+                    log = log + 'pas besoin de création d\'enfant pour id :{} , {}'.format(prop_dissert.id,
+                                                                                           prop_dissert.title)
+    print(log)
+
