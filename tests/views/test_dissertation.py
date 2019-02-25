@@ -31,6 +31,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.test import TestCase
 from django.utils.translation import ugettext_lazy as _
 
+from base.models.academic_year import current_academic_year
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
@@ -78,7 +79,7 @@ class DissertationViewTestCase(TestCase):
         self.offer1 = OfferFactory(title="test_offer1")
         self.offer2 = OfferFactory(title="test_offer2")
         self.education_group = EducationGroupFactory()
-        self.academic_year1 = AcademicYearFactory()
+        self.academic_year1 = current_academic_year()
         self.academic_year2 = AcademicYearFactory(year=self.academic_year1.year - 1)
         self.education_group_year_start = EducationGroupYearFactory(
             academic_year=self.academic_year1,
