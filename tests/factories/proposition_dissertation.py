@@ -23,12 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import factory
 import factory.fuzzy
 from django.utils import timezone
+
 from base.tests.factories.person import PersonFactory
-from dissertation.tests.factories.adviser import AdviserTeacherFactory
 from dissertation.models.proposition_dissertation import PropositionDissertation
+from dissertation.tests.factories.adviser import AdviserTeacherFactory
 
 
 class PropositionDissertationFactory(factory.DjangoModelFactory):

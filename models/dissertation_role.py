@@ -45,6 +45,9 @@ class DissertationRole(SerializableModel):
     adviser = models.ForeignKey('Adviser', related_name='dissertations_roles')
     dissertation = models.ForeignKey('Dissertation')
 
+    class Meta:
+        unique_together = ('status', 'adviser', 'dissertation')
+
     def __str__(self):
         return u"%s %s" % (self.status if self.status else "",
                            self.adviser if self.adviser else "")

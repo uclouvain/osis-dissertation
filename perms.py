@@ -30,9 +30,11 @@ from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import available_attrs
 
+from base.models.education_group import EducationGroup
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_role import DissertationRole
 from dissertation.models.enums import dissertation_role_status
+from dissertation.models.proposition_role import PropositionRole
 
 
 def user_is_dissertation_promotor(user, dissert):
@@ -41,10 +43,24 @@ def user_is_dissertation_promotor(user, dissert):
         filter(status=dissertation_role_status.PROMOTEUR).filter(adviser=this_adviser).exists()
 
 
+def user_is_proposition_promotor(user, prop_diss):
+    return PropositionRole.objects.filter(
+        proposition_dissertation=prop_diss,
+        status=dissertation_role_status.PROMOTEUR,
+        adviser__person__user=user).exists()
+
+
 def adviser_can_manage(dissert, advis):
     return advis.facultyadviser_set.filter(
         education_group=dissert.education_group_year_start.education_group
     ).exists() and advis.type == 'MGR'
+
+
+def adviser_can_manage_proposition_dissertation(prop_diss, advis):
+    education_groups_prop_diss_pk = EducationGroup.objects.filter(
+        offer_proposition__offer_propositions=prop_diss
+    ).values_list('id', flat=True)
+    return EducationGroup.objects.filter(facultyadviser__adviser=advis, pk__in=education_groups_prop_diss_pk).exists()
 
 
 def adviser_is_in_jury(user, pk):
