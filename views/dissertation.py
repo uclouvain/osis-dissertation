@@ -565,6 +565,22 @@ def manager_dissertations_accept_eval_list(request, pk):
 @login_required
 @user_passes_test(adviser.is_manager)
 @check_for_dissert(autorized_dissert_promotor_or_manager)
+def manager_dissertations_go_forward_from_list(request, pk, choice):
+    dissert = dissertation.get_object_or_none(Dissertation, pk=pk)
+    old_status = dissert.status
+    if choice == 'ok':
+        dissert.manager_accept()
+    elif choice == 'ko':
+        dissert.refuse()
+    else:
+        dissert.go_forward()
+    dissertation_update.add(request, dissert, old_status)
+    return redirect('manager_dissertations_list')
+
+
+@login_required
+@user_passes_test(adviser.is_manager)
+@check_for_dissert(autorized_dissert_promotor_or_manager)
 def manager_dissertations_to_dir_ko(request, pk):
     dissert = get_object_or_404(Dissertation.objects.select_related('author__person'), pk=pk)
     old_status = dissert.status
