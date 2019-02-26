@@ -374,9 +374,10 @@ def proposition_dissertations(request):
     propositions_dissertations = PropositionDissertation.objects.filter(
         active=True,
         visibility=True,
-    ).select_related('author__person', 'creator').prefetch_related(prefetch_propositions)
+    ).select_related('author__person', 'creator')\
+        .prefetch_related(prefetch_propositions)
     return render(request,
-                  'manager_proposition_dissertations_list.html',
+                  'proposition_dissertations_list.html',
                   {'propositions_dissertations': propositions_dissertations}
                   )
 
@@ -522,12 +523,13 @@ def proposition_dissertation_new(request):
 @login_required
 @user_passes_test(adviser.is_teacher)
 def proposition_dissertations_search(request):
+    prefetch_propositions = return_prefetch_propositions()
     propositions_dissertations = proposition_dissertation.search(terms=request.GET['search'],
                                                                  active=True,
-                                                                 visibility=True,
-                                                                 connected_adviser=get_current_adviser(request))
-    return layout.render(request, "proposition_dissertations_list.html",
-                         {'propositions_dissertations': propositions_dissertations})
+                                                                 visibility=True)\
+        .select_related('author__person', 'creator').prefetch_related(prefetch_propositions)
+    return render(request, "proposition_dissertations_list.html",
+                  {'propositions_dissertations': propositions_dissertations})
 
 
 @login_required
