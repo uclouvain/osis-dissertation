@@ -22,7 +22,7 @@
 #   see http://www.gnu.org/licenses/.
 # ##############################################################################
 
-from datetime import date
+from datetime import date, datetime
 
 from dateutil.relativedelta import relativedelta
 
@@ -30,13 +30,14 @@ from dissertation.models.offer_proposition import OfferProposition
 
 
 def offer_proposition_extend_dates():
+    date_time_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     all_offer_propositions = OfferProposition.objects.all()
     logs = ''
     for offer_proposition in all_offer_propositions:
         logs += check_dates_of_offer_proposition(offer_proposition)
     if not logs:
         logs = 'no action'
-    return logs
+    return "{}    task date: {}" .format(logs, date_time_now)
 
 
 def check_dates_of_offer_proposition(offer_prop):
@@ -46,7 +47,7 @@ def check_dates_of_offer_proposition(offer_prop):
     logs += check_date_end(offer_prop, start_arg="start_jury_visibility", end_arg="end_jury_visibility")
     logs += check_date_end(offer_prop, start_arg="start_edit_title", end_arg="end_edit_title")
     if logs:
-        logs = str(offer_prop.education_group.most_recent_acronym) + "\n" + logs
+        logs = str(offer_prop.recent_acronym_education_group) + " _____ " + logs
     return logs
 
 
@@ -56,12 +57,13 @@ def check_date_end(offer_prop, start_arg, end_arg):
     offer_end = getattr(offer_prop, end_arg)
     logs = ''
     if offer_end < date_now:
-        logs += "{} : {}  {} : {}".format(
-            start_arg, offer_start, end_arg, offer_end
+        logs += "{} :  {} : {}  {} : {}        ".format(
+            offer_prop.recent_acronym_education_group, start_arg, offer_start, end_arg, offer_end
         )
         setattr(offer_prop, start_arg, incr_year(offer_start))
         setattr(offer_prop, end_arg, incr_year(offer_end))
-        logs += "new data : {} : {} new {} : {} \n".format(start_arg, offer_start, end_arg, offer_end)
+        logs += "new data : {} : {} new {} : {}       ".format(start_arg, getattr(offer_prop, start_arg),
+                                                               end_arg, getattr(offer_prop, end_arg))
         offer_prop.save()
     return logs
 
