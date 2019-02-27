@@ -31,11 +31,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.test import TestCase
 from django.utils.translation import ugettext_lazy as _
 
-from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
 from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.offer import OfferFactory
-from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
 from base.tests.factories.student import StudentFactory
 from dissertation.models import adviser
@@ -78,7 +77,8 @@ class DissertationViewTestCase(TestCase):
         self.offer1 = OfferFactory(title="test_offer1")
         self.offer2 = OfferFactory(title="test_offer2")
         self.education_group = EducationGroupFactory()
-        self.academic_year1 = AcademicYearFactory()
+        self.education_group3 = EducationGroupFactory()
+        self.academic_year1 = create_current_academic_year()
         self.academic_year2 = AcademicYearFactory(year=self.academic_year1.year - 1)
         self.education_group_year_start = EducationGroupYearFactory(
             academic_year=self.academic_year1,
@@ -86,26 +86,21 @@ class DissertationViewTestCase(TestCase):
             acronym="test_offer1"
         )
         self.faculty_manager = FacultyAdviserFactory(adviser=self.manager, education_group=self.education_group)
-        self.offer_year_start1 = OfferYearFactory(acronym="test_offer1", offer=self.offer1,
-                                                  academic_year=self.academic_year1)
-        self.offer_year_start2 = OfferYearFactory(acronym="test_offer2", offer=self.offer2,
-                                                  academic_year=self.academic_year1)
-        self.offer_proposition1 = OfferPropositionFactory(offer=self.offer1,
-                                                          global_email_to_commission=True,
-                                                          evaluation_first_year=True,
-                                                          education_group=self.education_group_year_start.education_group)
-        self.education_group_year1 = EducationGroupYearFactory(acronym="test_offer1",
-                                                               education_group=self.offer_proposition1.education_group)
-        self.offer_proposition2 = OfferPropositionFactory(offer=self.offer2, global_email_to_commission=False)
+        self.offer_proposition1 = OfferPropositionFactory(
+            offer=self.offer1,
+            global_email_to_commission=True,
+            evaluation_first_year=True,
+            education_group=self.education_group_year_start.education_group)
+        self.offer_proposition2 = OfferPropositionFactory(education_group=self.education_group3, global_email_to_commission=False)
         self.education_group_year2 = EducationGroupYearFactory(acronym="test_offer2",
-                                                               education_group=self.offer_proposition2.education_group)
+                                                               education_group=self.offer_proposition2.education_group,
+                                                               academic_year=self.academic_year1)
         self.proposition_dissertation = PropositionDissertationFactory(author=self.teacher,
                                                                        creator=a_person_teacher,
                                                                        title='Proposition 1212121'
                                                                        )
         self.dissertation_test_email = DissertationFactory(author=self.student,
                                                            title='Dissertation_test_email',
-                                                           offer_year_start=self.offer_year_start1,
                                                            proposition_dissertation=self.proposition_dissertation,
                                                            status='DRAFT',
                                                            active=True,
@@ -117,7 +112,7 @@ class DissertationViewTestCase(TestCase):
         FacultyAdviserFactory(
             adviser=self.manager,
             offer=self.offer1,
-            education_group=self.education_group_year1.education_group
+            education_group=self.education_group_year_start.education_group
         )
         self.manager2 = AdviserManagerFactory()
         FacultyAdviserFactory(
@@ -143,7 +138,6 @@ class DissertationViewTestCase(TestCase):
             self.dissertations_list.append(DissertationFactory(
                 author=self.student,
                 title='Dissertation {}'.format(x),
-                offer_year_start=self.offer_year_start1,
                 education_group_year_start=self.education_group_year_start,
                 proposition_dissertation=proposition_dissertation,
                 status=status[x],
@@ -153,7 +147,6 @@ class DissertationViewTestCase(TestCase):
             ))
         self.dissertation_1 = DissertationFactory(author=self.student,
                                                   title='Dissertation 2017',
-                                                  offer_year_start=self.offer_year_start1,
                                                   education_group_year_start=self.education_group_year_start,
                                                   proposition_dissertation=proposition_dissertation,
                                                   status='COM_SUBMIT',
