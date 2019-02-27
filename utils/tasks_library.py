@@ -37,7 +37,7 @@ def offer_proposition_extend_dates():
         logs += check_dates_of_offer_proposition(offer_proposition)
     if not logs:
         logs = 'no action'
-    return "{}    task date: {}" .format(logs, date_time_now)
+    return "{} ;   task date: {}" .format(logs, date_time_now)
 
 
 def check_dates_of_offer_proposition(offer_prop):
@@ -47,7 +47,7 @@ def check_dates_of_offer_proposition(offer_prop):
     logs += check_date_end(offer_prop, start_arg="start_jury_visibility", end_arg="end_jury_visibility")
     logs += check_date_end(offer_prop, start_arg="start_edit_title", end_arg="end_edit_title")
     if logs:
-        logs = str(offer_prop.recent_acronym_education_group) + " _____ " + logs
+        logs = str(offer_prop.recent_acronym_education_group) + " , " + logs + ' ; '
     return logs
 
 
