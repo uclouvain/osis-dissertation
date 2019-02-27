@@ -47,7 +47,7 @@ from dissertation.tests.factories.faculty_adviser import FacultyAdviserFactory
 from dissertation.tests.factories.offer_proposition import OfferPropositionFactory
 from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
 from dissertation.tests.factories.proposition_offer import PropositionOfferFactory
-from dissertation.views.dissertation import new_status_display
+from dissertation.views.dissertation import new_status_display, manager_dissertations_go_forward_from_list
 from osis_common.models import message_history
 from osis_common.models import message_template
 
@@ -538,6 +538,26 @@ class DissertationViewTestCase(TestCase):
                                                                                'adviser': self.teacher.pk,
                                                                                "dissertation": self.dissertation_1.pk}
         )
+        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
+
+    def test_manager_dissertations_go_forward_from_list(self):
+        self.client.force_login(self.manager.person.user)
+        response = self.client.post(
+            reverse('manager_dissertations_go_forward_from_list', args=[self.dissertation_1.pk, "ok"])
+        )
+        self.dissertation_1.refresh_from_db()
+        self.assertEqual(self.dissertation_1.status, "EVA_SUBMIT")
+        response = self.client.post(
+            reverse('manager_dissertations_go_forward_from_list', args=[self.dissertation_1.pk, "ko"])
+        )
+        self.dissertation_1.refresh_from_db()
+        self.assertEqual(self.dissertation_1.status, "EVA_KO")
+
+        response = self.client.post(
+            reverse('manager_dissertations_go_forward_from_list', args=[self.dissertation_test_email.pk, "submit"])
+        )
+        self.dissertation_test_email.refresh_from_db()
+        self.assertEqual(self.dissertation_test_email.status, "DIR_SUBMIT")
         self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
 
 
