@@ -46,7 +46,7 @@ from dissertation.tests.factories.faculty_adviser import FacultyAdviserFactory
 from dissertation.tests.factories.offer_proposition import OfferPropositionFactory
 from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
 from dissertation.tests.factories.proposition_offer import PropositionOfferFactory
-from dissertation.views.dissertation import new_status_display, manager_dissertations_go_forward_from_list
+from dissertation.views.dissertation import new_status_display
 from osis_common.models import message_history
 from osis_common.models import message_template
 
