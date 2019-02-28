@@ -25,22 +25,29 @@
 ##############################################################################
 from functools import wraps
 
+from django.contrib.auth.models import User
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import available_attrs
 
-from base import models as mdl
-from base.models import person
-from dissertation.models import dissertation_role, adviser, faculty_adviser
+from base.models.education_group import EducationGroup
 from dissertation.models.dissertation import Dissertation
+from dissertation.models.dissertation_role import DissertationRole
 from dissertation.models.enums import dissertation_role_status
+from dissertation.models.proposition_role import PropositionRole
 
 
 def user_is_dissertation_promotor(user, dissert):
-    pers = person.find_by_user(user)
-    this_adviser = adviser.search_by_person(pers)
-    return dissertation_role.find_by_dissertation(dissert). \
+    this_adviser = user.person.adviser
+    return DissertationRole.objects.filter(dissertation=dissert). \
         filter(status=dissertation_role_status.PROMOTEUR).filter(adviser=this_adviser).exists()
+
+
+def user_is_proposition_promotor(user, prop_diss):
+    return PropositionRole.objects.filter(
+        proposition_dissertation=prop_diss,
+        status=dissertation_role_status.PROMOTEUR,
+        adviser__person__user=user).exists()
 
 
 def adviser_can_manage(dissert, advis):
@@ -49,28 +56,40 @@ def adviser_can_manage(dissert, advis):
     ).exists() and advis.type == 'MGR'
 
 
+def adviser_can_manage_proposition_dissertation(prop_diss, advis):
+    education_groups_prop_diss_pk = EducationGroup.objects.filter(
+        offer_proposition__offer_propositions=prop_diss
+    ).values_list('id', flat=True)
+    return EducationGroup.objects.filter(facultyadviser__adviser=advis, pk__in=education_groups_prop_diss_pk).exists()
+
+
 def adviser_is_in_jury(user, pk):
     dissert = get_object_or_404(Dissertation, pk=pk)
-    perso = mdl.person.find_by_user(user)
-    advis = adviser.search_by_person(perso)
-    return dissertation_role.count_by_adviser_dissertation(advis, dissert) > 0
+    return DissertationRole.objects.filter(dissertation=dissert, adviser__person__user=user).count() > 0
 
 
 def autorized_dissert_promotor_or_manager(user, pk):
-    dissert = get_object_or_404(Dissertation, pk=pk)
-    perso = mdl.person.find_by_user(user)
-    advis = adviser.search_by_person(perso)
-    return user_is_dissertation_promotor(user, dissert) or adviser_can_manage(dissert, advis)
+    dissert = get_object_or_404(Dissertation.objects.select_related('education_group_year_start__education_group').
+                                prefetch_related('advisers'), pk=pk)
+    if user.person.adviser:
+        return user_is_dissertation_promotor(user, dissert) or \
+               adviser_can_manage(dissert, user.person.adviser)
+    else:
+        return False
 
 
 def check_for_dissert(test_func):
     def f_check_for_dissert_or_redirect(view_func):
         @wraps(view_func, assigned=available_attrs(view_func))
         def _wrapped_view(request, *args, **kwargs):
-            if test_func(request.user, kwargs['pk']):
+            if test_func(return_user_with_adviser(request.user), kwargs['pk']):
                 return view_func(request, *args, **kwargs)
             else:
                 return HttpResponseForbidden()
         return _wrapped_view
 
     return f_check_for_dissert_or_redirect
+
+
+def return_user_with_adviser(user):
+    return get_object_or_404(User.objects.select_related('person__adviser'), pk=user.pk)

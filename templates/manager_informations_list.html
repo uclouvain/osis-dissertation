@@ -57,11 +57,16 @@
             <table class="table table-hover display responsive no-wrap" width="100%" id="table-advisers">
                 <thead>
                     <tr>
-                        <th>{% trans 'Teacher' %}</th>
+                        <th>{% trans 'Teachers' %}</th>
+                        <th>{% trans 'How many active dissertations for this current academic year (all programs)' %}</th>
                         <th>{% trans 'How many active dissertations (all programs)' %}</th>
+                        <th>{% trans 'How many active dissertations (your programs)' %}</th>
                         <th>{% trans 'How many dissertations as promotor' %}</th>
                         <th>{% trans 'How many dissertations as copromotor' %}</th>
                         <th>{% trans 'How many dissertations as reader' %}</th>
+                        <th>{% trans 'How many active dissertations as accompanist' %}</th>
+                        <th>{% trans 'How many dissertations as internship' %}</th>
+                        <th>{% trans 'How many dissertations as president' %}</th>
                         <th>{% trans 'How many dissertations need answer' %}</th>
                     </tr>
                 </thead>
@@ -69,16 +74,16 @@
                     {% for adviser in advisers %}
                         <tr>
                             <td><a href="{% url 'manager_informations_detail' pk=adviser.pk %}">{{ adviser }}</a></td>
-
-                            {% with ad_stat=adviser.get_stat_dissertation_role %}
-
-                            <td>{{ad_stat.0.0}}</td>
-                            <td>{{ad_stat.0.1}}</td>
-                            <td>{{ad_stat.0.2}}</td>
-                            <td>{{ad_stat.0.3}}</td>
-                            <td>{{ad_stat.0.4}}</td>
-
-                            {% endwith %}
+                            <td>{{adviser.dissertations_count_actif_this_academic_year}}</td>
+                            <td>{{adviser.dissertations_count_all_actif}}</td>
+                            <td>{{adviser.dissertations_count_all_actif_in_your_education_groups}}</td>
+                            <td>{{adviser.dissertations_count_promotor_actif}}</td>
+                            <td>{{adviser.dissertations_count_copromoteur_actif}}</td>
+                            <td>{{adviser.dissertations_count_reader_actif}}</td>
+                            <td>{{adviser.dissertations_count_accompanist_actif}}</td>
+                            <td>{{adviser.dissertations_count_internship_actif}}</td>
+                            <td>{{adviser.dissertations_count_president_actif}}</td>
+                            <td>{{adviser.dissertations_count_need_to_respond_actif}}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -103,7 +108,6 @@
                 "searching" : true,
                 "language":
                 {
-
                     "sProcessing":     "{% trans 'Processing...'%}",
                     "sSearch":         "{% trans 'Search:'%}",
                     "sLengthMenu":     "&nbsp;&nbsp;&nbsp;_MENU_ &eacute;l&eacute;ments",
@@ -129,6 +133,11 @@
                 },
                 "columns": [
                     null,
+                    { "orderable": false },
+                    { "orderable": false },
+                    { "orderable": true },
+                    { "orderable": false },
+                    { "orderable": false },
                     { "orderable": false },
                     { "orderable": false },
                     { "orderable": false },

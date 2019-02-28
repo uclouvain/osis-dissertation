@@ -35,10 +35,12 @@ from base.models import offer_year, student
 from base.models.education_group_year import EducationGroupYear
 from base.models.utils.utils import get_object_or_none
 from dissertation.models import dissertation_location
+from dissertation.models.dissertation_document_file import DissertationDocumentFile
 from dissertation.models.enums import dissertation_status
 from dissertation.models.offer_proposition import OfferProposition
 from dissertation.models.proposition_dissertation import PropositionDissertation
 from dissertation.utils import emails_dissert
+from osis_common.models.document_file import DocumentFile
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
@@ -86,11 +88,10 @@ class Dissertation(SerializableModel):
         blank=True,
         on_delete=models.PROTECT,
         related_name='dissertations', verbose_name=_('Programs'))
-    proposition_dissertation = models.ForeignKey(
-        PropositionDissertation,
-        verbose_name=_('Dissertation subject')
-    )
-    description = models.TextField(blank=True, null=True, verbose_name=_('Description'))
+    proposition_dissertation = models.ForeignKey(PropositionDissertation,
+                                                 related_name='dissertations',
+                                                 verbose_name=_('Description'))
+    description = models.TextField(blank=True)
     active = models.BooleanField(default=True)
     creation_date = models.DateTimeField(auto_now_add=True, editable=False)
     modification_date = models.DateTimeField(auto_now=True)
@@ -100,6 +101,8 @@ class Dissertation(SerializableModel):
         null=True,
         verbose_name=_('Dissertation location')
     )
+    location = models.ForeignKey(dissertation_location.DissertationLocation, blank=True, null=True)
+    dissertation_documents_files = models.ManyToManyField(DocumentFile, through=DissertationDocumentFile)
 
     def __str__(self):
         return self.title

@@ -24,15 +24,16 @@
 #
 ##############################################################################
 
-from rest_framework import status
 from django.test import TestCase
+from rest_framework import status
+
 import dissertation.perms
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
+from base.tests.factories.offer import OfferFactory
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
-from base.tests.factories.offer import OfferFactory
 from base.tests.factories.student import StudentFactory
 from dissertation.models.enums import dissertation_role_status
 from dissertation.tests.factories.adviser import AdviserManagerFactory, AdviserTeacherFactory
@@ -41,7 +42,9 @@ from dissertation.tests.factories.dissertation_role import DissertationRoleFacto
 from dissertation.tests.factories.faculty_adviser import FacultyAdviserFactory
 from dissertation.tests.factories.offer_proposition import OfferPropositionFactory
 from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
-from dissertation.perms import adviser_can_manage, autorized_dissert_promotor_or_manager
+from dissertation.perms import adviser_can_manage,\
+    autorized_dissert_promotor_or_manager, adviser_can_manage_proposition_dissertation
+from dissertation.tests.factories.proposition_offer import PropositionOfferFactory
 
 
 class DecoratorsTestCase(TestCase):
@@ -83,6 +86,10 @@ class DecoratorsTestCase(TestCase):
         )
         self.proposition_dissertation = PropositionDissertationFactory()
         self.offer_propo = OfferPropositionFactory(offer=self.offer1, education_group=self.education_group)
+        self.proposition_offer = PropositionOfferFactory(
+            proposition_dissertation=self.proposition_dissertation,
+            offer_proposition=self.offer_propo
+        )
         self.dissertation1 = DissertationFactory(
             author=self.student,
             offer_year_start=self.offer_year_start1,
@@ -127,7 +134,6 @@ class DecoratorsTestCase(TestCase):
         response = self.client.get('/dissertation/manager_dissertations_detail/' + str(self.dissertation1.id))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-
     def test_user_teacher_passes_test_for_dissert(self):
         self.client.force_login(self.a_person_teacher.user)
         response = self.client.get('/dissertation/dissertations_detail/' + '999999')
@@ -141,7 +147,15 @@ class DecoratorsTestCase(TestCase):
         response = self.client.get('/dissertation/dissertations_detail/' + str(self.dissertation1.id))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-
     def test_adviser_is_in_jury(self):
         self.assertTrue(autorized_dissert_promotor_or_manager(self.a_person_teacher.user, str(self.dissertation1.id)))
         self.assertFalse(autorized_dissert_promotor_or_manager(self.teacher2.person.user, str(self.dissertation1.id)))
+
+    def test_adviser_can_manage_proposition_dissertation(self):
+        self.client.force_login(self.manager.person.user)
+        self.assertEqual(adviser_can_manage_proposition_dissertation(
+            self.proposition_dissertation,
+            self.manager), True)
+        self.assertNotEqual(adviser_can_manage_proposition_dissertation(
+            self.proposition_dissertation,
+            self.manager2), True)

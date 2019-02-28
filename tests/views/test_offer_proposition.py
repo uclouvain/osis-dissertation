@@ -30,7 +30,6 @@ from django.urls import reverse
 from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.person import PersonFactory
-from dissertation.forms import ManagerOfferPropositionForm
 from dissertation.models import faculty_adviser, offer_proposition
 from dissertation.tests.factories.adviser import AdviserManagerFactory
 from dissertation.tests.factories.faculty_adviser import FacultyAdviserFactory

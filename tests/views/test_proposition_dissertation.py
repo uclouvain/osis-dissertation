@@ -23,45 +23,73 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.test import TestCase, RequestFactory
 import random
-from django.core.urlresolvers import reverse
-from dissertation.tests.models import test_proposition_dissertation, test_offer_proposition, test_adviser, \
-                                      test_proposition_role
-from base.tests.models import test_offer
 
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.test import TestCase
+
+from base.tests.factories.education_group import EducationGroupFactory
 from dissertation.models.proposition_dissertation import PropositionDissertation
 from dissertation.models.proposition_role import PropositionRole
+from dissertation.tests.factories.adviser import AdviserManagerFactory, AdviserTeacherFactory
+from dissertation.tests.factories.faculty_adviser import FacultyAdviserFactory
+from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
+from dissertation.tests.factories.proposition_offer import PropositionOfferFactory
+from dissertation.tests.factories.proposition_role import PropositionRoleFactory
+from dissertation.tests.models import test_proposition_dissertation, test_offer_proposition, test_adviser, \
+    test_proposition_role
+
 
 class PropositionDissertationViewTestCase(TestCase):
 
     def setUp(self):
         #Teacher
-        self.adviser_teacher = test_adviser.create_adviser_from_scratch(username='teacher', email='teacher@uclouvain.be',
-                                                                        password='teacher', type='PRF')
+        self.adviser_teacher = test_adviser.create_adviser_from_scratch(
+            username='teacher', email='teacher@uclouvain.be',
+            password='teacher', type='PRF')
         #Manager
-        self.adviser_manager = test_adviser.create_adviser_from_scratch(username='manager', email='manager@uclouvain.be',
-                                                                        password='manager', type='MGR')
-        #Proposition Offer
-        offer = test_offer.create_offer(title="TEST_OFFER")
-        self.offer_proposition = test_offer_proposition.create_offer_proposition(acronym="TEST_OFFER_NOW", offer=offer)
+        self.adviser_manager = test_adviser.create_adviser_from_scratch(
+            username='manager', email='manager@uclouvain.be',
+            password='manager', type='MGR')
+        self.teacher = AdviserTeacherFactory()
+        self.manager = AdviserManagerFactory()
+        self.education_group = EducationGroupFactory()
+        self.faculty_manager = FacultyAdviserFactory(adviser=self.manager,
+                                                     education_group=self.education_group)
+        self.offer_proposition = test_offer_proposition.create_offer_proposition(acronym="TEST_OFFER_NOW",
+                                                                                 education_group=self.education_group)
+        self.prop_diss = PropositionDissertationFactory(
+                title="Teacher proposition ",
+                author=self.teacher,
+                creator=self.teacher.person)
+        self.prop_offer = PropositionOfferFactory(
+            proposition_dissertation=self.prop_diss,
+            offer_proposition=self.offer_proposition
+        )
+        self.prop_role1 = PropositionRoleFactory(
+            status="PROMOTEUR",
+            adviser=self.teacher,
+            proposition_dissertation=self.prop_diss
+        )
         # Create multiple propositions dissertations
         self.teacher_propositon_dissertations = []
         self.manager_proposition_dissertations = []
         for x in range(0, 5):
             # Teacher proposition dissertation creation
-            teacher_prop = test_proposition_dissertation.create_proposition_dissertation(title="Teacher proposition " + str(x),
-                                                                          adviser=self.adviser_teacher,
-                                                                          person=self.adviser_teacher.person,
-                                                                          offer_proposition=self.offer_proposition)
+            teacher_prop = test_proposition_dissertation.create_proposition_dissertation(
+                title="Teacher proposition " + str(x),
+                adviser=self.adviser_teacher,
+                person=self.adviser_teacher.person,
+                offer_proposition=self.offer_proposition)
             self.teacher_propositon_dissertations.append(teacher_prop)
             # Manager proposition dissertation creation
-            manager_prop = test_proposition_dissertation.create_proposition_dissertation(title="Manager propostion " + str(x),
-                                                                          adviser=self.adviser_manager,
-                                                                          person=self.adviser_manager.person,
-                                                                          offer_proposition=self.offer_proposition)
+            manager_prop = test_proposition_dissertation.create_proposition_dissertation(
+                title="Manager propostion " + str(x),
+                adviser=self.adviser_manager,
+                person=self.adviser_manager.person,
+                offer_proposition=self.offer_proposition)
             self.manager_proposition_dissertations.append(manager_prop)
-
 
     ###########################
     #         TEACHER         #
@@ -123,7 +151,7 @@ class PropositionDissertationViewTestCase(TestCase):
         self.client.login(username='teacher', password='teacher')
         url = reverse('proposition_dissertations')
         response = self.client.get(url)
-        self.assertEqual(len(response.context['propositions_dissertations']), 10) #5 teachers / 5 managers
+        self.assertEqual(len(response.context['propositions_dissertations']), 11) #5 teachers / 5 managers
 
     def test_get_my_proposition_dissertations(self):
         self.client.login(username='teacher', password='teacher')
@@ -148,89 +176,13 @@ class PropositionDissertationViewTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context['propositions_dissertations']), 1)
 
-    #TODO: Check if the redirection is correct because it seems strange to render a layout
-    #      "proposition_dissertations_jury_edit"
-    def test_get_new_jury_proposition_dissertations(self):
-        self.client.login(username='teacher', password='teacher')
-        proposition = self.teacher_propositon_dissertations[1]
-        url = reverse('proposition_dissertations_jury_new', args=[proposition.id])
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-        #self.assertRedirects(response, reverse('proposition_dissertations_jury_edit', args=[proposition.id]))
-
-    def test_post_new_jury_proposition_dissertations(self):
-        self.client.login(username='teacher', password='teacher')
-        proposition = self.teacher_propositon_dissertations[1]
-        new_adviser = test_adviser.create_adviser_from_scratch(username='thomas', email='thomas@uclouvain.be',
-                                                               password='thomas', type='PRF')
-
-        url = reverse('proposition_dissertations_jury_new', args=[proposition.id])
-        response = self.client.post(url, data={ "status"  : 'PROMOTEUR',
-                                                "adviser" : new_adviser.id,
-                                                "proposition_dissertation" : proposition.id })
-        self.assertRedirects(response, reverse('proposition_dissertation_detail', args=[proposition.id]))
-
-        nb_occurence = PropositionRole.objects.filter(status="PROMOTEUR",adviser=new_adviser,
-                                                      proposition_dissertation=proposition).count()
-        self.assertEqual(nb_occurence, 1)
-
-    #Test max [4] number for jury
-    def test_post_max_new_jury_proposition_dissertations(self):
-        self.client.login(username='teacher', password='teacher')
-        proposition = self.teacher_propositon_dissertations[1]
-        url = reverse('proposition_dissertations_jury_new', args=[proposition.id])
-
-        #PROMOTEUR
-        new_adviser_1 = test_adviser.create_adviser_from_scratch(username='thomas', email='thomas@uclouvain.be',
-                                                                 password='thomas', type='PRF')
-        response = self.client.post(url, data={"status": 'PROMOTEUR',
-                                               "adviser": new_adviser_1.id,
-                                               "proposition_dissertation": proposition.id})
-        self.assertRedirects(response, reverse('proposition_dissertation_detail', args=[proposition.id]))
-
-        #CO_PROMOTEUR
-        new_adviser_2 = test_adviser.create_adviser_from_scratch(username='dupont', email='dupont@uclouvain.be',
-                                                                 password='dupont', type='PRF')
-        response = self.client.post(url, data={"status": 'CO_PROMOTEUR',
-                                               "adviser": new_adviser_2.id,
-                                               "proposition_dissertation": proposition.id})
-        self.assertRedirects(response, reverse('proposition_dissertation_detail', args=[proposition.id]))
-
-        #READER
-        new_adviser_3 = test_adviser.create_adviser_from_scratch(username='durant', email='durant@uclouvain.be',
-                                                                 password='durant', type='PRF')
-        response = self.client.post(url, data={"status": 'READER',
-                                               "adviser": new_adviser_3.id,
-                                               "proposition_dissertation": proposition.id})
-        self.assertRedirects(response, reverse('proposition_dissertation_detail', args=[proposition.id]))
-
-        #ACCOMPANIST
-        new_adviser_4 = test_adviser.create_adviser_from_scratch(username='paul', email='paul@uclouvain.be',
-                                                                 password='paul', type='PRF')
-        response = self.client.post(url, data={"status": 'ACCOMPANIST',
-                                               "adviser": new_adviser_4.id,
-                                               "proposition_dissertation": proposition.id})
-        self.assertRedirects(response, reverse('proposition_dissertation_detail', args=[proposition.id]))
-        nb_occurence = PropositionRole.objects.filter(proposition_dissertation=proposition).count()
-        self.assertEqual(nb_occurence, 4)
-
-        #Try another add but must not pass
-        new_adviser_5 = test_adviser.create_adviser_from_scratch(username='xavier', email='xavier@uclouvain.be',
-                                                                 password='xavier', type='PRF')
-        response = self.client.post(url, data={"status": 'PRESIDENT',
-                                               "adviser": new_adviser_5.id,
-                                               "proposition_dissertation": proposition.id})
-        self.assertRedirects(response, reverse('proposition_dissertation_detail', args=[proposition.id]))
-        nb_occurence = PropositionRole.objects.filter(proposition_dissertation=proposition).count()
-        self.assertEqual(nb_occurence, 4) #4 elem and not 5 (Max: 4) !
-
     def test_delete_jury_proposition_dissertations(self):
         self.client.login(username='teacher', password='teacher')
         proposition = self.teacher_propositon_dissertations[1]
-        adviser = test_adviser.create_adviser_from_scratch(username='thomas', email='thomas@uclouvain.be',
+        adviser_test = test_adviser.create_adviser_from_scratch(username='thomas', email='thomas@uclouvain.be',
                                                            password='thomas', type='PRF')
         status = "CO_PROMOTEUR"
-        proposition_role = test_proposition_role.create_proposition_role(proposition=proposition, adviser=adviser,
+        proposition_role = test_proposition_role.create_proposition_role(proposition=proposition, adviser=adviser_test,
                                                                          status=status)
         nb_occurence = PropositionRole.objects.filter(proposition_dissertation=proposition).count()
         self.assertEqual(nb_occurence, 2) #teacher as "PROMOTEUR" AND thomas as "CO_PROMOTEUR"
@@ -240,7 +192,6 @@ class PropositionDissertationViewTestCase(TestCase):
         self.assertRedirects(response, reverse('proposition_dissertation_detail', args=[proposition.id]))
         nb_occurence_after_delete = PropositionRole.objects.filter(proposition_dissertation=proposition).count()
         self.assertEqual(nb_occurence_after_delete, 1)  # teacher as "PROMOTEUR"
-
 
     def get_unused_id_proposition_dissertation(self):
         allowed_values = list(range(0, 600))
@@ -273,6 +224,32 @@ class PropositionDissertationViewTestCase(TestCase):
             "txt_checkbox_" + str(self.offer_proposition.id) : "on"  # Simulate checkbox
         }
 
-    ###########################
-    #         MANAGER         #
-    ###########################
+    def test_proposition_dissertation_jury_new_view_with_teacher(self):
+        self.client.force_login(self.teacher.person.user)
+        response = self.client.post(
+            reverse('manager_proposition_dissertations_jury_new', args=[self.prop_diss.pk]),
+            {"status": "READER",
+             'adviser': self.teacher.pk,
+             "proposition_dissertation": self.prop_diss.pk}
+        )
+        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
+
+    def test_dissertation_jury_new_view_with_manager(self):
+        self.client.force_login(self.manager.person.user)
+        response = self.client.post(
+            reverse('manager_proposition_dissertations_jury_new', args=[self.prop_diss.pk]),
+            {"status": "READER",
+             'adviser': self.teacher.pk,
+             "proposition_dissertation": self.prop_diss.pk}
+        )
+        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
+
+    def test_dissertation_jury_new_view_promotor_add(self):
+        self.client.force_login(self.manager.person.user)
+        response = self.client.post(
+            reverse('manager_proposition_dissertations_jury_new', args=[self.prop_diss.pk]),
+            {"status": "PROMOTEUR",
+             'adviser': self.teacher.pk,
+             "proposition_dissertation": self.prop_diss.pk}
+        )
+        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
