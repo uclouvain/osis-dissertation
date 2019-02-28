@@ -49,6 +49,7 @@ from base.models.academic_year import AcademicYear
 from base.models.education_group import EducationGroup
 from base.models.person import Person
 from base.models.student import Student
+from base.utils.cache import cache_filter
 from base.views.mixins import AjaxTemplateMixin
 from dissertation.forms import ManagerDissertationEditForm, ManagerDissertationRoleForm, \
     ManagerDissertationUpdateForm, AdviserForm
@@ -65,6 +66,7 @@ from dissertation.models.enums.dissertation_status import DISSERTATION_STATUS
 from dissertation.models.offer_proposition import OfferProposition
 from dissertation.perms import adviser_can_manage, autorized_dissert_promotor_or_manager, check_for_dissert, \
     adviser_is_in_jury
+from osis_common.decorators.ajax import ajax_required
 
 
 def _role_can_be_deleted(dissert, dissert_role):
@@ -281,6 +283,7 @@ def manager_dissertations_jury_new_ajax(request):
 
 
 @login_required
+@cache_filter()
 @user_passes_test(adviser.is_manager)
 def manager_dissertations_list(request):
     disserts = Dissertation.objects.filter(
@@ -367,6 +370,7 @@ def get_ordered_roles(dissert):
 
 
 @login_required
+@cache_filter()
 @user_passes_test(adviser.is_manager)
 def manager_dissertations_search(request):
     terms = request.GET.get('search', '')
@@ -560,6 +564,22 @@ def manager_dissertations_accept_eval_list(request, pk):
     dissert.manager_accept()
     dissertation_update.add(request, dissert, old_status)
     return redirect('manager_dissertations_wait_eval_list')
+
+
+@login_required
+@user_passes_test(adviser.is_manager)
+@check_for_dissert(autorized_dissert_promotor_or_manager)
+def manager_dissertations_go_forward_from_list(request, pk, choice):
+    dissert = dissertation.get_object_or_none(Dissertation, pk=pk)
+    old_status = dissert.status
+    if choice == 'ok':
+        dissert.manager_accept()
+    elif choice == 'ko':
+        dissert.refuse()
+    else:
+        dissert.go_forward()
+    dissertation_update.add(request, dissert, old_status)
+    return redirect('manager_dissertations_search')
 
 
 @login_required
