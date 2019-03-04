@@ -29,6 +29,7 @@ from dissertation.utils import request
 from dissertation.utils.request import find_adviser_list_json
 from dissertation.views import dissertation, proposition_dissertation, information, offer_proposition, \
     upload_dissertation_file, upload_proposition_file
+from dissertation.views.dissertation import AdviserAutocomplete
 
 urlpatterns = [
     url(r'^$', dissertation.dissertations, name='dissertations'),
@@ -36,8 +37,10 @@ urlpatterns = [
         name='dissertations_detail'),
     url(r'^dissertations_detail_updates/(?P<pk>[0-9]+)$', dissertation.dissertations_detail_updates,
         name='dissertations_detail_updates'),
-    url(r'^dissertations_jury_new/(?P<pk>[0-9]+)$', dissertation.dissertations_jury_new,
+    url(r'^dissertations_jury_new/(?P<pk>[0-9]+)$', dissertation.DissertationJuryNewView.as_view(),
         name='dissertations_jury_new'),
+    url(r'^adviser-autocomplete/$', AdviserAutocomplete.as_view(),
+        name='adviser-autocomplete'),
     url(r'^dissertations_list$', dissertation.dissertations_list,
         name='dissertations_list'),
     url(r'^dissertations_role_delete/(?P<pk>[0-9]+)$', dissertation.dissertations_role_delete,
@@ -62,10 +65,11 @@ urlpatterns = [
         name='manager_dissertations_detail_updates'),
     url(r'^manager_dissertations_edit/(?P<pk>[0-9]+)$', dissertation.manager_dissertations_edit,
         name='manager_dissertations_edit'),
+    url(r'^manager_dissertations_go_forward_from_list/(?P<pk>[0-9]+)/(?P<choice>[a-zA-Z]\w+)/$',
+        dissertation.manager_dissertations_go_forward_from_list,
+        name='manager_dissertations_go_forward_from_list'),
     url(r'^manager_dissertations_jury_edit/(?P<pk>[0-9]+)$', dissertation.manager_dissertations_jury_edit,
         name='manager_dissertations_jury_edit'),
-    url(r'^manager_dissertations_jury_new/(?P<pk>[0-9]+)$', dissertation.manager_dissertations_jury_new,
-        name='manager_dissertations_jury_new'),
     url(r'^manager_dissertations_list$', dissertation.manager_dissertations_list,
         name='manager_dissertations_list'),
     url(r'^manager_dissertations_role_delete/(?P<pk>[0-9]+)$', dissertation.manager_dissertations_role_delete,
@@ -140,7 +144,7 @@ urlpatterns = [
         proposition_dissertation.manager_proposition_dissertations_jury_edit,
         name='manager_proposition_dissertations_jury_edit'),
     url(r'^manager_proposition_dissertation_jury_new/(?P<pk>[0-9]+)$',
-        proposition_dissertation.manager_proposition_dissertations_jury_new,
+        proposition_dissertation.PropositionDissertationJuryNewView.as_view(),
         name='manager_proposition_dissertations_jury_new'),
     url(r'^manager_proposition_dissertations_role_delete/(?P<pk>[0-9]+)$',
         proposition_dissertation.manager_proposition_dissertations_role_delete,
@@ -170,9 +174,6 @@ urlpatterns = [
     url(r'^proposition_dissertation_jury_edit/(?P<pk>[0-9]+)$',
         proposition_dissertation.proposition_dissertations_jury_edit,
         name='proposition_dissertations_jury_edit'),
-    url(r'^proposition_dissertation_jury_new/(?P<pk>[0-9]+)$',
-        proposition_dissertation.proposition_dissertations_jury_new,
-        name='proposition_dissertations_jury_new'),
     url(r'^proposition_dissertations_role_delete/(?P<pk>[0-9]+)$',
         proposition_dissertation.proposition_dissertations_role_delete,
         name='proposition_dissertations_role_delete'),

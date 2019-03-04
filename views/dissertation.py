@@ -26,14 +26,18 @@
 import json
 import time
 
+from dal import autocomplete
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db.models import Q, F
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.shortcuts import redirect
 from django.utils import timezone
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
+from django.views.generic import CreateView
 from openpyxl import Workbook
 from openpyxl.utils.exceptions import IllegalCharacterError
 from openpyxl.writer.excel import save_virtual_workbook
@@ -45,10 +49,13 @@ from base.models.academic_year import AcademicYear
 from base.models.education_group import EducationGroup
 from base.models.person import Person
 from base.models.student import Student
+from base.utils.cache import cache_filter
+from base.views.mixins import AjaxTemplateMixin
 from dissertation.forms import ManagerDissertationEditForm, ManagerDissertationRoleForm, \
     ManagerDissertationUpdateForm, AdviserForm
 from dissertation.models import adviser, dissertation, dissertation_document_file, dissertation_role, \
     dissertation_update, offer_proposition, proposition_role
+
 from dissertation.models.adviser import Adviser
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_document_file import DissertationDocumentFile
@@ -59,6 +66,7 @@ from dissertation.models.enums.dissertation_status import DISSERTATION_STATUS
 from dissertation.models.offer_proposition import OfferProposition
 from dissertation.perms import adviser_can_manage, autorized_dissert_promotor_or_manager, check_for_dissert, \
     adviser_is_in_jury
+from osis_common.decorators.ajax import ajax_required
 
 
 def _role_can_be_deleted(dissert, dissert_role):
@@ -248,33 +256,6 @@ def manager_dissertations_jury_edit(request, pk):
     return render(request, 'manager_dissertations_jury_edit.html', {'form': form})
 
 
-@login_required
-@user_passes_test(adviser.is_manager)
-@check_for_dissert(autorized_dissert_promotor_or_manager)
-def manager_dissertations_jury_new(request, pk):
-    dissert = dissertation.find_by_id(pk)
-    count_dissertation_role = dissertation_role.count_by_dissertation(dissert)
-    if count_dissertation_role < MAX_DISSERTATION_ROLE_FOR_ONE_DISSERTATION and dissert.status != 'DRAFT':
-        if request.method == "POST":
-            form = ManagerDissertationRoleForm(request.POST)
-            if form.is_valid():
-                data = form.cleaned_data
-                status = data['status']
-                adv = data['adviser']
-                diss = data['dissertation']
-                justification = "%s %s %s" % (_("Manager add jury"), str(status), str(adv))
-                dissertation_update.add(request, dissert, dissert.status, justification=justification)
-                dissertation_role.add(status, adv, diss)
-                return redirect('manager_dissertations_detail', pk=dissert.pk)
-            else:
-                form = ManagerDissertationRoleForm(initial={'dissertation': dissert})
-        else:
-            form = ManagerDissertationRoleForm(initial={'dissertation': dissert})
-        return render(request, 'manager_dissertations_jury_edit.html', {'form': form, 'dissert': dissert})
-    else:
-        return redirect('manager_dissertations_detail', pk=dissert.pk)
-
-
 @require_http_methods(["POST"])
 @login_required
 @user_passes_test(adviser.is_manager)
@@ -302,6 +283,7 @@ def manager_dissertations_jury_new_ajax(request):
 
 
 @login_required
+@cache_filter()
 @user_passes_test(adviser.is_manager)
 def manager_dissertations_list(request):
     disserts = Dissertation.objects.filter(
@@ -388,6 +370,7 @@ def get_ordered_roles(dissert):
 
 
 @login_required
+@cache_filter()
 @user_passes_test(adviser.is_manager)
 def manager_dissertations_search(request):
     terms = request.GET.get('search', '')
@@ -581,6 +564,22 @@ def manager_dissertations_accept_eval_list(request, pk):
     dissert.manager_accept()
     dissertation_update.add(request, dissert, old_status)
     return redirect('manager_dissertations_wait_eval_list')
+
+
+@login_required
+@user_passes_test(adviser.is_manager)
+@check_for_dissert(autorized_dissert_promotor_or_manager)
+def manager_dissertations_go_forward_from_list(request, pk, choice):
+    dissert = dissertation.get_object_or_none(Dissertation, pk=pk)
+    old_status = dissert.status
+    if choice == 'ok':
+        dissert.manager_accept()
+    elif choice == 'ko':
+        dissert.refuse()
+    else:
+        dissert.go_forward()
+    dissertation_update.add(request, dissert, old_status)
+    return redirect('manager_dissertations_search')
 
 
 @login_required
@@ -925,40 +924,56 @@ def dissertations_role_delete(request, pk):
     return redirect('dissertations_detail', pk=dissert.pk)
 
 
-@login_required
-@user_passes_test(adviser.is_teacher)
-def dissertations_jury_new(request, pk):
-    dissert = dissertation.find_by_id(pk)
-    if dissert is None:
-        return redirect('dissertations_list')
-    person = mdl.person.find_by_user(request.user)
-    adv = adviser.search_by_person(person)
-    offer_prop = offer_proposition.get_by_dissertation(dissert)
-    if offer_prop is not None and teacher_is_promotor(adv, dissert):
+class DissertationJuryNewView(AjaxTemplateMixin, UserPassesTestMixin, CreateView):
+    model = DissertationRole
+    template_name = 'dissertations_jury_edit_inner.html'
+    form_class = ManagerDissertationRoleForm
+    raise_exception = True
+
+    def test_func(self):
+        dissert = self.dissertation
         count_dissertation_role = dissertation_role.count_by_dissertation(dissert)
-        if count_dissertation_role < MAX_DISSERTATION_ROLE_FOR_ONE_DISSERTATION \
-                and offer_prop.adviser_can_suggest_reader:
-            if request.method == "POST":
-                form = ManagerDissertationRoleForm(request.POST)
-                if form.is_valid():
-                    data = form.cleaned_data
-                    status = data['status']
-                    adv = data['adviser']
-                    diss = data['dissertation']
-                    justification = "%s %s %s" % (_("Teacher added jury"), str(status), str(adv))
-                    dissertation_update.add(request, dissert, dissert.status, justification=justification)
-                    dissertation_role.add(status, adv, diss)
-                    return redirect('dissertations_detail', pk=dissert.pk)
-                else:
-                    form = ManagerDissertationRoleForm(initial={'dissertation': dissert})
-            else:
-                form = ManagerDissertationRoleForm(initial={'dissertation': dissert})
-            return render(
-                request,
-                'dissertations_jury_edit.html',
-                {
-                    'form': form,
-                    'dissert': dissert,
-                }
-            )
-    return redirect('dissertations_detail', pk=dissert.pk)
+        offer_prop = offer_proposition.get_by_dissertation(dissert)
+        if offer_prop is not None:
+            if adviser.is_teacher(self.request.user):
+                return offer_prop.adviser_can_suggest_reader \
+                    and count_dissertation_role < MAX_DISSERTATION_ROLE_FOR_ONE_DISSERTATION
+            if adviser.is_manager(self.request.user):
+                return count_dissertation_role < MAX_DISSERTATION_ROLE_FOR_ONE_DISSERTATION \
+                       and dissert.status != 'DRAFT'
+
+    def dispatch(self, request, *args, **kwargs):
+        if autorized_dissert_promotor_or_manager(request.user, self.dissertation.pk):
+            return super().dispatch(request, *args, **kwargs)
+        return redirect('dissertations')
+
+    @cached_property
+    def dissertation(self):
+        return get_object_or_404(dissertation.Dissertation, pk=self.kwargs['pk'])
+
+    def get_initial(self):
+        return {'status': dissertation_role_status, 'dissertation': self.dissertation}
+
+    def get_form_kwargs(self):
+        form_kwargs = super().get_form_kwargs()
+        form_kwargs['request'] = self.request
+        return form_kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super(DissertationJuryNewView, self).get_context_data(**kwargs)
+        context['manager'] = adviser.is_manager(self.request.user)
+        return context
+
+    def get_success_url(self):
+        return None
+
+
+class AdviserAutocomplete(autocomplete.Select2QuerySetView):
+    def get_result_label(self, item):
+        return "{} {}, {}".format(item.person.last_name, item.person.first_name, item.person.email)
+
+    def get_queryset(self):
+        qs = Adviser.objects.all().select_related("person").order_by("person")
+        if self.q:
+            qs = qs.filter(Q(person__last_name__icontains=self.q) | Q(person__first_name__icontains=self.q))
+        return qs

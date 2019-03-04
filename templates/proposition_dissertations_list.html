@@ -84,11 +84,11 @@
                       {% else %}
                         <span class="label label-warning">{% trans 'Invisible' %}</span>
                       {% endif %}
-                  </td>
-                  <td>
-                      {% for prop_offer in proposition_dissertation.propositionoffer_set.all %}
+                    </td>
+                    <td>
+                        {% for offer_proposition in proposition_dissertation.offer_propositions.all %}
                         <span class="label label-default" >
-                          {{ prop_offer.last_acronym }}
+                          {{ offer_proposition.last_acronym }}
                         </span>
                         &nbsp;
                       {% endfor %}

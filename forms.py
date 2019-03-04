@@ -23,20 +23,24 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from dal import autocomplete
 from django import forms
 from django.forms import ModelForm
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 
 from base import models as mdl
 from base.models.education_group_year import EducationGroupYear
 from base.models.student import Student
+from dissertation.models import dissertation_update, adviser, proposition_role
 from dissertation.models.adviser import Adviser
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_role import DissertationRole
 from dissertation.models.dissertation_update import DissertationUpdate
+from dissertation.models.enums import dissertation_role_status
 from dissertation.models.offer_proposition import OfferProposition
 from dissertation.models.proposition_dissertation import PropositionDissertation
-from dissertation.models.proposition_role import PropositionRole
+from dissertation.models.proposition_role import PropositionRole, MAX_PROPOSITION_ROLE
 
 
 class AdviserForm(ModelForm):
@@ -134,10 +138,43 @@ class ManagerDissertationEditForm(ModelForm):
 
 
 class ManagerDissertationRoleForm(ModelForm):
+    # TODO :: remplacer request par user mais cela implique de remplacer dissertation_update_add
+    def __init__(self, request, *args, **kwargs):
+        self.request = request
+        super().__init__(*args, **kwargs)
+
     class Meta:
         model = DissertationRole
         fields = ('dissertation', 'status', 'adviser')
-        widgets = {'dissertation': forms.HiddenInput()}
+        widgets = {'dissertation': forms.HiddenInput(),
+                   'adviser': autocomplete.ModelSelect2(url='adviser-autocomplete', attrs={'style': 'width:100%'})}
+
+    class Media:
+        css = {
+            'all': ('css/select2-bootstrap.css',)
+        }
+
+    def save(self, commit=True):
+        data = self.cleaned_data
+        status = data['status']
+        adv = data['adviser']
+        diss = data['dissertation']
+        justification = self._get_justification()
+        dissertation_update.add(self.request, diss, status, justification=justification)
+        if status == dissertation_role_status.PROMOTEUR:
+            instance, created = DissertationRole.objects.update_or_create(
+                dissertation=diss,
+                status=status,
+                defaults={'adviser': adv})
+        else:
+            instance = super().save(commit)
+        return instance
+
+    def _get_justification(self):
+        status = self.cleaned_data['status']
+        adv = self.cleaned_data['adviser']
+        action = _("Teacher added jury") if adviser.is_teacher(self.request.user) else _("Manager add jury")
+        return "%s %s %s" % (action, str(status), str(adv))
 
 
 class ManagerOfferPropositionForm(ModelForm):
@@ -168,7 +205,27 @@ class ManagerPropositionRoleForm(ModelForm):
     class Meta:
         model = PropositionRole
         fields = ('proposition_dissertation', 'status', 'adviser')
-        widgets = {'proposition_dissertation': forms.HiddenInput()}
+        widgets = {'proposition_dissertation': forms.HiddenInput(),
+                   'adviser': autocomplete.ModelSelect2(url='adviser-autocomplete', attrs={'style': 'width:100%'})}
+
+    class Media:
+        css = {
+            'all': ('css/select2-bootstrap.css',)
+        }
+
+    def save(self, commit=True):
+        data = self.cleaned_data
+        status = data['status']
+        adv = data['adviser']
+        prop = data['proposition_dissertation']
+        if status == dissertation_role_status.PROMOTEUR:
+            instance, created = PropositionRole.objects.update_or_create(
+                proposition_dissertation=prop,
+                status=status,
+                defaults={'adviser': adv})
+        else:
+            instance = super().save(commit)
+        return instance
 
 
 class ManagerDissertationUpdateForm(ModelForm):
