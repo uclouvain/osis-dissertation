@@ -22,16 +22,12 @@
 #   see http://www.gnu.org/licenses/.
 # ##############################################################################
 from datetime import date, datetime
-from dateutil.relativedelta import relativedelta
-from django.db.models import Subquery, OuterRef
 
-from base.models.academic_year import current_academic_year
-from base.models.education_group_year import EducationGroupYear
-from base.models.offer_year import OfferYear
+from dateutil.relativedelta import relativedelta
+
 from dissertation.models.offer_proposition import OfferProposition
 from dissertation.models.proposition_dissertation import PropositionDissertation
 from dissertation.models.proposition_offer import PropositionOffer
-from osis_common.tests.queue.test_callbacks import get_object
 
 
 def offer_proposition_extend_dates():
@@ -77,52 +73,55 @@ def incr_year(date_too):
     return date_too + relativedelta(years=1)
 
 
-def clean_db_with_no_educationgroup_match():
-    offer_props_with_education_group_none = OfferProposition.objects.filter(education_group=None).annotate(
-        last_acronym=Subquery(
-            OfferYear.objects.filter(
-                offer__offer_proposition=OuterRef('pk'),
-                academic_year=current_academic_year).values('acronym')[:1]
-        ))
-    offer_props_with_education_group_not_none = OfferProposition.objects.exclude(education_group=None).annotate(
-        last_acronym=Subquery(
-            EducationGroupYear.objects.filter(
-                education_group__offer_proposition=OuterRef('pk'),
-                academic_year=current_academic_year).values('acronym')[:1]
-        ))
+def clean_db_with_no_educationgroup_match(request):
+
+    offer_props_with_education_group_not_none = OfferProposition.objects.exclude(education_group=None)
     log = ''
 
-    def find_childs(offer_prop):
-        tab_with_child_pk = []
+    offer_props_with_education_group_none = OfferProposition.objects.filter(education_group=None).\
+        prefetch_related('propositionoffer_set')
+
+    def Return_tab_childs_offer_prop(offer_prop):
+        tab_with_child = []
         for offer_prop_not_none in offer_props_with_education_group_not_none:
-            if offer_prop.last_acronym in offer_prop_not_none.last_acronym:
-                tab_with_child_pk.append(offer_prop_not_none.pk)
+            if offer_prop.acronym in offer_prop_not_none.acronym:
+                tab_with_child.append(offer_prop_not_none)
+        return tab_with_child
 
-    offer_props_with_education_group_none.annotate(pk_child_list=find_childs)
-    props_disserts = PropositionDissertation.objects.all().prefetch_related('propositionoffer_set')
-    # parcours des propositions dissertations
-    for prop_dissert in props_disserts:
-        # parcours des liaisons proposition_offer de chaque proposition dissertation
-        for prop_offer in prop_dissert.propositionoffer_set.all():
-            # si la proposition offer est une liaison avec un Offer_proposition avec education_group None
+    def check_if_child(propositions_offers, child_list):
+        # boucle qui vérifie si il y a une autre liaison avec un enfant ou pas.
+        for prop_offer_check_if_child in propositions_offers:
+            if prop_offer_check_if_child.offer_proposition in child_list:
+                return True
+        return False
+
+    def add_line(str_):
+        return str_ + '\n'
+
+    props_disserts = PropositionDissertation.objects.filter(offer_propositions__education_group=None).\
+        prefetch_related('propositionoffer_set', 'offer_propositions').distinct()
+    for proposition_dissertation in props_disserts:
+        print('traitement en cours')
+        log += add_line('*********************************************************************************')
+        log += add_line(proposition_dissertation.title)
+        for prop_offer in proposition_dissertation.propositionoffer_set.all():
+            log += add_line('   ' + prop_offer.offer_proposition.acronym)
             if prop_offer.offer_proposition in offer_props_with_education_group_none:
-
-                pk_child_list = find_childs(prop_offer.offer_proposition)
-                if_other_proposition_offer_child = False
-                # boucle qui vérifie si il y a une autre liaison avec un enfant ou pas.
-                for prop_offer_check_if_child in prop_dissert.propositionoffer_set.all():
-                    if prop_offer_check_if_child.pk in pk_child_list:
-                        if_other_proposition_offer_child = True
-                # si il n'y a pas d'autre liaison alors il faut les créer
-                if if_other_proposition_offer_child == False:
-                    # pour chaque programme enfant trouvé précédament et dont la PK est déjà stocké
-                    for pk_child in pk_child_list:
-                        log = log + 'création d\'un enfant : prop_dissert.id :{}, offer_proposition.id :{}'\
-                            .format(prop_dissert.id, pk_child)
-                        PropositionOffer.objects.create(proposition_dissertation=prop_dissert,
-                                                        offer_proposition=get_object(pk=pk_child))
-                else:
-                    log = log + 'pas besoin de création d\'enfant pour id :{} , {}'.format(prop_dissert.id,
-                                                                                           prop_dissert.title)
+                log += add_line('      ' + prop_offer.offer_proposition.acronym + ' have none education group')
+                child_list_offer_prop = Return_tab_childs_offer_prop(prop_offer.offer_proposition)
+                if_other_proposition_offer_child = check_if_child(proposition_dissertation.propositionoffer_set.all(),
+                                                                  child_list_offer_prop)
+                log += add_line('      ' + prop_offer.offer_proposition.acronym + ' have none education group')
+                if not if_other_proposition_offer_child:
+                    log += add_line('Ne dispose pas d\'un enfant (' + str(if_other_proposition_offer_child)
+                                    + ') :  child list :' + str(child_list_offer_prop))
+                    for child_offer_prop in child_list_offer_prop:
+                        PropositionOffer.objects.create(proposition_dissertation=proposition_dissertation,
+                                                        offer_proposition=child_offer_prop)
+                        log += add_line('A un enfant ou pas : ' + str(if_other_proposition_offer_child)
+                                        + '  child list :' + str(child_list_offer_prop))
     print(log)
+
+
+
 
