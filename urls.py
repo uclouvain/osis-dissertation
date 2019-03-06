@@ -30,8 +30,11 @@ from dissertation.utils.request import find_adviser_list_json
 from dissertation.views import dissertation, proposition_dissertation, information, offer_proposition, \
     upload_dissertation_file, upload_proposition_file
 from dissertation.views.dissertation import AdviserAutocomplete
+from dissertation.views.faculty_adviser.delete import FacultyAdviserDeleteView
+from dissertation.views.faculty_adviser.search import OfferPropositionFilterView, AdviserList
 
 urlpatterns = [
+    url(r'^adviser_list$', AdviserList.as_view(), name='adviser_list'),
     url(r'^$', dissertation.dissertations, name='dissertations'),
     url(r'^dissertations_detail/(?P<pk>[0-9]+)$', dissertation.dissertations_detail,
         name='dissertations_detail'),
@@ -51,6 +54,7 @@ urlpatterns = [
         name='dissertations_to_dir_ok'),
     url(r'^dissertations_wait_list$', dissertation.dissertations_wait_list,
         name='dissertations_wait_list'),
+    url(r'^faculty_adviser_delete/(?P<pk>[0-9]+)$', FacultyAdviserDeleteView.as_view(), name='faculty_adviser_delete'),
 
     url(r'^informations/$', information.informations, name='informations'),
     url(r'^informations_add/$', information.informations_add, name='informations_add'),
@@ -157,6 +161,7 @@ urlpatterns = [
 
     url(r'^my_dissertation_propositions$', proposition_dissertation.my_dissertation_propositions,
         name='my_dissertation_propositions'),
+    url(r'^offer_propositions$', OfferPropositionFilterView.as_view(), name='offer_propositions'),
     url(r'^proposition_dissertations/$', proposition_dissertation.proposition_dissertations,
         name='proposition_dissertations'),
     url(r'^proposition_dissertations_created/$', proposition_dissertation.proposition_dissertations_created,

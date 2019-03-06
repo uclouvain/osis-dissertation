@@ -1,0 +1,32 @@
+{% load i18n %}
+<table class="table table-striped table-hover">
+   <tr>
+       <th>{% trans 'Manager'%}</th>
+       <th><a class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span></a> </th>
+   </tr>
+   <tbody>
+    {% for obj in object_list %}
+    <tr>
+        <td>{{ obj.adviser }}</td>
+        <td>
+        <a class="btn btn-default pull-right trigger_modal" data-url="{% url 'faculty_adviser_delete' obj.pk %}">
+            <span class="glyphicon glyphicon-minus" ></span>
+        </a>
+        </td>
+    </tr>
+   {% endfor %}
+   </tbody>
+</table>
+<script>
+    $(".trigger_modal").click(function () {
+        let url = $(this).data("url");
+        let modal_class = $(this).data("modal_class");
+        $('#modal_dialog_id').attr("class", "modal-dialog").addClass(modal_class);
+        $('#form-ajax-modal').modal('toggle');
+
+        $('#form-modal-ajax-content').load(url, function () {
+            bindTextArea();
+            formAjaxSubmit('#form-modal-body form', '#form-ajax-modal');
+    });
+});
+</script>
