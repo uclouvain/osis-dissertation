@@ -39,6 +39,7 @@ from openpyxl.writer.excel import save_virtual_workbook
 
 from base import models as mdl
 from base.models import academic_year
+from base.models.academic_year import current_academic_year
 from base.models.education_group_year import EducationGroupYear
 from base.views import layout
 from base.views.mixins import AjaxTemplateMixin
@@ -94,6 +95,7 @@ def generate_proposition_offers(request, proposition):
 
 def is_valid(request, form):
     return form.is_valid() and detect_in_request(request, 'txt_checkbox_', 'on')
+
 
 def return_prefetch_propositions():
     current_academic_year = academic_year.starting_academic_year()
@@ -266,7 +268,12 @@ def manager_proposition_dissertations_role_delete(request, pk):
 @login_required
 @user_passes_test(adviser.is_manager)
 def manager_proposition_dissertation_new(request):
-    offer_propositions = offer_proposition.find_all_ordered_by_acronym()
+    current_ac_year = current_academic_year()
+    offer_propositions = OfferProposition.objects.annotate(last_acronym=Subquery(
+            EducationGroupYear.objects.filter(
+                education_group__offer_proposition=OuterRef('pk'),
+                academic_year=current_ac_year).values('acronym')[:1]
+        )).select_related('offer_proposition_group').order_by('last_acronym')
     offer_propositions_group = offer_proposition_group.find_all_ordered_by_name_short()
     offer_propositions_error = None
     if request.method == "POST":
@@ -280,14 +287,14 @@ def manager_proposition_dissertation_new(request):
     else:
         form = ManagerPropositionDissertationForm(initial={'active': True})
 
-    return layout.render(request, 'manager_proposition_dissertation_new.html',
-                         {'form': form,
-                          'types_choices': PropositionDissertation.TYPES_CHOICES,
-                          'levels_choices': PropositionDissertation.LEVELS_CHOICES,
-                          'collaborations_choices': PropositionDissertation.COLLABORATION_CHOICES,
-                          'offer_propositions_error': offer_propositions_error,
-                          'offer_propositions': offer_propositions,
-                          'offer_proposition_group': offer_propositions_group})
+    return render(request, 'manager_proposition_dissertation_new.html',
+                  {'form': form,
+                   'types_choices': PropositionDissertation.TYPES_CHOICES,
+                   'levels_choices': PropositionDissertation.LEVELS_CHOICES,
+                   'collaborations_choices': PropositionDissertation.COLLABORATION_CHOICES,
+                   'offer_propositions_error': offer_propositions_error,
+                   'offer_propositions': offer_propositions,
+                   'offer_proposition_group': offer_propositions_group})
 
 
 @login_required
