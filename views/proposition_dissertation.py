@@ -503,28 +503,33 @@ def proposition_dissertations_created(request):
 @login_required
 @user_passes_test(adviser.is_teacher)
 def proposition_dissertation_new(request):
-    person = mdl.person.find_by_user(request.user)
-    offer_propositions = offer_proposition.find_all_ordered_by_acronym()
+    current_ac_year = current_academic_year()
+    perso = request.user.person
+    offer_propositions = OfferProposition.objects.annotate(last_acronym=Subquery(
+            EducationGroupYear.objects.filter(
+                education_group__offer_proposition=OuterRef('pk'),
+                academic_year=current_ac_year).values('acronym')[:1]
+        )).select_related('offer_proposition_group').order_by('last_acronym')
     offer_propositions_group = offer_proposition_group.find_all_ordered_by_name_short()
     offer_propositions_error = None
     if request.method == "POST":
         form = PropositionDissertationForm(request.POST)
         if is_valid(request, form):
-            proposition = create_proposition(form, person, request)
+            proposition = create_proposition(form, perso, request)
             return redirect('proposition_dissertation_detail', pk=proposition.pk)
         else:
             offer_propositions_error = 'select_at_least_one_item'
     else:
         form = PropositionDissertationForm(initial={'author': get_current_adviser(request), 'active': True})
 
-    return layout.render(request, 'proposition_dissertation_new.html',
-                         {'form': form,
-                          'types_choices': PropositionDissertation.TYPES_CHOICES,
-                          'levels_choices': PropositionDissertation.LEVELS_CHOICES,
-                          'collaborations_choices': PropositionDissertation.COLLABORATION_CHOICES,
-                          'offer_propositions_error': offer_propositions_error,
-                          'offer_propositions': offer_propositions,
-                          'offer_proposition_group': offer_propositions_group})
+    return render(request, 'proposition_dissertation_new.html',
+                  {'form': form,
+                   'types_choices': PropositionDissertation.TYPES_CHOICES,
+                   'levels_choices': PropositionDissertation.LEVELS_CHOICES,
+                   'collaborations_choices': PropositionDissertation.COLLABORATION_CHOICES,
+                   'offer_propositions_error': offer_propositions_error,
+                   'offer_propositions': offer_propositions,
+                   'offer_proposition_group': offer_propositions_group})
 
 
 @login_required
