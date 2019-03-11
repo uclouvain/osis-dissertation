@@ -269,7 +269,7 @@ def manager_proposition_dissertations_role_delete(request, pk):
 @user_passes_test(adviser.is_manager)
 def manager_proposition_dissertation_new(request):
     current_ac_year = current_academic_year()
-    offer_propositions = OfferProposition.objects.annotate(last_acronym=Subquery(
+    offer_propositions = OfferProposition.objects.exclude(education_group=None).annotate(last_acronym=Subquery(
             EducationGroupYear.objects.filter(
                 education_group__offer_proposition=OuterRef('pk'),
                 academic_year=current_ac_year).values('acronym')[:1]
@@ -339,8 +339,8 @@ def manager_proposition_dissertations_search(request):
         collaboration_choices = dict(PropositionDissertation.COLLABORATION_CHOICES)
         for proposition in propositions_dissertations:
             education_groups = ""
-            for education_group in proposition.propositionoffer_set.all():
-                education_groups += "{} ".format(str(education_group))
+            for offer_prop in proposition.offer_propositions.all():
+                education_groups += "{} ".format(str(offer_prop.last_acronym))
             worksheet1.append([proposition.created_date,
                                str(proposition.author),
                                proposition.title,
@@ -505,7 +505,7 @@ def proposition_dissertations_created(request):
 def proposition_dissertation_new(request):
     current_ac_year = current_academic_year()
     perso = request.user.person
-    offer_propositions = OfferProposition.objects.annotate(last_acronym=Subquery(
+    offer_propositions = OfferProposition.objects.exclude(education_group=None).annotate(last_acronym=Subquery(
             EducationGroupYear.objects.filter(
                 education_group__offer_proposition=OuterRef('pk'),
                 academic_year=current_ac_year).values('acronym')[:1]
