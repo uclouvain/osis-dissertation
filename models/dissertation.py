@@ -101,7 +101,6 @@ class Dissertation(SerializableModel):
         null=True,
         verbose_name=_('Dissertation location')
     )
-    location = models.ForeignKey(dissertation_location.DissertationLocation, blank=True, null=True)
     dissertation_documents_files = models.ManyToManyField(DocumentFile, through=DissertationDocumentFile)
 
     def __str__(self):
