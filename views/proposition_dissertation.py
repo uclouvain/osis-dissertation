@@ -41,7 +41,6 @@ from base import models as mdl
 from base.models import academic_year
 from base.models.academic_year import current_academic_year
 from base.models.education_group_year import EducationGroupYear
-from base.views import layout
 from base.views.mixins import AjaxTemplateMixin
 from dissertation.forms import PropositionDissertationForm, ManagerPropositionDissertationForm, \
     ManagerPropositionRoleForm, ManagerPropositionDissertationEditForm
@@ -340,7 +339,7 @@ def manager_proposition_dissertations_search(request):
         for proposition in propositions_dissertations:
             education_groups = ""
             for offer_prop in proposition.offer_propositions.all():
-                education_groups += "{} ".format(str(offer_prop.last_acronym))
+                education_groups += "{}, ".format(str(offer_prop.last_acronym))
             worksheet1.append([proposition.created_date,
                                str(proposition.author),
                                proposition.title,
@@ -360,8 +359,8 @@ def manager_proposition_dissertations_search(request):
         return response
 
     else:
-        return layout.render(request, "manager_proposition_dissertations_list.html",
-                             {'propositions_dissertations': propositions_dissertations})
+        return render(request, "manager_proposition_dissertations_list.html",
+                      {'propositions_dissertations': propositions_dissertations})
 
 
 ###########################
@@ -465,17 +464,17 @@ def proposition_dissertation_edit(request, pk):
                 proposition_offers = None
 
         form = PropositionDissertationForm(instance=proposition)
-        return layout.render(request, 'proposition_dissertation_edit.html',
-                             {'prop_dissert': proposition,
-                              'form': form,
-                              'types_choices': PropositionDissertation.TYPES_CHOICES,
-                              'levels_choices': PropositionDissertation.LEVELS_CHOICES,
-                              'collaborations_choices': PropositionDissertation.COLLABORATION_CHOICES,
-                              'offer_propositions': offer_propositions,
-                              'offer_propositions_error': offer_propositions_error,
-                              'proposition_offers': proposition_offers,
-                              'offer_proposition_group': offer_propositions_group
-                              })
+        return render(request, 'proposition_dissertation_edit.html',
+                      {'prop_dissert': proposition,
+                       'form': form,
+                       'types_choices': PropositionDissertation.TYPES_CHOICES,
+                       'levels_choices': PropositionDissertation.LEVELS_CHOICES,
+                       'collaborations_choices': PropositionDissertation.COLLABORATION_CHOICES,
+                       'offer_propositions': offer_propositions,
+                       'offer_propositions_error': offer_propositions_error,
+                       'proposition_offers': proposition_offers,
+                       'offer_proposition_group': offer_propositions_group
+                       })
     else:
         return redirect('proposition_dissertation_detail', pk=proposition.pk)
 
@@ -496,8 +495,8 @@ def my_dissertation_propositions(request):
 @user_passes_test(adviser.is_teacher)
 def proposition_dissertations_created(request):
     propositions_dissertations = proposition_dissertation.get_created_for_teacher(get_current_adviser(request))
-    return layout.render(request, 'proposition_dissertations_list_created.html',
-                         {'propositions_dissertations': propositions_dissertations})
+    return render(request, 'proposition_dissertations_list_created.html',
+                  {'propositions_dissertations': propositions_dissertations})
 
 
 @login_required
