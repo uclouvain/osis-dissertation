@@ -38,6 +38,7 @@ from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_role import DissertationRole
 from dissertation.models.dissertation_update import DissertationUpdate
 from dissertation.models.enums import dissertation_role_status
+from dissertation.models.faculty_adviser import FacultyAdviser
 from dissertation.models.offer_proposition import OfferProposition
 from dissertation.models.proposition_dissertation import PropositionDissertation
 from dissertation.models.proposition_role import PropositionRole, MAX_PROPOSITION_ROLE
@@ -59,6 +60,13 @@ class DissertationForm(ModelForm):
     class Meta:
         model = Dissertation
         fields = ('title', 'author', 'education_group_year_start', 'proposition_dissertation', 'description')
+
+
+class FacultyAdviserForm(ModelForm):
+    class Meta:
+        model = FacultyAdviser
+        fields = ('adviser', )
+        widgets = {'adviser': autocomplete.ModelSelect2(url='adviser-autocomplete', attrs={'style': 'width:100%'})}
 
 
 class PropositionDissertationForm(ModelForm):

@@ -18,16 +18,18 @@
 #   see http://www.gnu.org/licenses/.                                                              #
 # ##################################################################################################
 from django.urls import reverse_lazy
-from django.views.generic import DeleteView
+from django.views.generic import FormView
 
+from base.models.education_group import EducationGroup
 from base.views.mixins import AjaxTemplateMixin
+from dissertation.forms import FacultyAdviserForm
 from dissertation.models.faculty_adviser import FacultyAdviser
 
 
-class FacultyAdviserDeleteView(AjaxTemplateMixin, DeleteView):
-    model = FacultyAdviser
+class FacultyAdviserCreateView(AjaxTemplateMixin, FormView):
+    form_class = FacultyAdviserForm
     success_url = reverse_lazy('adviser_list')
-    template_name = 'dissertation/facultyadviser_confirm_delete_inner.html'
+    template_name = 'dissertation/facultyadviser_add_inner.html'
     partial_reload = '#tb_faculty_adviser'
 
     def get_success_url(self):
@@ -36,15 +38,20 @@ class FacultyAdviserDeleteView(AjaxTemplateMixin, DeleteView):
             url += "offer_proposition={}&".format(offer_prop)
 
         return url
-    
-    def get_object(self, queryset=None):
-        return FacultyAdviser.objects.filter(
-            adviser__pk=self.kwargs['pk'],
-            education_group__offer_proposition__pk__in=self.request.GET['offer_proposition'].split(',')
-        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['offer_propositions'] = self.request.GET['offer_proposition']
         return context
 
+    def form_valid(self, form):
+        education_groups = EducationGroup.objects.filter(
+            offer_proposition__pk__in=self.request.GET['offer_proposition'].split(',')
+        )
+        adviser = form.cleaned_data['adviser']
+        for education_group in education_groups:
+            FacultyAdviser.objects.get_or_create(
+                adviser=adviser,
+                education_group=education_group
+            )
+        return super().form_valid(form)

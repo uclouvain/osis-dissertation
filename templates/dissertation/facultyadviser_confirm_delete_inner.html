@@ -1,6 +1,6 @@
 {% load staticfiles %}
 {% load i18n %}
-<form method="post" action='{{ request.path }}' id="form_remove_manager">
+<form method="post" action='{{ request.get_full_path }}' class="post-form" id="form-modal">
     {% csrf_token %}
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="bt_close_remove_manager_modal"><span aria-hidden="true">&times;</span></button>
@@ -17,6 +17,6 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" id="bt_cancel_remove_manager_modal">{% trans 'Cancel' %}</button>
-        <input type="submit" class="btn btn-primary" value="{% trans 'Remove' %}"/>
+        <input type="submit" class="btn btn-primary"  value="{% trans 'Remove' %}"/>
     </div>
 </form>

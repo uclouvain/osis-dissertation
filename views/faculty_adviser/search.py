@@ -27,9 +27,8 @@ from base.forms.education_groups import EntityManagementModelChoiceField
 from base.models.academic_year import current_academic_year
 from base.models.education_group_year import EducationGroupYear
 from base.models.entity_version import EntityVersion
-from base.utils.cache import cache_filter
+from base.utils.cache import CacheFilterMixin
 from dissertation.models.adviser import Adviser
-from dissertation.models.faculty_adviser import FacultyAdviser
 from dissertation.models.offer_proposition import OfferProposition
 
 
@@ -56,7 +55,7 @@ class OfferPropositionFilterSet(django_filters.FilterSet):
         fields = ('education_group__educationgroupyear', 'education_group__facultyadviser__adviser')
 
 
-class OfferPropositionFilterView(FilterView):
+class OfferPropositionFilterView(CacheFilterMixin, FilterView):
     model = OfferProposition
     filterset_class = OfferPropositionFilterSet
 

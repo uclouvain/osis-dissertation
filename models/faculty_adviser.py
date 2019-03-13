@@ -43,8 +43,8 @@ class FacultyAdviserAdmin(admin.ModelAdmin):
 
 class FacultyAdviser(models.Model):
     adviser = models.ForeignKey(Adviser)
-    offer = models.ForeignKey(offer.Offer)
-    education_group = models.ForeignKey(EducationGroup, null=True, blank=True, on_delete=models.PROTECT)
+    offer = models.ForeignKey(offer.Offer, null=True, blank=True)
+    education_group = models.ForeignKey(EducationGroup, null=True, on_delete=models.PROTECT)
 
     def __str__(self):
         return "{} - Offer {}".format(str(self.adviser), str(self.offer.id))

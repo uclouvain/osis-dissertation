@@ -30,6 +30,7 @@ from dissertation.utils.request import find_adviser_list_json
 from dissertation.views import dissertation, proposition_dissertation, information, offer_proposition, \
     upload_dissertation_file, upload_proposition_file
 from dissertation.views.dissertation import AdviserAutocomplete
+from dissertation.views.faculty_adviser.create import FacultyAdviserCreateView
 from dissertation.views.faculty_adviser.delete import FacultyAdviserDeleteView
 from dissertation.views.faculty_adviser.search import OfferPropositionFilterView, AdviserList
 
@@ -54,6 +55,7 @@ urlpatterns = [
         name='dissertations_to_dir_ok'),
     url(r'^dissertations_wait_list$', dissertation.dissertations_wait_list,
         name='dissertations_wait_list'),
+    url(r'^faculty_adviser_add/', FacultyAdviserCreateView.as_view(), name='faculty_adviser_add'),
     url(r'^faculty_adviser_delete/(?P<pk>[0-9]+)$', FacultyAdviserDeleteView.as_view(), name='faculty_adviser_delete'),
 
     url(r'^informations/$', information.informations, name='informations'),
