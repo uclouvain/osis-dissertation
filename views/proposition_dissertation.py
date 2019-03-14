@@ -39,7 +39,6 @@ from openpyxl.writer.excel import save_virtual_workbook
 
 from base import models as mdl
 from base.models import academic_year
-from base.models.academic_year import current_academic_year
 from base.models.education_group_year import EducationGroupYear
 from base.views.mixins import AjaxTemplateMixin
 from dissertation.forms import PropositionDissertationForm, ManagerPropositionDissertationForm, \
@@ -267,7 +266,7 @@ def manager_proposition_dissertations_role_delete(request, pk):
 @login_required
 @user_passes_test(adviser.is_manager)
 def manager_proposition_dissertation_new(request):
-    current_ac_year = current_academic_year()
+    current_ac_year = academic_year.starting_academic_year()
     offer_propositions = OfferProposition.objects.exclude(education_group=None).annotate(last_acronym=Subquery(
             EducationGroupYear.objects.filter(
                 education_group__offer_proposition=OuterRef('pk'),
@@ -502,7 +501,7 @@ def proposition_dissertations_created(request):
 @login_required
 @user_passes_test(adviser.is_teacher)
 def proposition_dissertation_new(request):
-    current_ac_year = current_academic_year()
+    current_ac_year = academic_year.starting_academic_year()
     perso = request.user.person
     offer_propositions = OfferProposition.objects.exclude(education_group=None).annotate(last_acronym=Subquery(
             EducationGroupYear.objects.filter(
