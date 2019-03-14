@@ -189,7 +189,7 @@ class ManagerOfferPropositionForm(ModelForm):
 
 class ManagerPropositionDissertationForm(ModelForm):
     def __init__(self,  *args, **kwargs):
-        super().__init__( *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["author"].queryset = Adviser.objects.all().select_related("person").distinct()
 
     class Meta:
