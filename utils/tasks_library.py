@@ -69,8 +69,3 @@ def check_date_end(offer_prop, start_arg, end_arg):
 
 def incr_year(date_too):
     return date_too + relativedelta(years=1)
-
-
-
-
-

@@ -192,7 +192,6 @@ class ManagerPropositionDissertationForm(ModelForm):
         super().__init__( *args, **kwargs)
         self.fields["author"].queryset = Adviser.objects.all().select_related("person").distinct()
 
-
     class Meta:
         model = PropositionDissertation
         fields = ('author', 'visibility', 'title', 'description', 'type', 'level', 'collaboration',
