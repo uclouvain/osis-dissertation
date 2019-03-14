@@ -25,6 +25,7 @@
 ##############################################################################
 from django.contrib import admin
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 from base.models import offer
 from base.models import offer_year
@@ -42,7 +43,7 @@ class FacultyAdviserAdmin(admin.ModelAdmin):
 
 
 class FacultyAdviser(models.Model):
-    adviser = models.ForeignKey(Adviser)
+    adviser = models.ForeignKey(Adviser, verbose_name=_('Adviser'))
     offer = models.ForeignKey(offer.Offer, null=True, blank=True)
     education_group = models.ForeignKey(EducationGroup, null=True, on_delete=models.PROTECT)
 
@@ -62,6 +63,18 @@ class FacultyAdviser(models.Model):
         if self.education_group:
             return self.education_group.most_recent_acronym
         return None
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        if self.adviser.type != 'MGR':
+            self.adviser.type = 'MGR'
+            self.adviser.save()
+        super().save(force_insert, force_update, using, update_fields)
+
+    def delete(self, using=None, keep_parents=False):
+        if self.adviser.facultyadviser_set.exclude(pk=self.pk).count() == 0:
+            self.adviser.type = 'PRF'
+            self.adviser.save()
+        return super().delete(using, keep_parents)
 
 
 def find_education_groups_by_adviser(a_adviser):

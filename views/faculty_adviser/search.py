@@ -23,7 +23,6 @@ from django.utils.translation import gettext_lazy
 from django.views.generic import ListView
 from django_filters.views import FilterView
 
-from base.forms.education_groups import EntityManagementModelChoiceField
 from base.models.academic_year import current_academic_year
 from base.models.education_group_year import EducationGroupYear
 from base.models.entity_version import EntityVersion
@@ -32,27 +31,17 @@ from dissertation.models.adviser import Adviser
 from dissertation.models.offer_proposition import OfferProposition
 
 
-class EducationGroupModelChoiceFilter(django_filters.ModelChoiceFilter):
-    field_class = EntityManagementModelChoiceField
-
-
 class OfferPropositionFilterSet(django_filters.FilterSet):
-    education_group__educationgroupyear = EducationGroupModelChoiceFilter(queryset=EducationGroupYear.objects.filter(
-        academic_year=current_academic_year(), education_group__facultyadviser__isnull=False
-    ).order_by('acronym'), label=gettext_lazy("Education Group"))
+
+    education_group__educationgroupyear__acronym = django_filters.CharFilter(lookup_expr="icontains", label=gettext_lazy("Education Group"))
+
     education_group__facultyadviser__adviser = django_filters.ModelChoiceFilter(
         queryset=Adviser.objects.filter(type='MGR').select_related('person'), label=gettext_lazy("Faculty Adviser")
     )
 
-    def __init__(self, data=None, queryset=None, *, request=None, prefix=None):
-        super().__init__(data, queryset, request=request, prefix=prefix)
-        qs = self.filters['education_group__educationgroupyear'].queryset
-        qs = qs.filter(management_entity__in=request.user.person.linked_entities).distinct()
-        self.filters['education_group__educationgroupyear'].queryset = qs
-
     class Meta:
         model = OfferProposition
-        fields = ('education_group__educationgroupyear', 'education_group__facultyadviser__adviser')
+        fields = ('education_group__facultyadviser__adviser',)
 
 
 class OfferPropositionFilterView(CacheFilterMixin, FilterView):

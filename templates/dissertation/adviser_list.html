@@ -3,7 +3,7 @@
    <tr>
        <th>{% trans 'Manager'%}</th>
        <th><a class="btn btn-primary pull-right trigger_modal" data-url="{% url 'faculty_adviser_add' %}?offer_proposition={{offer_propositions|join:','}}">
-           <span class="glyphicon glyphicon-plus"></span>
+           <span class="fa fa-plus"></span>
            </a>
        </th>
    </tr>
@@ -13,7 +13,7 @@
         <td>{{ obj }}</td>
         <td>
         <a class="btn btn-default pull-right trigger_modal" data-url="{% url 'faculty_adviser_delete' obj.pk %}?offer_proposition={{offer_propositions|join:','}}">
-            <span class="glyphicon glyphicon-minus" ></span>
+            <span class="fa fa-minus" ></span>
         </a>
         </td>
     </tr>
