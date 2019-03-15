@@ -48,7 +48,7 @@ class OfferPropositionAdmin(SerializableModelAdmin):
 
 class OfferProposition(SerializableModel):
     acronym = models.CharField(max_length=200)
-    offer = models.ForeignKey(offer.Offer)
+    offer = models.ForeignKey(offer.Offer, related_name='offer_proposition')
     education_group = models.OneToOneField('base.EducationGroup',
                                            null=True,
                                            blank=True,

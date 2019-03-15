@@ -32,7 +32,7 @@ from django.utils.translation import ugettext_lazy as _
 from base import models as mdl
 from base.models.education_group_year import EducationGroupYear
 from base.models.student import Student
-from dissertation.models import dissertation_update, adviser, proposition_role
+from dissertation.models import dissertation_update, adviser
 from dissertation.models.adviser import Adviser
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_role import DissertationRole
@@ -40,7 +40,7 @@ from dissertation.models.dissertation_update import DissertationUpdate
 from dissertation.models.enums import dissertation_role_status
 from dissertation.models.offer_proposition import OfferProposition
 from dissertation.models.proposition_dissertation import PropositionDissertation
-from dissertation.models.proposition_role import PropositionRole, MAX_PROPOSITION_ROLE
+from dissertation.models.proposition_role import PropositionRole
 
 
 class AdviserForm(ModelForm):
@@ -188,6 +188,10 @@ class ManagerOfferPropositionForm(ModelForm):
 
 
 class ManagerPropositionDissertationForm(ModelForm):
+    def __init__(self,  *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["author"].queryset = Adviser.objects.all().select_related("person").distinct()
+
     class Meta:
         model = PropositionDissertation
         fields = ('author', 'visibility', 'title', 'description', 'type', 'level', 'collaboration',
