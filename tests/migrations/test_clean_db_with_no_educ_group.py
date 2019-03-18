@@ -76,47 +76,52 @@ class DissertationUtilsTestCase(TestCase):
         self.offer_proposition_FOPA2MSG = OfferPropositionFactory(acronym='FOPA2MSG',
                                                                   offer=self.offer_FOPA2MSG,
                                                                   education_group=self.education_group_FOPA2MSG)
-
-        # self.offer_ANTR2M = OfferFactory()
-        # self.offeryear_ANTR2M = OfferYearFactory(acronym='ANTR2M')
-        # self.education_group_ANTR2M = EducationGroupFactory()
-        # self.education_group_year_ANTR2M = EducationGroupYearFactory(acronym='ANTR2M', academic_year=self.ac_year)
-        # self.offer_proposition_ANTR2M = OfferPropositionFactory(acronym='ANTR2M',
-        #                                                         offer=self.offer_ANTR2M,
-        #                                                         education_group=None,
-        #                                                         global_email_to_commission=True)
-        # self.offer_ANTR2MA = OfferFactory()
-        # self.offeryear_ANTR2MA = OfferYearFactory(acronym='ANTR2MA')
-        # self.education_group_ANTR2MA = EducationGroupFactory()
-        # self.education_group_year_ANTR2MA = EducationGroupYearFactory(acronym='ANTR2MA', academic_year=self.ac_year)
-        # self.offer_proposition_ANTR2MA = OfferPropositionFactory(acronym='ANTR2MA',
-        #                                                          offer=self.offer_ANTR2MA,
-        #                                                          education_group=self.education_group_ANTR2MA)
-        # self.offer_ANTR2MB = OfferFactory()
-        # self.offeryear_ANTR2MB = OfferYearFactory(acronym='ANTR2MB')
-        # self.education_group_ANTR2MB = EducationGroupFactory()
-        # self.education_group_year_ANTR2MB = EducationGroupYearFactory(acronym='ANTR2MB', academic_year=self.ac_year)
-        # self.offer_proposition_ANTR2MB = OfferPropositionFactory(acronym='ANTR2MB',
-        #                                                          offer=self.offer_ANTR2MB,
-        #                                                          education_group=self.education_group_ANTR2MB)
-        # self.offer_ANTR2MS = OfferFactory()
-        # self.offeryear_ANTR2MS = OfferYearFactory(acronym='ANTR2MS')
-        # self.education_group_year_ANTR2MS = EducationGroupYearFactory(acronym='ANTR2MS', academic_year=self.ac_year)
-        # self.offer_proposition_ANTR2MS = OfferPropositionFactory(acronym='ANTR2MS',
-        #                                                          offer=self.offer_ANTR2MS,
-        #                                                          education_group=None)
-        # self.offer_ANTR2MSID = OfferFactory()
-        # self.offeryear_ANTR2MSID = OfferYearFactory(acronym='ANTR2MS/ID')
-        # self.education_group_ANTR2MSID = EducationGroupFactory()
-        # self.education_group_year_ANTR2MSID = EducationGroupYearFactory(acronym='ANTR2MS/ID',
-        #                                                                 academic_year=self.ac_year)
-        # self.offer_proposition_ANTR2MSID = OfferPropositionFactory(acronym='ANTR2MSID',
-        #                                                            offer=self.offer_ANTR2MSID,
-        #                                                            education_group=self.education_group_ANTR2MSID)
+        self.offer_ANTR2M = OfferFactory()
+        self.offeryear_ANTR2M = OfferYearFactory(acronym='ANTR2M')
+        self.offer_proposition_ANTR2M = OfferPropositionFactory(acronym='ANTR2M',
+                                                                offer=self.offer_ANTR2M,
+                                                                education_group=None,
+                                                                global_email_to_commission=True)
+        self.offer_ANTR2MA = OfferFactory()
+        self.offeryear_ANTR2MA = OfferYearFactory(acronym='ANTR2MA')
+        self.education_group_ANTR2MA = EducationGroupFactory()
+        self.education_group_year_ANTR2MA = EducationGroupYearFactory(acronym='ANTR2MA',
+                                                                      academic_year=self.ac_year,
+                                                                      education_group=self.education_group_ANTR2MA)
+        self.offer_proposition_ANTR2MA = OfferPropositionFactory(acronym='ANTR2MA',
+                                                                 offer=self.offer_ANTR2MA,
+                                                                 education_group=self.education_group_ANTR2MA)
+        self.offer_ANTR2MB = OfferFactory()
+        self.offeryear_ANTR2MB = OfferYearFactory(acronym='ANTR2MB')
+        self.education_group_ANTR2MB = EducationGroupFactory()
+        self.education_group_year_ANTR2MB = EducationGroupYearFactory(acronym='ANTR2MB',
+                                                                      academic_year=self.ac_year,
+                                                                      education_group=self.education_group_ANTR2MB)
+        self.offer_proposition_ANTR2MB = OfferPropositionFactory(acronym='ANTR2MB',
+                                                                 offer=self.offer_ANTR2MB,
+                                                                 education_group=self.education_group_ANTR2MB)
+        self.offer_ANTR2MS = OfferFactory()
+        self.offeryear_ANTR2MS = OfferYearFactory(acronym='ANTR2MS')
+        self.offer_proposition_ANTR2MS = OfferPropositionFactory(acronym='ANTR2MS',
+                                                                 offer=self.offer_ANTR2MS,
+                                                                 education_group=None)
+        self.offer_ANTR2MSID = OfferFactory()
+        self.offeryear_ANTR2MSID = OfferYearFactory(acronym='ANTR2MS/ID')
+        self.education_group_ANTR2MSID = EducationGroupFactory()
+        self.education_group_year_ANTR2MSID = EducationGroupYearFactory(acronym='ANTR2MS/ID',
+                                                                        academic_year=self.ac_year,
+                                                                        education_group=self.education_group_ANTR2MSID)
+        self.offer_proposition_ANTR2MSID = OfferPropositionFactory(acronym='ANTR2MSID',
+                                                                   offer=self.offer_ANTR2MSID,
+                                                                   education_group=self.education_group_ANTR2MSID)
 
         self.sujet_sans_enfant_1 = PropositionDissertationFactory(title='sujet_sans_enfant_1')
         PropositionOfferFactory(proposition_dissertation=self.sujet_sans_enfant_1,
                                 offer_proposition=self.offer_proposition_FOPA2M)
+
+        self.sujet_sans_enfant_2 = PropositionDissertationFactory(title='sujet_sans_enfant_2')
+        PropositionOfferFactory(proposition_dissertation=self.sujet_sans_enfant_2,
+                                offer_proposition=self.offer_proposition_ANTR2MS)
 
         # self.sujet_sans_enfant_2 = PropositionDissertationFactory(title='sujet_sans_enfant_2')
         # PropositionOfferFactory(proposition_dissertation=self.sujet_sans_enfant_2,
@@ -132,13 +137,18 @@ class DissertationUtilsTestCase(TestCase):
         #                         offer_proposition=self.offer_proposition_ANTR2MS)
         clean_db_with_no_educationgroup_match()
         prop_offers_sujet_1 = PropositionOffer.objects.filter(proposition_dissertation=self.sujet_sans_enfant_1)
-        # prop_offers_sujet_2 = PropositionOffer.object.get(proposition_dissertation=self.sujet_sans_enfant_2)
+
         # prop_offers_sujet_3 = PropositionOffer.object.get(proposition_dissertation=self.sujet_avec_enfant_1)
         tab_offer_proposition_sujet_1 = []
         for prop_offer in prop_offers_sujet_1:
             tab_offer_proposition_sujet_1.append(prop_offer.offer_proposition)
-
         self.assertIn(self.offer_proposition_FOPA2MA, tab_offer_proposition_sujet_1)
-
         self.assertIn(self.offer_proposition_FOPA2MSG, tab_offer_proposition_sujet_1)
+
+        prop_offers_sujet_2 = PropositionOffer.object.get(proposition_dissertation=self.sujet_sans_enfant_2)
+        tab_offer_proposition_sujet_1 = []
+        for prop_offer in prop_offers_sujet_1:
+            tab_offer_proposition_sujet_1.append(prop_offer.offer_proposition)
+        print(prop_offers_sujet_1)
+        self.assertIn(self.offer_proposition_ANTR2MSID, tab_offer_proposition_sujet_1)
 
