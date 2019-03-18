@@ -45,8 +45,9 @@ class DissertationUtilsTestCase(TestCase):
         self.offer_FOPA2M = OfferFactory()
         self.offeryear_FOPA2M = OfferYearFactory(acronym='FOPA2M')
         self.education_group_FOPA2M = EducationGroupFactory()
-        EducationGroupYearFactory(acronym='FOPA2M', academic_year=self.last_ac_year)
-        self.education_group_year_FOPA2M = EducationGroupYearFactory(acronym='FOPA2M', academic_year=self.ac_year)
+        self.education_group_year_FOPA2M = EducationGroupYearFactory(acronym='FOPA2M',
+                                                                     academic_year=self.last_ac_year,
+                                                                     education_group=self.education_group_FOPA2M)
         self.offer_proposition_FOPA2M = OfferPropositionFactory(acronym='FOPA2M',
                                                                 offer=self.offer_FOPA2M,
                                                                 education_group=None,
@@ -54,27 +55,27 @@ class DissertationUtilsTestCase(TestCase):
         self.offer_FOPA2MA = OfferFactory()
         self.offeryear_FOPA2MA = OfferYearFactory(acronym='FOPA2MA')
         self.education_group_FOPA2MA = EducationGroupFactory()
-        EducationGroupYearFactory(acronym='FOPA2MA', academic_year=self.last_ac_year)
-        self.education_group_year_FOPA2MA = EducationGroupYearFactory(acronym='FOPA2MA', academic_year=self.ac_year)
+        self.education_group_year_FOPA2MA = EducationGroupYearFactory(acronym='FOPA2MA',
+                                                                      academic_year=self.last_ac_year,
+                                                                      education_group=self.education_group_FOPA2MA)
         self.offer_proposition_FOPA2MA = OfferPropositionFactory(acronym='FOPA2MA',
                                                                  offer=self.offer_FOPA2MA,
                                                                  education_group=self.education_group_FOPA2MA)
-        # self.offer_FOPA2MS = OfferFactory()
-        # self.offeryear_FOPA2MS = OfferYearFactory(acronym='FOPA2MS')
-        # EducationGroupYearFactory(acronym='FOPA2MS', academic_year=self.last_ac_year)
-        # self.education_group_year_FOPA2MS = EducationGroupYearFactory(acronym='FOPA2MS', academic_year=self.ac_year)
-        # self.offer_proposition_FOPA2MS = OfferPropositionFactory(acronym='FOPA2MS',
-        #                                                          offer=self.offer_FOPA2MS,
-        #                                                          education_group=None)
-        # self.offer_FOPA2MSG = OfferFactory()
-        #
-        # self.offeryear_FOPA2MSG = OfferYearFactory(acronym='FOPA2MS/G', academic_year=self.ac_year)
-        # self.education_group_FOPA2MSG = EducationGroupFactory()
-        # EducationGroupYearFactory(acronym='FOPA2MS/G', academic_year=self.last_ac_year)
-        # self.education_group_year_FOPA2MSG = EducationGroupYearFactory(acronym='FOPA2MS/G', academic_year=self.ac_year)
-        # self.offer_proposition_FOPA2MSG = OfferPropositionFactory(acronym='FOPA2MSG',
-        #                                                           offer=self.offer_FOPA2MSG,
-        #                                                           education_group=self.education_group_FOPA2MSG)
+        self.offer_FOPA2MS = OfferFactory()
+        self.offeryear_FOPA2MS = OfferYearFactory(acronym='FOPA2MS')
+        self.offer_proposition_FOPA2MS = OfferPropositionFactory(acronym='FOPA2MS',
+                                                                 offer=self.offer_FOPA2MS,
+                                                                 education_group=None)
+        self.offer_FOPA2MSG = OfferFactory()
+        self.offeryear_FOPA2MSG = OfferYearFactory(acronym='FOPA2MS/G', academic_year=self.ac_year)
+        self.education_group_FOPA2MSG = EducationGroupFactory()
+        self.education_group_year_FOPA2MSG = EducationGroupYearFactory(acronym='FOPA2MS/G',
+                                                                       academic_year=self.ac_year,
+                                                                       education_group=self.education_group_FOPA2MSG
+                                                                       )
+        self.offer_proposition_FOPA2MSG = OfferPropositionFactory(acronym='FOPA2MSG',
+                                                                  offer=self.offer_FOPA2MSG,
+                                                                  education_group=self.education_group_FOPA2MSG)
 
         # self.offer_ANTR2M = OfferFactory()
         # self.offeryear_ANTR2M = OfferYearFactory(acronym='ANTR2M')
@@ -130,9 +131,14 @@ class DissertationUtilsTestCase(TestCase):
         # PropositionOfferFactory(proposition_dissertation=self.sujet_sans_enfant_3,
         #                         offer_proposition=self.offer_proposition_ANTR2MS)
         clean_db_with_no_educationgroup_match()
-        prop_offers_sujet_1 = PropositionOffer.object.get(proposition_dissertation=self.sujet_sans_enfant_1)
+        prop_offers_sujet_1 = PropositionOffer.objects.filter(proposition_dissertation=self.sujet_sans_enfant_1)
         # prop_offers_sujet_2 = PropositionOffer.object.get(proposition_dissertation=self.sujet_sans_enfant_2)
         # prop_offers_sujet_3 = PropositionOffer.object.get(proposition_dissertation=self.sujet_avec_enfant_1)
-        self.assertIn(self.offer_proposition_FOPA2M, prop_offers_sujet_1)
-        self.assertIn(self.offer_proposition_FOPA2MSG, prop_offers_sujet_1)
+        tab_offer_proposition_sujet_1 = []
+        for prop_offer in prop_offers_sujet_1:
+            tab_offer_proposition_sujet_1.append(prop_offer.offer_proposition)
+
+        self.assertIn(self.offer_proposition_FOPA2MA, tab_offer_proposition_sujet_1)
+
+        self.assertIn(self.offer_proposition_FOPA2MSG, tab_offer_proposition_sujet_1)
 

@@ -27,7 +27,7 @@ from dissertation.models.proposition_dissertation import PropositionDissertation
 from dissertation.models.proposition_offer import PropositionOffer
 
 
-def clean_db_with_no_educationgroup_match():
+def clean_db_with_no_educationgroup_match(apps=None, shema_editor=None):
 
     offer_props_with_education_group_not_none = OfferProposition.objects.exclude(education_group=None)
     log = ''
