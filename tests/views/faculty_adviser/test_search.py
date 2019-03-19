@@ -32,8 +32,14 @@ class TestOfferPropositionFilterView(TestCase):
         self.education_group = OfferPropositionFactory()
         self.client.force_login(self.entity_manager.person.user)
 
-    def offer_proposition_search(self):
+    def test_offer_proposition_search(self):
         response = self.client.get(
             reverse('offer_propositions')+'?offer_proposition={}'.format(self.education_group.pk), data={}
+        )
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+
+    def test_adviser_list(self):
+        response = self.client.get(
+            reverse('adviser_list')+'?offer_proposition={}'.format(self.education_group.pk), data={}
         )
         self.assertEqual(response.status_code, HttpResponse.status_code)
