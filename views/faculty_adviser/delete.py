@@ -18,6 +18,7 @@
 #   see http://www.gnu.org/licenses/.                                                              #
 # ##################################################################################################
 from django.db.models import Subquery, OuterRef
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView
 
@@ -56,7 +57,7 @@ class FacultyAdviserDeleteView(AjaxTemplateMixin, DeleteView):
         self.object = self.get_object()
         for obj in self.object.all():
             obj.delete()
-        return self._ajax_response()
+        return self._ajax_response() or HttpResponseRedirect(self.get_success_url())
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
