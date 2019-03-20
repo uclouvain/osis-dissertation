@@ -44,7 +44,7 @@ class AdviserAdmin(SerializableModelAdmin):
 
 
 class Adviser(SerializableModel):
-    #TODO move this const in enum file
+    # TODO move this const in enum file
     TYPES_CHOICES = (
         ('PRF', _('Teacher')),
         ('MGR', _('Manager')),
