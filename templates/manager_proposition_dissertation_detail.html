@@ -37,9 +37,7 @@
     <h2>{{ proposition_dissertation.title }}</h2>
     </div>
     <div style="text-align:right; margin-bottom: 5px;">
-        <a class="btn btn-default btn-primary" data-toggle="modal" data-target="#pnl_upload_documents"
-           id="btn_add_file" title="{% trans 'Add file'%}">
-            <span class="glyphicon glyphicon-upload" aria-hidden="true" id="spn_add_file"></span></a>
+
         <a class="btn btn-default btn-primary"
            href="{% url 'manager_proposition_dissertation_edit' pk=proposition_dissertation.pk %}">
             <span class="glyphicon glyphicon-edit"></span></a>
@@ -70,16 +68,31 @@
                     {{ proposition_dissertation.title }}
                 </div>
             </div>
-            {% if filename != "" %}
+
                 <div class="row">
                     <div class="col-md-4" style="text-align:right">
                          <label>{% trans 'file' %}</label>
                      </div>
-                     <div class="col-md-4">
-                         <a href="{% url 'proposition_download' proposition_pk=proposition_dissertation.pk %}">{% trans 'Link' %}</a>
-                     </div>
+                    {% if filename != "" %}
+                         <div class="col-md-5">
+                             <a href="{% url 'proposition_download' proposition_pk=proposition_dissertation.pk %}" title="{% trans 'Download' %}">
+                                 <i class="far fa-file"> {{ filename }}</i>
+                             </a>
+                             <a href="#" class="btn btn-warning btn-xs" role="button">
+                                 <span class="fas fa-times">
+                                 </span>
+                             </a>
+                         </div>
+                    {% else %}
+                        <div class="col-md-5">
+                            <a class="btn btn-default btn-primary btn-xs" data-toggle="modal" data-target="#pnl_upload_documents"
+                               id="btn_add_file" title="{% trans 'Add file'%}">{% trans 'Add file'%}
+                                <span class="fas fa-file-upload" aria-hidden="true" id="spn_add_file">
+                                </span>
+                            </a>
+                         </div>
+                    {% endif %}
                  </div>
-            {% endif %}
             <div class="row">
                 <div class="col-md-4" style="text-align: right">
                     <label>{% trans 'Visibility' %}</label>
