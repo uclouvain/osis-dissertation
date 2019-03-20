@@ -279,7 +279,7 @@ msgstr "Retour"
 #: templates/dissertation/facultyadviser_add_inner.html:22
 #: templates/dissertation/facultyadviser_confirm_delete_inner.html:33
 msgid "Cancel"
-msgstr ""
+msgstr "Annuler"
 
 #: templates/dissertations_detail_updates.html:90
 #: templates/manager_dissertations_detail_updates.html:90
@@ -1350,7 +1350,7 @@ msgstr "Refusé par le promoteur"
 
 #: templates/dissertation/facultyadviser_confirm_delete_inner.html:34
 msgid "Remove"
-msgstr ""
+msgstr "Supprimer"
 
 #: models/enums/dissertation_status.py:62
 #: templates/manager_dissertations_list.html:105
@@ -1718,7 +1718,7 @@ msgstr "Enseignants devant répondre à une ou plusieurs demandes"
 
 #: templates/dissertation/facultyadviser_confirm_delete_inner.html:22
 msgid "The manager will keep the following programs : "
-msgstr ""
+msgstr "Le gestionnaire devra conserver les programmes suivant : "
 
 #: templates/manager_dissertations_wait_commission_list.html:321
 msgid "The status or the teacher are missing"
