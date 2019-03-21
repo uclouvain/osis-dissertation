@@ -78,7 +78,8 @@
                              <a href="{% url 'proposition_download' proposition_pk=proposition_dissertation.pk %}" title="{% trans 'Download' %}">
                                  <i class="far fa-file"> {{ filename }}</i>
                              </a>
-                             <a href="#" class="btn btn-warning btn-xs" role="button">
+                             <a data-url="{% url 'proposition_file_delete' proposition_pk=proposition_dissertation.pk %}"
+                                class="btn btn-warning btn-xs trigger_modal" role="button">
                                  <span class="fas fa-times">
                                  </span>
                              </a>
@@ -86,7 +87,9 @@
                     {% else %}
                         <div class="col-md-5">
                             <a class="btn btn-default btn-primary btn-xs" data-toggle="modal" data-target="#pnl_upload_documents"
-                               id="btn_add_file" title="{% trans 'Add file'%}">{% trans 'Add file'%}
+                               id="btn_add_file" title="{% trans 'Add file'%}">
+                                <i class="fas fa-plus"></i>
+                                    {% trans 'Add file'%}
                                 <span class="fas fa-file-upload" aria-hidden="true" id="spn_add_file">
                                 </span>
                             </a>
