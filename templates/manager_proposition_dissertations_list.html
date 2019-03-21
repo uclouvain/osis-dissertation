@@ -70,16 +70,22 @@
                 <th>{% trans 'Title'%}</th>
                 <th>{% trans 'Promotor'%}</th>
                 <th>{% trans 'Created by'%}</th>
-                  <th>{% trans 'Number of places'%}</th>
-                  <th>{% trans 'Visibility'%}</th>
-                  <th>{% trans 'Programs'%}</th>
+                <th>{% trans 'Maximum number of student'%}</th>
+                <th>{% trans 'Number of places remaining' %}</th>
+                <th>{% trans 'Visibility'%}</th>
+                <th>{% trans 'Programs'%}</th>
               </thead>
               {% for proposition_dissertation in propositions_dissertations %}
                 <tr>
                   <td><a href="{% url 'manager_proposition_dissertation_detail' pk=proposition_dissertation.pk %}">{{ proposition_dissertation.title }}</a></td>
                   <td>{{ proposition_dissertation.author }}</td>
                   <td>{{ proposition_dissertation.creator }}</td>
-                  <td>{{ proposition_dissertation.dissertations_count }} {% trans 'of' %} {{ proposition_dissertation.max_number_student }} </td>
+                  <td>{{ proposition_dissertation.max_number_student }}</td>
+                  {% if proposition_dissertation.remaining_places > 0 %}
+                  <td> {{ proposition_dissertation.remaining_places }}</td>
+                  {% else %}
+                  <td> 0 </td>
+                  {% endif %}
                   <td>
                       {% if proposition_dissertation.visibility == True %}
                       <span class="label label-success">{% trans 'Visible' %}</span>
