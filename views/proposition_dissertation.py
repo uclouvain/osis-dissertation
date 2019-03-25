@@ -343,7 +343,7 @@ def manager_proposition_dissertations_search(request):
         worksheet1.title = "proposition_dissertation"
         worksheet1.append(['Date_de_création', 'Teacher', 'Title',
                            'Type', 'Level', 'Collaboration', 'Maximum number of places', 'Places Remaining',
-                           'Visibility','Active', 'Programme(s)', 'Description'])
+                           'Visibility', 'Active', 'Programme(s)', 'Description'])
         types_choices = dict(PropositionDissertation.TYPES_CHOICES)
         levels_choices = dict(PropositionDissertation.LEVELS_CHOICES)
         collaboration_choices = dict(PropositionDissertation.COLLABORATION_CHOICES)
@@ -358,8 +358,8 @@ def manager_proposition_dissertations_search(request):
                                str(levels_choices[proposition.level]),
                                str(collaboration_choices[proposition.collaboration]),
                                proposition.max_number_student,
-                               (proposition.max_number_student - proposition.dissertations_count) if
-                               (proposition.max_number_student - proposition.dissertations_count) > 0 else 0,
+                               proposition.remaining_places if
+                               proposition.remaining_places > 0 else 0,
                                proposition.visibility,
                                proposition.active,
                                education_groups,
