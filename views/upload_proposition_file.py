@@ -53,7 +53,7 @@ def download(request, proposition_pk):
 
 class DeletePropositionFileView(AjaxTemplateMixin, DeleteView):
     model = PropositionDocumentFile
-    template = "proposition_dissertation_delete_file_inner.html"
+    template_name = 'propositiondocumentfile_confirm_delete_inner.html'
 
     def get_success_url(self):
         return None
