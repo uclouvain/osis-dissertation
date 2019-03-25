@@ -68,6 +68,8 @@
                   <th>{% trans 'Promotor'%}</th>
                   <th>{% trans 'Created by'%}</th>
                   <th>{% trans 'Visibility'%}</th>
+                  <th>{% trans 'Maximum number of student'%}</th>
+                  <th>{% trans 'Number of places remaining' %}</th>
                   <th>{% trans 'Programs'%}</th>
                 </tr>
                 {% for proposition_dissertation in propositions_dissertations %}
@@ -82,6 +84,12 @@
                         <span class="label label-warning">{% trans 'Invisible' %}</span>
                       {% endif %}
                     </td>
+                    <td>{{ proposition_dissertation.max_number_student }}</td>
+                    {% if proposition_dissertation.remaining_places > 0 %}
+                    <td> {{ proposition_dissertation.remaining_places }}</td>
+                    {% else %}
+                    <td> 0 </td>
+                    {% endif %}
                     <td>
                         {% for offer_proposition in proposition_dissertation.offer_propositions.all %}
                         <span class="label label-default" >
