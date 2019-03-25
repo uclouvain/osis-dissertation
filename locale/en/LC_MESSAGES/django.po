@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-21 16:24+0100\n"
+"POT-Creation-Date: 2019-03-25 11:47+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -188,6 +188,10 @@ msgstr ""
 msgid "Advanced search"
 msgstr ""
 
+#: models/faculty_adviser.py:46
+msgid "Adviser"
+msgstr ""
+
 #: templates/manager_offer_parameters.html:162
 #: templates/manager_offer_parameters_edit.html:193
 msgid "Adviser can manage jury members"
@@ -213,6 +217,10 @@ msgstr ""
 #: templates/manager_informations_list.html:43
 #: templates/manager_informations_list_request.html:43
 msgid "All teachers"
+msgstr ""
+
+#: templates/dissertation/facultyadviser_confirm_delete_inner.html:11
+msgid "Are you sure you want to remove the following program(s) ?"
 msgstr ""
 
 #: models/dissertation.py:70 templates/dissertations_add_justification.html:59
@@ -266,6 +274,11 @@ msgstr ""
 
 #: templates/informations_add.html:68
 msgid "Back"
+msgstr ""
+
+#: templates/dissertation/facultyadviser_add_inner.html:21
+#: templates/dissertation/facultyadviser_confirm_delete_inner.html:33
+msgid "Cancel"
 msgstr ""
 
 #: templates/dissertations_detail_updates.html:90
@@ -341,6 +354,14 @@ msgstr ""
 msgid "Commission refuses"
 msgstr ""
 
+#: templates/dissertation/facultyadviser_confirm_delete_inner.html:7
+msgid "Confirm delete for :"
+msgstr ""
+
+#: templates/dissertation/facultyadviser_add_inner.html:8
+msgid "Confirm manager add"
+msgstr ""
+
 #: templates/dissertations_welcome.html:49
 msgid "Continue"
 msgstr ""
@@ -414,6 +435,10 @@ msgstr ""
 #: templates/manager_students_list.html:53
 #: templates/manager_students_list.html:116
 msgid "Dissertation"
+msgstr ""
+
+#: templates/dissertation/offerproposition_filter.html:7
+msgid "Dissertation Manager"
 msgstr ""
 
 #: templates/manager_dissertations_detail.html:359
@@ -666,6 +691,11 @@ msgstr ""
 msgid "Editable"
 msgstr ""
 
+#: templates/dissertation/offerproposition_filter.html:33
+#: views/faculty_adviser/search.py:37
+msgid "Education Group"
+msgstr ""
+
 #: models/proposition_dissertation.py:47
 msgid "Empirical research"
 msgstr ""
@@ -694,6 +724,10 @@ msgstr ""
 #: templates/manager_dissertations_list.html:114
 #: templates/manager_proposition_dissertations_list.html:54
 msgid "Export search as XLS"
+msgstr ""
+
+#: views/faculty_adviser/search.py:40
+msgid "Faculty Adviser"
 msgstr ""
 
 #: templates/dissertations_list.html:417
@@ -986,11 +1020,11 @@ msgstr ""
 msgid "Loading..."
 msgstr ""
 
-#: models/adviser.py:49
+#: models/adviser.py:50 templates/dissertation/adviser_list.html:4
 msgid "Manager"
 msgstr ""
 
-#: forms.py:176 views/dissertation.py:275
+#: forms.py:184 views/dissertation.py:275
 msgid "Manager add jury"
 msgstr ""
 
@@ -1309,6 +1343,10 @@ msgstr ""
 msgid "Refused by promotor"
 msgstr ""
 
+#: templates/dissertation/facultyadviser_confirm_delete_inner.html:34
+msgid "Remove"
+msgstr ""
+
 #: models/enums/dissertation_status.py:62
 #: templates/manager_dissertations_list.html:105
 msgid "Reported"
@@ -1321,6 +1359,7 @@ msgstr ""
 msgid "Required"
 msgstr ""
 
+#: templates/dissertation/facultyadviser_add_inner.html:22
 #: templates/dissertations_add_justification.html:84
 #: templates/dissertations_jury_edit_inner.html:33
 #: templates/informations_add.html:53 templates/informations_edit.html:81
@@ -1599,13 +1638,13 @@ msgstr ""
 msgid "Taken places"
 msgstr ""
 
-#: models/adviser.py:48
+#: models/adviser.py:49
 #: templates/manager_dissertations_wait_commission_list.html:90
 #: templates/manager_proposition_dissertations_jury_edit.html:54
 msgid "Teacher"
 msgstr ""
 
-#: forms.py:176
+#: forms.py:184
 msgid "Teacher added jury"
 msgstr ""
 
@@ -1660,6 +1699,10 @@ msgstr ""
 
 #: templates/manager_informations_list_request.html:40
 msgid "Teachers not responding to requests"
+msgstr ""
+
+#: templates/dissertation/facultyadviser_confirm_delete_inner.html:22
+msgid "The manager will keep the following programs : "
 msgstr ""
 
 #: templates/manager_dissertations_wait_commission_list.html:321
