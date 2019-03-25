@@ -26,6 +26,7 @@
 from django.contrib.auth.decorators import login_required
 from django.http import *
 from django.shortcuts import redirect, get_object_or_404
+from django.views.decorators.http import require_http_methods
 from django.views.generic import DeleteView
 
 from base.views.mixins import AjaxTemplateMixin
@@ -50,20 +51,6 @@ def download(request, proposition_pk):
     return redirect('manager_proposition_dissertation_detail', pk=proposition.pk)
 
 
-# @login_required
-# @check_for_dissert(autorized_proposition_dissert_promotor_or_manager_or_author)
-# def delete_proposition_file(request, proposition_pk):
-#     proposition = get_object_or_404(PropositionDissertation, pk=proposition_pk)
-#     propositions_documents = PropositionDocumentFile.objects.filter(proposition=proposition)
-#     if propositions_documents:
-#         for proposition_document in propositions_documents:
-#             proposition_document.delete()
-#     if request.user.person.adviser.type == 'MGR':
-#         return redirect('manager_proposition_dissertation_detail', pk=proposition.pk)
-#     else:
-#         return redirect('proposition_dissertation_detail', pk=proposition.pk)
-
-
 class DeletePropositionFileView(AjaxTemplateMixin, DeleteView):
     model = PropositionDocumentFile
     template = "proposition_dissertation_delete_file_inner.html"
@@ -79,29 +66,29 @@ class DeletePropositionFileView(AjaxTemplateMixin, DeleteView):
         return PropositionDocumentFile.objects.filter(proposition=self.proposition)
 
     def delete(self, request, *args, **kwargs):
-        if autorized_proposition_dissert_promotor_or_manager_or_author(request.user, self.proposition):
-            self.proposition_document = self.get_object()
-            if self.proposition_document:
-                for proposition_document in self.proposition_document:
-                    proposition_document.delete()
+        self.proposition_documents = self.get_object()
+        if self.proposition_documents and autorized_proposition_dissert_promotor_or_manager_or_author(request.user,
+                                                                                                      self.proposition):
+            for proposition_document in self.proposition_documents:
+                proposition_document.delete()
             return self._ajax_response() or HttpResponseRedirect(self.get_success_url())
-        else:
-            return self._ajax_response() or HttpResponseRedirect(self.get_success_url())
+        return self._ajax_response() or HttpResponseRedirect(self.get_error_url())
 
 
 @login_required
+@require_http_methods(["POST"])
 def save_uploaded_file(request):
     data = request.POST
-    if request.method == 'POST':
-        if request.POST.get('proposition_dissertation_id'):
-            proposition = mdl.proposition_dissertation.find_by_id(request.POST['proposition_dissertation_id'])
+    proposition = get_object_or_404(PropositionDissertation.objects.prefetch_related('propositiondocumentfile_set'),
+                                    pk=request.POST['proposition_dissertation_id'])
+    if autorized_proposition_dissert_promotor_or_manager_or_author(request.user, proposition):
         file_selected = request.FILES['file']
         file = file_selected
         file_name = file_selected.name
         content_type = file_selected.content_type
         size = file_selected.size
         description = data['description']
-        documents = mdl.proposition_document_file.find_by_proposition(proposition)
+        documents = proposition.propositiondocumentfile_set.all()
         for document in documents:
             document.delete()
             old_document = mdl_osis_common.document_file.find_by_id(document.document_file.id)
