@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-26 11:28+0100\n"
+"POT-Creation-Date: 2019-03-26 11:49+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -417,6 +417,7 @@ msgstr "Session de la défense"
 msgid "Defense year"
 msgstr "Année de la défense"
 
+#: templates/proposition_dissertation_detail.html:83
 #: templates/propositiondocumentfile_confirm_delete_inner.html:46
 msgid "Delete"
 msgstr "Supprimer"
