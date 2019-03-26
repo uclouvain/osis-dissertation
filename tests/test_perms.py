@@ -43,13 +43,16 @@ from dissertation.tests.factories.faculty_adviser import FacultyAdviserFactory
 from dissertation.tests.factories.offer_proposition import OfferPropositionFactory
 from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
 from dissertation.perms import adviser_can_manage,\
-    autorized_dissert_promotor_or_manager, adviser_can_manage_proposition_dissertation
+    autorized_dissert_promotor_or_manager,\
+    adviser_can_manage_proposition_dissertation,\
+    autorized_proposition_dissert_promotor_or_manager_or_author
 from dissertation.tests.factories.proposition_offer import PropositionOfferFactory
 
 
 class DecoratorsTestCase(TestCase):
     def setUp(self):
         self.person_manager = PersonFactory()
+        self.person_no_manager = PersonFactory()
         self.person_manager2 = PersonFactory()
         self.manager = AdviserManagerFactory(person=self.person_manager)
         self.manager2 = AdviserManagerFactory(person=self.person_manager2)
@@ -84,7 +87,8 @@ class DecoratorsTestCase(TestCase):
             offer=self.offer2,
             education_group=self.education_group2
         )
-        self.proposition_dissertation = PropositionDissertationFactory()
+        self.proposition_dissertation = PropositionDissertationFactory(author=self.teacher,
+                                                                       creator=self.teacher3.person)
         self.offer_propo = OfferPropositionFactory(offer=self.offer1, education_group=self.education_group)
         self.proposition_offer = PropositionOfferFactory(
             proposition_dissertation=self.proposition_dissertation,
@@ -159,3 +163,29 @@ class DecoratorsTestCase(TestCase):
         self.assertNotEqual(adviser_can_manage_proposition_dissertation(
             self.proposition_dissertation,
             self.manager2), True)
+
+    def test_autorized_proposition_dissert_promotor_or_manager_or_author(self):
+        self.assertEqual(autorized_proposition_dissert_promotor_or_manager_or_author(
+            self.manager.person.user,
+            self.proposition_dissertation
+        ), True)
+        self.assertEqual(autorized_proposition_dissert_promotor_or_manager_or_author(
+            self.teacher.person.user,
+            self.proposition_dissertation
+        ), True)
+        self.assertEqual(autorized_proposition_dissert_promotor_or_manager_or_author(
+            self.teacher2.person.user,
+            self.proposition_dissertation
+        ), False)
+        self.assertEqual(autorized_proposition_dissert_promotor_or_manager_or_author(
+            self.teacher3.person.user,
+            self.proposition_dissertation
+        ), False)
+        self.assertEqual(autorized_proposition_dissert_promotor_or_manager_or_author(
+            self.manager2.person.user,
+            self.proposition_dissertation
+        ), False)
+        self.assertEqual(autorized_proposition_dissert_promotor_or_manager_or_author(
+            self.person_no_manager.user,
+            self.proposition_dissertation
+        ), False)

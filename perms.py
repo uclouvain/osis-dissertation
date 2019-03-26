@@ -26,6 +26,7 @@
 from functools import wraps
 
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import available_attrs
@@ -80,12 +81,13 @@ def autorized_dissert_promotor_or_manager(user, pk):
 
 
 def autorized_proposition_dissert_promotor_or_manager_or_author(user, proposition_dissert):
-    if user.person.adviser:
-        advis = user.person.adviser
-        return user_is_proposition_promotor(user, proposition_dissert) or \
-               adviser_can_manage_proposition_dissertation(proposition_dissert, advis) or \
-               proposition_dissert.author == advis
-    else:
+    try:
+        if user.person.adviser:
+            advis = user.person.adviser
+            return user_is_proposition_promotor(user, proposition_dissert) or \
+                   adviser_can_manage_proposition_dissertation(proposition_dissert, advis) or \
+                   proposition_dissert.author == advis
+    except ObjectDoesNotExist:
         return False
 
 
