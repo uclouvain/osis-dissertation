@@ -223,11 +223,11 @@ msgstr "Tous les enseignants"
 
 #: templates/propositiondocumentfile_confirm_delete_inner.html:37
 msgid "Are you sure you want to delete this document?"
-msgstr "Êtes vous certain de vouloir supprimer ce fichier"
+msgstr "Êtes vous certain de vouloir supprimer ce fichier ?"
 
 #: templates/dissertation/facultyadviser_confirm_delete_inner.html:11
 msgid "Are you sure you want to remove the following program(s) ?"
-msgstr "Êtes vous certain de vouloir supprimer ce(s) programme()s"
+msgstr "Êtes vous certain de vouloir supprimer ce(s) programme()s ?"
 
 #: models/dissertation.py:70 templates/dissertations_add_justification.html:59
 #: templates/dissertations_detail.html:57 templates/dissertations_list.html:52
