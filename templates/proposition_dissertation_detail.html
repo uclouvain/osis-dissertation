@@ -36,11 +36,8 @@
     <div class="page-header">
         <h2>{{ proposition_dissertation.title }}</h2>
     </div>
-    {% if proposition_dissertation.author == adviser or proposition_dissertation.creator == adviser.person %}
+    {% if check_authorisation_of_proposition %}
     <div style="text-align:right; margin-bottom: 5px;">
-        <a class="btn btn-default btn-primary" data-toggle="modal" data-target="#pnl_upload_documents"
-           id="btn_add_file" title="{% trans 'Add file'%}">
-            <span class="glyphicon glyphicon-upload" aria-hidden="true" id="spn_add_file"></span></a>
         <a class="btn btn-default btn-primary"
            href="{% url 'proposition_dissertation_edit' pk=proposition_dissertation.pk %}">
             <span class="glyphicon glyphicon-edit"></span></a>
@@ -81,14 +78,17 @@
                          <a href="{% url 'proposition_download' proposition_pk=proposition_dissertation.pk %}" title="{% trans 'Download' %}">
                              <i class="far fa-file"> {{ filename }}</i>
                          </a>
-                         <a data-url="{% url 'proposition_file_delete' proposition_pk=proposition_dissertation.pk %}"
-                            class="btn btn-warning btn-xs trigger_modal" role="button">
-                             <span class="fas fa-times">
-                             </span>
-                         </a>
+                         {% if check_authorisation_of_proposition %}
+                             <a data-url="{% url 'proposition_file_delete' proposition_pk=proposition_dissertation.pk %}"
+                                class="btn btn-warning btn-xs trigger_modal" role="button">
+                                 <span class="fas fa-times">
+                                 </span>
+                             </a>
+                         {% endif %}
                      </div>
                 {% else %}
                     <div class="col-md-5">
+                    {% if check_authorisation_of_proposition %}
                         <a class="btn btn-default btn-primary btn-xs" data-toggle="modal" data-target="#pnl_upload_documents"
                            id="btn_add_file" title="{% trans 'Add file'%}">
                             <i class="fas fa-plus"></i>
@@ -96,7 +96,11 @@
                             <span class="fas fa-file-upload" aria-hidden="true" id="spn_add_file">
                             </span>
                         </a>
-                     </div>
+
+                    {% else %}
+                        {% trans 'no file'%}
+                    {% endif %}
+                    </div>
                 {% endif %}
              </div>
             <div class="row">
@@ -173,7 +177,7 @@
                 </div>
                 <div class="col-md-8">
                     {% for offer_proposition in offer_propositions %}
-                        <span class="label label-default">{{ offer_proposition }}</span>
+                        <span class="label label-default">{{ offer_proposition.last_acronym }}</span>
                     {% endfor %}
                 </div>
             </div>
@@ -189,7 +193,7 @@
             {% endif %}
         </div>
     </div>
-    {% if proposition_dissertation.author == adviser or proposition_dissertation.creator == adviser.person %}
+    {% if check_authorisation_of_proposition %}
         <div class="panel panel-default">
              <div class="panel-heading">
                  <h3 class="panel-title">{% trans 'Dissertation subject jury' %}</h3>

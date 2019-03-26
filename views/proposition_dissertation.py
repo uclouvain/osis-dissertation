@@ -57,7 +57,7 @@ from dissertation.models.proposition_dissertation import PropositionDissertation
 from dissertation.models.proposition_offer import PropositionOffer
 from dissertation.models.proposition_role import PropositionRole
 from dissertation.perms import user_is_proposition_promotor, \
-    adviser_can_manage_proposition_dissertation
+    adviser_can_manage_proposition_dissertation, autorized_proposition_dissert_promotor_or_manager_or_author
 
 MAX_PROPOSITION_ROLE = 4
 
@@ -164,9 +164,12 @@ def manager_proposition_dissertation_delete(request, pk):
 @login_required
 @user_passes_test(adviser.is_manager)
 def manager_proposition_dissertation_detail(request, pk):
+    prefetch_propositions = return_prefetch_propositions()
     proposition = get_object_or_404(PropositionDissertation.objects.select_related('author__person', 'creator').
-                                    prefetch_related('offer_propositions__education_group__educationgroupyear_set',
-                                                     'propositionrole_set__adviser__person'), pk=pk)
+                                    prefetch_related(prefetch_propositions,
+                                                     'offer_propositions__education_group__educationgroupyear_set',
+                                                     'propositionrole_set__adviser__person',
+                                                     ), pk=pk)
     adv = request.user.person.adviser
     count_use = dissertation.count_by_proposition(proposition)
     percent = count_use * 100 / proposition.max_number_student if proposition.max_number_student else 0
@@ -414,7 +417,7 @@ def proposition_dissertation_delete(request, pk):
 @user_passes_test(adviser.is_teacher)
 def proposition_dissertation_detail(request, pk):
     current_academic_year = academic_year.starting_academic_year()
-    prefetch_propositions = return_prefetch_propositions()
+
     prefetch_disserts = Prefetch(
         "dissertations",
         queryset=Dissertation.objects.filter(
@@ -423,15 +426,18 @@ def proposition_dissertation_detail(request, pk):
             education_group_year_start__academic_year=current_academic_year
         ).exclude(status__in=(dissertation_status.DRAFT, dissertation_status.DIR_KO))
     )
+    prefetch_offer_propositions = return_prefetch_propositions()
 
     proposition = get_object_or_404(
         PropositionDissertation.objects.select_related(
             'author__person', 'creator'
         ).prefetch_related(
-            prefetch_propositions, prefetch_disserts, 'propositionrole_set__adviser__person'
+            prefetch_offer_propositions, prefetch_disserts, 'propositionrole_set__adviser__person'
         ), pk=pk
     )
-    offer_propositions = proposition.propositionoffer_set.all
+    check_authorisation_of_proposition = autorized_proposition_dissert_promotor_or_manager_or_author(request.user,
+                                                                                                     proposition)
+    offer_propositions = proposition.offer_propositions.all()
     count_use = proposition.dissertations.all().count()
     percent = count_use * 100 / proposition.max_number_student if proposition.max_number_student else 0
     count_proposition_role = proposition.propositionrole_set.all().count()
@@ -445,6 +451,7 @@ def proposition_dissertation_detail(request, pk):
         .select_related('adviser__person')
     return render(request, 'proposition_dissertation_detail.html',
                   {'proposition_dissertation': proposition,
+                   'check_authorisation_of_proposition': check_authorisation_of_proposition,
                    'offer_propositions': offer_propositions,
                    'adviser': get_current_adviser(request),
                    'count_use': count_use,

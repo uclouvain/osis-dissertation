@@ -170,7 +170,7 @@
                 </div>
                 <div class="col-md-8">
                     {% for offer_proposition in proposition_dissertation.offer_propositions.all %}
-                        <span class="label label-default">{{ offer_proposition }}</span>
+                        <span class="label label-default">{{ offer_proposition.last_acronym }}</span>
                     {% endfor %}
                 </div>
             </div>
