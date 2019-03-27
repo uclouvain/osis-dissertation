@@ -29,9 +29,12 @@ from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import UserPassesTestMixin
-from django.db.models import Count, OuterRef, Subquery, Q, Prefetch
+from django.db import models
+from django.db.models import Count
+from django.db.models import Q, F, ExpressionWrapper, OuterRef, Subquery, Prefetch
 from django.http import HttpResponse
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import get_object_or_404, render
+from django.shortcuts import redirect
 from django.utils.functional import cached_property
 from django.views.generic import CreateView
 from openpyxl import Workbook
@@ -43,9 +46,9 @@ from base.models.education_group_year import EducationGroupYear
 from base.views.mixins import AjaxTemplateMixin
 from dissertation.forms import PropositionDissertationForm, ManagerPropositionDissertationForm, \
     ManagerPropositionRoleForm, ManagerPropositionDissertationEditForm
-from dissertation.models import adviser, offer_proposition, proposition_dissertation, \
-    proposition_document_file, proposition_offer, proposition_role, offer_proposition_group
-from dissertation.models import dissertation
+from dissertation.models import adviser, offer_proposition, offer_proposition_group
+from dissertation.models import dissertation, proposition_dissertation, proposition_document_file, proposition_role, \
+    proposition_offer
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.enums import dissertation_role_status
 from dissertation.models.enums import dissertation_status
@@ -130,7 +133,12 @@ def manager_proposition_dissertations(request):
             active=True,
             education_group_year_start__academic_year=current_academic_year
         ) & ~Q(status__in=(dissertation_status.DRAFT, dissertation_status.DIR_KO))
-    )).select_related('author__person', 'creator').prefetch_related(prefetch_propositions)
+    )).annotate(
+        remaining_places=ExpressionWrapper(
+            F('max_number_student') - F('dissertations_count'),
+            output_field=models.IntegerField()
+        )
+    ).select_related('author__person', 'creator').prefetch_related(prefetch_propositions)
     return render(request,
                   'manager_proposition_dissertations_list.html',
                   {'propositions_dissertations': propositions_dissertations}
@@ -322,6 +330,10 @@ def manager_proposition_dissertations_search(request):
                 active=True,
                 education_group_year_start__academic_year=current_academic_year
             ) & ~Q(status__in=(dissertation_status.DRAFT, dissertation_status.DIR_KO))
+        )).annotate(
+        remaining_places=ExpressionWrapper(
+            F('max_number_student') - F('dissertations_count'),
+            output_field=models.IntegerField()
         )).select_related('author__person', 'creator').prefetch_related(prefetch_propositions)
 
     if 'bt_xlsx' in request.GET:
@@ -330,8 +342,8 @@ def manager_proposition_dissertations_search(request):
         worksheet1 = workbook.active
         worksheet1.title = "proposition_dissertation"
         worksheet1.append(['Date_de_création', 'Teacher', 'Title',
-                           'Type', 'Level', 'Collaboration', 'Places', 'Visibility',
-                           'Active', 'Programme(s)', 'Description'])
+                           'Type', 'Level', 'Collaboration', 'Maximum number of places', 'Places Remaining',
+                           'Visibility', 'Active', 'Programme(s)', 'Description'])
         types_choices = dict(PropositionDissertation.TYPES_CHOICES)
         levels_choices = dict(PropositionDissertation.LEVELS_CHOICES)
         collaboration_choices = dict(PropositionDissertation.COLLABORATION_CHOICES)
@@ -345,7 +357,9 @@ def manager_proposition_dissertations_search(request):
                                str(types_choices[proposition.type]),
                                str(levels_choices[proposition.level]),
                                str(collaboration_choices[proposition.collaboration]),
-                               '{}/{}'.format(proposition.dissertations_count, proposition.max_number_student),
+                               proposition.max_number_student,
+                               proposition.remaining_places if
+                               proposition.remaining_places > 0 else 0,
                                proposition.visibility,
                                proposition.active,
                                education_groups,
@@ -379,8 +393,7 @@ def proposition_dissertations(request):
     propositions_dissertations = PropositionDissertation.objects.filter(
         active=True,
         visibility=True,
-    ).select_related('author__person', 'creator')\
-        .prefetch_related(prefetch_propositions)
+    ).select_related('author__person', 'creator').prefetch_related(prefetch_propositions)
     return render(request,
                   'proposition_dissertations_list.html',
                   {'propositions_dissertations': propositions_dissertations}
@@ -482,9 +495,23 @@ def proposition_dissertation_edit(request, pk):
 @user_passes_test(adviser.is_teacher)
 def my_dissertation_propositions(request):
     prefetch_propositions = return_prefetch_propositions()
+    current_academic_year = academic_year.starting_academic_year()
     propositions_dissertations = PropositionDissertation.objects.filter(
         active=True,
         author=request.user.person.adviser
+    ).annotate(
+        dissertations_count=Count(
+            'dissertations',
+            filter=Q(
+                active=True,
+                education_group_year_start__academic_year=current_academic_year
+            ) & ~Q(status__in=(dissertation_status.DRAFT, dissertation_status.DIR_KO))
+        )
+    ).annotate(
+        remaining_places=ExpressionWrapper(
+            F('max_number_student') - F('dissertations_count'),
+            output_field=models.IntegerField()
+        )
     ).select_related('author__person', 'creator').prefetch_related(prefetch_propositions)
     return render(request, 'proposition_dissertations_list_my.html',
                   {'propositions_dissertations': propositions_dissertations})
