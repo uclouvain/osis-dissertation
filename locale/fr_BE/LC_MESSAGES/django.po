@@ -427,10 +427,8 @@ msgid "Delete dissertation"
 msgstr "Mémoire supprimé"
 
 #: templates/propositiondocumentfile_confirm_delete_inner.html:29
-#, fuzzy
-#| msgid "Delete dissertation"
 msgid "Delete file"
-msgstr "Mémoire supprimé"
+msgstr "Supprimer le fichier"
 
 #: models/dissertation.py:93 templates/dissertations_detail.html:104
 #: templates/manager_dissertations_detail.html:115

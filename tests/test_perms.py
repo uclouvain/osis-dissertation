@@ -165,27 +165,27 @@ class DecoratorsTestCase(TestCase):
             self.manager2), True)
 
     def test_autorized_proposition_dissert_promotor_or_manager_or_author(self):
-        self.assertEqual(autorized_proposition_dissert_promotor_or_manager_or_author(
+        self.assertTrue(autorized_proposition_dissert_promotor_or_manager_or_author(
             self.manager.person.user,
             self.proposition_dissertation
-        ), True)
-        self.assertEqual(autorized_proposition_dissert_promotor_or_manager_or_author(
+        ))
+        self.assertTrue(autorized_proposition_dissert_promotor_or_manager_or_author(
             self.teacher.person.user,
             self.proposition_dissertation
-        ), True)
-        self.assertEqual(autorized_proposition_dissert_promotor_or_manager_or_author(
+        ))
+        self.assertFalse(autorized_proposition_dissert_promotor_or_manager_or_author(
             self.teacher2.person.user,
             self.proposition_dissertation
-        ), False)
-        self.assertEqual(autorized_proposition_dissert_promotor_or_manager_or_author(
+        ))
+        self.assertFalse(autorized_proposition_dissert_promotor_or_manager_or_author(
             self.teacher3.person.user,
             self.proposition_dissertation
-        ), False)
-        self.assertEqual(autorized_proposition_dissert_promotor_or_manager_or_author(
+        ))
+        self.assertFalse(autorized_proposition_dissert_promotor_or_manager_or_author(
             self.manager2.person.user,
             self.proposition_dissertation
-        ), False)
-        self.assertEqual(autorized_proposition_dissert_promotor_or_manager_or_author(
+        ))
+        self.assertFalse(autorized_proposition_dissert_promotor_or_manager_or_author(
             self.person_no_manager.user,
             self.proposition_dissertation
-        ), False)
+        ))
