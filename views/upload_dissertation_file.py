@@ -25,8 +25,13 @@
 ##############################################################################
 from django.contrib.auth.decorators import login_required
 from django.http import *
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
+from django.views.generic import DeleteView
+
+from base.views.mixins import AjaxTemplateMixin
 from dissertation import models as mdl
+from dissertation.models.dissertation import Dissertation
+from dissertation.models.dissertation_document_file import DissertationDocumentFile
 from osis_common import models as mdl_osis_common
 from osis_common.models.enum import storage_duration
 
@@ -42,6 +47,30 @@ def download(request, dissertation_pk):
         response['Content-Disposition'] = 'attachment; filename=%s' % filename
         return response
     return redirect('manager_dissertations_detail', pk=dissertation.pk)
+
+
+class DeletePropositionFileView(AjaxTemplateMixin, DeleteView):
+    model = DissertationDocumentFile
+    template_name = 'dissertationdocumentfile_confirm_delete_inner.html'
+
+    def get_success_url(self):
+        return None
+
+    @property
+    def dissertation(self):
+        return get_object_or_404(Dissertation, pk=self.kwargs['dissertation_pk'])
+
+    def get_object(self, queryset=None):
+        return DissertationDocumentFile.objects.filter(dissertation=self.dissertation)
+
+    def delete(self, request, *args, **kwargs):
+        self.dissertation_documents = self.get_object()
+        if self.dissertation_documents and autorized_proposition_dissert_promotor_or_manager_or_author(request.user,
+                                                                                                      self.dissertation):
+            for dissertation_document in self.dissertation_documents:
+                dissertation_document.delete()
+            return self._ajax_response() or HttpResponseRedirect(self.get_success_url())
+        return self._ajax_response() or HttpResponseRedirect(self.get_error_url())
 
 
 @login_required
