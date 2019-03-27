@@ -33,6 +33,7 @@ from dissertation.views.dissertation import AdviserAutocomplete
 from dissertation.views.faculty_adviser.create import FacultyAdviserCreateView
 from dissertation.views.faculty_adviser.delete import FacultyAdviserDeleteView
 from dissertation.views.faculty_adviser.search import OfferPropositionFilterView, AdviserList
+from dissertation.views.upload_dissertation_file import DeleteDissertationFileView
 from dissertation.views.upload_proposition_file import DeletePropositionFileView
 
 urlpatterns = [
@@ -193,6 +194,9 @@ urlpatterns = [
         DeletePropositionFileView.as_view(),
         name='proposition_file_delete'),
     url(r'^upload/proposition_save/$', upload_proposition_file.save_uploaded_file, name="proposition_save_upload"),
+    url(r'^upload/dissertation_delete_file/(?P<dissertation_pk>[0-9]+)$',
+        DeleteDissertationFileView.as_view(),
+        name='dissertation_file_delete'),
     url(r'^upload/dissertation_download/(?P<dissertation_pk>[0-9]+)$', upload_dissertation_file.download,
         name='dissertation_download'),
     url(r'^upload/dissertation_save/$', upload_dissertation_file.save_uploaded_file, name="dissertation_save_upload"),

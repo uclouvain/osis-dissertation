@@ -69,15 +69,16 @@
                     </div>
                 </div>
                 {% if filename != "" %}
-                    <div class="row">
-                        <div class="col-md-3" style="text-align:right">
-                            <label>{% trans 'file' %}</label>
-                        </div>
-                        <div class="col-md-9">
-                            <a href="{% url 'dissertation_download' dissertation_pk=dissertation.pk %}">
-                                {% trans 'Link' %}</a>
-                        </div>
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>{% trans 'File' %}</label>
                     </div>
+                    <div class="col-md-9">
+                        <a href="{% url 'dissertation_download' dissertation_pk=dissertation.pk %}" title="{% trans 'Download' %}">
+                            <i class="far fa-file"> {{ filename }}</i>
+                        </a>
+                    </div>
+                </div>
                 {% endif %}
                 <div class="row">
                     <div class="col-md-3" style="text-align: right">

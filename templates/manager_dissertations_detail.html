@@ -51,10 +51,6 @@
     <a class="btn btn-primary pull-right" href="{% url 'manager_dissertations_edit' pk=dissertation.pk %}"
        style="margin-right: 5px;">
         <span class="glyphicon glyphicon-edit"></span></a>
-
-    <a class="btn btn-default btn-primary pull-right" data-toggle="modal" data-target="#pnl_upload_documents"
-       id="btn_add_file" style="margin-right: 5px;" title="{% trans 'Add file'%}">
-        <span class="glyphicon glyphicon-upload" aria-hidden="true" id="spn_add_file"></span></a>
 </ul>
 <input type="hidden" value="{{dissertation.pk | default_if_none:''}}" id="hdn_current_dissertation_id" name="dissertation_id" title="dissertation_id" >
 <div class="panel panel-default">
@@ -81,14 +77,36 @@
                     </div>
                 </div>
                 {% if filename != "" %}
-                    <div class="row">
-                        <div class="col-md-3" style="text-align:right">
-                            <label>{% trans 'file' %}</label>
-                        </div>
-                        <div class="col-md-9">
-                            <a href="{% url 'dissertation_download' dissertation_pk=dissertation.pk %}">{% trans 'Link' %}</a>
-                        </div>
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>{% trans 'File' %}</label>
                     </div>
+                    <div class="col-md-9">
+                        <a href="{% url 'dissertation_download' dissertation_pk=dissertation.pk %}" title="{% trans 'Download' %}">
+                            <i class="far fa-file"> {{ filename }}</i>
+                        </a>
+                        <a data-url="{% url 'dissertation_file_delete' dissertation_pk=dissertation.pk %}"
+                           class="btn btn-warning btn-xs trigger_modal" role="button">
+                                 <span class="fas fa-times">
+                                 </span>
+                        </a>
+                    </div>
+                </div>
+                {% else %}
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>{% trans 'File' %}</label>
+                    </div>
+                    <div class="col-md-9">
+                        <a class="btn btn-default btn-primary btn-xs" data-toggle="modal" data-target="#pnl_upload_documents"
+                           id="btn_add_file" title="{% trans 'Add file'%}">
+                            <i class="fas fa-plus"></i>
+                            {% trans 'Add file'%}
+                            <span class="fas fa-file-upload" aria-hidden="true" id="spn_add_file">
+                                </span>
+                        </a>
+                    </div>
+                </div>
                 {% endif %}
                 <div class="row">
                     <div class="col-md-3" style="text-align: right">
