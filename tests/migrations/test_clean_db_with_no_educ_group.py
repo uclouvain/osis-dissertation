@@ -37,7 +37,8 @@ from dissertation.tests.factories.proposition_offer import PropositionOfferFacto
 
 
 class DissertationUtilsTestCase(TestCase):
-    def test_clean_db_with_no_educationgroup_match(self):
+    def setUp(self):
+
         self.last_ac_year = create_current_academic_year()
         self.last_ac_year.year = self.last_ac_year.year-1
         self.ac_year = create_current_academic_year()
@@ -123,32 +124,19 @@ class DissertationUtilsTestCase(TestCase):
         PropositionOfferFactory(proposition_dissertation=self.sujet_sans_enfant_2,
                                 offer_proposition=self.offer_proposition_ANTR2MS)
 
-        # self.sujet_sans_enfant_2 = PropositionDissertationFactory(title='sujet_sans_enfant_2')
-        # PropositionOfferFactory(proposition_dissertation=self.sujet_sans_enfant_2,
-        #                         offer_proposition=self.offer_proposition_FOPA2M)
-        # PropositionOfferFactory(proposition_dissertation=self.sujet_sans_enfant_2,
-        #                         offer_proposition=self.offer_proposition_FOPA2MS)
-        #
-        # self.sujet_avec_enfant_1 = PropositionDissertationFactory(title='sujet_avec_enfant_3')
-        # PropositionOfferFactory(proposition_dissertation=self.sujet_avec_enfant_1,
-        #                         offer_proposition=self.offer_proposition_ANTR2MSID)
-        #
-        # PropositionOfferFactory(proposition_dissertation=self.sujet_sans_enfant_3,
-        #                         offer_proposition=self.offer_proposition_ANTR2MS)
+    def test_clean_db_with_no_educationgroup_match(self):
+
         clean_db_with_no_educationgroup_match()
         prop_offers_sujet_1 = PropositionOffer.objects.filter(proposition_dissertation=self.sujet_sans_enfant_1)
 
-        # prop_offers_sujet_3 = PropositionOffer.object.get(proposition_dissertation=self.sujet_avec_enfant_1)
         tab_offer_proposition_sujet_1 = []
         for prop_offer in prop_offers_sujet_1:
             tab_offer_proposition_sujet_1.append(prop_offer.offer_proposition)
         self.assertIn(self.offer_proposition_FOPA2MA, tab_offer_proposition_sujet_1)
         self.assertIn(self.offer_proposition_FOPA2MSG, tab_offer_proposition_sujet_1)
 
-        prop_offers_sujet_2 = PropositionOffer.object.get(proposition_dissertation=self.sujet_sans_enfant_2)
-        tab_offer_proposition_sujet_1 = []
-        for prop_offer in prop_offers_sujet_1:
-            tab_offer_proposition_sujet_1.append(prop_offer.offer_proposition)
-        print(prop_offers_sujet_1)
-        self.assertIn(self.offer_proposition_ANTR2MSID, tab_offer_proposition_sujet_1)
-
+        prop_offers_sujet_2 = PropositionOffer.objects.filter(proposition_dissertation=self.sujet_sans_enfant_2)
+        tab_offer_proposition_sujet_2 = []
+        for prop_offer in prop_offers_sujet_2:
+            tab_offer_proposition_sujet_2.append(prop_offer.offer_proposition)
+        self.assertIn(self.offer_proposition_ANTR2MSID, tab_offer_proposition_sujet_2)

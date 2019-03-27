@@ -31,7 +31,7 @@ from dissertation.migrations.utils.clean_db_with_no_educ_group import clean_db_w
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('dissertation', '0045_auto_20190312_1148'),
+        ('dissertation', '0046_auto_20190320_1038'),
     ]
 
     operations = [
