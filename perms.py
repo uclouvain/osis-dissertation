@@ -26,6 +26,7 @@
 from functools import wraps
 
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import available_attrs
@@ -34,6 +35,7 @@ from base.models.education_group import EducationGroup
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_role import DissertationRole
 from dissertation.models.enums import dissertation_role_status
+from dissertation.models.proposition_dissertation import PropositionDissertation
 from dissertation.models.proposition_role import PropositionRole
 
 
@@ -75,6 +77,17 @@ def autorized_dissert_promotor_or_manager(user, pk):
         return user_is_dissertation_promotor(user, dissert) or \
                adviser_can_manage(dissert, user.person.adviser)
     else:
+        return False
+
+
+def autorized_proposition_dissert_promotor_or_manager_or_author(user, proposition_dissert):
+    try:
+        if user.person.adviser:
+            advis = user.person.adviser
+            return user_is_proposition_promotor(user, proposition_dissert) or \
+                   adviser_can_manage_proposition_dissertation(proposition_dissert, advis) or \
+                   proposition_dissert.author == advis
+    except ObjectDoesNotExist:
         return False
 
 

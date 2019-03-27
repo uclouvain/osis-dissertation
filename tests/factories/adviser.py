@@ -39,4 +39,7 @@ class AdviserTeacherFactory(factory.DjangoModelFactory):
 
 
 class AdviserManagerFactory(AdviserTeacherFactory):
+    class Meta:
+        model = 'dissertation.Adviser'
     type = 'MGR'
+    person = factory.SubFactory(PersonFactory)
