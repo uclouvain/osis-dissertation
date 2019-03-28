@@ -21,13 +21,19 @@
 #   at the root of the source code of this program.  If not,
 #   see http://www.gnu.org/licenses/.
 # ##############################################################################
+import logging
+
+from django.conf import settings
 
 from dissertation.models.offer_proposition import OfferProposition
 from dissertation.models.proposition_dissertation import PropositionDissertation
 from dissertation.models.proposition_offer import PropositionOffer
 
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
+
 
 def clean_db_with_no_educationgroup_match(apps=None, shema_editor=None):
+
 
     offer_props_with_education_group_not_none = OfferProposition.objects.exclude(education_group=None)
     log = ''
@@ -73,4 +79,4 @@ def clean_db_with_no_educationgroup_match(apps=None, shema_editor=None):
                                                         offer_proposition=child_offer_prop)
                         log += add_line('A un enfant ou pas : ' + str(if_other_proposition_offer_child)
                                         + '  child list :' + str(child_list_offer_prop))
-    print(log)
+    logger.info(log)
