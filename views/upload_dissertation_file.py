@@ -23,10 +23,18 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import *
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
+from django.views.decorators.http import require_http_methods
+from django.views.generic import DeleteView
+
+from base.views.mixins import AjaxTemplateMixin
 from dissertation import models as mdl
+from dissertation.models import adviser
+from dissertation.models.dissertation import Dissertation
+from dissertation.models.dissertation_document_file import DissertationDocumentFile
+from dissertation.perms import autorized_dissert_promotor_or_manager, check_for_dissert
 from osis_common import models as mdl_osis_common
 from osis_common.models.enum import storage_duration
 
@@ -44,12 +52,36 @@ def download(request, dissertation_pk):
     return redirect('manager_dissertations_detail', pk=dissertation.pk)
 
 
+class DeleteDissertationFileView(AjaxTemplateMixin, DeleteView):
+    model = DissertationDocumentFile
+    template_name = 'dissertationdocumentfile_confirm_delete_inner.html'
+
+    def get_success_url(self):
+        return None
+
+    @property
+    def dissertation(self):
+        return get_object_or_404(Dissertation, pk=self.kwargs['dissertation_pk'])
+
+    def get_object(self, queryset=None):
+        return DissertationDocumentFile.objects.filter(dissertation=self.dissertation)
+
+    def delete(self, request, *args, **kwargs):
+        self.dissertation_documents = self.get_object()
+        if self.dissertation_documents and autorized_dissert_promotor_or_manager(request.user, self.dissertation.pk):
+            for dissertation_document in self.dissertation_documents:
+                dissertation_document.delete()
+            return self._ajax_response() or HttpResponseRedirect(self.get_success_url())
+        return self._ajax_response() or HttpResponseRedirect(self.get_error_url())
+
+
 @login_required
+@require_http_methods(["POST"])
+@user_passes_test(adviser.is_manager)
 def save_uploaded_file(request):
     data = request.POST
-    if request.method == 'POST':
-        if request.POST.get('dissertation_id'):
-            dissertation = mdl.dissertation.find_by_id(request.POST['dissertation_id'])
+    dissertation = get_object_or_404(Dissertation, pk=request.POST['dissertation_id'])
+    if autorized_dissert_promotor_or_manager(request.user, dissertation.pk):
         file_selected = request.FILES['file']
         file = file_selected
         file_name = file_selected.name
