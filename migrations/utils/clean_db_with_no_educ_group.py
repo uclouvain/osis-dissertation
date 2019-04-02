@@ -34,7 +34,6 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 def clean_db_with_no_educationgroup_match(apps=None, shema_editor=None):
 
-
     offer_props_with_education_group_not_none = OfferProposition.objects.exclude(education_group=None)
     log = ''
 
@@ -75,8 +74,10 @@ def clean_db_with_no_educationgroup_match(apps=None, shema_editor=None):
                     log += add_line('Ne dispose pas d\'un enfant (' + str(if_other_proposition_offer_child)
                                     + ') :  child list :' + str(child_list_offer_prop))
                     for child_offer_prop in child_list_offer_prop:
-                        PropositionOffer.objects.create(proposition_dissertation=proposition_dissertation,
-                                                        offer_proposition=child_offer_prop)
-                        log += add_line('A un enfant ou pas : ' + str(if_other_proposition_offer_child)
-                                        + '  child list :' + str(child_list_offer_prop))
+                        if PropositionOffer.objects.filter(proposition_dissertation=proposition_dissertation,
+                                                           offer_proposition=child_offer_prop).count() <= 0:
+                            PropositionOffer.objects.create(proposition_dissertation=proposition_dissertation,
+                                                            offer_proposition=child_offer_prop)
+                            log += add_line('A un enfant ou pas : ' + str(if_other_proposition_offer_child)
+                                            + '  child list :' + str(child_list_offer_prop))
     logger.info(log)
