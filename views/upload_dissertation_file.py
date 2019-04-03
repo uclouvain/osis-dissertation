@@ -71,7 +71,7 @@ class DeleteDissertationFileView(AjaxTemplateMixin, DeleteView):
         self.dissertation_documents = self.get_object()
         if self.dissertation_documents and autorized_dissert_promotor_or_manager(request.user, self.dissertation.pk):
             for dissertation_document in self.dissertation_documents:
-                justification = "%s %s " % (_("Delete file "), dissertation_document.document_file.file_name)
+                justification = "%s %s " % (_("Delete file"), dissertation_document.document_file.file_name)
                 dissertation_update.add(request, self.dissertation,
                                         self.dissertation.status,
                                         justification=justification)
@@ -108,7 +108,7 @@ def save_uploaded_file(request):
                                                                   size=size,
                                                                   update_by=request.user)
 
-        justification = "%s %s " % (_("Add file "), new_document.file_name)
+        justification = "%s %s " % (_("Add file"), new_document.file_name)
         dissertation_update.add(request, dissert,
                                 dissert.status,
                                 justification=justification)

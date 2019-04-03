@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-27 16:28+0100\n"
+"POT-Creation-Date: 2019-04-03 16:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -127,6 +127,7 @@ msgstr "Ajouter un sujet de mémoire"
 #: templates/manager_proposition_dissertation_detail.html:92
 #: templates/proposition_dissertation_detail.html:93
 #: templates/proposition_dissertation_detail.html:95
+#: views/upload_dissertation_file.py:111
 msgid "Add file"
 msgstr "Ajouter un fichier"
 
@@ -432,6 +433,7 @@ msgstr "Mémoire supprimé"
 
 #: templates/dissertationdocumentfile_confirm_delete_inner.html:29
 #: templates/propositiondocumentfile_confirm_delete_inner.html:29
+#: views/upload_dissertation_file.py:74
 msgid "Delete file"
 msgstr "Supprimer le fichier"
 
