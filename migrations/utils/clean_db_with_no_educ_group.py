@@ -77,5 +77,7 @@ def clean_db_with_no_educationgroup_match(apps=None, shema_editor=None):
                         obj, created = PropositionOffer.objects.get_or_create(
                             proposition_dissertation=proposition_dissertation, offer_proposition=child_offer_prop)
                         if created:
-                            log += add_line('Enfant créé : ' + str(obj.offer_proposition))
+                            log += add_line('Child created : ' + str(obj.offer_proposition))
+                        else:
+                            log += add_line('Child already existing : ' + str(obj.offer_proposition))
     logger.info(log)
