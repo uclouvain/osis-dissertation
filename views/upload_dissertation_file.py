@@ -72,7 +72,8 @@ class DeleteDissertationFileView(AjaxTemplateMixin, DeleteView):
         if self.dissertation_documents and autorized_dissert_promotor_or_manager(request.user, self.dissertation.pk):
             for dissertation_document in self.dissertation_documents:
                 justification = "{} {} ".format(_("Delete file"), dissertation_document.document_file.file_name)
-                dissertation_update.add(request, self.dissertation,
+                dissertation_update.add(request,
+                                        self.dissertation,
                                         self.dissertation.status,
                                         justification=justification)
                 dissertation_document.delete()
