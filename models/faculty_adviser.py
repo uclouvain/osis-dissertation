@@ -43,8 +43,12 @@ class FacultyAdviserAdmin(admin.ModelAdmin):
 
 
 class FacultyAdviser(models.Model):
-    adviser = models.ForeignKey(Adviser, verbose_name=_('Adviser'))
-    offer = models.ForeignKey(offer.Offer, null=True, blank=True)
+    adviser = models.ForeignKey(Adviser, verbose_name=_('Adviser'), on_delete=models.CASCADE)
+    offer = models.ForeignKey(
+        offer.Offer,
+        null=True, blank=True,
+        on_delete=models.CASCADE
+    )
     education_group = models.ForeignKey(EducationGroup, null=True, on_delete=models.PROTECT)
 
     def __str__(self):
@@ -78,5 +82,5 @@ class FacultyAdviser(models.Model):
 
 
 def find_education_groups_by_adviser(a_adviser):
-    return FacultyAdviser.objects.filter(adviser=a_adviser).select_related('education_group').\
+    return FacultyAdviser.objects.filter(adviser=a_adviser).select_related('education_group'). \
         values_list('education_group', flat=True)

@@ -35,7 +35,7 @@ class DissertationGroupAdmin(SerializableModelAdmin):
 
 
 class DissertationGroup(SerializableModel):
-    dissertation = models.ForeignKey(dissertation.Dissertation)
+    dissertation = models.ForeignKey(dissertation.Dissertation, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.dissertation.title

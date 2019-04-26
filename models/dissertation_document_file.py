@@ -34,8 +34,8 @@ class DissertationDocumentFileAdmin(SerializableModelAdmin):
 
 
 class DissertationDocumentFile(SerializableModel):
-    dissertation = models.ForeignKey('Dissertation')
-    document_file = models.ForeignKey('osis_common.DocumentFile')
+    dissertation = models.ForeignKey('Dissertation', on_delete=models.CASCADE)
+    document_file = models.ForeignKey('osis_common.DocumentFile', on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.dissertation)

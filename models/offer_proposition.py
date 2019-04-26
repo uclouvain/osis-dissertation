@@ -48,7 +48,7 @@ class OfferPropositionAdmin(SerializableModelAdmin):
 
 class OfferProposition(SerializableModel):
     acronym = models.CharField(max_length=200)
-    offer = models.ForeignKey(offer.Offer, related_name='offer_proposition')
+    offer = models.ForeignKey(offer.Offer, related_name='offer_proposition', on_delete=models.CASCADE)
     education_group = models.OneToOneField('base.EducationGroup',
                                            null=True,
                                            blank=True,
@@ -66,7 +66,7 @@ class OfferProposition(SerializableModel):
     end_jury_visibility = models.DateField(default=timezone.now)
     start_edit_title = models.DateField(default=timezone.now)
     end_edit_title = models.DateField(default=timezone.now)
-    offer_proposition_group = models.ForeignKey(OfferPropositionGroup, null=True, blank=True)
+    offer_proposition_group = models.ForeignKey(OfferPropositionGroup, null=True, blank=True, on_delete=models.CASCADE)
     global_email_to_commission = models.BooleanField(default=False)
 
     def clean(self):
