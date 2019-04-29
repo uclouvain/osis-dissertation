@@ -46,8 +46,8 @@ class PropositionRole(SerializableModel):
         max_length=12,
         choices=dissertation_role_status.STATUS_CHOICES,
         default=dissertation_role_status.PROMOTEUR)
-    adviser = models.ForeignKey('Adviser')
-    proposition_dissertation = models.ForeignKey('PropositionDissertation')
+    adviser = models.ForeignKey('Adviser', on_delete=models.CASCADE)
+    proposition_dissertation = models.ForeignKey('PropositionDissertation', on_delete=models.CASCADE)
 
     def __str__(self):
         return u"%s %s" % (self.status if self.status else "",

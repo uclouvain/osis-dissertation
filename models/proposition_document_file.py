@@ -34,8 +34,8 @@ class PropositionDocumentFileAdmin(SerializableModelAdmin):
 
 
 class PropositionDocumentFile(SerializableModel):
-    proposition = models.ForeignKey('PropositionDissertation')
-    document_file = models.ForeignKey('osis_common.documentFile')
+    proposition = models.ForeignKey('PropositionDissertation', on_delete=models.CASCADE)
+    document_file = models.ForeignKey('osis_common.documentFile', on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.proposition)

@@ -42,8 +42,8 @@ class DissertationRoleAdmin(SerializableModelAdmin):
 
 class DissertationRole(SerializableModel):
     status = models.CharField(max_length=12, choices=dissertation_role_status.STATUS_CHOICES)
-    adviser = models.ForeignKey('Adviser', related_name='dissertations_roles')
-    dissertation = models.ForeignKey('Dissertation')
+    adviser = models.ForeignKey('Adviser', related_name='dissertations_roles', on_delete=models.CASCADE)
+    dissertation = models.ForeignKey('Dissertation', on_delete=models.CASCADE)
 
     class Meta:
         unique_together = ('status', 'adviser', 'dissertation')

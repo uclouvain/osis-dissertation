@@ -54,8 +54,8 @@ class DissertationUpdate(SerializableModel):
     )
     created = models.DateTimeField(auto_now_add=True)
     justification = models.TextField(blank=True)
-    person = models.ForeignKey('base.Person')
-    dissertation = models.ForeignKey(dissertation.Dissertation)
+    person = models.ForeignKey('base.Person', on_delete=models.CASCADE)
+    dissertation = models.ForeignKey(dissertation.Dissertation, on_delete=models.CASCADE)
 
     def __str__(self):
         desc = "%s / %s >> %s / %s" % (self.dissertation.title, self.status_from, self.status_to, str(self.created))
