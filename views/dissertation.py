@@ -799,7 +799,11 @@ def manager_dissertations_wait_recep_list(request):
 def manager_students_list(request):
     current_manager = adviser.search_by_person(mdl.person.find_by_user(request.user))
     offers = faculty_adviser.search_by_adviser(current_manager)
-    offers_years = mdl.offer_year.find_by_offers_and_year(offers, mdl.academic_year.starting_academic_year())
+    offers_years = mdl.offer_year.OfferYear.objects.filter(
+        offer__in=offers
+    ).filter(
+        academic_year=mdl.academic_year.starting_academic_year()
+    )
     offer_enroll = offer_enrollment.OfferEnrollment.objects.filter(offer_year__in=offers_years).\
         select_related('student', 'offer_year').prefetch_related('student__dissertation_set')
 
