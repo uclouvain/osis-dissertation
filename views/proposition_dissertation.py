@@ -511,8 +511,8 @@ def my_dissertation_propositions(request):
             'dissertations',
             filter=Q(
                 active=True,
-                education_group_year_start__academic_year=current_academic_year
-            ) & ~Q(status__in=(dissertation_status.DRAFT, dissertation_status.DIR_KO))
+                dissertations__education_group_year_start__academic_year=current_academic_year
+            ) & ~Q(dissertations__status__in=(dissertation_status.DRAFT, dissertation_status.DIR_KO))
         )
     ).annotate(
         remaining_places=ExpressionWrapper(

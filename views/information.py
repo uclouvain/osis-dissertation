@@ -128,7 +128,7 @@ def informations_add(request):
                     return layout.render(request, 'informations_add_search.html', {'form': form,
                                                                                    'message': message})
 
-                elif person and adviser.find_by_person(person):  # person already adviser -> step 1
+                elif person and adviser.find_by_person(person[0]):  # person already adviser -> step 1
                     form = ManagerAddAdviserPreForm()
                     email = "%s (%s)" % (list(person)[0], data['email'])
                     message = "person_already_adviser"
@@ -282,7 +282,7 @@ def manager_informations_add(request):
                     return render(request, 'manager_informations_add_search.html', {'form': form,
                                                                                     'message': message})
 
-                elif person and adviser.find_by_person(person):  # person already adviser -> step 1
+                elif person and adviser.find_by_person(person[0]):  # person already adviser -> step 1
                     form = ManagerAddAdviserPreForm()
                     email = "%s (%s)" % (list(person)[0], data['email'])
                     message = "person_already_adviser"
