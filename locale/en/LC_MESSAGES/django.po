@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-03 16:49+0200\n"
+"POT-Creation-Date: 2019-08-13 14:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgid "%%"
 msgstr ""
 
 #: templates/dissertations_list.html:411
-#: templates/manager_dissertations_list.html:320
+#: templates/manager_dissertations_list.html:328
 #: templates/manager_dissertations_wait_commission_list.html:243
 #: templates/manager_dissertations_wait_eval_list.html:144
 #: templates/manager_dissertations_wait_list.html:137
@@ -42,7 +42,7 @@ msgid "1st year evaluation failed"
 msgstr ""
 
 #: templates/dissertations_list.html:423
-#: templates/manager_dissertations_list.html:332
+#: templates/manager_dissertations_list.html:340
 #: templates/manager_dissertations_wait_commission_list.html:256
 #: templates/manager_dissertations_wait_eval_list.html:156
 #: templates/manager_dissertations_wait_list.html:149
@@ -56,7 +56,7 @@ msgid ": activate to sort column ascending"
 msgstr ""
 
 #: templates/dissertations_list.html:424
-#: templates/manager_dissertations_list.html:333
+#: templates/manager_dissertations_list.html:341
 #: templates/manager_dissertations_wait_commission_list.html:257
 #: templates/manager_dissertations_wait_eval_list.html:157
 #: templates/manager_dissertations_wait_list.html:150
@@ -127,7 +127,7 @@ msgstr ""
 #: templates/manager_proposition_dissertation_detail.html:92
 #: templates/proposition_dissertation_detail.html:93
 #: templates/proposition_dissertation_detail.html:95
-#: views/upload_dissertation_file.py:111
+#: views/upload_dissertation_file.py:112
 msgid "Add file"
 msgstr ""
 
@@ -437,7 +437,7 @@ msgstr ""
 msgid "Delete file"
 msgstr ""
 
-#: models/dissertation.py:93 templates/dissertations_detail.html:105
+#: models/dissertation.py:98 templates/dissertations_detail.html:105
 #: templates/manager_dissertations_detail.html:133
 #: templates/manager_dissertations_wait_commission_list.html:154
 #: templates/manager_proposition_dissertation_detail.html:121
@@ -480,7 +480,7 @@ msgstr ""
 msgid "Dissertation jury"
 msgstr ""
 
-#: models/dissertation.py:102 templates/dissertations_detail.html:129
+#: models/dissertation.py:109 templates/dissertations_detail.html:129
 #: templates/manager_dissertations_detail.html:157
 msgid "Dissertation location"
 msgstr ""
@@ -767,7 +767,7 @@ msgid "File"
 msgstr ""
 
 #: templates/dissertations_list.html:417
-#: templates/manager_dissertations_list.html:326
+#: templates/manager_dissertations_list.html:334
 #: templates/manager_dissertations_wait_commission_list.html:250
 #: templates/manager_dissertations_wait_eval_list.html:150
 #: templates/manager_dissertations_wait_list.html:143
@@ -987,7 +987,7 @@ msgid "Large theme"
 msgstr ""
 
 #: templates/dissertations_list.html:420
-#: templates/manager_dissertations_list.html:329
+#: templates/manager_dissertations_list.html:337
 #: templates/manager_dissertations_wait_commission_list.html:253
 #: templates/manager_dissertations_wait_eval_list.html:153
 #: templates/manager_dissertations_wait_list.html:146
@@ -1036,7 +1036,7 @@ msgid "Litterature review"
 msgstr ""
 
 #: templates/dissertations_list.html:413
-#: templates/manager_dissertations_list.html:322
+#: templates/manager_dissertations_list.html:330
 #: templates/manager_dissertations_wait_commission_list.html:245
 #: templates/manager_dissertations_wait_eval_list.html:146
 #: templates/manager_dissertations_wait_list.html:139
@@ -1130,7 +1130,7 @@ msgid "New search"
 msgstr ""
 
 #: templates/dissertations_list.html:419
-#: templates/manager_dissertations_list.html:328
+#: templates/manager_dissertations_list.html:336
 #: templates/manager_dissertations_wait_commission_list.html:252
 #: templates/manager_dissertations_wait_eval_list.html:152
 #: templates/manager_dissertations_wait_list.html:145
@@ -1158,7 +1158,7 @@ msgid "No data"
 msgstr ""
 
 #: templates/dissertations_list.html:415
-#: templates/manager_dissertations_list.html:324
+#: templates/manager_dissertations_list.html:332
 #: templates/manager_dissertations_wait_commission_list.html:247
 #: templates/manager_dissertations_wait_eval_list.html:148
 #: templates/manager_dissertations_wait_list.html:141
@@ -1172,7 +1172,7 @@ msgid "No data available in table"
 msgstr ""
 
 #: templates/dissertations_list.html:414
-#: templates/manager_dissertations_list.html:323
+#: templates/manager_dissertations_list.html:331
 #: templates/manager_dissertations_wait_commission_list.html:246
 #: templates/manager_dissertations_wait_eval_list.html:147
 #: templates/manager_dissertations_wait_list.html:140
@@ -1262,7 +1262,7 @@ msgid "President"
 msgstr ""
 
 #: templates/dissertations_list.html:418
-#: templates/manager_dissertations_list.html:327
+#: templates/manager_dissertations_list.html:335
 #: templates/manager_dissertations_wait_commission_list.html:251
 #: templates/manager_dissertations_wait_eval_list.html:151
 #: templates/manager_dissertations_wait_list.html:144
@@ -1276,7 +1276,7 @@ msgid "Previous"
 msgstr ""
 
 #: templates/dissertations_list.html:406
-#: templates/manager_dissertations_list.html:315
+#: templates/manager_dissertations_list.html:323
 #: templates/manager_dissertations_wait_commission_list.html:238
 #: templates/manager_dissertations_wait_eval_list.html:139
 #: templates/manager_dissertations_wait_list.html:132
@@ -1304,7 +1304,7 @@ msgstr ""
 msgid "Program"
 msgstr ""
 
-#: models/dissertation.py:90
+#: models/dissertation.py:94
 #: templates/manager_proposition_dissertation_detail.html:169
 #: templates/manager_proposition_dissertations_list.html:76
 #: templates/manager_students_list.html:114
@@ -1424,7 +1424,7 @@ msgid "Search dissertation subject"
 msgstr ""
 
 #: templates/dissertations_list.html:407
-#: templates/manager_dissertations_list.html:316
+#: templates/manager_dissertations_list.html:324
 #: templates/manager_dissertations_wait_commission_list.html:239
 #: templates/manager_dissertations_wait_eval_list.html:140
 #: templates/manager_dissertations_wait_list.html:133
@@ -1474,7 +1474,7 @@ msgid "Show _MENU_ entries"
 msgstr ""
 
 #: templates/dissertations_list.html:410
-#: templates/manager_dissertations_list.html:319
+#: templates/manager_dissertations_list.html:327
 #: templates/manager_dissertations_wait_commission_list.html:242
 #: templates/manager_dissertations_wait_eval_list.html:143
 #: templates/manager_dissertations_wait_list.html:136
@@ -1488,7 +1488,7 @@ msgid "Showing 0 to 0 of 0 entries"
 msgstr ""
 
 #: templates/dissertations_list.html:409
-#: templates/manager_dissertations_list.html:318
+#: templates/manager_dissertations_list.html:326
 #: templates/manager_dissertations_wait_commission_list.html:241
 #: templates/manager_dissertations_wait_eval_list.html:142
 #: templates/manager_dissertations_wait_list.html:135
@@ -1818,7 +1818,11 @@ msgid "To be defended"
 msgstr ""
 
 #: models/enums/dissertation_status.py:57
+#: templates/manager_dissertations_detail.html:396
+#: templates/manager_dissertations_detail.html:399
 #: templates/manager_dissertations_list.html:100
+#: templates/manager_dissertations_list.html:292
+#: templates/manager_dissertations_list.html:295
 #: tests/views/test_dissertation.py:507
 msgid "To be received"
 msgstr ""
@@ -1959,6 +1963,13 @@ msgid ""
 "dissertation. Are you sure you want to continue ?"
 msgstr ""
 
+#: templates/manager_dissertations_detail.html:397
+#: templates/manager_dissertations_list.html:293
+msgid ""
+"You are ready to set this dissertation as To Receive. Are you sure you want "
+"to continue ?"
+msgstr ""
+
 #: templates/manager_dissertations_detail.html:323
 #: templates/manager_dissertations_detail.html:337
 #: templates/manager_dissertations_list.html:219
@@ -2050,7 +2061,7 @@ msgid "close"
 msgstr ""
 
 #: templates/dissertations_list.html:412
-#: templates/manager_dissertations_list.html:321
+#: templates/manager_dissertations_list.html:329
 #: templates/manager_dissertations_wait_commission_list.html:244
 #: templates/manager_dissertations_wait_eval_list.html:145
 #: templates/manager_dissertations_wait_list.html:138

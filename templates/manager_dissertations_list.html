@@ -286,6 +286,14 @@
                                 class="glyphicon glyphicon-remove-circle"
                                 aria-hidden="true"></span> {% trans 'Dissertation delayed'%}</a>
                     {% endif %}
+                    {% if dissertation.status == 'ENDED_LOS' %}
+                        <a href="{% url 'manager_dissertations_go_forward_from_list' pk=dissertation.pk choice='ok' %}"
+                          id="lnk_manager_back_to_receive" class="btn btn-default"
+                          role="button" title="{% trans 'To be received'%}"
+                          onclick="return confirm('{% trans 'You are ready to set this dissertation as To Receive. Are you sure you want to continue ?' %}')"><span
+                          class="glyphicon glyphicon-circle-arrow-right"
+                          aria-hidden="true"></span> {% trans 'To be received'%}</a>
+                    {% endif %}
                     </div>
                 </td>
               </tr>

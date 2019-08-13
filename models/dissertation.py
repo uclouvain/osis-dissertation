@@ -135,6 +135,8 @@ class Dissertation(SerializableModel):
     def manager_accept(self):
         if self.status == dissertation_status.DIR_SUBMIT:
             self.teacher_accept()
+        elif self.status == dissertation_status.ENDED_LOS:
+            self.set_status(dissertation_status.TO_RECEIVE)
         elif self.status == dissertation_status.COM_SUBMIT or self.status == dissertation_status.COM_KO:
             next_status = get_next_status(self, "accept")
             emails_dissert.send_email(self, 'dissertation_accepted_by_com', [self.author])
