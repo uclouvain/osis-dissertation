@@ -99,7 +99,7 @@ def is_valid(request, form):
 
 
 def return_prefetch_propositions():
-    current_academic_year = academic_year.starting_academic_year()
+    current_academic_year = academic_year.current_academic_year()
     return Prefetch(
         "offer_propositions",
         queryset=OfferProposition.objects.annotate(last_acronym=Subquery(
@@ -118,7 +118,7 @@ def return_prefetch_propositions():
 @user_passes_test(adviser.is_manager)
 def manager_proposition_dissertations(request):
     now = datetime.now()
-    current_academic_year = academic_year.starting_academic_year()
+    current_academic_year = academic_year.current_academic_year()
     prefetch_propositions = return_prefetch_propositions()
 
     propositions_dissertations = PropositionDissertation.objects.filter(
@@ -277,7 +277,7 @@ def manager_proposition_dissertations_role_delete(request, pk):
 @login_required
 @user_passes_test(adviser.is_manager)
 def manager_proposition_dissertation_new(request):
-    current_ac_year = academic_year.starting_academic_year()
+    current_ac_year = academic_year.current_academic_year()
     offer_propositions = OfferProposition.objects.exclude(education_group=None).annotate(last_acronym=Subquery(
             EducationGroupYear.objects.filter(
                 education_group__offer_proposition=OuterRef('pk'),
@@ -312,7 +312,7 @@ def manager_proposition_dissertations_search(request):
     terms = request.GET['search']
 
     now = datetime.now()
-    current_academic_year = academic_year.starting_academic_year()
+    current_academic_year = academic_year.current_academic_year()
     prefetch_propositions = return_prefetch_propositions()
     propositions_dissertations = PropositionDissertation.objects.filter(
         active=True,
@@ -416,7 +416,7 @@ def proposition_dissertation_delete(request, pk):
 @login_required
 @user_passes_test(adviser.is_teacher)
 def proposition_dissertation_detail(request, pk):
-    current_academic_year = academic_year.starting_academic_year()
+    current_academic_year = academic_year.current_academic_year()
 
     prefetch_disserts = Prefetch(
         "dissertations",
@@ -502,7 +502,7 @@ def proposition_dissertation_edit(request, pk):
 @user_passes_test(adviser.is_teacher)
 def my_dissertation_propositions(request):
     prefetch_propositions = return_prefetch_propositions()
-    current_academic_year = academic_year.starting_academic_year()
+    current_academic_year = academic_year.current_academic_year()
     propositions_dissertations = PropositionDissertation.objects.filter(
         active=True,
         author=request.user.person.adviser
@@ -535,7 +535,7 @@ def proposition_dissertations_created(request):
 @login_required
 @user_passes_test(adviser.is_teacher)
 def proposition_dissertation_new(request):
-    current_ac_year = academic_year.starting_academic_year()
+    current_ac_year = academic_year.current_academic_year()
     perso = request.user.person
     offer_propositions = OfferProposition.objects.exclude(education_group=None).annotate(last_acronym=Subquery(
             EducationGroupYear.objects.filter(
