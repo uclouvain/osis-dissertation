@@ -95,7 +95,7 @@ class Dissertation(SerializableModel):
     proposition_dissertation = models.ForeignKey(
         PropositionDissertation,
         related_name='dissertations',
-        verbose_name=_('Description'),
+        verbose_name=_('Dissertation subject'),
         on_delete=models.CASCADE
     )
     description = models.TextField(blank=True)
