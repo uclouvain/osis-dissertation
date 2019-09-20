@@ -52,7 +52,7 @@ class FacultyAdviser(models.Model):
     education_group = models.ForeignKey(EducationGroup, null=True, on_delete=models.PROTECT)
 
     def __str__(self):
-        return "{} - Offer {}".format(str(self.adviser), str(self.offer.id))
+        return "{} - EducationGroup {}".format(str(self.adviser), str(self.education_group))
 
     def get_adviser_type(self):
         return self.adviser.type
