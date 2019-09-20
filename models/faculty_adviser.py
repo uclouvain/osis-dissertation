@@ -33,7 +33,7 @@ from dissertation.models.adviser import Adviser
 
 
 class FacultyAdviserAdmin(admin.ModelAdmin):
-    list_display = ('adviser', 'get_adviser_type', 'education_group', 'recent_acronym_education_group')
+    list_display = ('adviser', 'get_adviser_type', 'education_group', 'recent_acronym_education_group', 'offer')
     raw_id_fields = ('adviser', 'offer', 'education_group')
     search_fields = ('adviser__person__last_name', 'adviser__person__first_name', 'offer__id',
                      'education_group__id')
