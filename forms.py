@@ -26,7 +26,6 @@
 from dal import autocomplete
 from django import forms
 from django.forms import ModelForm
-from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from base import models as mdl
@@ -116,16 +115,12 @@ class ManagerDissertationForm(ModelForm):
 
 
 class ManagerDissertationEditForm(ModelForm):
-
     def __init__(self, data, *args, **kwargs):
         user = kwargs.pop("user")
         super().__init__(data, *args, **kwargs)
-        now = timezone.now()
         self.fields["proposition_dissertation"].queryset = PropositionDissertation.objects.filter(
             active=True,
             visibility=True,
-            offer_propositions__start_visibility_proposition__lte=now,
-            offer_propositions__end_visibility_proposition__gte=now,
             offer_propositions__education_group__advisers__person__user=user
         ).select_related("author__person").distinct()
         self.fields["author"].queryset = Student.objects.filter(
