@@ -90,7 +90,7 @@ class InformationTeacherViewTestCase(TestCase):
                                         'last_name': self.teacher.person.last_name.title(),
                                         'email': self.teacher.person.email,
                                         'phone': self.teacher.person.phone,
-                                        'phone_mobile': self.teacher.person.phone_mobile
+                                        'phone_mobile': ""
                                     }
                                     )
         self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
@@ -101,7 +101,7 @@ class InformationTeacherViewTestCase(TestCase):
                                         'last_name': self.teacher.person.last_name.title(),
                                         'email': self.teacher.person.email,
                                         'phone': self.teacher.person.phone,
-                                        'phone_mobile': self.teacher.person.phone_mobile
+                                        'phone_mobile': ""
                                     }
                                     )
         self.assertEqual(response.status_code, HttpResponse.status_code)
