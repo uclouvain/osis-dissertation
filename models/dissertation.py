@@ -95,7 +95,7 @@ class Dissertation(SerializableModel):
     proposition_dissertation = models.ForeignKey(
         PropositionDissertation,
         related_name='dissertations',
-        verbose_name=_('Description'),
+        verbose_name=_('Dissertation subject'),
         on_delete=models.CASCADE
     )
     description = models.TextField(blank=True)
@@ -135,6 +135,8 @@ class Dissertation(SerializableModel):
     def manager_accept(self):
         if self.status == dissertation_status.DIR_SUBMIT:
             self.teacher_accept()
+        elif self.status == dissertation_status.ENDED_LOS:
+            self.set_status(dissertation_status.TO_RECEIVE)
         elif self.status == dissertation_status.COM_SUBMIT or self.status == dissertation_status.COM_KO:
             next_status = get_next_status(self, "accept")
             emails_dissert.send_email(self, 'dissertation_accepted_by_com', [self.author])
@@ -274,10 +276,10 @@ def find_by_id(dissertation_id):
 
 
 def count_by_proposition(proposition):
-    current_academic_year = academic_year.starting_academic_year()
+    starting_academic_year = academic_year.starting_academic_year()
     return Dissertation.objects.filter(proposition_dissertation=proposition) \
         .filter(active=True) \
-        .filter(education_group_year_start__academic_year=current_academic_year) \
+        .filter(education_group_year_start__academic_year=starting_academic_year) \
         .exclude(status=dissertation_status.DRAFT) \
         .exclude(status=dissertation_status.DIR_KO) \
         .count()

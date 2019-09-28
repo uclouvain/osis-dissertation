@@ -725,7 +725,7 @@ def manager_dissertations_wait_recep_list(request):
 def manager_students_list(request):
     student_with_enrollement_in_education_groups = Student.objects.filter(
         offerenrollment__education_group_year__education_group__facultyadviser__adviser__person__user=request.user,
-        offerenrollment__education_group_year__academic_year=mdl.academic_year.starting_academic_year()
+        offerenrollment__education_group_year__academic_year=mdl.academic_year.current_academic_year()
     ).select_related('person'). \
         prefetch_related('dissertation_set__education_group_year_start__education_group',
                          'dissertation_set__education_group_year_start__academic_year',

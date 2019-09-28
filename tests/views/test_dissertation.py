@@ -26,9 +26,9 @@
 
 import json
 
-from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.test import TestCase
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
@@ -281,15 +281,22 @@ class DissertationViewTestCase(TestCase):
         self.dissertation_test_email.status = 'EVA_SUBMIT'
         self.dissertation_test_email.manager_accept()
         self.assertEqual(self.dissertation_test_email.status, 'TO_RECEIVE')
+
         self.dissertation_test_email.status = 'EVA_KO'
         self.dissertation_test_email.manager_accept()
         self.assertEqual(self.dissertation_test_email.status, 'TO_RECEIVE')
+
         self.dissertation_test_email.status = 'DEFENDED'
         self.dissertation_test_email.manager_accept()
         self.assertEqual(self.dissertation_test_email.status, 'ENDED_WIN')
+
         self.dissertation_test_email.status = 'DRAFT'
         self.dissertation_test_email.manager_accept()
         self.assertEqual(self.dissertation_test_email.status, 'DRAFT')
+
+        self.dissertation_test_email.status = 'ENDED_LOS'
+        self.dissertation_test_email.manager_accept()
+        self.assertEqual(self.dissertation_test_email.status, 'TO_RECEIVE')
 
     def test_email_new_dissert(self):
         self.client.force_login(self.manager.person.user)

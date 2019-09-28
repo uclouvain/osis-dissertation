@@ -30,7 +30,6 @@ from django.test import TestCase
 
 from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
 from base.tests.factories.education_group import EducationGroupFactory
-
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.offer import OfferFactory
 from base.tests.factories.offer_year import OfferYearFactory
@@ -421,23 +420,19 @@ class DissertationModelTestCase(TestCase):
         self.assertEqual(None, result)
 
     def test_count_by_proposition(self):
-        self.proposition_dissertation_x = PropositionDissertationFactory()
-        self.current_academic_year = create_current_academic_year()
+        self.prop_dissert = PropositionDissertationFactory()
+        self.starting_academic_year = create_current_academic_year()
         self.dissertation_active = DissertationFactory(
             active=True,
             status=dissertation_status.COM_SUBMIT,
-            proposition_dissertation=self.proposition_dissertation_x,
-            education_group_year_start__academic_year=self.current_academic_year
+            proposition_dissertation=self.prop_dissert,
+            education_group_year_start__academic_year=self.starting_academic_year
         )
-        self.dissertation_false = DissertationFactory(active=False,
-                                                      proposition_dissertation=self.proposition_dissertation_x)
-        self.dissertation_active_draft = DissertationFactory(active=True,
-                                                             status=dissertation_status.DRAFT,
-                                                             proposition_dissertation=self.proposition_dissertation_x)
-        self.dissertation_active_draft = DissertationFactory(active=True,
-                                                             status=dissertation_status.DIR_KO,
-                                                             proposition_dissertation=self.proposition_dissertation_x)
-        self.assertEqual(dissertation.count_by_proposition(self.proposition_dissertation_x), 1)
+        DissertationFactory(active=False, proposition_dissertation=self.prop_dissert)
+        DissertationFactory(active=True, status=dissertation_status.DRAFT, proposition_dissertation=self.prop_dissert)
+        DissertationFactory(active=True, status=dissertation_status.DIR_KO, proposition_dissertation=self.prop_dissert)
+
+        self.assertEqual(dissertation.count_by_proposition(self.prop_dissert), 1)
 
     def test_search_by_education_group(self):
         dissert = dissertation.search_by_education_group([self.education_group_year_start.education_group])

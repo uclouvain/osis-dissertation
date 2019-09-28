@@ -165,9 +165,11 @@ def find_by_id(proposition_id):
     except ObjectDoesNotExist:
         return None
 
+
 def search_by_offers(offers):
     proposition_ids = proposition_offer.find_by_offers(offers).values('proposition_dissertation_id')
     return PropositionDissertation.objects.filter(pk__in=proposition_ids, active=True, visibility=True)
+
 
 def find_by_education_groups(education_groups):
     now = timezone.now()

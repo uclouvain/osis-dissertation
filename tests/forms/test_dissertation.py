@@ -25,18 +25,33 @@
 ##############################################################################
 from django.test import TestCase
 
+from dissertation.forms import ManagerDissertationEditForm
+from dissertation.models.proposition_dissertation import PropositionDissertation
+from dissertation.tests.factories.adviser import AdviserManagerFactory
+from dissertation.tests.factories.dissertation import DissertationFactory
 from dissertation.tests.factories.faculty_adviser import FacultyAdviserFactory
+from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
+from dissertation.tests.factories.proposition_offer import PropositionOfferFactory
 
 
-class FacultyManagerTest(TestCase):
+class DissertationFormsTestCase(TestCase):
+
     def setUp(self):
-        self.faculty_adviser = FacultyAdviserFactory()
-
-    def test_str_self(self):
-        self.assertEqual(
-            str(self.faculty_adviser),
-            "{} - EducationGroup {}".format(self.faculty_adviser.adviser, self.faculty_adviser.education_group)
+        self.manager = AdviserManagerFactory()
+        self.proposition = PropositionDissertationFactory()
+        self.dissertation = DissertationFactory(proposition_dissertation=self.proposition)
+        self.proposition_offer = PropositionOfferFactory(
+            proposition_dissertation=self.proposition
+        )
+        FacultyAdviserFactory(
+            adviser=self.manager,
+            offer=self.proposition_offer.offer_proposition.offer,
+            education_group=self.proposition_offer.offer_proposition.education_group
         )
 
-    def test_get_adviser_type(self):
-        self.assertEqual(self.faculty_adviser.get_adviser_type(), self.faculty_adviser.adviser.type)
+    def test_dissertation_manager_edit_form(self):
+        form = ManagerDissertationEditForm(None, instance=self.dissertation, user=self.manager.person.user)
+        self.assertCountEqual(
+            form.fields['proposition_dissertation'].queryset,
+            PropositionDissertation.objects.all()
+        )
