@@ -122,10 +122,6 @@ def manager_proposition_dissertations(request):
     prefetch_propositions = return_prefetch_propositions()
 
     propositions_dissertations = PropositionDissertation.objects.filter(
-        active=True,
-        visibility=True,
-        offer_propositions__start_visibility_proposition__lte=now,
-        offer_propositions__end_visibility_proposition__gte=now,
         offer_propositions__education_group__facultyadviser__adviser__person__user=request.user
     ).annotate(dissertations_count=Count(
         'dissertations',
@@ -395,7 +391,6 @@ def proposition_dissertations(request):
     prefetch_propositions = return_prefetch_propositions()
     propositions_dissertations = PropositionDissertation.objects.filter(
         active=True,
-        visibility=True,
     ).select_related('author__person', 'creator').prefetch_related(prefetch_propositions)
     return render(request,
                   'proposition_dissertations_list.html',
