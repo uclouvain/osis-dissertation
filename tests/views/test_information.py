@@ -47,7 +47,7 @@ class InformationTeacherViewTestCase(TestCase):
 
     def setUp(self):
         self.manager = AdviserManagerFactory()
-        a_person_teacher = PersonFactory(first_name='Pierre', last_name='Dupont')
+        a_person_teacher = PersonFactory(first_name='Pierre', last_name='Dupont', phone_mobile="0472760003")
         self.teacher = AdviserTeacherFactory(person=a_person_teacher)
         self.person = PersonFactory()
         self.manager2 = AdviserManagerFactory()
