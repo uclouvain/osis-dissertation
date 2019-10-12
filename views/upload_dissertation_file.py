@@ -26,7 +26,7 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import *
 from django.shortcuts import redirect, get_object_or_404
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 from django.views.generic import DeleteView
 

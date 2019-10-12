@@ -26,7 +26,7 @@
 from dal import autocomplete
 from django import forms
 from django.forms import ModelForm
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from base import models as mdl
 from base.models.education_group_year import EducationGroupYear

@@ -35,7 +35,7 @@ def translating(string, language=LANGUAGE_DEFAULT):
     cur_language = translation.get_language()
     try:
         translation.activate(language)
-        text = translation.ugettext(string)
+        text = translation.gettext(string)
     finally:
         translation.activate(cur_language)
     return text
