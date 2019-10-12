@@ -23,17 +23,19 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.test import TestCase
+
 from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
-from dissertation.models.offer_proposition import OfferProposition
-from dissertation.models.offer_proposition import get_by_offer, get_by_dissertation, get_by_offer_proposition_group, find_by_id
-from dissertation.models.offer_proposition_group import OfferPropositionGroup
-from dissertation.tests.factories.offer_proposition import OfferPropositionFactory
-from dissertation.tests.factories.offer_proposition_group import OfferPropositionGroupFactory
-from dissertation.tests.factories.dissertation import DissertationFactory
 from base.tests.factories.offer import OfferFactory
 from base.tests.factories.offer_year import OfferYearFactory
-from django.test import TestCase
+from dissertation.models.offer_proposition import OfferProposition
+from dissertation.models.offer_proposition import get_by_offer, get_by_dissertation, get_by_offer_proposition_group, \
+    find_by_id
+from dissertation.models.offer_proposition_group import OfferPropositionGroup
+from dissertation.tests.factories.dissertation import DissertationFactory
+from dissertation.tests.factories.offer_proposition import OfferPropositionFactory
+from dissertation.tests.factories.offer_proposition_group import OfferPropositionGroupFactory
 
 
 def create_offer_proposition(acronym, education_group, offer_proposition_group=None):

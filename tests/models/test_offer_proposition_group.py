@@ -23,8 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from dissertation.models.offer_proposition_group import *
 from django.test import TestCase
+
+from dissertation.models.offer_proposition_group import *
 from dissertation.tests.factories.offer_proposition_group import OfferPropositionGroupFactory
 
 

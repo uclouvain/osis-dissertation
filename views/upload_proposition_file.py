@@ -33,7 +33,7 @@ from base.views.mixins import AjaxTemplateMixin
 from dissertation import models as mdl
 from dissertation.models.proposition_dissertation import PropositionDissertation
 from dissertation.models.proposition_document_file import PropositionDocumentFile
-from dissertation.perms import check_for_dissert, autorized_proposition_dissert_promotor_or_manager_or_author
+from dissertation.perms import autorized_proposition_dissert_promotor_or_manager_or_author
 from osis_common import models as mdl_osis_common
 from osis_common.models.enum import storage_duration
 

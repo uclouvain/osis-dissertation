@@ -24,10 +24,11 @@
 #
 ##############################################################################
 import json
+
 from django.test import TestCase
+
 from base.tests.factories.person import PersonFactory
 from dissertation.tests.factories.adviser import AdviserManagerFactory, AdviserTeacherFactory
-
 
 ERROR_405_BAD_REQUEST=405
 ERROR_404_PAGE_NO_FOUND = 404

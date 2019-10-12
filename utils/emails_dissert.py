@@ -24,8 +24,9 @@
 #
 ##############################################################################
 from django.utils import translation
-from osis_common.messaging import message_config, send_message as message_service
+
 from dissertation.models import dissertation_role
+from osis_common.messaging import message_config, send_message as message_service
 
 LANGUAGE_DEFAULT = 'fr_BE'
 
