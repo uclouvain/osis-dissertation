@@ -30,6 +30,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from base import models as mdl
 from base.models.education_group_year import EducationGroupYear
+from base.models.person import Person
 from base.models.student import Student
 from dissertation.models import dissertation_update, adviser
 from dissertation.models.adviser import Adviser
@@ -197,8 +198,19 @@ class ManagerPropositionDissertationForm(ModelForm):
 
     class Meta:
         model = PropositionDissertation
-        fields = ('author', 'visibility', 'title', 'description', 'type', 'level', 'collaboration',
-                  'max_number_student')
+        fields = (
+            'author',
+            'visibility',
+            'title',
+            'description',
+            'type',
+            'level',
+            'collaboration',
+            'max_number_student'
+        )
+        widgets = {
+            'author': autocomplete.ModelSelect2(url='adviser-autocomplete')
+        }
 
 
 class ManagerPropositionDissertationEditForm(ModelForm):
