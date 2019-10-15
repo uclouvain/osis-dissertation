@@ -36,16 +36,16 @@ from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
 from base.tests.factories.student import StudentFactory
 from dissertation.models.enums import dissertation_role_status
+from dissertation.perms import adviser_can_manage, \
+    autorized_dissert_promotor_or_manager, \
+    adviser_can_manage_proposition_dissertation, \
+    autorized_proposition_dissert_promotor_or_manager_or_author
 from dissertation.tests.factories.adviser import AdviserManagerFactory, AdviserTeacherFactory
 from dissertation.tests.factories.dissertation import DissertationFactory
 from dissertation.tests.factories.dissertation_role import DissertationRoleFactory
 from dissertation.tests.factories.faculty_adviser import FacultyAdviserFactory
 from dissertation.tests.factories.offer_proposition import OfferPropositionFactory
 from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
-from dissertation.perms import adviser_can_manage,\
-    autorized_dissert_promotor_or_manager,\
-    adviser_can_manage_proposition_dissertation,\
-    autorized_proposition_dissert_promotor_or_manager_or_author
 from dissertation.tests.factories.proposition_offer import PropositionOfferFactory
 
 

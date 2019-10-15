@@ -25,9 +25,9 @@
 ##############################################################################
 import random
 
-from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.test import TestCase
+from django.urls import reverse
 
 from base.tests.factories.education_group import EducationGroupFactory
 from dissertation.models.proposition_dissertation import PropositionDissertation

@@ -24,8 +24,9 @@
 #
 ##############################################################################
 from django.utils import translation
-from osis_common.messaging import message_config, send_message as message_service
+
 from dissertation.models import dissertation_role
+from osis_common.messaging import message_config, send_message as message_service
 
 LANGUAGE_DEFAULT = 'fr_BE'
 
@@ -34,7 +35,7 @@ def translating(string, language=LANGUAGE_DEFAULT):
     cur_language = translation.get_language()
     try:
         translation.activate(language)
-        text = translation.ugettext(string)
+        text = translation.gettext(string)
     finally:
         translation.activate(cur_language)
     return text

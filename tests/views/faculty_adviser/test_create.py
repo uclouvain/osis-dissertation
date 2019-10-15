@@ -18,9 +18,9 @@
 #   see http://www.gnu.org/licenses/.                                                              #
 # ##################################################################################################
 
-from django.urls import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.test import TestCase
+from django.urls import reverse
 
 from base.tests.factories.entity_manager import EntityManagerFactory
 from dissertation.tests.factories.adviser import AdviserTeacherFactory

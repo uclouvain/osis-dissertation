@@ -29,11 +29,12 @@ import factory.fuzzy
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.student import StudentFactory
+from dissertation.models import dissertation
+from dissertation.models.enums import dissertation_status
 from dissertation.tests.factories.dissertation_location import DissertationLocationFactory
 from dissertation.tests.factories.dissertation_role import DissertationRoleFactory
 from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
-from dissertation.models import dissertation
-from dissertation.models.enums import dissertation_status
+
 
 class DissertationFactory(factory.DjangoModelFactory):
     class Meta:

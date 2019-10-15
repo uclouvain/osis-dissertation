@@ -24,8 +24,9 @@
 #
 ##############################################################################
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
-from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from django.db import models
+
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from .enums import dissertation_role_status
 
 MAX_PROPOSITION_ROLE = 4

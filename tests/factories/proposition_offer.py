@@ -24,8 +24,9 @@
 #
 ##############################################################################
 import factory
-from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
+
 from dissertation.tests.factories.offer_proposition import OfferPropositionFactory
+from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
 
 
 class PropositionOfferFactory(factory.DjangoModelFactory):

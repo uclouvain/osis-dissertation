@@ -24,6 +24,7 @@
 #
 ##############################################################################
 import factory
+
 from base.tests.factories.person import PersonFactory
 
 

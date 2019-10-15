@@ -24,7 +24,9 @@
 #
 ##############################################################################
 from django.db import models
+
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
+
 
 class OfferPropositionGroupAdmin(SerializableModelAdmin):
     list_display = ('name_short', 'name_long')

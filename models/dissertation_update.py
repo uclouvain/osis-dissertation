@@ -23,13 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from django.db import models
+
 from base import models as mdl
+from dissertation.models.enums import dissertation_status
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from . import adviser
 from . import dissertation
-from dissertation.models.enums import dissertation_status
-
 
 JUSTIFICATION_LINK = "_set_to_"
 
