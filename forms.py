@@ -197,8 +197,19 @@ class ManagerPropositionDissertationForm(ModelForm):
 
     class Meta:
         model = PropositionDissertation
-        fields = ('author', 'visibility', 'title', 'description', 'type', 'level', 'collaboration',
-                  'max_number_student')
+        fields = (
+            'author',
+            'visibility',
+            'title',
+            'description',
+            'type',
+            'level',
+            'collaboration',
+            'max_number_student'
+        )
+        widgets = {
+            'author': autocomplete.ModelSelect2(url='adviser-autocomplete')
+        }
 
 
 class ManagerPropositionDissertationEditForm(ModelForm):

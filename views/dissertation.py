@@ -975,7 +975,7 @@ class AdviserAutocomplete(autocomplete.Select2QuerySetView):
         return "{} {}, {}".format(item.person.last_name, item.person.first_name, item.person.email)
 
     def get_queryset(self):
-        qs = Adviser.objects.all().select_related("person").order_by("person")
+        qs = Adviser.objects.all().select_related("person").order_by("person__last_name")
         if self.q:
             qs = qs.filter(Q(person__last_name__icontains=self.q) | Q(person__first_name__icontains=self.q))
         return qs
