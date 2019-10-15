@@ -62,15 +62,17 @@ class PropositionDissertation(SerializableModel):
         ('FORBIDDEN', _('Forbidden')),
         )
 
-    author = models.ForeignKey('Adviser', on_delete=models.CASCADE)
+    author = models.ForeignKey('Adviser', on_delete=models.CASCADE, verbose_name=_('Author'))
     creator = models.ForeignKey('base.Person', blank=True, null=True, on_delete=models.CASCADE)
-    collaboration = models.CharField(max_length=12, choices=COLLABORATION_CHOICES, default='FORBIDDEN')
-    description = models.TextField(blank=True, null=True)
-    level = models.CharField(max_length=12, choices=LEVELS_CHOICES, default='DOMAIN')
-    max_number_student = models.IntegerField()
-    title = models.CharField(max_length=200)
-    type = models.CharField(max_length=12, choices=TYPES_CHOICES, default='OTH')
-    visibility = models.BooleanField(default=True)
+    collaboration = models.CharField(max_length=12, choices=COLLABORATION_CHOICES, default='FORBIDDEN',
+                                     verbose_name=_('Collaboration'))
+    description = models.TextField(blank=True, null=True, verbose_name=_('Description'))
+    level = models.CharField(max_length=12, choices=LEVELS_CHOICES, default='DOMAIN',
+                             verbose_name=_('Subject developement level'))
+    max_number_student = models.IntegerField(verbose_name=_('Indicative number of places for this subject'))
+    title = models.CharField(max_length=200, verbose_name=_('Title'))
+    type = models.CharField(max_length=12, choices=TYPES_CHOICES, default='OTH', verbose_name=_('Subject type'))
+    visibility = models.BooleanField(default=True, verbose_name=_('Visibility'))
     active = models.BooleanField(default=True)
     created_date = models.DateTimeField(default=timezone.now)
     offer_propositions = models.ManyToManyField(

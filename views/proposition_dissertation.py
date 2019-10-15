@@ -213,7 +213,8 @@ def manage_proposition_dissertation_edit(request, pk):
                    'collaborations_choices': PropositionDissertation.COLLABORATION_CHOICES,
                    'offer_propositions': offer_propositions,
                    'offer_propositions_error': offer_propositions_error,
-                   'offer_proposition_group': offer_propositions_group})
+                   'offer_proposition_group': offer_propositions_group,
+                   'proposition_offers': proposition_offers})
 
 
 @login_required
