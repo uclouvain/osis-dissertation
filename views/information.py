@@ -121,51 +121,7 @@ def informations_edit(request):
 def informations_add(request):
     if request.method == "POST":
         if 'search_form' in request.POST:  # step 2 : second form to select person in list
-            form = ManagerAddAdviserPreForm(request.POST)
-            if form.is_valid():  # mail format is valid
-                data = form.cleaned_data
-                person = mdl.person.search_by_email(data['email'])
-
-                if not data['email']:  # empty search -> step 1
-                    form = ManagerAddAdviserPreForm()
-                    message = "empty_data"
-                    return render(request, 'informations_add_search.html', {
-                        'form': form,
-                        'message': message
-                    })
-
-                elif person and adviser.find_by_person(person[0]):  # person already adviser -> step 1
-                    form = ManagerAddAdviserPreForm()
-                    email = "%s (%s)" % (list(person)[0], data['email'])
-                    message = "person_already_adviser"
-                    return render(request, 'informations_add_search.html', {
-                        'form': form,
-                        'message': message,
-                        'email': email
-                    })
-                elif mdl.person.count_by_email(data['email']) > 0:  # person found and not adviser -> go forward
-                    pers = list(person)[0]
-                    select_form = AddAdviserForm()
-                    return render(request, 'informations_add.html', {'form': select_form, 'pers': pers})
-
-                else:  # person not found by email -> step 1
-                    form = ManagerAddAdviserPreForm()
-                    email = data['email']
-                    message = "person_not_found_by_mail"
-                    message_add = "add_new_person_explanation"
-                    return render(request, 'informations_add_search.html', {
-                        'form': form,
-                        'message': message,
-                        'email': email,
-                        'message_add': message_add
-                    })
-            else:  # invalid form (invalid format for email)
-                form = ManagerAddAdviserPreForm()
-                message = "invalid_data"
-                return render(request, 'informations_add_search.html', {
-                    'form': form,
-                    'message': message
-                })
+            return _manage_search_form(request)
 
         else:  # step 3 : everything ok, register the person as adviser
             form = AddAdviserForm(request.POST)
@@ -179,6 +135,55 @@ def informations_add(request):
     else:  # step 1 : initial form to search person by email
         form = ManagerAddAdviserPreForm()
         return render(request, 'manager_informations_add_search.html', {'form': form})
+
+
+def _manage_search_form(request, manager=False):
+    template_prefix = 'manager_' if manager else ''
+    form = ManagerAddAdviserPreForm(request.POST)
+    if form.is_valid():  # mail format is valid
+        data = form.cleaned_data
+        person = mdl.person.search_by_email(data['email'])
+
+        if not data['email']:  # empty search -> step 1
+            form = ManagerAddAdviserPreForm()
+            message = "empty_data"
+            return render(request, template_prefix + 'informations_add_search.html', {
+                'form': form,
+                'message': message
+            })
+
+        elif person and adviser.find_by_person(person[0]):  # person already adviser -> step 1
+            form = ManagerAddAdviserPreForm()
+            email = "%s (%s)" % (list(person)[0], data['email'])
+            message = "person_already_adviser"
+            return render(request, template_prefix + 'informations_add_search.html', {
+                'form': form,
+                'message': message,
+                'email': email
+            })
+        elif mdl.person.count_by_email(data['email']) > 0:  # person found and not adviser -> go forward
+            pers = list(person)[0]
+            select_form = ManagerAddAdviserForm() if manager else AddAdviserForm()
+            return render(request, template_prefix + 'informations_add.html', {'form': select_form, 'pers': pers})
+
+        else:  # person not found by email -> step 1
+            form = ManagerAddAdviserPreForm()
+            email = data['email']
+            message = "person_not_found_by_mail"
+            message_add = "add_new_person_explanation"
+            return render(request, template_prefix + 'informations_add_search.html', {
+                'form': form,
+                'message': message,
+                'email': email,
+                'message_add': message_add
+            })
+    else:  # invalid form (invalid format for email)
+        form = ManagerAddAdviserPreForm()
+        message = "invalid_data"
+        return render(request, template_prefix + 'informations_add_search.html', {
+            'form': form,
+            'message': message
+        })
 
 
 ###########################
@@ -283,49 +288,7 @@ def manager_informations(request):
 def manager_informations_add(request):
     if request.method == "POST":
         if 'search_form' in request.POST:  # step 2 : second form to select person in list
-            form = ManagerAddAdviserPreForm(request.POST)
-            if form.is_valid():  # mail format is valid
-                data = form.cleaned_data
-                person = mdl.person.search_by_email(data['email'])
-
-                if not data['email']:  # empty search -> step 1
-                    form = ManagerAddAdviserPreForm()
-                    message = "empty_data"
-                    return render(request, 'manager_informations_add_search.html', {
-                        'form': form,
-                        'message': message
-                    })
-
-                elif person and adviser.find_by_person(person[0]):  # person already adviser -> step 1
-                    form = ManagerAddAdviserPreForm()
-                    email = "%s (%s)" % (list(person)[0], data['email'])
-                    message = "person_already_adviser"
-                    return render(request, 'manager_informations_add_search.html', {
-                        'form': form,
-                        'message': message,
-                        'email': email
-                    })
-                elif mdl.person.count_by_email(data['email']) > 0:  # person found and not adviser -> go forward
-                    pers = list(person)[0]
-                    select_form = ManagerAddAdviserForm()
-                    return render(request, 'manager_informations_add.html', {'form': select_form, 'pers': pers})
-
-                else:  # person not found by email -> step 1
-                    form = ManagerAddAdviserPreForm()
-                    email = data['email']
-                    message = "person_not_found_by_mail"
-                    message_add = "add_new_person_explanation"
-                    return render(request, 'manager_informations_add_search.html', {
-                        'form': form,
-                        'message': message,
-                        'email': email,
-                        'message_add': message_add
-                    })
-            else:  # invalid form (invalid format for email)
-                form = ManagerAddAdviserPreForm()
-                message = "invalid_data"
-                return render(request, 'manager_informations_add_search.html', {'form': form, 'message': message})
-
+            return _manage_search_form(request)
         else:  # step 3 : everything ok, register the person as adviser
             form = ManagerAddAdviserForm(request.POST)
             if form.is_valid():
@@ -414,23 +377,25 @@ def manager_informations_list_request(request):
     educ_groups_of_fac_manager = FacultyAdviser.objects.filter(adviser=request.user.person.adviser).values_list(
         'education_group',
         flat=True)
-    advisers_need_request = Adviser.objects.filter(type='PRF', ). \
-        filter(Q(dissertations__active=True,
-                 dissertations__status=dissertation_status.DIR_SUBMIT,
-                 dissertations_roles__status=dissertation_role_status.PROMOTEUR,
-                 dissertations__education_group_year_start__education_group__in=educ_groups_of_fac_manager
-                 )) \
-        .annotate(dissertations_count_need_to_respond_actif=models.Sum(
-        models.Case(
-            models.When(Q(
-                dissertations__active=True,
-                dissertations__status=dissertation_status.DIR_SUBMIT,
-                dissertations_roles__status=dissertation_role_status.PROMOTEUR,
-                dissertations__education_group_year_start__education_group__in=educ_groups_of_fac_manager
-            ), then=1), default=0, output_field=models.IntegerField()
-        ))
-    ).select_related('person').prefetch_related('dissertations'). \
-        order_by('person__last_name', 'person__first_name')
+    advisers_need_request = Adviser.objects.filter(type='PRF', ).filter(
+        Q(
+            dissertations__active=True,
+            dissertations__status=dissertation_status.DIR_SUBMIT,
+            dissertations_roles__status=dissertation_role_status.PROMOTEUR,
+            dissertations__education_group_year_start__education_group__in=educ_groups_of_fac_manager
+          )
+    ).annotate(
+        dissertations_count_need_to_respond_actif=models.Sum(
+            models.Case(
+                models.When(Q(
+                    dissertations__active=True,
+                    dissertations__status=dissertation_status.DIR_SUBMIT,
+                    dissertations_roles__status=dissertation_role_status.PROMOTEUR,
+                    dissertations__education_group_year_start__education_group__in=educ_groups_of_fac_manager
+                ), then=1), default=0, output_field=models.IntegerField()
+            )
+        )
+    ).select_related('person').prefetch_related('dissertations').order_by('person__last_name', 'person__first_name')
     return render(request, "manager_informations_list_request.html",
                   {'advisers_need_request': advisers_need_request})
 
