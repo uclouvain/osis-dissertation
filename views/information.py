@@ -288,7 +288,7 @@ def manager_informations(request):
 def manager_informations_add(request):
     if request.method == "POST":
         if 'search_form' in request.POST:  # step 2 : second form to select person in list
-            return _manage_search_form(request)
+            return _manage_search_form(request, manager=True)
         else:  # step 3 : everything ok, register the person as adviser
             form = ManagerAddAdviserForm(request.POST)
             if form.is_valid():
