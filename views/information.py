@@ -139,48 +139,42 @@ def informations_add(request):
 
 def _manage_search_form(request, manager=False):
     template_prefix = 'manager_' if manager else ''
+    template = template_prefix + 'informations_add_search.html'
     form = ManagerAddAdviserPreForm(request.POST)
+
     if form.is_valid():  # mail format is valid
         data = form.cleaned_data
         person = mdl.person.search_by_email(data['email'])
-
+        message, email, message_add = '', '', ''
+        form = ManagerAddAdviserPreForm()
+        pers = None
         if not data['email']:  # empty search -> step 1
-            form = ManagerAddAdviserPreForm()
             message = "empty_data"
-            return render(request, template_prefix + 'informations_add_search.html', {
-                'form': form,
-                'message': message
-            })
 
         elif person and adviser.find_by_person(person[0]):  # person already adviser -> step 1
-            form = ManagerAddAdviserPreForm()
             email = "%s (%s)" % (list(person)[0], data['email'])
             message = "person_already_adviser"
-            return render(request, template_prefix + 'informations_add_search.html', {
-                'form': form,
-                'message': message,
-                'email': email
-            })
+
         elif mdl.person.count_by_email(data['email']) > 0:  # person found and not adviser -> go forward
             pers = list(person)[0]
-            select_form = ManagerAddAdviserForm() if manager else AddAdviserForm()
-            return render(request, template_prefix + 'informations_add.html', {'form': select_form, 'pers': pers})
+            form = ManagerAddAdviserForm() if manager else AddAdviserForm()
+            template = template_prefix + 'informations_add.html'
 
         else:  # person not found by email -> step 1
-            form = ManagerAddAdviserPreForm()
             email = data['email']
             message = "person_not_found_by_mail"
             message_add = "add_new_person_explanation"
-            return render(request, template_prefix + 'informations_add_search.html', {
-                'form': form,
-                'message': message,
-                'email': email,
-                'message_add': message_add
-            })
+        return render(request, template, {
+            'form': form,
+            'message': message,
+            'email': email,
+            'message_add': message_add,
+            'pers': pers
+        })
     else:  # invalid form (invalid format for email)
         form = ManagerAddAdviserPreForm()
         message = "invalid_data"
-        return render(request, template_prefix + 'informations_add_search.html', {
+        return render(request, template, {
             'form': form,
             'message': message
         })
