@@ -143,27 +143,12 @@ def _manage_search_form(request, manager=False):
     form = ManagerAddAdviserPreForm(request.POST)
 
     if form.is_valid():  # mail format is valid
-        data = form.cleaned_data
-        person = mdl.person.search_by_email(data['email'])
-        message, email, message_add = '', '', ''
-        form = ManagerAddAdviserPreForm()
-        pers = None
-        if not data['email']:  # empty search -> step 1
-            message = "empty_data"
-
-        elif person and adviser.find_by_person(person[0]):  # person already adviser -> step 1
-            email = "%s (%s)" % (list(person)[0], data['email'])
-            message = "person_already_adviser"
-
-        elif mdl.person.count_by_email(data['email']) > 0:  # person found and not adviser -> go forward
-            pers = list(person)[0]
-            form = ManagerAddAdviserForm() if manager else AddAdviserForm()
-            template = template_prefix + 'informations_add.html'
-
-        else:  # person not found by email -> step 1
-            email = data['email']
-            message = "person_not_found_by_mail"
-            message_add = "add_new_person_explanation"
+        email, form, message, message_add, pers, template = _get_rendering_data(
+            form,
+            manager,
+            template,
+            template_prefix
+        )
         return render(request, template, {
             'form': form,
             'message': message,
@@ -178,6 +163,31 @@ def _manage_search_form(request, manager=False):
             'form': form,
             'message': message
         })
+
+
+def _get_rendering_data(form, manager, template, template_prefix):
+    data = form.cleaned_data
+    person = mdl.person.search_by_email(data['email'])
+    message, email, message_add = '', '', ''
+    form = ManagerAddAdviserPreForm()
+    pers = None
+    if not data['email']:  # empty search -> step 1
+        message = "empty_data"
+
+    elif person and adviser.find_by_person(person[0]):  # person already adviser -> step 1
+        email = "%s (%s)" % (list(person)[0], data['email'])
+        message = "person_already_adviser"
+
+    elif mdl.person.count_by_email(data['email']) > 0:  # person found and not adviser -> go forward
+        pers = list(person)[0]
+        form = ManagerAddAdviserForm() if manager else AddAdviserForm()
+        template = template_prefix + 'informations_add.html'
+
+    else:  # person not found by email -> step 1
+        email = data['email']
+        message = "person_not_found_by_mail"
+        message_add = "add_new_person_explanation"
+    return email, form, message, message_add, pers, template
 
 
 ###########################
