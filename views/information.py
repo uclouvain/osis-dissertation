@@ -33,7 +33,6 @@ from base import models as mdl
 from base.models.academic_year import current_academic_year
 from base.models.education_group import EducationGroup
 from base.models.enums import person_source_type
-from base.views import layout
 from dissertation.forms import AdviserForm, ManagerAdviserForm, ManagerAddAdviserForm, ManagerAddAdviserPreForm, \
     ManagerAddAdviserPerson, AddAdviserForm
 from dissertation.models import adviser
@@ -55,10 +54,11 @@ from dissertation.models.faculty_adviser import FacultyAdviser
 def informations(request):
     person = mdl.person.find_by_user(request.user)
     adv = adviser.search_by_person(person)
-    return layout.render(request, "informations.html", {'adviser': adv,
-                                                        'first_name': adv.person.first_name.title(),
-                                                        'last_name': adv.person.last_name.title()
-                                                        })
+    return render(request, "informations.html", {
+        'adviser': adv,
+        'first_name': adv.person.first_name.title(),
+        'last_name': adv.person.last_name.title()
+    })
 
 
 @login_required
@@ -80,15 +80,17 @@ def informations_detail_stats(request):
     count_advisers_reader = dissertation_role.count_by_adviser_and_role_stats(adv, 'READER')
     tab_education_group_count_read = dissertation_role.get_tab_count_role_by_education_group(advisers_reader)
 
-    return layout.render(request, 'informations_detail_stats.html',
-                         {'adviser': adv,
-                          'count_advisers_copro': count_advisers_copro,
-                          'count_advisers_pro': count_advisers_pro,
-                          'count_advisers_reader': count_advisers_reader,
-                          'count_advisers_pro_request': count_advisers_pro_request,
-                          'tab_offer_count_pro': tab_education_group_count_pro,
-                          'tab_offer_count_read': tab_education_group_count_read,
-                          'tab_offer_count_copro': tab_education_group_count_copro})
+    return render(request, 'informations_detail_stats.html',
+                  {
+                      'adviser': adv,
+                      'count_advisers_copro': count_advisers_copro,
+                      'count_advisers_pro': count_advisers_pro,
+                      'count_advisers_reader': count_advisers_reader,
+                      'count_advisers_pro_request': count_advisers_pro_request,
+                      'tab_offer_count_pro': tab_education_group_count_pro,
+                      'tab_offer_count_read': tab_education_group_count_read,
+                      'tab_offer_count_copro': tab_education_group_count_copro
+                  })
 
 
 @login_required
@@ -104,12 +106,14 @@ def informations_edit(request):
             return redirect('informations')
     else:
         form = AdviserForm(instance=adv)
-    return layout.render(request, "informations_edit.html", {'form': form,
-                                                             'first_name': person.first_name.title(),
-                                                             'last_name': person.last_name.title(),
-                                                             'email': person.email,
-                                                             'phone': person.phone,
-                                                             'phone_mobile': person.phone_mobile})
+    return render(request, "informations_edit.html", {
+        'form': form,
+        'first_name': person.first_name.title(),
+        'last_name': person.last_name.title(),
+        'email': person.email,
+        'phone': person.phone,
+        'phone_mobile': person.phone_mobile
+    })
 
 
 @login_required
@@ -117,56 +121,73 @@ def informations_edit(request):
 def informations_add(request):
     if request.method == "POST":
         if 'search_form' in request.POST:  # step 2 : second form to select person in list
-            form = ManagerAddAdviserPreForm(request.POST)
-            if form.is_valid():  # mail format is valid
-                data = form.cleaned_data
-                person = mdl.person.search_by_email(data['email'])
-
-                if not data['email']:  # empty search -> step 1
-                    form = ManagerAddAdviserPreForm()
-                    message = "empty_data"
-                    return layout.render(request, 'informations_add_search.html', {'form': form,
-                                                                                   'message': message})
-
-                elif person and adviser.find_by_person(person[0]):  # person already adviser -> step 1
-                    form = ManagerAddAdviserPreForm()
-                    email = "%s (%s)" % (list(person)[0], data['email'])
-                    message = "person_already_adviser"
-                    return layout.render(request, 'informations_add_search.html', {'form': form,
-                                                                                   'message': message,
-                                                                                   'email': email})
-                elif mdl.person.count_by_email(data['email']) > 0:  # person found and not adviser -> go forward
-                    pers = list(person)[0]
-                    select_form = AddAdviserForm()
-                    return layout.render(request, 'informations_add.html', {'form': select_form, 'pers': pers})
-
-                else:  # person not found by email -> step 1
-                    form = ManagerAddAdviserPreForm()
-                    email = data['email']
-                    message = "person_not_found_by_mail"
-                    message_add = "add_new_person_explanation"
-                    return layout.render(request, 'informations_add_search.html', {'form': form,
-                                                                                   'message': message,
-                                                                                   'email': email,
-                                                                                   'message_add': message_add})
-            else:  # invalid form (invalid format for email)
-                form = ManagerAddAdviserPreForm()
-                message = "invalid_data"
-                return layout.render(request, 'informations_add_search.html', {'form': form,
-                                                                               'message': message})
+            return _manage_search_form(request)
 
         else:  # step 3 : everything ok, register the person as adviser
             form = AddAdviserForm(request.POST)
             if form.is_valid():
                 adv = form.save(commit=False)
                 adv.save()
-                return layout.render(request, 'informations_add.html', {'adv': adv})
+                return render(request, 'informations_add.html', {'adv': adv})
             else:
                 return redirect('dissertations')
 
     else:  # step 1 : initial form to search person by email
         form = ManagerAddAdviserPreForm()
-        return layout.render(request, 'manager_informations_add_search.html', {'form': form})
+        return render(request, 'manager_informations_add_search.html', {'form': form})
+
+
+def _manage_search_form(request, manager=False):
+    template_prefix = 'manager_' if manager else ''
+    template = template_prefix + 'informations_add_search.html'
+    form = ManagerAddAdviserPreForm(request.POST)
+
+    if form.is_valid():  # mail format is valid
+        email, form, message, message_add, pers, template = _get_rendering_data(
+            form,
+            manager,
+            template,
+            template_prefix
+        )
+        return render(request, template, {
+            'form': form,
+            'message': message,
+            'email': email,
+            'message_add': message_add,
+            'pers': pers
+        })
+    else:  # invalid form (invalid format for email)
+        form = ManagerAddAdviserPreForm()
+        message = "invalid_data"
+        return render(request, template, {
+            'form': form,
+            'message': message
+        })
+
+
+def _get_rendering_data(form, manager, template, template_prefix):
+    data = form.cleaned_data
+    person = mdl.person.search_by_email(data['email'])
+    message, email, message_add = '', '', ''
+    form = ManagerAddAdviserPreForm()
+    pers = None
+    if not data['email']:  # empty search -> step 1
+        message = "empty_data"
+
+    elif person and adviser.find_by_person(person[0]):  # person already adviser -> step 1
+        email = "%s (%s)" % (list(person)[0], data['email'])
+        message = "person_already_adviser"
+
+    elif mdl.person.count_by_email(data['email']) > 0:  # person found and not adviser -> go forward
+        pers = list(person)[0]
+        form = ManagerAddAdviserForm() if manager else AddAdviserForm()
+        template = template_prefix + 'informations_add.html'
+
+    else:  # person not found by email -> step 1
+        email = data['email']
+        message = "person_not_found_by_mail"
+        message_add = "add_new_person_explanation"
+    return email, form, message, message_add, pers, template
 
 
 ###########################
@@ -204,7 +225,7 @@ def manager_informations(request):
             models.Case(
                 models.When(active_dissert, then=1), default=0,
                 output_field=models.IntegerField()
-             )),
+            )),
         dissertations_count_all_actif_in_your_education_groups=models.Sum(
             models.Case(
                 models.When(active_dissert & Q(
@@ -271,43 +292,7 @@ def manager_informations(request):
 def manager_informations_add(request):
     if request.method == "POST":
         if 'search_form' in request.POST:  # step 2 : second form to select person in list
-            form = ManagerAddAdviserPreForm(request.POST)
-            if form.is_valid():  # mail format is valid
-                data = form.cleaned_data
-                person = mdl.person.search_by_email(data['email'])
-
-                if not data['email']:  # empty search -> step 1
-                    form = ManagerAddAdviserPreForm()
-                    message = "empty_data"
-                    return render(request, 'manager_informations_add_search.html', {'form': form,
-                                                                                    'message': message})
-
-                elif person and adviser.find_by_person(person[0]):  # person already adviser -> step 1
-                    form = ManagerAddAdviserPreForm()
-                    email = "%s (%s)" % (list(person)[0], data['email'])
-                    message = "person_already_adviser"
-                    return render(request, 'manager_informations_add_search.html', {'form': form,
-                                                                                    'message': message,
-                                                                                    'email': email})
-                elif mdl.person.count_by_email(data['email']) > 0:  # person found and not adviser -> go forward
-                    pers = list(person)[0]
-                    select_form = ManagerAddAdviserForm()
-                    return render(request, 'manager_informations_add.html', {'form': select_form, 'pers': pers})
-
-                else:  # person not found by email -> step 1
-                    form = ManagerAddAdviserPreForm()
-                    email = data['email']
-                    message = "person_not_found_by_mail"
-                    message_add = "add_new_person_explanation"
-                    return render(request, 'manager_informations_add_search.html', {'form': form,
-                                                                                    'message': message,
-                                                                                    'email': email,
-                                                                                    'message_add': message_add})
-            else:  # invalid form (invalid format for email)
-                form = ManagerAddAdviserPreForm()
-                message = "invalid_data"
-                return render(request, 'manager_informations_add_search.html', {'form': form, 'message': message})
-
+            return _manage_search_form(request, manager=True)
         else:  # step 3 : everything ok, register the person as adviser
             form = ManagerAddAdviserForm(request.POST)
             if form.is_valid():
@@ -357,9 +342,11 @@ def manager_informations_detail(request, pk):
     if adv is None:
         return redirect('manager_informations')
     return render(request, 'manager_informations_detail.html',
-                  {'adviser': adv,
-                   'first_name': adv.person.first_name.title(),
-                   'last_name': adv.person.last_name.title()})
+                  {
+                      'adviser': adv,
+                      'first_name': adv.person.first_name.title(),
+                      'last_name': adv.person.last_name.title()
+                  })
 
 
 @login_required
@@ -377,13 +364,15 @@ def manager_informations_edit(request, pk):
     else:
         form = ManagerAdviserForm(instance=adv)
     return render(request, "manager_informations_edit.html",
-                  {'adviser': adv,
-                   'form': form,
-                   'first_name': adv.person.first_name.title(),
-                   'last_name': adv.person.last_name.title(),
-                   'email': adv.person.email,
-                   'phone': adv.person.phone,
-                   'phone_mobile': adv.person.phone_mobile})
+                  {
+                      'adviser': adv,
+                      'form': form,
+                      'first_name': adv.person.first_name.title(),
+                      'last_name': adv.person.last_name.title(),
+                      'email': adv.person.email,
+                      'phone': adv.person.phone,
+                      'phone_mobile': adv.person.phone_mobile
+                  })
 
 
 @login_required
@@ -392,13 +381,15 @@ def manager_informations_list_request(request):
     educ_groups_of_fac_manager = FacultyAdviser.objects.filter(adviser=request.user.person.adviser).values_list(
         'education_group',
         flat=True)
-    advisers_need_request = Adviser.objects.filter(type='PRF', ). \
-        filter(Q(dissertations__active=True,
-                 dissertations__status=dissertation_status.DIR_SUBMIT,
-                 dissertations_roles__status=dissertation_role_status.PROMOTEUR,
-                 dissertations__education_group_year_start__education_group__in=educ_groups_of_fac_manager
-                 )) \
-        .annotate(dissertations_count_need_to_respond_actif=models.Sum(
+    advisers_need_request = Adviser.objects.filter(type='PRF', ).filter(
+        Q(
+            dissertations__active=True,
+            dissertations__status=dissertation_status.DIR_SUBMIT,
+            dissertations_roles__status=dissertation_role_status.PROMOTEUR,
+            dissertations__education_group_year_start__education_group__in=educ_groups_of_fac_manager
+          )
+    ).annotate(
+        dissertations_count_need_to_respond_actif=models.Sum(
             models.Case(
                 models.When(Q(
                     dissertations__active=True,
@@ -406,9 +397,9 @@ def manager_informations_list_request(request):
                     dissertations_roles__status=dissertation_role_status.PROMOTEUR,
                     dissertations__education_group_year_start__education_group__in=educ_groups_of_fac_manager
                 ), then=1), default=0, output_field=models.IntegerField()
-                ))
-            ).select_related('person').prefetch_related('dissertations'). \
-        order_by('person__last_name', 'person__first_name')
+            )
+        )
+    ).select_related('person').prefetch_related('dissertations').order_by('person__last_name', 'person__first_name')
     return render(request, "manager_informations_list_request.html",
                   {'advisers_need_request': advisers_need_request})
 
@@ -493,11 +484,13 @@ def manager_informations_detail_stats(request, pk):
     tab_education_group_count_read = dissertation_role.get_tab_count_role_by_education_group(advisers_reader)
 
     return render(request, 'manager_informations_detail_stats.html',
-                  {'adviser': adv,
-                   'count_advisers_copro': count_advisers_copro,
-                   'count_advisers_pro': count_advisers_pro,
-                   'count_advisers_reader': count_advisers_reader,
-                   'count_advisers_pro_request': count_advisers_pro_request,
-                   'tab_offer_count_pro': tab_education_group_count_pro,
-                   'tab_offer_count_read': tab_education_group_count_read,
-                   'tab_offer_count_copro': tab_education_group_count_copro})
+                  {
+                      'adviser': adv,
+                      'count_advisers_copro': count_advisers_copro,
+                      'count_advisers_pro': count_advisers_pro,
+                      'count_advisers_reader': count_advisers_reader,
+                      'count_advisers_pro_request': count_advisers_pro_request,
+                      'tab_offer_count_pro': tab_education_group_count_pro,
+                      'tab_offer_count_read': tab_education_group_count_read,
+                      'tab_offer_count_copro': tab_education_group_count_copro
+                  })
