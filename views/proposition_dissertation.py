@@ -24,7 +24,6 @@
 #
 ##############################################################################
 import time
-from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
@@ -109,37 +108,10 @@ def return_prefetch_propositions():
         ))
     )
 
+
 ###########################
 #      MANAGER VIEWS      #
 ###########################
-
-
-@login_required
-@user_passes_test(adviser.is_manager)
-def manager_proposition_dissertations(request):
-    now = datetime.now()
-    current_academic_year = academic_year.current_academic_year()
-    prefetch_propositions = return_prefetch_propositions()
-
-    propositions_dissertations = PropositionDissertation.objects.filter(
-        offer_propositions__education_group__facultyadviser__adviser__person__user=request.user
-    ).annotate(dissertations_count=Count(
-        'dissertations',
-        filter=Q(
-            active=True,
-            education_group_year_start__academic_year=current_academic_year
-        ) & ~Q(status__in=(dissertation_status.DRAFT, dissertation_status.DIR_KO))
-    )).annotate(
-        remaining_places=ExpressionWrapper(
-            F('max_number_student') - F('dissertations_count'),
-            output_field=models.IntegerField()
-        )
-    ).select_related('author__person', 'creator').prefetch_related(prefetch_propositions)
-    return render(request,
-                  'manager_proposition_dissertations_list.html',
-                  {'propositions_dissertations': propositions_dissertations}
-                  )
-
 
 def _append_dissertations_count(prop):
     prop.dissertations_count = dissertation.count_by_proposition(prop)
@@ -241,7 +213,7 @@ class PropositionDissertationJuryNewView(AjaxTemplateMixin, UserPassesTestMixin,
         if adviser_can_manage_proposition_dissertation(self.proposition, adv) \
                 or user_is_proposition_promotor(request.user, self.proposition.pk) \
                 or self.proposition.creator == adv.person:
-                    return super().dispatch(request, *args, **kwargs)
+            return super().dispatch(request, *args, **kwargs)
         return redirect('proposition_dissertations')
 
     @cached_property
@@ -276,10 +248,10 @@ def manager_proposition_dissertations_role_delete(request, pk):
 def manager_proposition_dissertation_new(request):
     current_ac_year = academic_year.current_academic_year()
     offer_propositions = OfferProposition.objects.exclude(education_group=None).annotate(last_acronym=Subquery(
-            EducationGroupYear.objects.filter(
-                education_group__offer_proposition=OuterRef('pk'),
-                academic_year=current_ac_year).values('acronym')[:1]
-        )).select_related('offer_proposition_group').order_by('last_acronym')
+        EducationGroupYear.objects.filter(
+            education_group__offer_proposition=OuterRef('pk'),
+            academic_year=current_ac_year).values('acronym')[:1]
+    )).select_related('offer_proposition_group').order_by('last_acronym')
     offer_propositions_group = offer_proposition_group.find_all_ordered_by_name_short()
     offer_propositions_error = None
     if request.method == "POST":
@@ -305,17 +277,81 @@ def manager_proposition_dissertation_new(request):
 
 @login_required
 @user_passes_test(adviser.is_manager)
-def manager_proposition_dissertations_search(request):
-    terms = request.GET['search']
-
-    now = datetime.now()
+def manager_proposition_dissertations(request):
     current_academic_year = academic_year.current_academic_year()
     prefetch_propositions = return_prefetch_propositions()
+    if 'search' in request.GET:
+        terms = request.GET['search']
+        propositions_dissertations = _search_proposition_dissertation(current_academic_year, prefetch_propositions,
+                                                                      request, terms)
+    else:
+        propositions_dissertations = _get_all_proposition_by_offer(current_academic_year, prefetch_propositions,
+                                                                   request)
+
+    if 'bt_xlsx' in request.GET:
+        return _export_proposition_dissertation_xlsx(propositions_dissertations)
+
+    else:
+        return render(request, "manager_proposition_dissertations_list.html",
+                      {'propositions_dissertations': propositions_dissertations})
+
+
+def _export_proposition_dissertation_xlsx(propositions_dissertations):
+    filename = "EXPORT_propositions_{}.xlsx".format(time.strftime("%Y-%m-%d_%H:%M"))
+    workbook = Workbook(encoding='utf-8')
+    worksheet1 = workbook.active
+    worksheet1.title = "proposition_dissertation"
+    worksheet1.append(['Date_de_création', 'Teacher', 'Title',
+                       'Type', 'Level', 'Collaboration', 'Maximum number of places', 'Places Remaining',
+                       'Visibility', 'Active', 'Programme(s)', 'Description'])
+    types_choices = dict(PropositionDissertation.TYPES_CHOICES)
+    levels_choices = dict(PropositionDissertation.LEVELS_CHOICES)
+    collaboration_choices = dict(PropositionDissertation.COLLABORATION_CHOICES)
+    for proposition in propositions_dissertations:
+        education_groups = ""
+        for offer_prop in proposition.offer_propositions.all():
+            education_groups += "{}, ".format(str(offer_prop.last_acronym))
+        worksheet1.append([proposition.created_date,
+                           str(proposition.author),
+                           proposition.title,
+                           str(types_choices[proposition.type]),
+                           str(levels_choices[proposition.level]),
+                           str(collaboration_choices[proposition.collaboration]),
+                           proposition.max_number_student,
+                           proposition.remaining_places if
+                           proposition.remaining_places > 0 else 0,
+                           proposition.visibility,
+                           proposition.active,
+                           education_groups,
+                           proposition.description
+                           ])
+    response = HttpResponse(
+        save_virtual_workbook(workbook),
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=binary')
+    response['Content-Disposition'] = "%s%s" % ("attachment; filename=", filename)
+    return response
+
+
+def _get_all_proposition_by_offer(current_academic_year, prefetch_propositions, request):
     propositions_dissertations = PropositionDissertation.objects.filter(
-        active=True,
-        visibility=True,
-        offer_propositions__start_visibility_proposition__lte=now,
-        offer_propositions__end_visibility_proposition__gte=now,
+        offer_propositions__education_group__facultyadviser__adviser__person__user=request.user
+    ).annotate(dissertations_count=Count(
+        'dissertations',
+        filter=Q(
+            active=True,
+            education_group_year_start__academic_year=current_academic_year
+        ) & ~Q(status__in=(dissertation_status.DRAFT, dissertation_status.DIR_KO))
+    )).annotate(
+        remaining_places=ExpressionWrapper(
+            F('max_number_student') - F('dissertations_count'),
+            output_field=models.IntegerField()
+        )
+    ).select_related('author__person', 'creator').prefetch_related(prefetch_propositions)
+    return propositions_dissertations
+
+
+def _search_proposition_dissertation(current_academic_year, prefetch_propositions, request, terms):
+    propositions_dissertations = PropositionDissertation.objects.filter(
         offer_propositions__education_group__facultyadviser__adviser__person__user=request.user
     ).filter(
         Q(title__icontains=terms) |
@@ -335,45 +371,7 @@ def manager_proposition_dissertations_search(request):
             F('max_number_student') - F('dissertations_count'),
             output_field=models.IntegerField()
         )).select_related('author__person', 'creator').prefetch_related(prefetch_propositions)
-
-    if 'bt_xlsx' in request.GET:
-        filename = "EXPORT_propositions_{}.xlsx".format(time.strftime("%Y-%m-%d_%H:%M"))
-        workbook = Workbook(encoding='utf-8')
-        worksheet1 = workbook.active
-        worksheet1.title = "proposition_dissertation"
-        worksheet1.append(['Date_de_création', 'Teacher', 'Title',
-                           'Type', 'Level', 'Collaboration', 'Maximum number of places', 'Places Remaining',
-                           'Visibility', 'Active', 'Programme(s)', 'Description'])
-        types_choices = dict(PropositionDissertation.TYPES_CHOICES)
-        levels_choices = dict(PropositionDissertation.LEVELS_CHOICES)
-        collaboration_choices = dict(PropositionDissertation.COLLABORATION_CHOICES)
-        for proposition in propositions_dissertations:
-            education_groups = ""
-            for offer_prop in proposition.offer_propositions.all():
-                education_groups += "{}, ".format(str(offer_prop.last_acronym))
-            worksheet1.append([proposition.created_date,
-                               str(proposition.author),
-                               proposition.title,
-                               str(types_choices[proposition.type]),
-                               str(levels_choices[proposition.level]),
-                               str(collaboration_choices[proposition.collaboration]),
-                               proposition.max_number_student,
-                               proposition.remaining_places if
-                               proposition.remaining_places > 0 else 0,
-                               proposition.visibility,
-                               proposition.active,
-                               education_groups,
-                               proposition.description
-                               ])
-        response = HttpResponse(
-            save_virtual_workbook(workbook),
-            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=binary')
-        response['Content-Disposition'] = "%s%s" % ("attachment; filename=", filename)
-        return response
-
-    else:
-        return render(request, "manager_proposition_dissertations_list.html",
-                      {'propositions_dissertations': propositions_dissertations})
+    return propositions_dissertations
 
 
 ###########################
@@ -534,10 +532,10 @@ def proposition_dissertation_new(request):
     current_ac_year = academic_year.current_academic_year()
     perso = request.user.person
     offer_propositions = OfferProposition.objects.exclude(education_group=None).annotate(last_acronym=Subquery(
-            EducationGroupYear.objects.filter(
-                education_group__offer_proposition=OuterRef('pk'),
-                academic_year=current_ac_year).values('acronym')[:1]
-        )).select_related('offer_proposition_group').order_by('last_acronym')
+        EducationGroupYear.objects.filter(
+            education_group__offer_proposition=OuterRef('pk'),
+            academic_year=current_ac_year).values('acronym')[:1]
+    )).select_related('offer_proposition_group').order_by('last_acronym')
     offer_propositions_group = offer_proposition_group.find_all_ordered_by_name_short()
     offer_propositions_error = None
     if request.method == "POST":
@@ -566,7 +564,7 @@ def proposition_dissertations_search(request):
     prefetch_propositions = return_prefetch_propositions()
     propositions_dissertations = proposition_dissertation.search(terms=request.GET['search'],
                                                                  active=True,
-                                                                 visibility=True)\
+                                                                 visibility=True) \
         .select_related('author__person', 'creator').prefetch_related(prefetch_propositions)
     return render(request, "proposition_dissertations_list.html",
                   {'propositions_dissertations': propositions_dissertations})
