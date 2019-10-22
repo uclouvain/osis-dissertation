@@ -111,7 +111,8 @@ urlpatterns = [
         name='manager_dissertations_wait_comm_json_list'),
     url(r'^manager_dissertation_role_list_json/(?P<pk>[0-9]+)$', dissertation.manager_dissertation_role_list_json,
         name='manager_dissertation_role_list_json'),
-    url(r'^manager_dissertations_role_delete_by_ajax/(?P<pk>[0-9]+)$', dissertation.manager_dissertations_role_delete_by_ajax,
+    url(r'^manager_dissertations_role_delete_by_ajax/(?P<pk>[0-9]+)$',
+        dissertation.manager_dissertations_role_delete_by_ajax,
         name='manager_dissertations_role_delete_by_ajax'),
     url(r'^manager_dissertations_jury_new_ajax/', dissertation.manager_dissertations_jury_new_ajax,
         name='manager_dissertations_jury_new_ajax'),
@@ -159,8 +160,6 @@ urlpatterns = [
         name='manager_proposition_dissertations_role_delete'),
     url(r'^manager_proposition_dissertation_new$', proposition_dissertation.manager_proposition_dissertation_new,
         name='manager_proposition_dissertation_new'),
-    url(r'^manager_proposition_dissertation_search$', proposition_dissertation.manager_proposition_dissertations_search,
-        name='manager_proposition_dissertations_search'),
     url(r'^find_adviser_list/', find_adviser_list_json, name='find_adviser_list_json'),
 
     url(r'^my_dissertation_propositions$', proposition_dissertation.my_dissertation_propositions,
@@ -189,7 +188,8 @@ urlpatterns = [
 
     url(r'^students_list_in_offer_year/([0-9]+)/$', request.get_students_list_in_offer_year, name='students_list'),
 
-    url(r'^upload/proposition_download/(?P<proposition_pk>[0-9]+)$', upload_proposition_file.download, name='proposition_download'),
+    url(r'^upload/proposition_download/(?P<proposition_pk>[0-9]+)$', upload_proposition_file.download,
+        name='proposition_download'),
     url(r'^upload/proposition_delete_file/(?P<proposition_pk>[0-9]+)$',
         DeletePropositionFileView.as_view(),
         name='proposition_file_delete'),
