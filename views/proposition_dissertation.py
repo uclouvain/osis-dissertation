@@ -339,8 +339,8 @@ def _get_all_proposition_by_offer(current_academic_year, prefetch_propositions, 
         'dissertations',
         filter=Q(
             active=True,
-            education_group_year_start__academic_year=current_academic_year
-        ) & ~Q(status__in=(dissertation_status.DRAFT, dissertation_status.DIR_KO))
+            dissertations__education_group_year_start__academic_year=current_academic_year
+        ) & ~Q(dissertations__status__in=(dissertation_status.DRAFT, dissertation_status.DIR_KO))
     )).annotate(
         remaining_places=ExpressionWrapper(
             F('max_number_student') - F('dissertations_count'),
@@ -364,8 +364,8 @@ def _search_proposition_dissertation(current_academic_year, prefetch_proposition
             'dissertations',
             filter=Q(
                 active=True,
-                education_group_year_start__academic_year=current_academic_year
-            ) & ~Q(status__in=(dissertation_status.DRAFT, dissertation_status.DIR_KO))
+                dissertations__education_group_year_start__academic_year=current_academic_year
+            ) & ~Q(dissertations__status__in=(dissertation_status.DRAFT, dissertation_status.DIR_KO))
         )).annotate(
         remaining_places=ExpressionWrapper(
             F('max_number_student') - F('dissertations_count'),
