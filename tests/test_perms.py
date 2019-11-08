@@ -62,41 +62,32 @@ class DecoratorsTestCase(TestCase):
         self.teacher3 = AdviserTeacherFactory()
         self.a_person_student = PersonWithoutUserFactory()
         self.student = StudentFactory(person=self.a_person_student)
-        self.offer1 = OfferFactory(title="test_offer1")
-        self.offer2 = OfferFactory(title="test_offer2")
         self.education_group = EducationGroupFactory()
         self.education_group2 = EducationGroupFactory()
         self.academic_year1 = AcademicYearFactory()
-        self.offer_year_start1 = OfferYearFactory(
-            acronym="test_offer1",
-            offer=self.offer1,
-            academic_year=self.academic_year1
-        )
         self.education_group_year_start = EducationGroupYearFactory(
             acronym="test_offer1",
+            title="test_offer1",
             education_group=self.education_group,
             academic_year=self.academic_year1
         )
         self.faculty_adviser1 = FacultyAdviserFactory(
             adviser=self.manager,
-            offer=self.offer1,
             education_group=self.education_group
         )
         self.faculty_adviser2 = FacultyAdviserFactory(
             adviser=self.manager2,
-            offer=self.offer2,
             education_group=self.education_group2
         )
         self.proposition_dissertation = PropositionDissertationFactory(author=self.teacher,
                                                                        creator=self.teacher3.person)
-        self.offer_propo = OfferPropositionFactory(offer=self.offer1, education_group=self.education_group)
+        self.offer_propo = OfferPropositionFactory(education_group=self.education_group)
         self.proposition_offer = PropositionOfferFactory(
             proposition_dissertation=self.proposition_dissertation,
             offer_proposition=self.offer_propo
         )
         self.dissertation1 = DissertationFactory(
             author=self.student,
-            offer_year_start=self.offer_year_start1,
             education_group_year_start=self.education_group_year_start,
             proposition_dissertation=self.proposition_dissertation,
             status='DIR_SUBMIT',
