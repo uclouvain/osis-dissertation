@@ -31,7 +31,6 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from base.models import offer
 from base.models.utils.utils import get_object_or_none
 from dissertation.models.offer_proposition_group import OfferPropositionGroup
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
@@ -39,16 +38,14 @@ from osis_common.models.serializable_model import SerializableModel, Serializabl
 
 class OfferPropositionAdmin(SerializableModelAdmin):
     list_display = ('acronym',
-                    'offer',
                     'offer_proposition_group',
                     'recent_acronym_education_group')
-    raw_id_fields = ('offer', 'education_group')
-    search_fields = ('uuid', 'acronym', 'offer__id', 'education_group__id')
+    raw_id_fields = ('education_group',)
+    search_fields = ('uuid', 'acronym', 'education_group__id')
 
 
 class OfferProposition(SerializableModel):
     acronym = models.CharField(max_length=200)
-    offer = models.ForeignKey(offer.Offer, related_name='offer_proposition', on_delete=models.CASCADE)
     education_group = models.OneToOneField('base.EducationGroup',
                                            null=True,
                                            blank=True,
@@ -115,21 +112,6 @@ class OfferProposition(SerializableModel):
 
     class Meta:
         ordering = ['offer_proposition_group', 'acronym']
-
-
-def get_by_offer(an_offer):
-    try:
-        offer_proposition = OfferProposition.objects.get(offer=an_offer)
-    except ObjectDoesNotExist:
-        offer_proposition = None
-
-    return offer_proposition
-
-
-def search_by_offer(offers):
-    return OfferProposition.objects.filter(offer__in=offers) \
-        .distinct() \
-        .order_by('acronym')
 
 
 def search_by_education_group(education_groups):

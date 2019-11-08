@@ -34,7 +34,6 @@ from django.utils.translation import gettext_lazy as _
 from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
 from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
-from base.tests.factories.offer import OfferFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
 from base.tests.factories.student import StudentFactory
 from dissertation.models import adviser
@@ -74,8 +73,6 @@ class DissertationViewTestCase(TestCase):
         a_person_student = PersonWithoutUserFactory.create(last_name="Durant",
                                                            email='laurent.dermine@uclouvain.be')
         self.student = StudentFactory.create(person=a_person_student)
-        self.offer1 = OfferFactory(title="test_offer1")
-        self.offer2 = OfferFactory(title="test_offer2")
         self.education_group = EducationGroupFactory()
         self.education_group3 = EducationGroupFactory()
         self.academic_year1 = create_current_academic_year()
@@ -87,11 +84,11 @@ class DissertationViewTestCase(TestCase):
         )
         self.faculty_manager = FacultyAdviserFactory(adviser=self.manager, education_group=self.education_group)
         self.offer_proposition1 = OfferPropositionFactory(
-            offer=self.offer1,
             global_email_to_commission=True,
             evaluation_first_year=True,
             education_group=self.education_group_year_start.education_group)
-        self.offer_proposition2 = OfferPropositionFactory(education_group=self.education_group3, global_email_to_commission=False)
+        self.offer_proposition2 = OfferPropositionFactory(education_group=self.education_group3,
+                                                          global_email_to_commission=False)
         self.education_group_year2 = EducationGroupYearFactory(acronym="test_offer2",
                                                                education_group=self.offer_proposition2.education_group,
                                                                academic_year=self.academic_year1)
@@ -111,13 +108,11 @@ class DissertationViewTestCase(TestCase):
 
         FacultyAdviserFactory(
             adviser=self.manager,
-            offer=self.offer1,
             education_group=self.education_group_year_start.education_group
         )
         self.manager2 = AdviserManagerFactory()
         FacultyAdviserFactory(
             adviser=self.manager,
-            offer=self.offer2,
             education_group=self.education_group_year2.education_group
         )
         FacultyAdviserFactory(
@@ -148,7 +143,7 @@ class DissertationViewTestCase(TestCase):
         self.dissertation_1 = DissertationFactory(author=self.student,
                                                   title='Dissertation 2017',
                                                   education_group_year_start=self.education_group_year_start,
-                                                  proposition_dissertation=proposition_dissertation,
+                                                  proposition_dissertation=self.proposition_dissertation,
                                                   status='COM_SUBMIT',
                                                   active=True,
                                                   dissertation_role__adviser=self.teacher2,

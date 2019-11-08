@@ -27,8 +27,8 @@
 from django.test import TestCase
 
 from base.tests.factories.academic_year import AcademicYearFactory
-from base.tests.factories.offer import OfferFactory
-from base.tests.factories.offer_year import OfferYearFactory
+from base.tests.factories.education_group import EducationGroupFactory
+from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
 from base.tests.factories.student import StudentFactory
 from dissertation.tests.factories.adviser import AdviserManagerFactory, AdviserTeacherFactory
@@ -59,26 +59,26 @@ class DissertationUtilsTestCase(TestCase):
         a_person_student = PersonWithoutUserFactory.create(last_name="Durant",
                                                            email='laurent.dermine@uclouvain.be')
         self.student = StudentFactory.create(person=a_person_student)
-        self.offer1 = OfferFactory(title="test_offer1")
+        self.education_group_1 = EducationGroupFactory()
         self.academic_year1 = AcademicYearFactory()
-        self.offer_year_start1 = OfferYearFactory(acronym="test_offer1", offer=self.offer1,
-                                                  academic_year=self.academic_year1)
-        self.offer_proposition1 = OfferPropositionFactory(offer=self.offer1, global_email_to_commission=True)
+        self.education_group_year_1 = EducationGroupYearFactory(acronym="test_offer1",
+                                                                education_group=self.education_group_1,
+                                                                academic_year=self.academic_year1, title="test_offer1")
+        self.offer_proposition1 = OfferPropositionFactory(education_group=self.education_group_1,
+                                                          global_email_to_commission=True)
         self.proposition_dissertation = PropositionDissertationFactory(author=self.teacher,
                                                                        creator=a_person_teacher,
-                                                                       title='Proposition 1212121'
-                                                                       )
-        FacultyAdviserFactory(adviser=self.manager, offer=self.offer1)
+                                                                       title='Proposition 1212121')
+        FacultyAdviserFactory(adviser=self.manager, education_group=self.education_group_1)
         self.dissertation_1 = DissertationFactory(author=self.student,
                                                   title='Dissertation_test_email',
-                                                  offer_year_start=self.offer_year_start1,
+                                                  education_group_year_start=self.education_group_year_1,
                                                   proposition_dissertation=self.proposition_dissertation,
                                                   status='DRAFT',
                                                   active=True,
                                                   dissertation_role__adviser=self.teacher,
-                                                  dissertation_role__status='PROMOTEUR'
-                                                  )
-        FacultyAdviserFactory(adviser=self.manager, offer=self.offer1)
+                                                  dissertation_role__status='PROMOTEUR')
+        FacultyAdviserFactory(adviser=self.manager, education_group=self.education_group_1)
         self.dissert_role = DissertationRoleFactory(dissertation=self.dissertation_1,
                                                     adviser=self.teacher2,
                                                     status='READER')

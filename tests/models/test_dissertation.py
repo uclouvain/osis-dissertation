@@ -31,8 +31,6 @@ from django.test import TestCase
 from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
 from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
-from base.tests.factories.offer import OfferFactory
-from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
 from base.tests.factories.student import StudentFactory
 from dissertation.models import dissertation
@@ -60,8 +58,9 @@ class DissertationModelTestCase(TestCase):
             first_name='jean'
         )
         self.student = StudentFactory(person=a_person_student)
-        self.offer1 = OfferFactory(title="test_offer1")
-        self.offer_prop = OfferPropositionFactory(offer=self.offer1,
+        self.education_group = EducationGroupFactory()
+        self.education_group2 = EducationGroupFactory()
+        self.offer_prop = OfferPropositionFactory(education_group=self.education_group,
                                                   acronym="test_offer1",
                                                   validation_commission_exists=True)
         self.proposition_dissertation = PropositionDissertationFactory(author=self.teacher,
@@ -69,25 +68,22 @@ class DissertationModelTestCase(TestCase):
                                                                        creator=a_person_teacher)
 
         self.academic_year1 = AcademicYearFactory()
-        self.education_group2 = EducationGroupFactory()
-        self.education_group_year_start2 = EducationGroupYearFactory(education_group=self.education_group2,
+        self.education_group_year_start = EducationGroupYearFactory(acronym="test_offer1",
+                                                                    education_group=self.education_group,
+                                                                    academic_year=self.academic_year1)
+        self.education_group_year_start2 = EducationGroupYearFactory(acronym="test_offer1",
+                                                                     education_group=self.education_group2,
                                                                      academic_year=self.academic_year1)
-        self.offer_year_start1 = OfferYearFactory(acronym="test_offer1",
-                                                  offer=self.offer1,
-                                                  academic_year=self.academic_year1)
-        self.education_group_year_start = EducationGroupYearFactory()
         self.dissertation_test_email = DissertationFactory(author=self.student,
                                                            title='Dissertation_test_email',
-                                                           offer_year_start=self.offer_year_start1,
+                                                           education_group_year_start=self.education_group_year_start,
                                                            proposition_dissertation=self.proposition_dissertation,
                                                            status=dissertation_status.DRAFT,
                                                            active=True,
                                                            dissertation_role__adviser=self.teacher,
-                                                           dissertation_role__status='PROMOTEUR'
-                                                           )
+                                                           dissertation_role__status='PROMOTEUR')
         self.dissertation = DissertationFactory(author=self.student,
                                                 title='Dissertation_1',
-                                                offer_year_start=self.offer_year_start1,
                                                 education_group_year_start=self.education_group_year_start,
                                                 proposition_dissertation=self.proposition_dissertation,
                                                 status=dissertation_status.DIR_SUBMIT,
@@ -211,7 +207,7 @@ class DissertationModelTestCase(TestCase):
                                                    validation_commission_exists=False,
                                                    evaluation_first_year=True)
         self.dissertation1 = DissertationFactory(status=dissertation_status.EVA_KO,
-                                                 education_group_year_start=self.education_group_year_start2,)
+                                                 education_group_year_start=self.education_group_year_start2, )
         self.dissertation1.manager_accept()
         self.assertEqual(self.dissertation1.status, dissertation_status.TO_RECEIVE)
 
@@ -235,7 +231,7 @@ class DissertationModelTestCase(TestCase):
 
     def test_refuse_DIR_SUBMIT(self):
         count_messages_before_status_change = message_history.find_my_messages(self.student.person.id).count()
-        self.offer_prop2 = OfferPropositionFactory(education_group=self.education_group2,)
+        self.offer_prop2 = OfferPropositionFactory(education_group=self.education_group2, )
         self.dissertation1 = DissertationFactory(status=dissertation_status.DIR_SUBMIT,
                                                  education_group_year_start=self.education_group_year_start2,
                                                  author=self.student)
@@ -319,13 +315,13 @@ class DissertationModelTestCase(TestCase):
         )
 
     def test_search_by_offer(self):
-        self.assertCountEqual(dissertation.search_by_offer([self.offer1]),
+        self.assertCountEqual(dissertation.search_by_education_group([self.education_group]),
                               [self.dissertation, self.dissertation_test_email]
                               )
 
     def test_search_by_offer_and_status(self):
         self.assertCountEqual(
-            dissertation.search_by_offer_and_status([self.offer1], dissertation_status.DIR_SUBMIT),
+            dissertation.search_by_education_group_and_status([self.education_group], dissertation_status.DIR_SUBMIT),
             [self.dissertation]
         )
 

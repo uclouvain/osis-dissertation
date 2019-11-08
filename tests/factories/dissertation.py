@@ -45,7 +45,6 @@ class DissertationFactory(factory.DjangoModelFactory):
     status = factory.Iterator(dissertation_status.DISSERTATION_STATUS, getter=lambda c: c[0])
     defend_periode = factory.Iterator(dissertation.DEFEND_PERIODE_CHOICES, getter=lambda c: c[0])
     defend_year = factory.Faker('year')
-    offer_year_start = factory.SubFactory(OfferYearFactory)
     education_group_year_start = factory.SubFactory(EducationGroupYearFactory)
     proposition_dissertation = factory.SubFactory(PropositionDissertationFactory)
     description = factory.Faker('text', max_nb_chars=500)
@@ -53,5 +52,4 @@ class DissertationFactory(factory.DjangoModelFactory):
     creation_date = factory.Faker('date_time_this_decade', before_now=True, after_now=False, tzinfo=None)
     modification_date = factory.Faker('date_time_this_decade', before_now=True, after_now=False, tzinfo=None)
     location = factory.SubFactory(DissertationLocationFactory)
-
     dissertation_role = factory.RelatedFactory(DissertationRoleFactory, 'dissertation')

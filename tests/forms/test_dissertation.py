@@ -45,7 +45,6 @@ class DissertationFormsTestCase(TestCase):
         )
         FacultyAdviserFactory(
             adviser=self.manager,
-            offer=self.proposition_offer.offer_proposition.offer,
             education_group=self.proposition_offer.offer_proposition.education_group
         )
 
