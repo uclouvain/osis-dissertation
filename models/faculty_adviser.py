@@ -27,26 +27,20 @@ from django.contrib import admin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from base.models import offer
 from base.models.education_group import EducationGroup
 from dissertation.models.adviser import Adviser
 
 
 class FacultyAdviserAdmin(admin.ModelAdmin):
-    list_display = ('adviser', 'get_adviser_type', 'education_group', 'recent_acronym_education_group', 'offer')
-    raw_id_fields = ('adviser', 'offer', 'education_group')
-    search_fields = ('adviser__person__last_name', 'adviser__person__first_name', 'offer__id',
+    list_display = ('adviser', 'get_adviser_type', 'education_group', 'recent_acronym_education_group')
+    raw_id_fields = ('adviser', 'education_group')
+    search_fields = ('adviser__person__last_name', 'adviser__person__first_name',
                      'education_group__id')
     readonly_fields = ('recent_acronym_education_group',)
 
 
 class FacultyAdviser(models.Model):
     adviser = models.ForeignKey(Adviser, verbose_name=_('Adviser'), on_delete=models.CASCADE)
-    offer = models.ForeignKey(
-        offer.Offer,
-        null=True, blank=True,
-        on_delete=models.CASCADE
-    )
     education_group = models.ForeignKey(EducationGroup, null=True, on_delete=models.PROTECT)
 
     def __str__(self):
