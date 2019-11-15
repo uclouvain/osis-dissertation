@@ -246,12 +246,9 @@ def manager_proposition_dissertations_role_delete(request, pk):
 @login_required
 @user_passes_test(adviser.is_manager)
 def manager_proposition_dissertation_new(request):
-    current_ac_year = academic_year.current_academic_year()
-    offer_propositions = OfferProposition.objects.exclude(education_group=None).annotate(last_acronym=Subquery(
-        EducationGroupYear.objects.filter(
-            education_group__offer_proposition=OuterRef('pk'),
-            academic_year=current_ac_year).values('acronym')[:1]
-    )).select_related('offer_proposition_group').order_by('last_acronym')
+    offer_propositions = OfferProposition.objects.exclude(
+        education_group=None
+    ).select_related('offer_proposition_group')
     offer_propositions_group = offer_proposition_group.find_all_ordered_by_name_short()
     offer_propositions_error = None
     if request.method == "POST":
