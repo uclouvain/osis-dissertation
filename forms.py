@@ -118,11 +118,14 @@ class ManagerDissertationEditForm(ModelForm):
     def __init__(self, data, *args, **kwargs):
         user = kwargs.pop("user")
         super().__init__(data, *args, **kwargs)
-        self.fields["proposition_dissertation"].queryset = PropositionDissertation.objects.filter(
-            active=True,
-            visibility=True,
-            offer_propositions__education_group__advisers__person__user=user
-        ).select_related("author__person").distinct()
+        if self.instance:
+            self.fields["proposition_dissertation"].disabled = True
+        else:
+            self.fields["proposition_dissertation"].queryset = PropositionDissertation.objects.filter(
+                active=True,
+                visibility=True,
+                offer_propositions__education_group__advisers__person__user=user
+            ).select_related("author__person").distinct()
         self.fields["author"].queryset = Student.objects.filter(
             offerenrollment__education_group_year__education_group__advisers__person__user=user
         ).order_by(
