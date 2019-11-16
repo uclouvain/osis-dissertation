@@ -248,7 +248,7 @@ def manager_proposition_dissertations_role_delete(request, pk):
 def manager_proposition_dissertation_new(request):
     offer_propositions = OfferProposition.objects.exclude(
         education_group=None
-    ).select_related('offer_proposition_group')
+    ).select_related('offer_proposition_group', 'education_group')
     offer_propositions_group = offer_proposition_group.find_all_ordered_by_name_short()
     offer_propositions_error = None
     if request.method == "POST":
