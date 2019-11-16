@@ -81,8 +81,8 @@ class OfferProposition(SerializableModel):
 
     @property
     def full_offer_proposition_title(self):
-        most_recent_education_group = self.education_group.educationgroupyear_set.filter(education_group=self.education_group) \
-            .latest('academic_year__year')
+        most_recent_education_group = self.education_group.educationgroupyear_set.filter(
+            education_group=self.education_group).latest('academic_year__year')
         return "{} - {} - {} - {}".format(
             most_recent_education_group.acronym,
             most_recent_education_group.title,
