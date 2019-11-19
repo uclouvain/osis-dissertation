@@ -97,7 +97,7 @@
                                       &nbsp;
                                     <input id="txt_checkbox_{{ offer_proposition.id }}" name="txt_checkbox_{{ offer_proposition.id }}"
                                     type="checkbox" onclick="block_div(this,'test_{{ offer_proposition_g }}','statut_bouton_{{ offer_proposition_g }}','collapse_{{ offer_proposition_g }}');" class="test_{{ offer_proposition_g }}">
-                                    <label for="txt_checkbox_{{ offer_proposition.id }}">&nbsp; {{ offer_proposition.last_acronym }}</label>
+                                    <label for="txt_checkbox_{{ offer_proposition.id }}">&nbsp; {{ offer_proposition.full_offer_proposition_title }}</label>
                                   </div>
                                 {% endif %}
                             {% endfor %}

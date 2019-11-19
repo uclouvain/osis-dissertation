@@ -80,6 +80,18 @@ class OfferProposition(SerializableModel):
         return None
 
     @property
+    def full_offer_proposition_title(self):
+        most_recent_education_group = self.education_group.educationgroupyear_set.filter(
+            education_group=self.education_group
+        ).latest('academic_year__year')
+        return "{} - {} - {} - {}".format(
+            most_recent_education_group.acronym,
+            most_recent_education_group.title,
+            _(str(most_recent_education_group.schedule_type).capitalize()),
+            most_recent_education_group.main_teaching_campus.name
+        )
+
+    @property
     def in_periode_visibility_proposition(self):
         start = self.start_visibility_proposition
         end = self.end_visibility_proposition
