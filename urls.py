@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2019 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -30,8 +30,14 @@ from dissertation.utils.request import find_adviser_list_json
 from dissertation.views import dissertation, proposition_dissertation, information, offer_proposition, \
     upload_dissertation_file, upload_proposition_file
 from dissertation.views.dissertation import AdviserAutocomplete
+from dissertation.views.faculty_adviser.create import FacultyAdviserCreateView
+from dissertation.views.faculty_adviser.delete import FacultyAdviserDeleteView
+from dissertation.views.faculty_adviser.search import OfferPropositionFilterView, AdviserList
+from dissertation.views.upload_dissertation_file import DeleteDissertationFileView
+from dissertation.views.upload_proposition_file import DeletePropositionFileView
 
 urlpatterns = [
+    url(r'^adviser_list$', AdviserList.as_view(), name='adviser_list'),
     url(r'^$', dissertation.dissertations, name='dissertations'),
     url(r'^dissertations_detail/(?P<pk>[0-9]+)$', dissertation.dissertations_detail,
         name='dissertations_detail'),
@@ -51,6 +57,8 @@ urlpatterns = [
         name='dissertations_to_dir_ok'),
     url(r'^dissertations_wait_list$', dissertation.dissertations_wait_list,
         name='dissertations_wait_list'),
+    url(r'^faculty_adviser_add/', FacultyAdviserCreateView.as_view(), name='faculty_adviser_add'),
+    url(r'^faculty_adviser_delete/(?P<pk>[0-9]+)$', FacultyAdviserDeleteView.as_view(), name='faculty_adviser_delete'),
 
     url(r'^informations/$', information.informations, name='informations'),
     url(r'^informations_add/$', information.informations_add, name='informations_add'),
@@ -103,7 +111,8 @@ urlpatterns = [
         name='manager_dissertations_wait_comm_json_list'),
     url(r'^manager_dissertation_role_list_json/(?P<pk>[0-9]+)$', dissertation.manager_dissertation_role_list_json,
         name='manager_dissertation_role_list_json'),
-    url(r'^manager_dissertations_role_delete_by_ajax/(?P<pk>[0-9]+)$', dissertation.manager_dissertations_role_delete_by_ajax,
+    url(r'^manager_dissertations_role_delete_by_ajax/(?P<pk>[0-9]+)$',
+        dissertation.manager_dissertations_role_delete_by_ajax,
         name='manager_dissertations_role_delete_by_ajax'),
     url(r'^manager_dissertations_jury_new_ajax/', dissertation.manager_dissertations_jury_new_ajax,
         name='manager_dissertations_jury_new_ajax'),
@@ -151,12 +160,11 @@ urlpatterns = [
         name='manager_proposition_dissertations_role_delete'),
     url(r'^manager_proposition_dissertation_new$', proposition_dissertation.manager_proposition_dissertation_new,
         name='manager_proposition_dissertation_new'),
-    url(r'^manager_proposition_dissertation_search$', proposition_dissertation.manager_proposition_dissertations_search,
-        name='manager_proposition_dissertations_search'),
     url(r'^find_adviser_list/', find_adviser_list_json, name='find_adviser_list_json'),
 
     url(r'^my_dissertation_propositions$', proposition_dissertation.my_dissertation_propositions,
         name='my_dissertation_propositions'),
+    url(r'^offer_propositions$', OfferPropositionFilterView.as_view(), name='offer_propositions'),
     url(r'^proposition_dissertations/$', proposition_dissertation.proposition_dissertations,
         name='proposition_dissertations'),
     url(r'^proposition_dissertations_created/$', proposition_dissertation.proposition_dissertations_created,
@@ -180,8 +188,15 @@ urlpatterns = [
 
     url(r'^students_list_in_offer_year/([0-9]+)/$', request.get_students_list_in_offer_year, name='students_list'),
 
-    url(r'^upload/proposition_download/(?P<proposition_pk>[0-9]+)$', upload_proposition_file.download, name='proposition_download'),
+    url(r'^upload/proposition_download/(?P<proposition_pk>[0-9]+)$', upload_proposition_file.download,
+        name='proposition_download'),
+    url(r'^upload/proposition_delete_file/(?P<proposition_pk>[0-9]+)$',
+        DeletePropositionFileView.as_view(),
+        name='proposition_file_delete'),
     url(r'^upload/proposition_save/$', upload_proposition_file.save_uploaded_file, name="proposition_save_upload"),
+    url(r'^upload/dissertation_delete_file/(?P<dissertation_pk>[0-9]+)$',
+        DeleteDissertationFileView.as_view(),
+        name='dissertation_file_delete'),
     url(r'^upload/dissertation_download/(?P<dissertation_pk>[0-9]+)$', upload_dissertation_file.download,
         name='dissertation_download'),
     url(r'^upload/dissertation_save/$', upload_dissertation_file.save_uploaded_file, name="dissertation_save_upload"),

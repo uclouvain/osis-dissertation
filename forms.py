@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2019 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -26,21 +26,21 @@
 from dal import autocomplete
 from django import forms
 from django.forms import ModelForm
-from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from base import models as mdl
 from base.models.education_group_year import EducationGroupYear
 from base.models.student import Student
-from dissertation.models import dissertation_update, adviser, proposition_role
+from dissertation.models import dissertation_update, adviser
 from dissertation.models.adviser import Adviser
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_role import DissertationRole
 from dissertation.models.dissertation_update import DissertationUpdate
 from dissertation.models.enums import dissertation_role_status
+from dissertation.models.faculty_adviser import FacultyAdviser
 from dissertation.models.offer_proposition import OfferProposition
 from dissertation.models.proposition_dissertation import PropositionDissertation
-from dissertation.models.proposition_role import PropositionRole, MAX_PROPOSITION_ROLE
+from dissertation.models.proposition_role import PropositionRole
 
 
 class AdviserForm(ModelForm):
@@ -59,6 +59,13 @@ class DissertationForm(ModelForm):
     class Meta:
         model = Dissertation
         fields = ('title', 'author', 'education_group_year_start', 'proposition_dissertation', 'description')
+
+
+class FacultyAdviserForm(ModelForm):
+    class Meta:
+        model = FacultyAdviser
+        fields = ('adviser', )
+        widgets = {'adviser': autocomplete.ModelSelect2(url='adviser-autocomplete', attrs={'style': 'width:100%'})}
 
 
 class PropositionDissertationForm(ModelForm):
@@ -108,18 +115,17 @@ class ManagerDissertationForm(ModelForm):
 
 
 class ManagerDissertationEditForm(ModelForm):
-
     def __init__(self, data, *args, **kwargs):
         user = kwargs.pop("user")
         super().__init__(data, *args, **kwargs)
-        now = timezone.now()
-        self.fields["proposition_dissertation"].queryset = PropositionDissertation.objects.filter(
-            active=True,
-            visibility=True,
-            offer_propositions__start_visibility_proposition__lte=now,
-            offer_propositions__end_visibility_proposition__gte=now,
-            offer_propositions__education_group__advisers__person__user=user
-        ).select_related("author__person").distinct()
+        if self.instance:
+            self.fields["proposition_dissertation"].disabled = True
+        else:
+            self.fields["proposition_dissertation"].queryset = PropositionDissertation.objects.filter(
+                active=True,
+                visibility=True,
+                offer_propositions__education_group__advisers__person__user=user
+            ).select_related("author__person").distinct()
         self.fields["author"].queryset = Student.objects.filter(
             offerenrollment__education_group_year__education_group__advisers__person__user=user
         ).order_by(
@@ -188,10 +194,25 @@ class ManagerOfferPropositionForm(ModelForm):
 
 
 class ManagerPropositionDissertationForm(ModelForm):
+    def __init__(self,  *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["author"].queryset = Adviser.objects.all().select_related("person").distinct()
+
     class Meta:
         model = PropositionDissertation
-        fields = ('author', 'visibility', 'title', 'description', 'type', 'level', 'collaboration',
-                  'max_number_student')
+        fields = (
+            'author',
+            'visibility',
+            'title',
+            'description',
+            'type',
+            'level',
+            'collaboration',
+            'max_number_student'
+        )
+        widgets = {
+            'author': autocomplete.ModelSelect2(url='adviser-autocomplete')
+        }
 
 
 class ManagerPropositionDissertationEditForm(ModelForm):

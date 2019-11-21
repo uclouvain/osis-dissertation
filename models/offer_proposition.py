@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2019 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -29,9 +29,8 @@ from datetime import date
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
-from base.models import offer
 from base.models.utils.utils import get_object_or_none
 from dissertation.models.offer_proposition_group import OfferPropositionGroup
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
@@ -39,16 +38,14 @@ from osis_common.models.serializable_model import SerializableModel, Serializabl
 
 class OfferPropositionAdmin(SerializableModelAdmin):
     list_display = ('acronym',
-                    'offer',
                     'offer_proposition_group',
                     'recent_acronym_education_group')
-    raw_id_fields = ('offer', 'education_group')
-    search_fields = ('uuid', 'acronym', 'offer__id', 'education_group__id')
+    raw_id_fields = ('education_group',)
+    search_fields = ('uuid', 'acronym', 'education_group__id')
 
 
 class OfferProposition(SerializableModel):
     acronym = models.CharField(max_length=200)
-    offer = models.ForeignKey(offer.Offer)
     education_group = models.OneToOneField('base.EducationGroup',
                                            null=True,
                                            blank=True,
@@ -66,7 +63,7 @@ class OfferProposition(SerializableModel):
     end_jury_visibility = models.DateField(default=timezone.now)
     start_edit_title = models.DateField(default=timezone.now)
     end_edit_title = models.DateField(default=timezone.now)
-    offer_proposition_group = models.ForeignKey(OfferPropositionGroup, null=True, blank=True)
+    offer_proposition_group = models.ForeignKey(OfferPropositionGroup, null=True, blank=True, on_delete=models.CASCADE)
     global_email_to_commission = models.BooleanField(default=False)
 
     def clean(self):
@@ -81,6 +78,18 @@ class OfferProposition(SerializableModel):
         if self.education_group:
             return self.education_group.most_recent_acronym
         return None
+
+    @property
+    def full_offer_proposition_title(self):
+        most_recent_education_group = self.education_group.educationgroupyear_set.filter(
+            education_group=self.education_group
+        ).latest('academic_year__year')
+        return "{} - {} - {} - {}".format(
+            most_recent_education_group.acronym,
+            most_recent_education_group.title,
+            _(str(most_recent_education_group.schedule_type).capitalize()),
+            most_recent_education_group.main_teaching_campus.name
+        )
 
     @property
     def in_periode_visibility_proposition(self):
@@ -115,21 +124,6 @@ class OfferProposition(SerializableModel):
 
     class Meta:
         ordering = ['offer_proposition_group', 'acronym']
-
-
-def get_by_offer(an_offer):
-    try:
-        offer_proposition = OfferProposition.objects.get(offer=an_offer)
-    except ObjectDoesNotExist:
-        offer_proposition = None
-
-    return offer_proposition
-
-
-def search_by_offer(offers):
-    return OfferProposition.objects.filter(offer__in=offers) \
-        .distinct() \
-        .order_by('acronym')
 
 
 def search_by_education_group(education_groups):

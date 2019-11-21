@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2019 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -24,8 +24,9 @@
 #
 ##############################################################################
 import factory
-from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
+
 from dissertation.tests.factories.offer_proposition import OfferPropositionFactory
+from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
 
 
 class PropositionOfferFactory(factory.DjangoModelFactory):

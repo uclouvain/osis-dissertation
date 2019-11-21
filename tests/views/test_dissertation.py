@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2019 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -26,15 +26,14 @@
 
 import json
 
-from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.test import TestCase
-from django.utils.translation import ugettext_lazy as _
+from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
 from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
-from base.tests.factories.offer import OfferFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
 from base.tests.factories.student import StudentFactory
 from dissertation.models import adviser
@@ -74,8 +73,6 @@ class DissertationViewTestCase(TestCase):
         a_person_student = PersonWithoutUserFactory.create(last_name="Durant",
                                                            email='laurent.dermine@uclouvain.be')
         self.student = StudentFactory.create(person=a_person_student)
-        self.offer1 = OfferFactory(title="test_offer1")
-        self.offer2 = OfferFactory(title="test_offer2")
         self.education_group = EducationGroupFactory()
         self.education_group3 = EducationGroupFactory()
         self.academic_year1 = create_current_academic_year()
@@ -87,11 +84,11 @@ class DissertationViewTestCase(TestCase):
         )
         self.faculty_manager = FacultyAdviserFactory(adviser=self.manager, education_group=self.education_group)
         self.offer_proposition1 = OfferPropositionFactory(
-            offer=self.offer1,
             global_email_to_commission=True,
             evaluation_first_year=True,
             education_group=self.education_group_year_start.education_group)
-        self.offer_proposition2 = OfferPropositionFactory(education_group=self.education_group3, global_email_to_commission=False)
+        self.offer_proposition2 = OfferPropositionFactory(education_group=self.education_group3,
+                                                          global_email_to_commission=False)
         self.education_group_year2 = EducationGroupYearFactory(acronym="test_offer2",
                                                                education_group=self.offer_proposition2.education_group,
                                                                academic_year=self.academic_year1)
@@ -111,13 +108,11 @@ class DissertationViewTestCase(TestCase):
 
         FacultyAdviserFactory(
             adviser=self.manager,
-            offer=self.offer1,
             education_group=self.education_group_year_start.education_group
         )
         self.manager2 = AdviserManagerFactory()
         FacultyAdviserFactory(
             adviser=self.manager,
-            offer=self.offer2,
             education_group=self.education_group_year2.education_group
         )
         FacultyAdviserFactory(
@@ -148,7 +143,7 @@ class DissertationViewTestCase(TestCase):
         self.dissertation_1 = DissertationFactory(author=self.student,
                                                   title='Dissertation 2017',
                                                   education_group_year_start=self.education_group_year_start,
-                                                  proposition_dissertation=proposition_dissertation,
+                                                  proposition_dissertation=self.proposition_dissertation,
                                                   status='COM_SUBMIT',
                                                   active=True,
                                                   dissertation_role__adviser=self.teacher2,
@@ -281,15 +276,22 @@ class DissertationViewTestCase(TestCase):
         self.dissertation_test_email.status = 'EVA_SUBMIT'
         self.dissertation_test_email.manager_accept()
         self.assertEqual(self.dissertation_test_email.status, 'TO_RECEIVE')
+
         self.dissertation_test_email.status = 'EVA_KO'
         self.dissertation_test_email.manager_accept()
         self.assertEqual(self.dissertation_test_email.status, 'TO_RECEIVE')
+
         self.dissertation_test_email.status = 'DEFENDED'
         self.dissertation_test_email.manager_accept()
         self.assertEqual(self.dissertation_test_email.status, 'ENDED_WIN')
+
         self.dissertation_test_email.status = 'DRAFT'
         self.dissertation_test_email.manager_accept()
         self.assertEqual(self.dissertation_test_email.status, 'DRAFT')
+
+        self.dissertation_test_email.status = 'ENDED_LOS'
+        self.dissertation_test_email.manager_accept()
+        self.assertEqual(self.dissertation_test_email.status, 'TO_RECEIVE')
 
     def test_email_new_dissert(self):
         self.client.force_login(self.manager.person.user)

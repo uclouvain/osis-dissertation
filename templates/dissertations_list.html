@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% load staticfiles %}
+{% load static %}
 {% load i18n %}
 
 {% comment "License" %}
@@ -9,7 +9,7 @@
  * The core business involves the administration of students, teachers,
  * courses, programs and so on.
  *
- * Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+ * Copyright (C) 2015-2019 Université catholique de Louvain (http://www.uclouvain.be)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -419,9 +419,9 @@
                     "sNext":       "{% trans 'Next'%}",
                     "sLast":       "{% trans 'Last'%}"
                             },
-            "oAria": {
-                "sSortAscending":  "{% trans ': activate to sort column ascending'%}",
-                "sSortDescending": "{% trans ': activate to sort column descending'%}",
+                "oAria": {
+                    "sSortAscending":  "{% trans ': activate to sort column ascending'%}",
+                    "sSortDescending": "{% trans ': activate to sort column descending'%}",
                     }
                 }
             })

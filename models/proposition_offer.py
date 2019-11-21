@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2019 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,11 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.db import models
 from django.utils import timezone
 
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
-from django.db import models
-from django.db.models import Q
 
 
 class PropositionOfferAdmin(SerializableModelAdmin):
@@ -39,8 +38,8 @@ class PropositionOfferAdmin(SerializableModelAdmin):
 
 
 class PropositionOffer(SerializableModel):
-    proposition_dissertation = models.ForeignKey('PropositionDissertation')
-    offer_proposition = models.ForeignKey('OfferProposition')
+    proposition_dissertation = models.ForeignKey('PropositionDissertation', on_delete=models.CASCADE)
+    offer_proposition = models.ForeignKey('OfferProposition', on_delete=models.CASCADE)
 
     class Meta:
         ordering = ['offer_proposition__acronym']

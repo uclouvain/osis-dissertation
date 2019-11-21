@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% load staticfiles %}
+{% load static %}
 {% load i18n %}
 
 {% comment "License" %}
@@ -9,7 +9,7 @@
  * The core business involves the administration of students, teachers,
  * courses, programs and so on.
  *
- * Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+ * Copyright (C) 2015-2019 Université catholique de Louvain (http://www.uclouvain.be)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -126,7 +126,7 @@
                                       &nbsp;
                                     <input id="txt_checkbox_{{ offer_proposition.id }}" name="txt_checkbox_{{ offer_proposition.id }}"
                                     type="checkbox" onclick="block_div(this,'test_{{ offer_proposition_g }}','statut_bouton_{{ offer_proposition_g }}','collapse_{{ offer_proposition_g }}');" class="test_{{ offer_proposition_g }}">
-                                    <label for="txt_checkbox_{{ offer_proposition.id }}">&nbsp; {{ offer_proposition }}</label>
+                                    <label for="txt_checkbox_{{ offer_proposition.id }}">&nbsp; {{ offer_proposition.last_acronym }}</label>
                                   </div>
                                 {% endif %}
                             {% endfor %}

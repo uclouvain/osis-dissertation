@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% load staticfiles %}
+{% load static %}
 {% load i18n %}
 
 {% comment "License" %}
@@ -9,7 +9,7 @@
  * The core business involves the administration of students, teachers,
  * courses, programs and so on.
  *
- * Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+ * Copyright (C) 2015-2019 Université catholique de Louvain (http://www.uclouvain.be)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@
   <div class="panel panel-default">
     <div class="panel-body">
         <div class="row">
-          <div class="col-md-1"><i class="fa fa-lightbulb-o" style="font-size: 400%; color: #6699FF;"></i></div>
+          <div class="col-md-1"><i class="far fa-lightbulb" style="font-size: 400%; color: #6699FF;"></i></div>
           <div class="col-md-5">
             <h4 class="media-heading">
                 <a href="{% url 'my_dissertation_propositions' %}" id="lnk_my_dissertation_propositions" >
@@ -74,7 +74,7 @@
         </div>
         <br>
         <div class="row">
-          <div class="col-md-1"><i class="fa fa-pencil-square-o" style="font-size: 400%; color: #6699FF;"></i></div>
+          <div class="col-md-1"><i class="far fa-edit" style="font-size: 400%; color: #6699FF;"></i></div>
           <div class="col-md-5">
             <h4 class="media-heading">
                 <a href="{% url 'dissertations_list' %}" id="lnk_dissertations" >
@@ -88,7 +88,7 @@
     <div class="panel panel-default">
     <div class="panel-body">
         <div class="row">
-          <div class="col-md-1"><i class="fa fa-lightbulb-o" style="font-size: 400%; color: #6699FF;"></i></div>
+          <div class="col-md-1"><i class="far fa-lightbulb" style="font-size: 400%; color: #6699FF;"></i></div>
           <div class="col-md-5">
             <h4 class="media-heading">
                 <a href="{% url 'manager_proposition_dissertations' %}" id="lnk_manager_proposition_dissertations" >
@@ -109,7 +109,7 @@
         </div>
         <br>
         <div class="row">
-          <div class="col-md-1"><i class="fa fa-pencil-square-o" style="font-size: 400%; color: #6699FF;"></i></div>
+          <div class="col-md-1"><i class="far fa-edit" style="font-size: 400%; color: #6699FF;"></i></div>
           <div class="col-md-5">
             <h4 class="media-heading">
                 <a href="{% url 'manager_dissertations_list' %}" id="lnk_manager_dissertations" >

@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2019 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,13 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from django.db import models
+
 from base import models as mdl
+from dissertation.models.enums import dissertation_status
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from . import adviser
 from . import dissertation
-from dissertation.models.enums import dissertation_status
-
 
 JUSTIFICATION_LINK = "_set_to_"
 
@@ -54,8 +54,8 @@ class DissertationUpdate(SerializableModel):
     )
     created = models.DateTimeField(auto_now_add=True)
     justification = models.TextField(blank=True)
-    person = models.ForeignKey('base.Person')
-    dissertation = models.ForeignKey(dissertation.Dissertation)
+    person = models.ForeignKey('base.Person', on_delete=models.CASCADE)
+    dissertation = models.ForeignKey(dissertation.Dissertation, on_delete=models.CASCADE)
 
     def __str__(self):
         desc = "%s / %s >> %s / %s" % (self.dissertation.title, self.status_from, self.status_to, str(self.created))

@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2019 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,9 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.test import TestCase
+from django.urls import reverse
 
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.offer_year import OfferYearFactory
@@ -47,7 +47,7 @@ class InformationTeacherViewTestCase(TestCase):
 
     def setUp(self):
         self.manager = AdviserManagerFactory()
-        a_person_teacher = PersonFactory(first_name='Pierre', last_name='Dupont')
+        a_person_teacher = PersonFactory(first_name='Pierre', last_name='Dupont', phone_mobile="0472760003")
         self.teacher = AdviserTeacherFactory(person=a_person_teacher)
         self.person = PersonFactory()
         self.manager2 = AdviserManagerFactory()
@@ -64,19 +64,30 @@ class InformationTeacherViewTestCase(TestCase):
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_informations_detail_stats(self):
-        advisers_pro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, dissertation_role_status.PROMOTEUR)
-        advisers_copro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, dissertation_role_status.CO_PROMOTEUR)
-        advisers_reader = dissertation_role.search_by_adviser_and_role_stats(self.teacher, dissertation_role_status.READER)
+        advisers_pro = dissertation_role.search_by_adviser_and_role_stats(self.teacher,
+                                                                          dissertation_role_status.PROMOTEUR)
+        advisers_copro = dissertation_role.search_by_adviser_and_role_stats(self.teacher,
+                                                                            dissertation_role_status.CO_PROMOTEUR)
+        advisers_reader = dissertation_role.search_by_adviser_and_role_stats(self.teacher,
+                                                                             dissertation_role_status.READER)
         response = self.client.post(reverse('informations_detail_stats'),
                                     {
                                         'adviser': self.teacher,
-                                        'count_advisers_copro': dissertation_role.count_by_adviser_and_role_stats(self.teacher, dissertation_role_status.CO_PROMOTEUR),
-                                        'count_advisers_pro': dissertation_role.count_by_adviser_and_role_stats(self.teacher, dissertation_role_status.PROMOTEUR),
-                                        'count_advisers_reader': dissertation_role.count_by_adviser_and_role_stats(self.teacher, dissertation_role_status.READER),
-                                        'count_advisers_pro_request': dissertation_role.count_by_adviser(self.teacher, dissertation_role_status.PROMOTEUR, 'DIR_SUBMIT'),
-                                        'tab_offer_count_pro': dissertation_role.get_tab_count_role_by_education_group(advisers_pro),
-                                        'tab_offer_count_read': dissertation_role.get_tab_count_role_by_education_group(advisers_reader),
-                                        'tab_offer_count_copro': dissertation_role.get_tab_count_role_by_education_group(advisers_copro)
+                                        'count_advisers_copro': dissertation_role.count_by_adviser_and_role_stats(
+                                            self.teacher, dissertation_role_status.CO_PROMOTEUR),
+                                        'count_advisers_pro': dissertation_role.count_by_adviser_and_role_stats(
+                                            self.teacher, dissertation_role_status.PROMOTEUR),
+                                        'count_advisers_reader': dissertation_role.count_by_adviser_and_role_stats(
+                                            self.teacher, dissertation_role_status.READER),
+                                        'count_advisers_pro_request': dissertation_role.count_by_adviser(self.teacher,
+                                                                                                         dissertation_role_status.PROMOTEUR,
+                                                                                                         'DIR_SUBMIT'),
+                                        'tab_offer_count_pro': dissertation_role.get_tab_count_role_by_education_group(
+                                            advisers_pro),
+                                        'tab_offer_count_read': dissertation_role.get_tab_count_role_by_education_group(
+                                            advisers_reader),
+                                        'tab_offer_count_copro': dissertation_role.get_tab_count_role_by_education_group(
+                                            advisers_copro)
                                     }
                                     )
         self.assertEqual(response.status_code, HttpResponse.status_code)
@@ -90,20 +101,20 @@ class InformationTeacherViewTestCase(TestCase):
                                         'last_name': self.teacher.person.last_name.title(),
                                         'email': self.teacher.person.email,
                                         'phone': self.teacher.person.phone,
-                                        'phone_mobile': self.teacher.person.phone_mobile
+                                        'phone_mobile': ""
                                     }
                                     )
         self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
         response = self.client.get(reverse('informations_edit'),
-                                    {
-                                        'form': form,
-                                        'first_name': self.teacher.person.first_name.title(),
-                                        'last_name': self.teacher.person.last_name.title(),
-                                        'email': self.teacher.person.email,
-                                        'phone': self.teacher.person.phone,
-                                        'phone_mobile': self.teacher.person.phone_mobile
-                                    }
-                                    )
+                                   {
+                                       'form': form,
+                                       'first_name': self.teacher.person.first_name.title(),
+                                       'last_name': self.teacher.person.last_name.title(),
+                                       'email': self.teacher.person.email,
+                                       'phone': self.teacher.person.phone,
+                                       'phone_mobile': ""
+                                   }
+                                   )
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_informations_add(self):
@@ -176,13 +187,15 @@ class InformationManagerViewTestCase(TestCase):
         a_person_student = PersonWithoutUserFactory(last_name="Durant")
         student = StudentFactory(person=a_person_student)
         offer_year_start = OfferYearFactory(acronym="test_offer")
-        offer = offer_year_start.offer
-        offer_proposition = OfferPropositionFactory(offer=offer)
+        offer_proposition = OfferPropositionFactory()
         self.education_group_year = EducationGroupYearFactory(education_group=offer_proposition.education_group)
-        FacultyAdviserFactory(adviser=self.manager, offer=offer,
+        FacultyAdviserFactory(adviser=self.manager,
                               education_group=self.education_group_year.education_group)
-        roles = [dissertation_role_status.PROMOTEUR, dissertation_role_status.CO_PROMOTEUR, dissertation_role_status.READER, dissertation_role_status.PROMOTEUR, dissertation_role_status.ACCOMPANIST, dissertation_role_status.PRESIDENT]
-        status = [dissertation_status.DRAFT, dissertation_status.COM_SUBMIT, dissertation_status.EVA_SUBMIT, dissertation_status.TO_RECEIVE, dissertation_status.DIR_SUBMIT, dissertation_status.DIR_SUBMIT]
+        roles = [dissertation_role_status.PROMOTEUR, dissertation_role_status.CO_PROMOTEUR,
+                 dissertation_role_status.READER, dissertation_role_status.PROMOTEUR,
+                 dissertation_role_status.ACCOMPANIST, dissertation_role_status.PRESIDENT]
+        status = [dissertation_status.DRAFT, dissertation_status.COM_SUBMIT, dissertation_status.EVA_SUBMIT,
+                  dissertation_status.TO_RECEIVE, dissertation_status.DIR_SUBMIT, dissertation_status.DIR_SUBMIT]
         for x in range(0, 6):
             proposition_dissertation = PropositionDissertationFactory(author=self.teacher,
                                                                       creator=a_person_teacher,
@@ -266,36 +279,36 @@ class InformationManagerViewTestCase(TestCase):
 
     def test_manager_informations_add_person(self):
         form = {
-                   'email': self.person.email,
-                   'last_name': self.person.last_name,
-                   'first_name': self.person.first_name,
-                   'phone': self.person.phone,
-                   'phone_mobile': self.person.phone
-               }
+            'email': self.person.email,
+            'last_name': self.person.last_name,
+            'first_name': self.person.first_name,
+            'phone': self.person.phone,
+            'phone_mobile': self.person.phone
+        }
         response = self.client.post(reverse("manager_informations_add_person"), form)
         self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
 
     def test_manager_informations_add_person_with_invalid_data(self):
         form = {
-                   'email': self.person.email,
-                   'last_name': self.person.last_name,
-               }
+            'email': self.person.email,
+            'last_name': self.person.last_name,
+        }
         response = self.client.post(reverse("manager_informations_add_person"), form)
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_manager_informations_add_person_with_get_method(self):
         form = {
-                   'email': self.person.email,
-                   'last_name': self.person.last_name,
-                   'first_name': self.person.first_name,
-                   'phone': self.person.phone,
-                   'phone_mobile': self.person.phone
-               }
+            'email': self.person.email,
+            'last_name': self.person.last_name,
+            'first_name': self.person.first_name,
+            'phone': self.person.phone,
+            'phone_mobile': self.person.phone
+        }
         response = self.client.get(reverse("manager_informations_add_person"), form)
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_manager_informations_add_person_with_invalid_form(self):
-        data = { 'email': "fake_email" }
+        data = {'email': "fake_email"}
         form = ManagerAddAdviserPerson(data)
         self.assertFalse(form.is_valid())
         response = self.client.post(reverse("manager_informations_add_person"), data)
@@ -328,7 +341,7 @@ class InformationManagerViewTestCase(TestCase):
     def test_manager_informations_detail_list(self):
         url = reverse('manager_informations_detail_list', kwargs={'pk': self.teacher.id})
         response = self.client.get(url)
-        self.assertEqual(response.context[-1].get('adv_list_disserts_pro').count(), 1) # only 1 because 1st is DRAFT
+        self.assertEqual(response.context[-1].get('adv_list_disserts_pro').count(), 1)  # only 1 because 1st is DRAFT
         self.assertEqual(response.context[-1].get('adv_list_disserts_copro').count(), 1)
         self.assertEqual(response.context[-1].get('adv_list_disserts_reader').count(), 1)
         self.assertEqual(response.context[-1].get('adv_list_disserts_accompanist').count(), 1)
@@ -343,9 +356,12 @@ class InformationManagerViewTestCase(TestCase):
         self.assertEqual(response.status_code, HttpResponseNotFound.status_code)
 
     def test_manager_informations_detail_stats(self):
-        advisers_pro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, dissertation_role_status.PROMOTEUR)
-        advisers_copro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, dissertation_role_status.CO_PROMOTEUR)
-        advisers_reader = dissertation_role.search_by_adviser_and_role_stats(self.teacher, dissertation_role_status.READER)
+        advisers_pro = dissertation_role.search_by_adviser_and_role_stats(self.teacher,
+                                                                          dissertation_role_status.PROMOTEUR)
+        advisers_copro = dissertation_role.search_by_adviser_and_role_stats(self.teacher,
+                                                                            dissertation_role_status.CO_PROMOTEUR)
+        advisers_reader = dissertation_role.search_by_adviser_and_role_stats(self.teacher,
+                                                                             dissertation_role_status.READER)
         response = self.client.post(reverse('manager_informations_detail_stats', args=[self.teacher.pk]),
                                     {
                                         'adviser': self.teacher,
@@ -369,9 +385,12 @@ class InformationManagerViewTestCase(TestCase):
         self.assertEqual(response.status_code, HttpResponse.status_code)
 
     def test_manager_informations_detail_stats_without_teacher(self):
-        advisers_pro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, dissertation_role_status.PROMOTEUR)
-        advisers_copro = dissertation_role.search_by_adviser_and_role_stats(self.teacher, dissertation_role_status.CO_PROMOTEUR)
-        advisers_reader = dissertation_role.search_by_adviser_and_role_stats(self.teacher, dissertation_role_status.READER)
+        advisers_pro = dissertation_role.search_by_adviser_and_role_stats(self.teacher,
+                                                                          dissertation_role_status.PROMOTEUR)
+        advisers_copro = dissertation_role.search_by_adviser_and_role_stats(self.teacher,
+                                                                            dissertation_role_status.CO_PROMOTEUR)
+        advisers_reader = dissertation_role.search_by_adviser_and_role_stats(self.teacher,
+                                                                             dissertation_role_status.READER)
         response = self.client.post(reverse('manager_informations_detail_stats', args=[self.manager.person.user.pk]),
                                     {
                                         'adviser': self.teacher,

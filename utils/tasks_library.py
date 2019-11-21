@@ -22,6 +22,7 @@
 #   see http://www.gnu.org/licenses/.
 # ##############################################################################
 from datetime import date, datetime
+
 from dateutil.relativedelta import relativedelta
 
 from dissertation.models.offer_proposition import OfferProposition

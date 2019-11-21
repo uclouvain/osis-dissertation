@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2019 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from dissertation.models import proposition_offer
 from dissertation.models.offer_proposition import OfferProposition
@@ -62,15 +62,17 @@ class PropositionDissertation(SerializableModel):
         ('FORBIDDEN', _('Forbidden')),
         )
 
-    author = models.ForeignKey('Adviser')
-    creator = models.ForeignKey('base.Person', blank=True, null=True)
-    collaboration = models.CharField(max_length=12, choices=COLLABORATION_CHOICES, default='FORBIDDEN')
-    description = models.TextField(blank=True, null=True)
-    level = models.CharField(max_length=12, choices=LEVELS_CHOICES, default='DOMAIN')
-    max_number_student = models.IntegerField()
-    title = models.CharField(max_length=200)
-    type = models.CharField(max_length=12, choices=TYPES_CHOICES, default='OTH')
-    visibility = models.BooleanField(default=True)
+    author = models.ForeignKey('Adviser', on_delete=models.CASCADE, verbose_name=_('Author'))
+    creator = models.ForeignKey('base.Person', blank=True, null=True, on_delete=models.CASCADE)
+    collaboration = models.CharField(max_length=12, choices=COLLABORATION_CHOICES, default='FORBIDDEN',
+                                     verbose_name=_('Collaboration'))
+    description = models.TextField(blank=True, null=True, verbose_name=_('Description'))
+    level = models.CharField(max_length=12, choices=LEVELS_CHOICES, default='DOMAIN',
+                             verbose_name=_('Subject developement level'))
+    max_number_student = models.IntegerField(verbose_name=_('Indicative number of places for this subject'))
+    title = models.CharField(max_length=200, verbose_name=_('Title'))
+    type = models.CharField(max_length=12, choices=TYPES_CHOICES, default='OTH', verbose_name=_('Subject type'))
+    visibility = models.BooleanField(default=True, verbose_name=_('Visibility'))
     active = models.BooleanField(default=True)
     created_date = models.DateTimeField(default=timezone.now)
     offer_propositions = models.ManyToManyField(
@@ -165,9 +167,11 @@ def find_by_id(proposition_id):
     except ObjectDoesNotExist:
         return None
 
+
 def search_by_offers(offers):
     proposition_ids = proposition_offer.find_by_offers(offers).values('proposition_dissertation_id')
     return PropositionDissertation.objects.filter(pk__in=proposition_ids, active=True, visibility=True)
+
 
 def find_by_education_groups(education_groups):
     now = timezone.now()

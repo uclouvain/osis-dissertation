@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2019 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,13 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from dissertation.models import adviser
-from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
-from base.models.student import find_by_offer_year
-from base.models.offer_year import OfferYear
 from django.contrib.auth.decorators import user_passes_test
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+
+from base.models.offer_year import OfferYear
+from base.models.student import find_by_offer_year
+from dissertation.models import adviser
+
 MAX_RETURN = 50
 
 

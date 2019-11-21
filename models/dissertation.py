@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2019 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import Q
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from base.models import academic_year
 from base.models import offer_year, student
@@ -67,7 +67,7 @@ DEFEND_PERIODE_CHOICES = (
 
 class Dissertation(SerializableModel):
     title = models.CharField(max_length=500, verbose_name=_('Title'))
-    author = models.ForeignKey(student.Student, verbose_name=_('Author'))
+    author = models.ForeignKey(student.Student, verbose_name=_('Author'), on_delete=models.CASCADE)
     status = models.CharField(
         max_length=12,
         choices=dissertation_status.DISSERTATION_STATUS,
@@ -81,16 +81,23 @@ class Dissertation(SerializableModel):
         verbose_name=_('Defense period')
     )
     defend_year = models.IntegerField(blank=True, null=True, verbose_name=_('Defense year'))
-    offer_year_start = models.ForeignKey(offer_year.OfferYear, null=True, blank=True)
+    offer_year_start = models.ForeignKey(
+        offer_year.OfferYear,
+        null=True, blank=True,
+        on_delete=models.CASCADE
+    )
     education_group_year_start = models.ForeignKey(
         EducationGroupYear,
         null=True,
         blank=True,
         on_delete=models.PROTECT,
         related_name='dissertations', verbose_name=_('Programs'))
-    proposition_dissertation = models.ForeignKey(PropositionDissertation,
-                                                 related_name='dissertations',
-                                                 verbose_name=_('Description'))
+    proposition_dissertation = models.ForeignKey(
+        PropositionDissertation,
+        related_name='dissertations',
+        verbose_name=_('Dissertation subject'),
+        on_delete=models.CASCADE
+    )
     description = models.TextField(blank=True)
     active = models.BooleanField(default=True)
     creation_date = models.DateTimeField(auto_now_add=True, editable=False)
@@ -99,9 +106,9 @@ class Dissertation(SerializableModel):
         dissertation_location.DissertationLocation,
         blank=True,
         null=True,
-        verbose_name=_('Dissertation location')
+        verbose_name=_('Dissertation location'),
+        on_delete=models.CASCADE
     )
-    location = models.ForeignKey(dissertation_location.DissertationLocation, blank=True, null=True)
     dissertation_documents_files = models.ManyToManyField(DocumentFile, through=DissertationDocumentFile)
 
     def __str__(self):
@@ -128,10 +135,12 @@ class Dissertation(SerializableModel):
     def manager_accept(self):
         if self.status == dissertation_status.DIR_SUBMIT:
             self.teacher_accept()
+        elif self.status == dissertation_status.ENDED_LOS:
+            self.set_status(dissertation_status.TO_RECEIVE)
         elif self.status == dissertation_status.COM_SUBMIT or self.status == dissertation_status.COM_KO:
             next_status = get_next_status(self, "accept")
             emails_dissert.send_email(self, 'dissertation_accepted_by_com', [self.author])
-            if get_object_or_none(OfferProposition, education_group=self.education_group_year_start.education_group)\
+            if get_object_or_none(OfferProposition, education_group=self.education_group_year_start.education_group) \
                     .global_email_to_commission:
                 emails_dissert.send_email_to_jury_members(self)
             self.set_status(next_status)
@@ -173,7 +182,7 @@ def search(terms=None, active=True):
             Q(proposition_dissertation__author__person__last_name__icontains=terms) |
             Q(status__icontains=terms) |
             Q(title__icontains=terms) |
-            Q(offer_year_start__acronym__icontains=terms)
+            Q(education_group_year_start__acronym__icontains=terms)
         )
     queryset = queryset.filter(active=active).exclude(status=dissertation_status.ENDED).distinct()
     return queryset
@@ -183,16 +192,8 @@ def search_by_proposition_author(terms=None, active=True, proposition_author=Non
     return search(terms=terms, active=active).filter(proposition_dissertation__author=proposition_author)
 
 
-def search_by_offer(offers, active=True):
-    return Dissertation.objects.filter(offer_year_start__offer__in=offers).filter(active=active)
-
-
 def search_by_education_group(education_groups, active=True):
     return Dissertation.objects.filter(education_group_year_start__education_group__in=education_groups, active=active)
-
-
-def search_by_offer_and_status(offers, status):
-    return search_by_offer(offers).filter(status=status)
 
 
 def search_by_education_group_and_status(education_groups, status):
@@ -267,10 +268,10 @@ def find_by_id(dissertation_id):
 
 
 def count_by_proposition(proposition):
-    current_academic_year = academic_year.starting_academic_year()
+    starting_academic_year = academic_year.starting_academic_year()
     return Dissertation.objects.filter(proposition_dissertation=proposition) \
         .filter(active=True) \
-        .filter(education_group_year_start__academic_year=current_academic_year) \
+        .filter(education_group_year_start__academic_year=starting_academic_year) \
         .exclude(status=dissertation_status.DRAFT) \
         .exclude(status=dissertation_status.DIR_KO) \
         .count()

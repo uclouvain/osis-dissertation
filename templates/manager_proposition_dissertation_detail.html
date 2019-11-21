@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% load staticfiles %}
+{% load static %}
 {% load i18n %}
 
 {% comment "License" %}
@@ -9,7 +9,7 @@
  * The core business involves the administration of students, teachers,
  * courses, programs and so on.
  *
- * Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+ * Copyright (C) 2015-2019 Université catholique de Louvain (http://www.uclouvain.be)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,9 +37,7 @@
     <h2>{{ proposition_dissertation.title }}</h2>
     </div>
     <div style="text-align:right; margin-bottom: 5px;">
-        <a class="btn btn-default btn-primary" data-toggle="modal" data-target="#pnl_upload_documents"
-           id="btn_add_file" title="{% trans 'Add file'%}">
-            <span class="glyphicon glyphicon-upload" aria-hidden="true" id="spn_add_file"></span></a>
+
         <a class="btn btn-default btn-primary"
            href="{% url 'manager_proposition_dissertation_edit' pk=proposition_dissertation.pk %}">
             <span class="glyphicon glyphicon-edit"></span></a>
@@ -70,16 +68,34 @@
                     {{ proposition_dissertation.title }}
                 </div>
             </div>
-            {% if filename != "" %}
+
                 <div class="row">
                     <div class="col-md-4" style="text-align:right">
                          <label>{% trans 'file' %}</label>
                      </div>
-                     <div class="col-md-4">
-                         <a href="{% url 'proposition_download' proposition_pk=proposition_dissertation.pk %}">{% trans 'Link' %}</a>
-                     </div>
+                    {% if filename != "" %}
+                         <div class="col-md-5">
+                             <a href="{% url 'proposition_download' proposition_pk=proposition_dissertation.pk %}" title="{% trans 'Download' %}">
+                                 <i class="far fa-file"> {{ filename }}</i>
+                             </a>
+                             <a data-url="{% url 'proposition_file_delete' proposition_pk=proposition_dissertation.pk %}"
+                                class="btn btn-warning btn-xs trigger_modal" role="button">
+                                 <span class="fas fa-times">
+                                 </span>
+                             </a>
+                         </div>
+                    {% else %}
+                        <div class="col-md-5">
+                            <a class="btn btn-default btn-primary btn-xs" data-toggle="modal" data-target="#pnl_upload_documents"
+                               id="btn_add_file" title="{% trans 'Add file'%}">
+                                <i class="fas fa-plus"></i>
+                                    {% trans 'Add file'%}
+                                <span class="fas fa-file-upload" aria-hidden="true" id="spn_add_file">
+                                </span>
+                            </a>
+                         </div>
+                    {% endif %}
                  </div>
-            {% endif %}
             <div class="row">
                 <div class="col-md-4" style="text-align: right">
                     <label>{% trans 'Visibility' %}</label>
@@ -154,7 +170,7 @@
                 </div>
                 <div class="col-md-8">
                     {% for offer_proposition in proposition_dissertation.offer_propositions.all %}
-                        <span class="label label-default">{{ offer_proposition }}</span>
+                        <span class="label label-default">{{ offer_proposition.last_acronym }}</span>
                     {% endfor %}
                 </div>
             </div>

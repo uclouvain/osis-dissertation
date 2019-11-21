@@ -1,0 +1,36 @@
+{% load static %}
+{% load bootstrap3 i18n %}
+<form method="post" action='{{ request.get_full_path }}' class="post-form" id="form-modal">
+    {% csrf_token %}
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="bt_close_remove_manager_modal"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">{% trans 'Confirm delete for :' %}{{ adviser }}</h4>
+    </div>
+    <div class="modal-body">
+        <div id="pnl_faculty_adviser_off">
+            {% trans 'Are you sure you want to remove the following program(s) ?' %}
+            <br>
+            <strong class="text-danger">
+                {% for offer_prop in offer_propositions %}
+                {{ offer_prop }}
+                {% endfor %}
+            </strong>
+            <br>
+        </div>
+        <br>
+        <div id="pnl_faculty_adviser_on">
+            {% trans 'The manager will keep the following programs : '%}
+            <br>
+            <strong>
+                {% for obj in other_offer_propositions %}
+                    {{ obj }}
+                {% endfor %}
+            </strong>
+            <br>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="bt_cancel_remove_manager_modal">{% trans 'Cancel' %}</button>
+        <input type="submit" class="btn btn-primary"  value="{% trans 'Remove' %}"/>
+    </div>
+</form>

@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% load staticfiles %}
+{% load static %}
 {% load i18n %}
 
 {% comment "License" %}
@@ -9,7 +9,7 @@
 * The core business involves the administration of students, teachers,
 * courses, programs and so on.
 *
-* Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+* Copyright (C) 2015-2019 Université catholique de Louvain (http://www.uclouvain.be)
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -51,10 +51,6 @@
     <a class="btn btn-primary pull-right" href="{% url 'manager_dissertations_edit' pk=dissertation.pk %}"
        style="margin-right: 5px;">
         <span class="glyphicon glyphicon-edit"></span></a>
-
-    <a class="btn btn-default btn-primary pull-right" data-toggle="modal" data-target="#pnl_upload_documents"
-       id="btn_add_file" style="margin-right: 5px;" title="{% trans 'Add file'%}">
-        <span class="glyphicon glyphicon-upload" aria-hidden="true" id="spn_add_file"></span></a>
 </ul>
 <input type="hidden" value="{{dissertation.pk | default_if_none:''}}" id="hdn_current_dissertation_id" name="dissertation_id" title="dissertation_id" >
 <div class="panel panel-default">
@@ -81,14 +77,36 @@
                     </div>
                 </div>
                 {% if filename != "" %}
-                    <div class="row">
-                        <div class="col-md-3" style="text-align:right">
-                            <label>{% trans 'file' %}</label>
-                        </div>
-                        <div class="col-md-9">
-                            <a href="{% url 'dissertation_download' dissertation_pk=dissertation.pk %}">{% trans 'Link' %}</a>
-                        </div>
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>{% trans 'File' %}</label>
                     </div>
+                    <div class="col-md-9">
+                        <a href="{% url 'dissertation_download' dissertation_pk=dissertation.pk %}" title="{% trans 'Download' %}">
+                            <i class="far fa-file"> {{ filename }}</i>
+                        </a>
+                        <a data-url="{% url 'dissertation_file_delete' dissertation_pk=dissertation.pk %}"
+                           class="btn btn-warning btn-xs trigger_modal" role="button">
+                                 <span class="fas fa-times">
+                                 </span>
+                        </a>
+                    </div>
+                </div>
+                {% else %}
+                <div class="row">
+                    <div class="col-md-3" style="text-align: right">
+                        <label>{% trans 'File' %}</label>
+                    </div>
+                    <div class="col-md-9">
+                        <a class="btn btn-default btn-primary btn-xs" data-toggle="modal" data-target="#pnl_upload_documents"
+                           id="btn_add_file" title="{% trans 'Add file'%}">
+                            <i class="fas fa-plus"></i>
+                            {% trans 'Add file'%}
+                            <span class="fas fa-file-upload" aria-hidden="true" id="spn_add_file">
+                                </span>
+                        </a>
+                    </div>
+                </div>
                 {% endif %}
                 <div class="row">
                     <div class="col-md-3" style="text-align: right">
@@ -371,6 +389,14 @@
                      onclick="return confirm('{% trans 'You are ready to set this dissertation as failed. Are you sure you want to continue ?' %}')"><span
                           class="glyphicon glyphicon-remove-circle"
                           aria-hidden="true"></span> {% trans 'Dissertation delayed'%}</a>
+                {% endif %}
+                {% if dissertation.status == 'ENDED_LOS' %}
+                  <a href="{% url 'manager_dissertations_to_dir_ok' pk=dissertation.pk %}"
+                     id="lnk_manager_back_to_receive" class="btn btn-default"
+                     role="button" title="{% trans 'To be received'%}"
+                     onclick="return confirm('{% trans 'You are ready to set this dissertation as To Receive. Are you sure you want to continue ?' %}')"><span
+                          class="glyphicon glyphicon-circle-arrow-right"
+                          aria-hidden="true"></span> {% trans 'To be received'%}</a>
                 {% endif %}
             </div>
     </div>

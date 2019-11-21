@@ -136,7 +136,7 @@
     "pk": 37,
     "fields": {
       "reference": "dissertation_to_commission_list_html",
-      "subject": "La commission M\u00e9moires a accept\u00e9 le projet de M\u00e9moire : \"{{title}}\"",
+      "subject": "La commission M\u00e9moires a accept\u00e9 le projet de M\u00e9moire : \"{{author}}\"",
       "template": "<p>Bonjour,</p>\r\n\r\n<p>La commission M&eacute;moires a accept&eacute; le projet de M&eacute;moire : &quot;{{title}}&quot;</p>\r\n\r\n<p>Etudiant : {{author}}</p>\r\n\r\n<p>Voici la commission de lecture : {{commission_string}}</p>\r\n\r\n<p><br />\r\nMessage envoy&eacute; automatiquement - ne pas y r&eacute;pondre.</p>\r\n\r\n<p>En cas de question, contactez votre gestionnaire de M&eacute;moires ou les membres de la commission.</p>",
       "format": "HTML",
       "language": "fr-be"
@@ -147,7 +147,7 @@
     "pk": 38,
     "fields": {
       "reference": "dissertation_to_commission_list_txt",
-      "subject": "La commission M\u00e9moires a accept\u00e9 le projet de M\u00e9moire : \"{{title}}\"",
+      "subject": "La commission M\u00e9moires a accept\u00e9 le projet de M\u00e9moire : \"{{author}}\"",
       "template": "<p>Bonjour,</p>\r\n\r\n<p>La commission M&eacute;moires a accept&eacute; le projet de M&eacute;moire : &quot;{{title}}&quot;</p>\r\n\r\n<p>Etudiant : {{author}}</p>\r\n\r\n<p>Voici la commission lecture: {{commission_string}}</p>\r\n\r\n<p><br />\r\nMessage envoy&eacute; automatiquement - ne pas y r&eacute;pondre.</p>\r\n\r\n<p>En cas de question, contactez votre gestionnaire de M&eacute;moires ou les membres de la commission.</p>",
       "format": "PLAIN",
       "language": "fr-be"

@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2019 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ from django.shortcuts import get_object_or_404, render
 from django.shortcuts import redirect
 from django.utils import timezone
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 from django.views.generic import CreateView
 from openpyxl import Workbook
@@ -55,7 +55,6 @@ from dissertation.forms import ManagerDissertationEditForm, ManagerDissertationR
     ManagerDissertationUpdateForm, AdviserForm
 from dissertation.models import adviser, dissertation, dissertation_document_file, dissertation_role, \
     dissertation_update, offer_proposition, proposition_role
-
 from dissertation.models.adviser import Adviser
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_document_file import DissertationDocumentFile
@@ -66,7 +65,6 @@ from dissertation.models.enums.dissertation_status import DISSERTATION_STATUS
 from dissertation.models.offer_proposition import OfferProposition
 from dissertation.perms import adviser_can_manage, autorized_dissert_promotor_or_manager, check_for_dissert, \
     adviser_is_in_jury
-from osis_common.decorators.ajax import ajax_required
 
 
 def _role_can_be_deleted(dissert, dissert_role):
@@ -289,6 +287,7 @@ def manager_dissertations_list(request):
     disserts = Dissertation.objects.filter(
         education_group_year_start__education_group__facultyadviser__adviser__person__user=request.user,
         active=True).select_related('author__person',
+                                    'education_group_year_start',
                                     'education_group_year_start__academic_year',
                                     'proposition_dissertation__author__person').distinct()
     offer_props = OfferProposition.objects.filter(
@@ -313,7 +312,8 @@ def generate_xls(disserts):
                        'Student',
                        'Title',
                        'Status',
-                       'Year + Program Start',
+                       'Program_start',
+                       'Start_academic_year',
                        'Defend Year',
                        'Role 1',
                        'Teacher 1',
@@ -345,7 +345,8 @@ def construct_line(dissert, include_description=True):
             str(dissert.author),
             title,
             dissert.status,
-            str(dissert.education_group_year_start),
+            str(dissert.education_group_year_start.acronym),
+            str(dissert.education_group_year_start.academic_year),
             defend_year
             ]
 
@@ -389,6 +390,7 @@ def manager_dissertations_search(request):
             Q(title__icontains=terms) |
             Q(education_group_year_start__acronym__icontains=terms)
         ).select_related('author__person',
+                         'education_group_year_start',
                          'education_group_year_start__academic_year',
                          'proposition_dissertation__author__person').distinct()
     offer_prop_search = request.GET.get('offer_prop_search', '')
@@ -723,7 +725,7 @@ def manager_dissertations_wait_recep_list(request):
 def manager_students_list(request):
     student_with_enrollement_in_education_groups = Student.objects.filter(
         offerenrollment__education_group_year__education_group__facultyadviser__adviser__person__user=request.user,
-        offerenrollment__education_group_year__academic_year=mdl.academic_year.starting_academic_year()
+        offerenrollment__education_group_year__academic_year=mdl.academic_year.current_academic_year()
     ).select_related('person'). \
         prefetch_related('dissertation_set__education_group_year_start__education_group',
                          'dissertation_set__education_group_year_start__academic_year',
@@ -973,7 +975,7 @@ class AdviserAutocomplete(autocomplete.Select2QuerySetView):
         return "{} {}, {}".format(item.person.last_name, item.person.first_name, item.person.email)
 
     def get_queryset(self):
-        qs = Adviser.objects.all().select_related("person").order_by("person")
+        qs = Adviser.objects.all().select_related("person").order_by("person__last_name")
         if self.q:
             qs = qs.filter(Q(person__last_name__icontains=self.q) | Q(person__first_name__icontains=self.q))
         return qs

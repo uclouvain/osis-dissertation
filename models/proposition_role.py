@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2019 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -24,8 +24,9 @@
 #
 ##############################################################################
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
-from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from django.db import models
+
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from .enums import dissertation_role_status
 
 MAX_PROPOSITION_ROLE = 4
@@ -46,8 +47,8 @@ class PropositionRole(SerializableModel):
         max_length=12,
         choices=dissertation_role_status.STATUS_CHOICES,
         default=dissertation_role_status.PROMOTEUR)
-    adviser = models.ForeignKey('Adviser')
-    proposition_dissertation = models.ForeignKey('PropositionDissertation')
+    adviser = models.ForeignKey('Adviser', on_delete=models.CASCADE)
+    proposition_dissertation = models.ForeignKey('PropositionDissertation', on_delete=models.CASCADE)
 
     def __str__(self):
         return u"%s %s" % (self.status if self.status else "",

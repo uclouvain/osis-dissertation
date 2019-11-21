@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2019 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -29,11 +29,12 @@ import factory.fuzzy
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.student import StudentFactory
+from dissertation.models import dissertation
+from dissertation.models.enums import dissertation_status
 from dissertation.tests.factories.dissertation_location import DissertationLocationFactory
 from dissertation.tests.factories.dissertation_role import DissertationRoleFactory
 from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
-from dissertation.models import dissertation
-from dissertation.models.enums import dissertation_status
+
 
 class DissertationFactory(factory.DjangoModelFactory):
     class Meta:
@@ -44,7 +45,6 @@ class DissertationFactory(factory.DjangoModelFactory):
     status = factory.Iterator(dissertation_status.DISSERTATION_STATUS, getter=lambda c: c[0])
     defend_periode = factory.Iterator(dissertation.DEFEND_PERIODE_CHOICES, getter=lambda c: c[0])
     defend_year = factory.Faker('year')
-    offer_year_start = factory.SubFactory(OfferYearFactory)
     education_group_year_start = factory.SubFactory(EducationGroupYearFactory)
     proposition_dissertation = factory.SubFactory(PropositionDissertationFactory)
     description = factory.Faker('text', max_nb_chars=500)
@@ -52,5 +52,4 @@ class DissertationFactory(factory.DjangoModelFactory):
     creation_date = factory.Faker('date_time_this_decade', before_now=True, after_now=False, tzinfo=None)
     modification_date = factory.Faker('date_time_this_decade', before_now=True, after_now=False, tzinfo=None)
     location = factory.SubFactory(DissertationLocationFactory)
-
     dissertation_role = factory.RelatedFactory(DissertationRoleFactory, 'dissertation')
