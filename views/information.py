@@ -33,6 +33,7 @@ from base import models as mdl
 from base.models.academic_year import current_academic_year
 from base.models.education_group import EducationGroup
 from base.models.enums import person_source_type
+from base.models.person import Person
 from dissertation.forms import AdviserForm, ManagerAdviserForm, ManagerAddAdviserForm, ManagerAddAdviserPreForm, \
     ManagerAddAdviserPerson, AddAdviserForm
 from dissertation.models import adviser
@@ -178,7 +179,7 @@ def _get_rendering_data(form, manager, template, template_prefix):
         email = "%s (%s)" % (list(person)[0], data['email'])
         message = "person_already_adviser"
 
-    elif mdl.person.count_by_email(data['email']) > 0:  # person found and not adviser -> go forward
+    elif Person.objects.filter(email=data['email']).count() > 0:  # person found and not adviser -> go forward
         pers = list(person)[0]
         form = ManagerAddAdviserForm() if manager else AddAdviserForm()
         template = template_prefix + 'informations_add.html'
