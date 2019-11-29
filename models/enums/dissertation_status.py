@@ -6,8 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2019 Université catholique de Louvain
-# (http://www.uclouvain.be)
+#    Copyright (C) 2015-2019 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -45,19 +44,19 @@ ENDED_LOS = 'ENDED_LOS'
 
 DISSERTATION_STATUS = (
     (DRAFT, _('Draft')),
-    (DIR_SUBMIT, _('Submitted to promotor')),
-    (DIR_OK, _('Accepted by promotor')),
-    (DIR_KO, _('Refused by promotor')),
+    (DIR_SUBMIT, _('Submitted to promoter')),
+    (DIR_OK, _('Accepted by promoter')),
+    (DIR_KO, _('Refused by promoter')),
     (COM_SUBMIT, _('Submitted to commission')),
     (COM_OK, _('Accepted by commission')),
     (COM_KO, _('Refused by commission')),
-    (EVA_SUBMIT, _('Submitted to 1st year evaluation')),
-    (EVA_OK, _('Accepted by 1st year evaluation')),
-    (EVA_KO, _('1st year evaluation failed')),
+    (EVA_SUBMIT, _('Submitted to first year evaluation')),
+    (EVA_OK, _('Accepted by first year evaluation')),
+    (EVA_KO, _('Refused by first year evaluation')),
     (TO_RECEIVE, _('To be received')),
     (TO_DEFEND, _('To be defended')),
     (DEFENDED, _('Defended')),
-    (ENDED, _('Ended')),
-    (ENDED_WIN, _('Ended with success')),
+    (ENDED, _('Finished')),
+    (ENDED_WIN, _('Win')),
     (ENDED_LOS, _('Reported')),
 )

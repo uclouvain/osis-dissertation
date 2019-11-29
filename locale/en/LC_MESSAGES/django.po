@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-21 15:32+0200\n"
+"POT-Creation-Date: 2019-11-29 14:10+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,13 +38,13 @@ msgstr ""
 msgid "Accept this dissertation project"
 msgstr ""
 
-msgid "Accepted by 1st year evaluation"
-msgstr ""
-
 msgid "Accepted by commission"
 msgstr ""
 
-msgid "Accepted by promotor"
+msgid "Accepted by first year evaluation"
+msgstr ""
+
+msgid "Accepted by promoter"
 msgstr ""
 
 msgid "Accompanist"
@@ -81,9 +81,6 @@ msgid "Add this person"
 msgstr ""
 
 msgid "Add/Edit dissertation"
-msgstr ""
-
-msgid "Add/Edit jury member for the dissertation subject"
 msgstr ""
 
 msgid "Advanced search"
@@ -170,6 +167,9 @@ msgstr ""
 msgid "Continue"
 msgstr ""
 
+msgid "Course manager"
+msgstr ""
+
 msgid "Created by"
 msgstr ""
 
@@ -210,9 +210,6 @@ msgid "Development dissertation"
 msgstr ""
 
 msgid "Dissertation"
-msgstr ""
-
-msgid "Dissertation Manager"
 msgstr ""
 
 msgid "Dissertation defended"
@@ -326,9 +323,6 @@ msgstr ""
 msgid "End date must be greater than the start date"
 msgstr ""
 
-msgid "Ended"
-msgstr ""
-
 msgid "Ended with success"
 msgstr ""
 
@@ -342,6 +336,9 @@ msgid "Faculty Adviser"
 msgstr ""
 
 msgid "File"
+msgstr ""
+
+msgid "Finished"
 msgstr ""
 
 msgid "First"
@@ -498,9 +495,6 @@ msgstr ""
 msgid "Loading..."
 msgstr ""
 
-msgid "Manager"
-msgstr ""
-
 msgid "Manager add jury"
 msgstr ""
 
@@ -615,6 +609,9 @@ msgstr ""
 msgid "Processing..."
 msgstr ""
 
+msgid "Professor"
+msgstr ""
+
 msgid "Program"
 msgstr ""
 
@@ -643,6 +640,12 @@ msgid "Refuse this dissertation project"
 msgstr ""
 
 msgid "Refused by commission"
+msgstr ""
+
+msgid "Refused by first year evaluation"
+msgstr ""
+
+msgid "Refused by promoter"
 msgstr ""
 
 msgid "Refused by promotor"
@@ -740,6 +743,12 @@ msgid "Submitted to 1st year evaluation"
 msgstr ""
 
 msgid "Submitted to commission"
+msgstr ""
+
+msgid "Submitted to first year evaluation"
+msgstr ""
+
+msgid "Submitted to promoter"
 msgstr ""
 
 msgid "Submitted to promotor"
@@ -859,6 +868,9 @@ msgid "Warning"
 msgstr ""
 
 msgid "Welcome"
+msgstr ""
+
+msgid "Win"
 msgstr ""
 
 msgid ""

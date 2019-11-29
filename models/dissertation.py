@@ -23,8 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
-
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import Q
@@ -45,16 +43,33 @@ from osis_common.models.serializable_model import SerializableModel, Serializabl
 
 
 class DissertationAdmin(SerializableModelAdmin):
-    list_display = ('uuid', 'title', 'author', 'status', 'active', 'proposition_dissertation', 'modification_date',
-                    'education_group_year_start')
-    raw_id_fields = ('author',
-                     'offer_year_start',
-                     'proposition_dissertation',
-                     'location',
-                     'education_group_year_start')
-    search_fields = ('uuid', 'title', 'author__person__last_name', 'author__person__first_name',
-                     'proposition_dissertation__title', 'proposition_dissertation__author__person__last_name',
-                     'proposition_dissertation__author__person__first_name', 'education_group_year_start__acronym')
+    list_display = (
+        'uuid',
+        'title',
+        'author',
+        'status',
+        'active',
+        'proposition_dissertation',
+        'modification_date',
+        'education_group_year_start'
+    )
+    raw_id_fields = (
+        'author',
+        'offer_year_start',
+        'proposition_dissertation',
+        'location',
+        'education_group_year_start'
+    )
+    search_fields = (
+        'uuid',
+        'title',
+        'author__person__last_name',
+        'author__person__first_name',
+        'proposition_dissertation__title',
+        'proposition_dissertation__author__person__last_name',
+        'proposition_dissertation__author__person__first_name',
+        'education_group_year_start__acronym'
+    )
 
 
 DEFEND_PERIODE_CHOICES = (
@@ -66,8 +81,15 @@ DEFEND_PERIODE_CHOICES = (
 
 
 class Dissertation(SerializableModel):
-    title = models.CharField(max_length=500, verbose_name=_('Title'))
-    author = models.ForeignKey(student.Student, verbose_name=_('Author'), on_delete=models.CASCADE)
+    title = models.CharField(
+        max_length=500,
+        verbose_name=_('Title')
+    )
+    author = models.ForeignKey(
+        student.Student,
+        verbose_name=_('Author'),
+        on_delete=models.CASCADE
+    )
     status = models.CharField(
         max_length=12,
         choices=dissertation_status.DISSERTATION_STATUS,
