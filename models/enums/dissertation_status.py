@@ -25,6 +25,8 @@
 ##############################################################################
 from django.utils.translation import gettext_lazy as _
 
+from osis_common.utils.enumerations import ChoiceEnum
+
 DRAFT = 'DRAFT'
 DIR_SUBMIT = 'DIR_SUBMIT'
 DIR_OK = 'DIR_OK'
@@ -60,3 +62,22 @@ DISSERTATION_STATUS = (
     (ENDED_WIN, _('Win')),
     (ENDED_LOS, _('Reported')),
 )
+
+
+class DissertationStatus(ChoiceEnum):
+    DRAFT = 'DRAFT'
+    DIR_SUBMIT = 'DIR_SUBMIT'
+    DIR_OK = 'DIR_OK'
+    DIR_KO = 'DIR_KO'
+    COM_SUBMIT = 'COM_SUBMIT'
+    COM_OK = 'COM_OK'
+    COM_KO = 'COM_KO'
+    EVA_SUBMIT = 'EVA_SUBMIT'
+    EVA_OK = 'EVA_OK'
+    EVA_KO = 'EVA_KO'
+    TO_RECEIVE = 'TO_RECEIVE'
+    TO_DEFEND = 'TO_DEFEND'
+    DEFENDED = 'DEFENDED'
+    ENDED = 'ENDED'
+    ENDED_WIN = 'ENDED_WIN'
+    ENDED_LOS = 'ENDED_LOS'

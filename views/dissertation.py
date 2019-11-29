@@ -287,7 +287,7 @@ def manager_dissertations_list(request):
     disserts = Dissertation.objects.filter(
         education_group_year_start__education_group__facultyadviser__adviser__person__user=request.user,
         active=True).select_related('author__person',
-                                    'education_group_year_start',
+                                    'education_group_year',
                                     'education_group_year_start__academic_year',
                                     'proposition_dissertation__author__person').distinct()
     offer_props = OfferProposition.objects.filter(
@@ -390,7 +390,7 @@ def manager_dissertations_search(request):
             Q(title__icontains=terms) |
             Q(education_group_year_start__acronym__icontains=terms)
         ).select_related('author__person',
-                         'education_group_year_start',
+                         'education_group_year',
                          'education_group_year_start__academic_year',
                          'proposition_dissertation__author__person').distinct()
     offer_prop_search = request.GET.get('offer_prop_search', '')

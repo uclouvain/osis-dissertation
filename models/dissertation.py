@@ -29,12 +29,12 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from base.models import academic_year
-from base.models import offer_year, student
+from base.models import student
 from base.models.education_group_year import EducationGroupYear
 from base.models.utils.utils import get_object_or_none
 from dissertation.models import dissertation_location
 from dissertation.models.dissertation_document_file import DissertationDocumentFile
-from dissertation.models.enums import dissertation_status
+from dissertation.models.enums import dissertation_status, defend_periode_choices
 from dissertation.models.offer_proposition import OfferProposition
 from dissertation.models.proposition_dissertation import PropositionDissertation
 from dissertation.utils import emails_dissert
@@ -51,14 +51,13 @@ class DissertationAdmin(SerializableModelAdmin):
         'active',
         'proposition_dissertation',
         'modification_date',
-        'education_group_year_start'
+        'education_group_year'
     )
     raw_id_fields = (
         'author',
-        'offer_year_start',
         'proposition_dissertation',
         'location',
-        'education_group_year_start'
+        'education_group_year'
     )
     search_fields = (
         'uuid',
@@ -68,16 +67,8 @@ class DissertationAdmin(SerializableModelAdmin):
         'proposition_dissertation__title',
         'proposition_dissertation__author__person__last_name',
         'proposition_dissertation__author__person__first_name',
-        'education_group_year_start__acronym'
+        'education_group_year__acronym'
     )
-
-
-DEFEND_PERIODE_CHOICES = (
-    ('UNDEFINED', _('Undefined')),
-    ('JANUARY', _('January')),
-    ('JUNE', _('June')),
-    ('SEPTEMBER', _('September')),
-)
 
 
 class Dissertation(SerializableModel):
@@ -93,45 +84,60 @@ class Dissertation(SerializableModel):
     status = models.CharField(
         max_length=12,
         choices=dissertation_status.DISSERTATION_STATUS,
-        default=dissertation_status.DRAFT
+        default=dissertation_status.DissertationStatus.DRAFT.value
     )
     defend_periode = models.CharField(
         max_length=12,
-        choices=DEFEND_PERIODE_CHOICES,
-        blank=True,
+        choices=defend_periode_choices.DEFEND_PERIODE_CHOICES,
+        default=defend_periode_choices.DefendPeriode.UNDEFINED.value,
         null=True,
         verbose_name=_('Defense period')
     )
-    defend_year = models.IntegerField(blank=True, null=True, verbose_name=_('Defense year'))
-    offer_year_start = models.ForeignKey(
-        offer_year.OfferYear,
-        null=True, blank=True,
-        on_delete=models.CASCADE
+    defend_year = models.IntegerField(
+        blank=True,
+        null=True,
+        verbose_name=_('Defense year')
     )
-    education_group_year_start = models.ForeignKey(
+    education_group_year = models.ForeignKey(
         EducationGroupYear,
         null=True,
         blank=True,
         on_delete=models.PROTECT,
-        related_name='dissertations', verbose_name=_('Programs'))
+        related_name='dissertations',
+        verbose_name=_('Programs')
+    )
     proposition_dissertation = models.ForeignKey(
         PropositionDissertation,
         related_name='dissertations',
         verbose_name=_('Dissertation subject'),
-        on_delete=models.CASCADE
+        on_delete=models.PROTECT
     )
-    description = models.TextField(blank=True)
-    active = models.BooleanField(default=True)
-    creation_date = models.DateTimeField(auto_now_add=True, editable=False)
-    modification_date = models.DateTimeField(auto_now=True)
+    description = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name=_('Description')
+    )
+    active = models.BooleanField(
+        default=True
+    )
+    creation_date = models.DateTimeField(
+        auto_now_add=True,
+        editable=False
+    )
+    modification_date = models.DateTimeField(
+        auto_now=True
+    )
     location = models.ForeignKey(
         dissertation_location.DissertationLocation,
         blank=True,
         null=True,
         verbose_name=_('Dissertation location'),
-        on_delete=models.CASCADE
+        on_delete=models.PROTECT
     )
-    dissertation_documents_files = models.ManyToManyField(DocumentFile, through=DissertationDocumentFile)
+    dissertation_documents_files = models.ManyToManyField(
+        DocumentFile,
+        through=DissertationDocumentFile
+    )
 
     def __str__(self):
         return self.title
@@ -162,7 +168,7 @@ class Dissertation(SerializableModel):
         elif self.status == dissertation_status.COM_SUBMIT or self.status == dissertation_status.COM_KO:
             next_status = get_next_status(self, "accept")
             emails_dissert.send_email(self, 'dissertation_accepted_by_com', [self.author])
-            if get_object_or_none(OfferProposition, education_group=self.education_group_year_start.education_group) \
+            if get_object_or_none(OfferProposition, education_group=self.education_group_year.education_group) \
                     .global_email_to_commission:
                 emails_dissert.send_email_to_jury_members(self)
             self.set_status(next_status)
