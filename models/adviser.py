@@ -26,41 +26,71 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import Q
-from django.utils.translation import gettext_lazy as _
 
 from base.models.education_group import EducationGroup
 from base.models.utils.utils import get_object_or_none
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_role import DissertationRole
+from dissertation.models.enums.adviser_types import AdviserTypes, ADVISER_TYPES
 from dissertation.models.proposition_dissertation import PropositionDissertation
 from dissertation.models.proposition_role import PropositionRole
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
 class AdviserAdmin(SerializableModelAdmin):
-    list_display = ('person', 'type')
-    raw_id_fields = ('person',)
-    search_fields = ('uuid', 'person__last_name', 'person__first_name')
+    list_display = (
+        'uuid',
+        'person',
+        'type'
+    )
+    raw_id_fields = (
+        'person',
+    )
+    search_fields = (
+        'uuid',
+        'person__last_name',
+        'person__first_name'
+    )
 
 
 class Adviser(SerializableModel):
-    # TODO move this const in enum file
-    TYPES_CHOICES = (
-        ('PRF', _('Teacher')),
-        ('MGR', _('Manager')),
+    person = models.OneToOneField(
+        'base.Person',
+        on_delete=models.CASCADE
     )
-
-    person = models.OneToOneField('base.Person', on_delete=models.CASCADE)
-    type = models.CharField(max_length=3, choices=TYPES_CHOICES, default='PRF')
-    available_by_email = models.BooleanField(default=False)
-    available_by_phone = models.BooleanField(default=False)
-    available_at_office = models.BooleanField(default=False)
-    comment = models.TextField(default='', blank=True)
-    education_groups = models.ManyToManyField(EducationGroup, through="FacultyAdviser", related_name="advisers")
-    dissertations = models.ManyToManyField(Dissertation, through=DissertationRole, related_name='advisers')
-    proposition_dissertation = models.ManyToManyField(PropositionDissertation,
-                                                      through=PropositionRole,
-                                                      related_name='advisers')
+    type = models.CharField(
+        max_length=3,
+        choices=ADVISER_TYPES,
+        default=AdviserTypes.PRF.value
+    )
+    available_by_email = models.BooleanField(
+        default=False
+    )
+    available_by_phone = models.BooleanField(
+        default=False
+    )
+    available_at_office = models.BooleanField(
+        default=False
+    )
+    comment = models.TextField(
+        default='',
+        blank=True
+    )
+    education_groups = models.ManyToManyField(
+        EducationGroup,
+        through="FacultyAdviser",
+        related_name="advisers"
+    )
+    dissertations = models.ManyToManyField(
+        Dissertation,
+        through=DissertationRole,
+        related_name='advisers'
+    )
+    proposition_dissertation = models.ManyToManyField(
+        PropositionDissertation,
+        through=PropositionRole,
+        related_name='advisers'
+    )
 
     def __str__(self):
         first_name = ""
@@ -147,7 +177,7 @@ def convert_advisers_to_array(advisers):
             'id': adviser.id
         }
         for adviser in advisers
-        ]
+    ]
     return return_data
 
 
