@@ -210,7 +210,7 @@ def search(terms=None, active=True):
             Q(proposition_dissertation__author__person__last_name__icontains=terms) |
             Q(status__icontains=terms) |
             Q(title__icontains=terms) |
-            Q(education_group_year_start__acronym__icontains=terms)
+            Q(education_group_year__acronym__icontains=terms)
         )
     queryset = queryset.filter(active=active).exclude(status=dissertation_status.ENDED).distinct()
     return queryset
@@ -221,7 +221,7 @@ def search_by_proposition_author(terms=None, active=True, proposition_author=Non
 
 
 def search_by_education_group(education_groups, active=True):
-    return Dissertation.objects.filter(education_group_year_start__education_group__in=education_groups, active=active)
+    return Dissertation.objects.filter(education_group_year__education_group__in=education_groups, active=active)
 
 
 def search_by_education_group_and_status(education_groups, status):
@@ -245,7 +245,7 @@ def get_next_status(dissert, operation):
 
         offer_prop = get_object_or_none(
             OfferProposition,
-            education_group=dissert.education_group_year_start.education_group
+            education_group=dissert.education_group_year.education_group
         )
 
         if offer_prop is None:
@@ -299,7 +299,7 @@ def count_by_proposition(proposition):
     starting_academic_year = academic_year.starting_academic_year()
     return Dissertation.objects.filter(proposition_dissertation=proposition) \
         .filter(active=True) \
-        .filter(education_group_year_start__academic_year=starting_academic_year) \
+        .filter(education_group_year__academic_year=starting_academic_year) \
         .exclude(status=dissertation_status.DRAFT) \
         .exclude(status=dissertation_status.DIR_KO) \
         .count()

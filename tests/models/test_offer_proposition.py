@@ -62,7 +62,7 @@ class OfferPropositionTestCase(TestCase):
             education_group=self.education_group_with_offer_proposition
         )
         self.dissertation = DissertationFactory(
-            education_group_year_start=self.education_group_year
+            education_group_year=self.education_group_year
         )
 
     def test_offer_proposition_exist(self):

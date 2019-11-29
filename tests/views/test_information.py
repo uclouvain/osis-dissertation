@@ -207,7 +207,7 @@ class InformationManagerViewTestCase(TestCase):
             DissertationFactory(author=student,
                                 title='Dissertation {}'.format(x),
                                 offer_year_start=offer_year_start,
-                                education_group_year_start=self.education_group_year,
+                                education_group_year=self.education_group_year,
                                 proposition_dissertation=proposition_dissertation,
                                 status=status[x],
                                 active=True,

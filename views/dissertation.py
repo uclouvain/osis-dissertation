@@ -285,10 +285,10 @@ def manager_dissertations_jury_new_ajax(request):
 @user_passes_test(adviser.is_manager)
 def manager_dissertations_list(request):
     disserts = Dissertation.objects.filter(
-        education_group_year_start__education_group__facultyadviser__adviser__person__user=request.user,
+        education_group_year__education_group__facultyadviser__adviser__person__user=request.user,
         active=True).select_related('author__person',
                                     'education_group_year',
-                                    'education_group_year_start__academic_year',
+                                    'education_group_year__academic_year',
                                     'proposition_dissertation__author__person').distinct()
     offer_props = OfferProposition.objects.filter(
         education_group__facultyadviser__adviser__person__user=request.user).distinct()
@@ -345,8 +345,8 @@ def construct_line(dissert, include_description=True):
             str(dissert.author),
             title,
             dissert.status,
-            str(dissert.education_group_year_start.acronym),
-            str(dissert.education_group_year_start.academic_year),
+            str(dissert.education_group_year.acronym),
+            str(dissert.education_group_year.academic_year),
             defend_year
             ]
 
@@ -376,7 +376,7 @@ def get_ordered_roles(dissert):
 def manager_dissertations_search(request):
     terms = request.GET.get('search', '')
     disserts = Dissertation.objects.filter(
-        education_group_year_start__education_group__facultyadviser__adviser__person__user=request.user,
+        education_group_year__education_group__facultyadviser__adviser__person__user=request.user,
         active=True).filter(
             Q(author__person__first_name__icontains=terms) |
             Q(author__person__middle_name__icontains=terms) |
@@ -388,10 +388,10 @@ def manager_dissertations_search(request):
             Q(proposition_dissertation__author__person__last_name__icontains=terms) |
             Q(status__icontains=terms) |
             Q(title__icontains=terms) |
-            Q(education_group_year_start__acronym__icontains=terms)
+            Q(education_group_year__acronym__icontains=terms)
         ).select_related('author__person',
                          'education_group_year',
-                         'education_group_year_start__academic_year',
+                         'education_group_year__academic_year',
                          'proposition_dissertation__author__person').distinct()
     offer_prop_search = request.GET.get('offer_prop_search', '')
     academic_year_search = request.GET.get('academic_year', '')
@@ -400,11 +400,11 @@ def manager_dissertations_search(request):
     if offer_prop_search != '':
         offer_prop_search = int(offer_prop_search)
         offer_prop = offer_proposition.find_by_id(offer_prop_search)
-        disserts = disserts.filter(education_group_year_start__education_group=offer_prop.education_group)
+        disserts = disserts.filter(education_group_year__education_group=offer_prop.education_group)
     if academic_year_search != '':
         academic_year_search = int(academic_year_search)
         disserts = disserts.filter(
-            education_group_year_start__academic_year=academic_year.find_academic_year_by_id(academic_year_search)
+            education_group_year__academic_year=academic_year.find_academic_year_by_id(academic_year_search)
         )
     if status_search != '':
         disserts = disserts.filter(status=status_search)
@@ -613,10 +613,10 @@ def manager_dissertations_wait_list(request):
     show_validation_commission = offer_proposition.show_validation_commission(offer_props)
     show_evaluation_first_year = offer_proposition.show_evaluation_first_year(offer_props)
     disserts = Dissertation.objects.filter(
-        education_group_year_start__education_group__facultyadviser__adviser__person__user=request.user,
+        education_group_year_education_group__facultyadviser__adviser__person__user=request.user,
         active=True,
         status=dissertation_status.DIR_SUBMIT).select_related('author__person',
-                                                              'education_group_year_start__academic_year',
+                                                              'education_group_year__academic_year',
                                                               'proposition_dissertation__author__person')
     return render(request, 'manager_dissertations_wait_list.html',
                   {'dissertations': disserts,
@@ -643,11 +643,11 @@ def manager_dissertations_wait_comm_list(request):
 @user_passes_test(adviser.is_manager)
 def manager_dissertations_wait_comm_jsonlist(request):
     disserts = Dissertation.objects.filter(
-        education_group_year_start__education_group__facultyadviser__adviser__person__user=request.user,
+        education_group_year__education_group__facultyadviser__adviser__person__user=request.user,
         status=dissertation_status.COM_SUBMIT,
         active=True).select_related('author__person',
-                                    'education_group_year_start__academic_year',
-                                    'education_group_year_start__education_group',
+                                    'education_group_year__academic_year',
+                                    'education_group_year__education_group',
                                     'proposition_dissertation__author__person').distinct()
     dissert_waiting_list_json = [
         {
@@ -655,8 +655,8 @@ def manager_dissertations_wait_comm_jsonlist(request):
             'title': dissert.title,
             'author': "{p.last_name} {p.first_name} ".format(p=dissert.author.person),
             'status': dissert.status,
-            'education_group_year': str(dissert.education_group_year_start.academic_year),
-            'education_groups': dissert.education_group_year_start.acronym,
+            'education_group_year': str(dissert.education_group_year.academic_year),
+            'education_groups': dissert.education_group_year.acronym,
             'proposition_dissertation': str(dissert.proposition_dissertation),
             'description': dissert.description
         } for dissert in disserts
@@ -689,10 +689,10 @@ def manager_dissertations_wait_eval_list(request):
     show_validation_commission = offer_proposition.show_validation_commission(offer_props)
     show_evaluation_first_year = offer_proposition.show_evaluation_first_year(offer_props)
     disserts = Dissertation.objects.filter(
-        education_group_year_start__education_group__facultyadviser__adviser__person__user=request.user,
+        education_group_year__education_group__facultyadviser__adviser__person__user=request.user,
         active=True,
         status=dissertation_status.EVA_SUBMIT).select_related('author__person',
-                                                              'education_group_year_start__academic_year',
+                                                              'education_group_year__academic_year',
                                                               'proposition_dissertation__author__person')
 
     return render(request, 'manager_dissertations_wait_eval_list.html',
@@ -709,10 +709,10 @@ def manager_dissertations_wait_recep_list(request):
     show_validation_commission = offer_proposition.show_validation_commission(offer_props)
     show_evaluation_first_year = offer_proposition.show_evaluation_first_year(offer_props)
     disserts = Dissertation.objects.filter(
-        education_group_year_start__education_group__facultyadviser__adviser__person__user=request.user,
+        education_group_year__education_group__facultyadviser__adviser__person__user=request.user,
         active=True,
         status=dissertation_status.TO_RECEIVE).select_related('author__person',
-                                                              'education_group_year_start__academic_year',
+                                                              'education_group_year__academic_year',
                                                               'proposition_dissertation__author__person')
     return render(request, 'manager_dissertations_wait_recep_list.html',
                   {'dissertations': disserts,
@@ -727,8 +727,8 @@ def manager_students_list(request):
         offerenrollment__education_group_year__education_group__facultyadviser__adviser__person__user=request.user,
         offerenrollment__education_group_year__academic_year=mdl.academic_year.current_academic_year()
     ).select_related('person'). \
-        prefetch_related('dissertation_set__education_group_year_start__education_group',
-                         'dissertation_set__education_group_year_start__academic_year',
+        prefetch_related('dissertation_set__education_group_year__education_group',
+                         'dissertation_set__education_group_year__academic_year',
                          'offerenrollment_set__education_group_year__academic_year').distinct()
     return render(request,
                   'manager_students_list.html',
@@ -750,7 +750,7 @@ def dissertations_list(request):
                                            dissertation_status.ENDED_WIN,
                                            dissertation_status.ENDED_LOS]) \
         .select_related('dissertation__author__person',
-                        'dissertation__education_group_year_start__academic_year',
+                        'dissertation__education_group_year__academic_year',
                         'dissertation__proposition_dissertation__author__person'
                         ).order_by('dissertation__status',
                                    'dissertation__author__person__last_name',
@@ -769,7 +769,7 @@ def dissertations_list(request):
                                                                   dissertation_status.ENDED_WIN,
                                                                   dissertation_status.ENDED_LOS]).select_related(
             'dissertation__author__person',
-            'dissertation__education_group_year_start__academic_year',
+            'dissertation__education_group_year__academic_year',
             'dissertation__proposition_dissertation__author__person'
         ).order_by('dissertation__creation_date')
     return render(request, "dissertations_list.html", locals())
@@ -789,14 +789,14 @@ def dissertations_detail(request, pk):
     dissert = get_object_or_404(Dissertation.objects.select_related(
         'author__person',
         'location',
-        'education_group_year_start__academic_year',
+        'education_group_year__academic_year',
         'proposition_dissertation__author__person',
-        'education_group_year_start__education_group__offer_proposition'
+        'education_group_year_education_group__offer_proposition'
     ).prefetch_related('advisers'), pk=pk)
     adv = request.user.person.adviser
     if teacher_can_see_dissertation(adv, dissert):
         count_dissertation_role = DissertationRole.objects.filter(dissertation=dissert).count()
-        offer_prop = dissert.education_group_year_start.education_group.offer_proposition
+        offer_prop = dissert.education_group_year.education_group.offer_proposition
         promotors_count = DissertationRole.objects.filter(dissertation=dissert). \
             filter(status=dissertation_role_status.PROMOTEUR).count()
 
@@ -902,7 +902,7 @@ def dissertations_wait_list(request):
         dissertationrole__status=dissertation_role_status.PROMOTEUR
     )).order_by('author__person__last_name') \
         .select_related('author__person',
-                        'education_group_year_start__academic_year',
+                        'education_group_year__academic_year',
                         'proposition_dissertation__author__person')
     return render(request, 'dissertations_wait_list.html', {'disserts': disserts})
 

@@ -149,7 +149,7 @@ def search_by_adviser_and_role_and_offers(adviser, role, offers):
 
 def search_by_adviser_and_role_and_education_groups(adviser, role, education_groups):
     return search_by_adviser_and_role(adviser, role).filter(
-        dissertation__education_group_year_start__education_group__in=education_groups
+        dissertation__education_group_year__education_group__in=education_groups
     )
 
 
@@ -170,7 +170,7 @@ def list_teachers_action_needed(education_groups):
     ).filter(
         dissertation__status='DIR_SUBMIT'
     ).filter(
-        dissertation__education_group_year_start__education_group__in=education_groups
+        dissertation__education_group_year__education_group__in=education_groups
     ).filter(
         dissertation__active=True
     ).distinct('adviser')
@@ -183,10 +183,10 @@ def find_all_promotor_by_dissertation(dissert):
 def get_tab_count_role_by_education_group(list_roles):
     tab = {}
     for role in list_roles:
-        if role.dissertation.education_group_year_start.education_group in tab:
-            tab[role.dissertation.education_group_year_start.education_group] += 1
+        if role.dissertation.education_group_year.education_group in tab:
+            tab[role.dissertation.education_group_year.education_group] += 1
         else:
-            tab[role.dissertation.education_group_year_start.education_group] = 1
+            tab[role.dissertation.education_group_year.education_group] = 1
 
     return tab
 

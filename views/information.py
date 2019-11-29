@@ -218,7 +218,7 @@ def manager_informations(request):
         dissertations_count_actif_this_academic_year=models.Sum(
             models.Case(
                 models.When(active_dissert & Q(
-                    dissertations__education_group_year_start__academic_year=current_academic_year(),
+                    dissertations__education_group_year__academic_year=current_academic_year(),
                 ), then=1), default=0,
                 output_field=models.IntegerField()
             )),
@@ -230,7 +230,7 @@ def manager_informations(request):
         dissertations_count_all_actif_in_your_education_groups=models.Sum(
             models.Case(
                 models.When(active_dissert & Q(
-                    dissertations__education_group_year_start__education_group__in=education_groups_manager,
+                    dissertations__education_group_year__education_group__in=education_groups_manager,
                 ), then=1), default=0,
                 output_field=models.IntegerField()
             )),
@@ -387,7 +387,7 @@ def manager_informations_list_request(request):
             dissertations__active=True,
             dissertations__status=dissertation_status.DIR_SUBMIT,
             dissertations_roles__status=dissertation_role_status.PROMOTEUR,
-            dissertations__education_group_year_start__education_group__in=educ_groups_of_fac_manager
+            dissertations__education_group_year__education_group__in=educ_groups_of_fac_manager
           )
     ).annotate(
         dissertations_count_need_to_respond_actif=models.Sum(
@@ -396,7 +396,7 @@ def manager_informations_list_request(request):
                     dissertations__active=True,
                     dissertations__status=dissertation_status.DIR_SUBMIT,
                     dissertations_roles__status=dissertation_role_status.PROMOTEUR,
-                    dissertations__education_group_year_start__education_group__in=educ_groups_of_fac_manager
+                    dissertations__education_group_year__education_group__in=educ_groups_of_fac_manager
                 ), then=1), default=0, output_field=models.IntegerField()
             )
         )
@@ -457,7 +457,7 @@ def manager_informations_detail_list_wait(request, pk):
     disserts_role = DissertationRole.objects.filter(
         status=dissertation_role_status.PROMOTEUR,
         dissertation__status=dissertation_status.DIR_SUBMIT,
-        dissertation__education_group_year_start__education_group__in=education_groups,
+        dissertation__education_group_year__education_group__in=education_groups,
         dissertation__active=True,
         adviser=adv
     ).select_related('adviser__person').distinct()

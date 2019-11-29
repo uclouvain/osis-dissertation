@@ -65,7 +65,7 @@ class DecoratorsTestCase(TestCase):
         self.education_group = EducationGroupFactory()
         self.education_group2 = EducationGroupFactory()
         self.academic_year1 = AcademicYearFactory()
-        self.education_group_year_start = EducationGroupYearFactory(
+        self.education_group_year = EducationGroupYearFactory(
             acronym="test_offer1",
             title="test_offer1",
             education_group=self.education_group,
@@ -88,7 +88,7 @@ class DecoratorsTestCase(TestCase):
         )
         self.dissertation1 = DissertationFactory(
             author=self.student,
-            education_group_year_start=self.education_group_year_start,
+            education_group_year=self.education_group_year,
             proposition_dissertation=self.proposition_dissertation,
             status='DIR_SUBMIT',
             active=True,
