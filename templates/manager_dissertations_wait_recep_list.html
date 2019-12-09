@@ -104,8 +104,8 @@
                     {{ dissertation.get_status_display }}
                 </span>
             </td>
-            <td>{{ dissertation.education_group_year_start.acronym }}</td>
-            <td>{{ dissertation.education_group_year_start.academic_year }}</td>
+            <td>{{ dissertation.education_group_year.acronym }}</td>
+            <td>{{ dissertation.education_group_year.academic_year }}</td>
             <td>{{ dissertation.proposition_dissertation }}</td>
             <td><a href="{% url 'manager_dissertations_to_dir_submit_list' pk=dissertation.pk %}"
                id="manager_dissertations_to_dir_submit_list" class="btn btn-default"

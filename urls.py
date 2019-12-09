@@ -186,7 +186,7 @@ urlpatterns = [
         proposition_dissertation.proposition_dissertations_role_delete,
         name='proposition_dissertations_role_delete'),
 
-    url(r'^students_list_in_offer_year/([0-9]+)/$', request.get_students_list_in_offer_year, name='students_list'),
+    url(r'^students_list_in_education_group_year/([0-9]+)/$', request.get_students_list_in_education_group_year, name='students_list'),
 
     url(r'^upload/proposition_download/(?P<proposition_pk>[0-9]+)$', upload_proposition_file.download,
         name='proposition_download'),

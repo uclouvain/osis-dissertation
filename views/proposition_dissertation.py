@@ -336,7 +336,7 @@ def _get_all_proposition_by_offer(current_academic_year, prefetch_propositions, 
         'dissertations',
         filter=Q(
             active=True,
-            dissertations__education_group_year_start__academic_year=current_academic_year
+            dissertations__education_group_year__academic_year=current_academic_year
         ) & ~Q(dissertations__status__in=(dissertation_status.DRAFT, dissertation_status.DIR_KO))
     )).annotate(
         remaining_places=ExpressionWrapper(
@@ -361,7 +361,7 @@ def _search_proposition_dissertation(current_academic_year, prefetch_proposition
             'dissertations',
             filter=Q(
                 active=True,
-                dissertations__education_group_year_start__academic_year=current_academic_year
+                dissertations__education_group_year__academic_year=current_academic_year
             ) & ~Q(dissertations__status__in=(dissertation_status.DRAFT, dissertation_status.DIR_KO))
         )).annotate(
         remaining_places=ExpressionWrapper(
@@ -414,7 +414,7 @@ def proposition_dissertation_detail(request, pk):
         queryset=Dissertation.objects.filter(
             active=True
         ).filter(
-            education_group_year_start__academic_year=current_academic_year
+            education_group_year__academic_year=current_academic_year
         ).exclude(status__in=(dissertation_status.DRAFT, dissertation_status.DIR_KO))
     )
     prefetch_offer_propositions = return_prefetch_propositions()
@@ -502,7 +502,7 @@ def my_dissertation_propositions(request):
             'dissertations',
             filter=Q(
                 active=True,
-                dissertations__education_group_year_start__academic_year=current_academic_year
+                dissertations__education_group_year__academic_year=current_academic_year
             ) & ~Q(dissertations__status__in=(dissertation_status.DRAFT, dissertation_status.DIR_KO))
         )
     ).annotate(

@@ -74,8 +74,8 @@ class UtilsTestCase(TestCase):
         self.offer2 = EducationGroupFactory()
         self.academic_year1 = AcademicYearFactory()
         self.academic_year2 = AcademicYearFactory(year=self.academic_year1.year - 1)
-        self.offer_year_start1 = EducationGroupYearFactory(acronym="test_offer1", education_group=self.offer1,
-                                                           academic_year=self.academic_year1)
+        self.education_group_year1 = EducationGroupYearFactory(acronym="test_offer1", education_group=self.offer1,
+                                                               academic_year=self.academic_year1)
         self.offer_proposition1 = OfferPropositionFactory(education_group=self.offer1,
                                                           global_email_to_commission=True,
                                                           evaluation_first_year=True)
@@ -88,7 +88,7 @@ class UtilsTestCase(TestCase):
         self.faculty_adviser2 = FacultyAdviserFactory(adviser=self.manager, education_group=self.offer2)
         self.dissertation1 = DissertationFactory(author=self.student,
                                                  title='Dissertation_test_email',
-                                                 education_group_year_start=self.offer_year_start1,
+                                                 education_group_year=self.education_group_year1,
                                                  proposition_dissertation=self.proposition_dissertation,
                                                  status='DIR_SUBMIT',
                                                  active=True,

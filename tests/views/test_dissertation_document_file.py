@@ -46,7 +46,7 @@ class TestDissertationDocumentFileView(TestCase):
             academic_year=self.academic_year
         )
         self.faculty_adviser = FacultyAdviserFactory(adviser=self.manager, education_group=self.education_group)
-        self.dissertation = DissertationFactory(education_group_year_start=self.education_group_year)
+        self.dissertation = DissertationFactory(education_group_year=self.education_group_year)
         self.dissertation_document = DissertationDocumentFileFactory(dissertation=self.dissertation)
 
     def test_DeleteDissertationFileView(self):

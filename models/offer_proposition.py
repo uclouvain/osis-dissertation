@@ -143,7 +143,7 @@ def show_evaluation_first_year(offer_props):
 
 
 def get_by_dissertation(dissert):
-    return get_object_or_none(OfferProposition, education_group=dissert.education_group_year_start.education_group)
+    return get_object_or_none(OfferProposition, education_group=dissert.education_group_year.education_group)
 
 
 def find_by_id(offer_proposition_id):

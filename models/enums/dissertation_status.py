@@ -26,6 +26,8 @@
 ##############################################################################
 from django.utils.translation import gettext_lazy as _
 
+from osis_common.utils.enumerations import ChoiceEnum
+
 DRAFT = 'DRAFT'
 DIR_SUBMIT = 'DIR_SUBMIT'
 DIR_OK = 'DIR_OK'
@@ -45,19 +47,38 @@ ENDED_LOS = 'ENDED_LOS'
 
 DISSERTATION_STATUS = (
     (DRAFT, _('Draft')),
-    (DIR_SUBMIT, _('Submitted to promotor')),
-    (DIR_OK, _('Accepted by promotor')),
-    (DIR_KO, _('Refused by promotor')),
+    (DIR_SUBMIT, _('Submitted to promoter')),
+    (DIR_OK, _('Accepted by promoter')),
+    (DIR_KO, _('Refused by promoter')),
     (COM_SUBMIT, _('Submitted to commission')),
     (COM_OK, _('Accepted by commission')),
     (COM_KO, _('Refused by commission')),
-    (EVA_SUBMIT, _('Submitted to 1st year evaluation')),
-    (EVA_OK, _('Accepted by 1st year evaluation')),
-    (EVA_KO, _('1st year evaluation failed')),
+    (EVA_SUBMIT, _('Submitted to first year evaluation')),
+    (EVA_OK, _('Accepted by first year evaluation')),
+    (EVA_KO, _('Refused by first year evaluation')),
     (TO_RECEIVE, _('To be received')),
-    (TO_DEFEND, _('To be defended')),
+    (TO_DEFEND, _('To be received defended')),
     (DEFENDED, _('Defended')),
-    (ENDED, _('Ended')),
-    (ENDED_WIN, _('Ended with success')),
+    (ENDED, _('End')),
+    (ENDED_WIN, _('Win')),
     (ENDED_LOS, _('Reported')),
 )
+
+
+class DissertationStatus(ChoiceEnum):
+    DRAFT = 'DRAFT'
+    DIR_SUBMIT = 'DIR_SUBMIT'
+    DIR_OK = 'DIR_OK'
+    DIR_KO = 'DIR_KO'
+    COM_SUBMIT = 'COM_SUBMIT'
+    COM_OK = 'COM_OK'
+    COM_KO = 'COM_KO'
+    EVA_SUBMIT = 'EVA_SUBMIT'
+    EVA_OK = 'EVA_OK'
+    EVA_KO = 'EVA_KO'
+    TO_RECEIVE = 'TO_RECEIVE'
+    TO_DEFEND = 'TO_DEFEND'
+    DEFENDED = 'DEFENDED'
+    ENDED = 'ENDED'
+    ENDED_WIN = 'ENDED_WIN'
+    ENDED_LOS = 'ENDED_LOS'

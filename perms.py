@@ -53,7 +53,7 @@ def user_is_proposition_promotor(user, prop_diss):
 
 def adviser_can_manage(dissert, advis):
     return advis.facultyadviser_set.filter(
-        education_group=dissert.education_group_year_start.education_group
+        education_group=dissert.education_group_year.education_group
     ).exists() and advis.type == 'MGR'
 
 
@@ -70,7 +70,7 @@ def adviser_is_in_jury(user, pk):
 
 
 def autorized_dissert_promotor_or_manager(user, pk):
-    dissert = get_object_or_404(Dissertation.objects.select_related('education_group_year_start__education_group').
+    dissert = get_object_or_404(Dissertation.objects.select_related('education_group_year__education_group').
                                 prefetch_related('advisers'), pk=pk)
     if user.person.adviser:
         return user_is_dissertation_promotor(user, dissert) or \
