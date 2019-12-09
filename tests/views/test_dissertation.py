@@ -77,7 +77,7 @@ class DissertationViewTestCase(TestCase):
         self.education_group3 = EducationGroupFactory()
         self.academic_year1 = create_current_academic_year()
         self.academic_year2 = AcademicYearFactory(year=self.academic_year1.year - 1)
-        self.education_group_year_start = EducationGroupYearFactory(
+        self.education_group_year = EducationGroupYearFactory(
             academic_year=self.academic_year1,
             education_group=self.education_group,
             acronym="test_offer1"
@@ -86,7 +86,7 @@ class DissertationViewTestCase(TestCase):
         self.offer_proposition1 = OfferPropositionFactory(
             global_email_to_commission=True,
             evaluation_first_year=True,
-            education_group=self.education_group_year_start.education_group)
+            education_group=self.education_group_year.education_group)
         self.offer_proposition2 = OfferPropositionFactory(education_group=self.education_group3,
                                                           global_email_to_commission=False)
         self.education_group_year2 = EducationGroupYearFactory(acronym="test_offer2",
@@ -103,12 +103,12 @@ class DissertationViewTestCase(TestCase):
                                                            active=True,
                                                            dissertation_role__adviser=self.teacher,
                                                            dissertation_role__status='PROMOTEUR',
-                                                           education_group_year_start=self.education_group_year_start,
+                                                           education_group_year=self.education_group_year,
                                                            )
 
         FacultyAdviserFactory(
             adviser=self.manager,
-            education_group=self.education_group_year_start.education_group
+            education_group=self.education_group_year.education_group
         )
         self.manager2 = AdviserManagerFactory()
         FacultyAdviserFactory(
@@ -117,7 +117,7 @@ class DissertationViewTestCase(TestCase):
         )
         FacultyAdviserFactory(
             adviser=self.manager,
-            education_group=self.education_group_year_start.education_group
+            education_group=self.education_group_year.education_group
         )
         roles = ['PROMOTEUR', 'CO_PROMOTEUR', 'READER', 'PROMOTEUR', 'ACCOMPANIST', 'PRESIDENT']
         status = ['DRAFT', 'COM_SUBMIT', 'EVA_SUBMIT', 'TO_RECEIVE', 'DIR_SUBMIT', 'DIR_SUBMIT']
@@ -133,7 +133,7 @@ class DissertationViewTestCase(TestCase):
             self.dissertations_list.append(DissertationFactory(
                 author=self.student,
                 title='Dissertation {}'.format(x),
-                education_group_year_start=self.education_group_year_start,
+                education_group_year=self.education_group_year,
                 proposition_dissertation=proposition_dissertation,
                 status=status[x],
                 active=True,
@@ -142,7 +142,7 @@ class DissertationViewTestCase(TestCase):
             ))
         self.dissertation_1 = DissertationFactory(author=self.student,
                                                   title='Dissertation 2017',
-                                                  education_group_year_start=self.education_group_year_start,
+                                                  education_group_year=self.education_group_year,
                                                   proposition_dissertation=self.proposition_dissertation,
                                                   status='COM_SUBMIT',
                                                   active=True,
@@ -379,7 +379,7 @@ class DissertationViewTestCase(TestCase):
     def test_email_dissert_commission_accept_3(self):
         dissert = DissertationFactory(author=self.student,
                                       title='Dissertation_test_email',
-                                      education_group_year_start=self.education_group_year2,
+                                      education_group_year=self.education_group_year2,
                                       proposition_dissertation=self.proposition_dissertation,
                                       status='COM_SUBMIT',
                                       active=True,
@@ -497,13 +497,13 @@ class DissertationViewTestCase(TestCase):
             validation_commission_exists=False,
             evaluation_first_year=False
         )
-        self.education_group_year_start2 = EducationGroupYearFactory(
+        self.education_group_year2 = EducationGroupYearFactory(
             education_group=self.education_group2,
             academic_year=self.academic_year1
         )
         self.dissertation_x = DissertationFactory(
             status=dissertation_status.DIR_SUBMIT,
-            education_group_year_start=self.education_group_year_start2,
+            education_group_year=self.education_group_year2,
         )
         self.dissertation_x.status = dissertation_status.DIR_SUBMIT
         self.assertEqual(new_status_display(self.dissertation_x, "accept"), _('To be received'))

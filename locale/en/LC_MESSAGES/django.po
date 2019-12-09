@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-21 15:32+0200\n"
+"POT-Creation-Date: 2019-12-06 18:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,13 +38,13 @@ msgstr ""
 msgid "Accept this dissertation project"
 msgstr ""
 
-msgid "Accepted by 1st year evaluation"
-msgstr ""
-
 msgid "Accepted by commission"
 msgstr ""
 
-msgid "Accepted by promotor"
+msgid "Accepted by first year evaluation"
+msgstr ""
+
+msgid "Accepted by promoter"
 msgstr ""
 
 msgid "Accompanist"
@@ -81,9 +81,6 @@ msgid "Add this person"
 msgstr ""
 
 msgid "Add/Edit dissertation"
-msgstr ""
-
-msgid "Add/Edit jury member for the dissertation subject"
 msgstr ""
 
 msgid "Advanced search"
@@ -170,6 +167,9 @@ msgstr ""
 msgid "Continue"
 msgstr ""
 
+msgid "Course manager"
+msgstr ""
+
 msgid "Created by"
 msgstr ""
 
@@ -210,9 +210,6 @@ msgid "Development dissertation"
 msgstr ""
 
 msgid "Dissertation"
-msgstr ""
-
-msgid "Dissertation Manager"
 msgstr ""
 
 msgid "Dissertation defended"
@@ -321,6 +318,9 @@ msgid "Education Group"
 msgstr ""
 
 msgid "Empirical research"
+msgstr ""
+
+msgid "End"
 msgstr ""
 
 msgid "End date must be greater than the start date"
@@ -498,9 +498,6 @@ msgstr ""
 msgid "Loading..."
 msgstr ""
 
-msgid "Manager"
-msgstr ""
-
 msgid "Manager add jury"
 msgstr ""
 
@@ -615,6 +612,9 @@ msgstr ""
 msgid "Processing..."
 msgstr ""
 
+msgid "Professor"
+msgstr ""
+
 msgid "Program"
 msgstr ""
 
@@ -645,7 +645,10 @@ msgstr ""
 msgid "Refused by commission"
 msgstr ""
 
-msgid "Refused by promotor"
+msgid "Refused by first year evaluation"
+msgstr ""
+
+msgid "Refused by promoter"
 msgstr ""
 
 msgid "Remove"
@@ -742,7 +745,10 @@ msgstr ""
 msgid "Submitted to commission"
 msgstr ""
 
-msgid "Submitted to promotor"
+msgid "Submitted to first year evaluation"
+msgstr ""
+
+msgid "Submitted to promoter"
 msgstr ""
 
 msgid "Taken places"
@@ -825,6 +831,9 @@ msgstr ""
 msgid "To be received"
 msgstr ""
 
+msgid "To be received defended"
+msgstr ""
+
 msgid "Undefined"
 msgstr ""
 
@@ -859,6 +868,9 @@ msgid "Warning"
 msgstr ""
 
 msgid "Welcome"
+msgstr ""
+
+msgid "Win"
 msgstr ""
 
 msgid ""
@@ -994,6 +1006,9 @@ msgid "search_person_explanation"
 msgstr ""
 
 msgid "to"
+msgstr ""
+
+msgid "undefined"
 msgstr ""
 
 msgid "year beginning"

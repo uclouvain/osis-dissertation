@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-21 15:32+0200\n"
+"POT-Creation-Date: 2019-12-06 18:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,13 +38,13 @@ msgstr "Année académique"
 msgid "Accept this dissertation project"
 msgstr "Accepter le projet de mémoire"
 
-msgid "Accepted by 1st year evaluation"
-msgstr "Éval première année ok"
-
 msgid "Accepted by commission"
 msgstr "Accepté par la commission"
 
-msgid "Accepted by promotor"
+msgid "Accepted by first year evaluation"
+msgstr "Validation de première année validée"
+
+msgid "Accepted by promoter"
 msgstr "Accepté par le promoteur"
 
 msgid "Accompanist"
@@ -82,9 +82,6 @@ msgstr "ajouter cette personne"
 
 msgid "Add/Edit dissertation"
 msgstr "Ajout/Modification d'un mémoire"
-
-msgid "Add/Edit jury member for the dissertation subject"
-msgstr "Ajout/Modification d'un membre du jury pour le sujet de mémoire"
 
 msgid "Advanced search"
 msgstr "Recherche avancée"
@@ -170,6 +167,9 @@ msgstr "Confirmation d'ajout d'un gesionnaires"
 msgid "Continue"
 msgstr "Continuer"
 
+msgid "Course manager"
+msgstr "Gestionnaire de cours"
+
 msgid "Created by"
 msgstr "Créé par"
 
@@ -211,9 +211,6 @@ msgstr "Mémoire-développement"
 
 msgid "Dissertation"
 msgstr "Mémoire"
-
-msgid "Dissertation Manager"
-msgstr "Gestionnaire de mémoire"
 
 msgid "Dissertation defended"
 msgstr "Mémoire défendu"
@@ -326,6 +323,9 @@ msgstr "filtre par programme"
 msgid "Empirical research"
 msgstr "Recherche empirique"
 
+msgid "End"
+msgstr "Terminé"
+
 msgid "End date must be greater than the start date"
 msgstr "La date de fin doit être supérieure à la date de début"
 
@@ -363,7 +363,7 @@ msgid "First year evaluation success"
 msgstr "Éval 1ère année réussie"
 
 msgid "For managers"
-msgstr "Pour les gesionnaires"
+msgstr "Pour les gestionnaires"
 
 msgid "For students"
 msgstr "Pour les étudiants"
@@ -509,9 +509,6 @@ msgstr "Revue de littérature"
 msgid "Loading..."
 msgstr "Chargement en cours..."
 
-msgid "Manager"
-msgstr "Gestionnaire"
-
 msgid "Manager add jury"
 msgstr "Le manager a ajouté un membre du jury"
 
@@ -626,6 +623,9 @@ msgstr "Pr&eacute;c&eacute;dent"
 msgid "Processing..."
 msgstr "Traitement en cours..."
 
+msgid "Professor"
+msgstr "Professeur"
+
 msgid "Program"
 msgstr "Programme"
 
@@ -656,7 +656,10 @@ msgstr "Refuser le projet de mémoire"
 msgid "Refused by commission"
 msgstr "Refusé par la commission"
 
-msgid "Refused by promotor"
+msgid "Refused by first year evaluation"
+msgstr "Validation de première année ratée"
+
+msgid "Refused by promoter"
 msgstr "Refusé par le promoteur"
 
 msgid "Remove"
@@ -759,7 +762,11 @@ msgstr "Soumis à l'éval fin de 1ère"
 msgid "Submitted to commission"
 msgstr "Soumis à la commission"
 
-msgid "Submitted to promotor"
+
+msgid "Submitted to first year evaluation"
+msgstr "Soumis à l'évaluation de première année"
+
+msgid "Submitted to promoter"
 msgstr "Soumis au promoteur"
 
 msgid "Taken places"
@@ -855,6 +862,9 @@ msgstr "À défendre"
 msgid "To be received"
 msgstr "À recevoir"
 
+msgid "To be received defended"
+msgstr "En attente de défense"
+
 msgid "Undefined"
 msgstr "Indéfini"
 
@@ -890,6 +900,9 @@ msgstr "Attention"
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+msgid "Win"
+msgstr "Réussi"
 
 msgid ""
 "You are ready to definitely delete this dissertation subject.  Are you sure "
@@ -1060,17 +1073,11 @@ msgstr "Recherche d'une personne"
 msgid "to"
 msgstr "au"
 
+msgid "undefined"
+msgstr "indéfini"
+
 msgid "year beginning"
 msgstr "Année de début"
 
 msgid "yes"
 msgstr "oui"
-
-#~ msgid "Link"
-#~ msgstr "Lien"
-
-#~ msgid "Add dissertation"
-#~ msgstr "Ajouter un mémoire"
-
-#~ msgid "manager created dissertation"
-#~ msgstr "Le manager a créée la dissertation"

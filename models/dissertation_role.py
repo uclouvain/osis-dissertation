@@ -70,8 +70,8 @@ def count_by_adviser(adviser, role=None, dissertation_status=None):
     if dissertation_status:
         query = query.filter(dissertation__status=dissertation_status)
 
-    query = query.filter(dissertation__active=True)\
-                 .count()
+    query = query.filter(dissertation__active=True) \
+        .count()
 
     return query
 
@@ -97,14 +97,14 @@ def count_by_status_adviser_dissertation(status, adviser, dissertation):
 
 
 def search_by_adviser_and_role_stats(adviser, role):
-    return DissertationRole.objects.filter(adviser=adviser)\
-                                   .filter(status=role)\
-                                   .filter(dissertation__active=True)\
-                                   .exclude(
-                                            Q(dissertation__status='DRAFT') |
-                                            Q(dissertation__status='ENDED') |
-                                            Q(dissertation__status='DEFENDED')
-                                           )
+    return DissertationRole.objects.filter(adviser=adviser) \
+        .filter(status=role) \
+        .filter(dissertation__active=True) \
+        .exclude(
+        Q(dissertation__status='DRAFT') |
+        Q(dissertation__status='ENDED') |
+        Q(dissertation__status='DEFENDED')
+    )
 
 
 def search_by_adviser_and_role_and_waiting(adviser, education_groups):
@@ -132,36 +132,32 @@ def search_by_dissertation_and_role(dissertation, role):
 
 
 def search_by_adviser_and_role(adviser, role):
-    return DissertationRole.objects.filter(status=role)\
-                                   .filter(adviser=adviser)\
-                                   .filter(dissertation__active=True)\
-                                   .exclude(dissertation__status='DRAFT')\
-                                   .order_by(
-                                                'dissertation__status',
-                                                'dissertation__author__person__last_name',
-                                                'dissertation__author__person__first_name'
-                                            )
-
-
-def search_by_adviser_and_role_and_offers(adviser, role, offers):
-    return search_by_adviser_and_role(adviser, role).filter(dissertation__offer_year_start__offer__in=offers)
+    return DissertationRole.objects.filter(status=role) \
+        .filter(adviser=adviser) \
+        .filter(dissertation__active=True) \
+        .exclude(dissertation__status='DRAFT') \
+        .order_by(
+        'dissertation__status',
+        'dissertation__author__person__last_name',
+        'dissertation__author__person__first_name'
+    )
 
 
 def search_by_adviser_and_role_and_education_groups(adviser, role, education_groups):
     return search_by_adviser_and_role(adviser, role).filter(
-        dissertation__education_group_year_start__education_group__in=education_groups
+        dissertation__education_group_year__education_group__in=education_groups
     )
 
 
 def search_by_adviser_and_role_and_status(adviser, role, status):
-    return DissertationRole.objects.filter(status=role)\
-                                   .filter(adviser=adviser)\
-                                   .filter(dissertation__active=True)\
-                                   .filter(dissertation__status=status)\
-                                   .order_by(
-                                                'dissertation__author__person__last_name',
-                                                'dissertation__author__person__first_name'
-                                            )
+    return DissertationRole.objects.filter(status=role) \
+        .filter(adviser=adviser) \
+        .filter(dissertation__active=True) \
+        .filter(dissertation__status=status) \
+        .order_by(
+        'dissertation__author__person__last_name',
+        'dissertation__author__person__first_name'
+    )
 
 
 def list_teachers_action_needed(education_groups):
@@ -170,7 +166,7 @@ def list_teachers_action_needed(education_groups):
     ).filter(
         dissertation__status='DIR_SUBMIT'
     ).filter(
-        dissertation__education_group_year_start__education_group__in=education_groups
+        dissertation__education_group_year__education_group__in=education_groups
     ).filter(
         dissertation__active=True
     ).distinct('adviser')
@@ -183,10 +179,10 @@ def find_all_promotor_by_dissertation(dissert):
 def get_tab_count_role_by_education_group(list_roles):
     tab = {}
     for role in list_roles:
-        if role.dissertation.education_group_year_start.education_group in tab:
-            tab[role.dissertation.education_group_year_start.education_group] += 1
+        if role.dissertation.education_group_year.education_group in tab:
+            tab[role.dissertation.education_group_year.education_group] += 1
         else:
-            tab[role.dissertation.education_group_year_start.education_group] = 1
+            tab[role.dissertation.education_group_year.education_group] = 1
 
     return tab
 

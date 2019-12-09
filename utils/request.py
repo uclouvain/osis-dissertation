@@ -28,8 +28,8 @@ from django.contrib.auth.decorators import user_passes_test
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
-from base.models.offer_year import OfferYear
-from base.models.student import find_by_offer_year
+from base.models.education_group_year import EducationGroupYear
+from base.models.student import find_by_education_group_year
 from dissertation.models import adviser
 
 MAX_RETURN = 50
@@ -37,10 +37,10 @@ MAX_RETURN = 50
 
 @login_required
 @user_passes_test(adviser.is_manager)
-def get_students_list_in_offer_year(request, offer_year_start_id):
-    offer_year_start = get_object_or_404(OfferYear, pk=offer_year_start_id)
-    students_list = find_by_offer_year(offer_year_start)
-    data=[]
+def get_students_list_in_education_group_year(request, education_group_year_id):
+    education_group_year = get_object_or_404(EducationGroupYear, pk=education_group_year_id)
+    students_list = find_by_education_group_year(education_group_year)
+    data = []
     if students_list:
         for student in students_list:
             data.append({'person_id': student.id,

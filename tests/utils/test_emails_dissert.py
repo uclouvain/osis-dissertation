@@ -72,7 +72,7 @@ class DissertationUtilsTestCase(TestCase):
         FacultyAdviserFactory(adviser=self.manager, education_group=self.education_group_1)
         self.dissertation_1 = DissertationFactory(author=self.student,
                                                   title='Dissertation_test_email',
-                                                  education_group_year_start=self.education_group_year_1,
+                                                  education_group_year=self.education_group_year_1,
                                                   proposition_dissertation=self.proposition_dissertation,
                                                   status='DRAFT',
                                                   active=True,

@@ -58,7 +58,7 @@ class AddAdviserForm(ModelForm):
 class DissertationForm(ModelForm):
     class Meta:
         model = Dissertation
-        fields = ('title', 'author', 'education_group_year_start', 'proposition_dissertation', 'description')
+        fields = ('title', 'author', 'education_group_year', 'proposition_dissertation', 'description')
 
 
 class FacultyAdviserForm(ModelForm):
@@ -110,7 +110,7 @@ class ManagerAdviserForm(ModelForm):
 class ManagerDissertationForm(ModelForm):
     class Meta:
         model = Dissertation
-        fields = ('title', 'author', 'education_group_year_start', 'proposition_dissertation', 'description',
+        fields = ('title', 'author', 'education_group_year', 'proposition_dissertation', 'description',
                   'defend_year', 'defend_periode', 'location')
 
 
@@ -131,15 +131,15 @@ class ManagerDissertationEditForm(ModelForm):
         ).order_by(
             'person__last_name', 'person__first_name'
         ).select_related("person").distinct()
-        self.fields["education_group_year_start"].queryset = EducationGroupYear.objects.filter(
+        self.fields["education_group_year"].queryset = EducationGroupYear.objects.filter(
             education_group__advisers__person__user=user
         ).select_related("academic_year")
-        self.fields["education_group_year_start"].required = True
+        self.fields["education_group_year"].required = True
         self.fields['defend_periode'].required = True
 
     class Meta:
         model = Dissertation
-        fields = ('title', 'author', 'education_group_year_start', 'proposition_dissertation', 'description',
+        fields = ('title', 'author', 'education_group_year', 'proposition_dissertation', 'description',
                   'defend_year', 'defend_periode', 'location')
 
 

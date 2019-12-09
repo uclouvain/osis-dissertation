@@ -50,9 +50,9 @@
             {% bootstrap_field form.title %}
         </div>
         <div class="row">
-            <div class="col-md-6 form-group" {% if form.education_group_year_start.errors %} style="color:red;" {% endif %}>
+            <div class="col-md-6 form-group" {% if form.education_group_year.errors %} style="color:red;" {% endif %}>
                 <div class="panel-group">
-                        {% bootstrap_field form.education_group_year_start %}
+                        {% bootstrap_field form.education_group_year %}
                 </div>
             </div>
 

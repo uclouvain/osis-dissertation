@@ -68,15 +68,15 @@ class DissertationModelTestCase(TestCase):
                                                                        creator=a_person_teacher)
 
         self.academic_year1 = AcademicYearFactory()
-        self.education_group_year_start = EducationGroupYearFactory(acronym="test_offer1",
+        self.education_group_year = EducationGroupYearFactory(acronym="test_offer1",
                                                                     education_group=self.education_group,
                                                                     academic_year=self.academic_year1)
-        self.education_group_year_start2 = EducationGroupYearFactory(acronym="test_offer1",
+        self.education_group_year2 = EducationGroupYearFactory(acronym="test_offer1",
                                                                      education_group=self.education_group2,
                                                                      academic_year=self.academic_year1)
         self.dissertation_test_email = DissertationFactory(author=self.student,
                                                            title='Dissertation_test_email',
-                                                           education_group_year_start=self.education_group_year_start,
+                                                           education_group_year=self.education_group_year,
                                                            proposition_dissertation=self.proposition_dissertation,
                                                            status=dissertation_status.DRAFT,
                                                            active=True,
@@ -84,7 +84,7 @@ class DissertationModelTestCase(TestCase):
                                                            dissertation_role__status='PROMOTEUR')
         self.dissertation = DissertationFactory(author=self.student,
                                                 title='Dissertation_1',
-                                                education_group_year_start=self.education_group_year_start,
+                                                education_group_year=self.education_group_year,
                                                 proposition_dissertation=self.proposition_dissertation,
                                                 status=dissertation_status.DIR_SUBMIT,
                                                 active=True,
@@ -157,7 +157,7 @@ class DissertationModelTestCase(TestCase):
         )
         self.dissertation1 = DissertationFactory(
             status=dissertation_status.DIR_SUBMIT,
-            education_group_year_start=self.education_group_year_start2
+            education_group_year=self.education_group_year2
         )
         self.dissertation1.manager_accept()
         self.assertEqual(self.dissertation1.status, dissertation_status.COM_SUBMIT)
@@ -170,7 +170,7 @@ class DissertationModelTestCase(TestCase):
         )
         self.dissertation1 = DissertationFactory(
             status=dissertation_status.COM_KO,
-            education_group_year_start=self.education_group_year_start2
+            education_group_year=self.education_group_year2
         )
         self.dissertation1.manager_accept()
         self.assertEqual(self.dissertation1.status, dissertation_status.EVA_SUBMIT)
@@ -180,7 +180,7 @@ class DissertationModelTestCase(TestCase):
                                                    validation_commission_exists=False,
                                                    evaluation_first_year=False)
         self.dissertation1 = DissertationFactory(status=dissertation_status.DIR_SUBMIT,
-                                                 education_group_year_start=self.education_group_year_start2)
+                                                 education_group_year=self.education_group_year2)
         self.dissertation1.manager_accept()
         self.assertEqual(self.dissertation1.status, dissertation_status.TO_RECEIVE)
 
@@ -189,7 +189,7 @@ class DissertationModelTestCase(TestCase):
                                                    validation_commission_exists=False,
                                                    evaluation_first_year=True)
         self.dissertation1 = DissertationFactory(status=dissertation_status.DIR_SUBMIT,
-                                                 education_group_year_start=self.education_group_year_start2)
+                                                 education_group_year=self.education_group_year2)
         self.dissertation1.manager_accept()
         self.assertEqual(self.dissertation1.status, dissertation_status.EVA_SUBMIT)
 
@@ -198,7 +198,7 @@ class DissertationModelTestCase(TestCase):
                                                    validation_commission_exists=False,
                                                    evaluation_first_year=True)
         self.dissertation1 = DissertationFactory(status=dissertation_status.EVA_SUBMIT,
-                                                 education_group_year_start=self.education_group_year_start2)
+                                                 education_group_year=self.education_group_year2)
         self.dissertation1.manager_accept()
         self.assertEqual(self.dissertation1.status, dissertation_status.TO_RECEIVE)
 
@@ -207,7 +207,7 @@ class DissertationModelTestCase(TestCase):
                                                    validation_commission_exists=False,
                                                    evaluation_first_year=True)
         self.dissertation1 = DissertationFactory(status=dissertation_status.EVA_KO,
-                                                 education_group_year_start=self.education_group_year_start2, )
+                                                 education_group_year=self.education_group_year2, )
         self.dissertation1.manager_accept()
         self.assertEqual(self.dissertation1.status, dissertation_status.TO_RECEIVE)
 
@@ -217,7 +217,7 @@ class DissertationModelTestCase(TestCase):
                                                    validation_commission_exists=True,
                                                    evaluation_first_year=True)
         self.dissertation1 = DissertationFactory(status=dissertation_status.DIR_SUBMIT,
-                                                 education_group_year_start=self.education_group_year_start2,
+                                                 education_group_year=self.education_group_year2,
                                                  author=self.student)
         self.dissertation1.teacher_accept()
         message_history_result = message_history.find_my_messages(self.student.person.id)
@@ -233,7 +233,7 @@ class DissertationModelTestCase(TestCase):
         count_messages_before_status_change = message_history.find_my_messages(self.student.person.id).count()
         self.offer_prop2 = OfferPropositionFactory(education_group=self.education_group2, )
         self.dissertation1 = DissertationFactory(status=dissertation_status.DIR_SUBMIT,
-                                                 education_group_year_start=self.education_group_year_start2,
+                                                 education_group_year=self.education_group_year2,
                                                  author=self.student)
         self.dissertation1.refuse()
         message_history_result = message_history.find_my_messages(self.student.person.id)
@@ -248,7 +248,7 @@ class DissertationModelTestCase(TestCase):
                                                    validation_commission_exists=True,
                                                    evaluation_first_year=True)
         self.dissertation1 = DissertationFactory(status=dissertation_status.COM_SUBMIT,
-                                                 education_group_year_start=self.education_group_year_start2,
+                                                 education_group_year=self.education_group_year2,
                                                  author=self.student)
         self.dissertation1.refuse()
         message_history_result = message_history.find_my_messages(self.student.person.id)
@@ -263,7 +263,7 @@ class DissertationModelTestCase(TestCase):
                                                    validation_commission_exists=True,
                                                    evaluation_first_year=True)
         self.dissertation1 = DissertationFactory(status=dissertation_status.COM_SUBMIT,
-                                                 education_group_year_start=self.education_group_year_start2,
+                                                 education_group_year=self.education_group_year2,
                                                  author=self.student,
                                                  dissertation_role__adviser=self.teacher,
                                                  dissertation_role__status='PROMOTEUR'
@@ -349,7 +349,7 @@ class DissertationModelTestCase(TestCase):
             evaluation_first_year=True
         )
         self.dissertation_x = DissertationFactory(status=dissertation_status.DIR_SUBMIT,
-                                                  education_group_year_start=self.education_group_year_start2)
+                                                  education_group_year=self.education_group_year2)
         self.assertEqual(dissertation.get_next_status(self.dissertation_x, "accept"),
                          dissertation_status.COM_SUBMIT)
 
@@ -358,7 +358,7 @@ class DissertationModelTestCase(TestCase):
                                                    validation_commission_exists=False,
                                                    evaluation_first_year=True)
         self.dissertation_x = DissertationFactory(status=dissertation_status.DIR_SUBMIT,
-                                                  education_group_year_start=self.education_group_year_start2)
+                                                  education_group_year=self.education_group_year2)
         self.assertEqual(dissertation.get_next_status(self.dissertation_x, "accept"),
                          dissertation_status.EVA_SUBMIT)
         self.dissertation_x.status = dissertation_status.COM_SUBMIT
@@ -373,7 +373,7 @@ class DissertationModelTestCase(TestCase):
                                                    validation_commission_exists=False,
                                                    evaluation_first_year=True)
         self.dissertation_x = DissertationFactory(status=dissertation_status.EVA_SUBMIT,
-                                                  education_group_year_start=self.education_group_year_start2)
+                                                  education_group_year=self.education_group_year2)
         self.assertEqual(dissertation.get_next_status(self.dissertation_x, "accept"),
                          dissertation_status.TO_RECEIVE)
         self.dissertation_x.status = dissertation_status.DEFENDED
@@ -387,7 +387,7 @@ class DissertationModelTestCase(TestCase):
                                                    validation_commission_exists=False,
                                                    evaluation_first_year=False)
         self.dissertation_x = DissertationFactory(status=dissertation_status.DIR_SUBMIT,
-                                                  education_group_year_start=self.education_group_year_start2)
+                                                  education_group_year=self.education_group_year2)
         self.dissertation_x.status = dissertation_status.DIR_SUBMIT
         self.assertEqual(dissertation.get_next_status(self.dissertation_x, "accept"),
                          dissertation_status.TO_RECEIVE)
@@ -422,7 +422,7 @@ class DissertationModelTestCase(TestCase):
             active=True,
             status=dissertation_status.COM_SUBMIT,
             proposition_dissertation=self.prop_dissert,
-            education_group_year_start__academic_year=self.starting_academic_year
+            education_group_year__academic_year=self.starting_academic_year
         )
         DissertationFactory(active=False, proposition_dissertation=self.prop_dissert)
         DissertationFactory(active=True, status=dissertation_status.DRAFT, proposition_dissertation=self.prop_dissert)
@@ -431,5 +431,5 @@ class DissertationModelTestCase(TestCase):
         self.assertEqual(dissertation.count_by_proposition(self.prop_dissert), 1)
 
     def test_search_by_education_group(self):
-        dissert = dissertation.search_by_education_group([self.education_group_year_start.education_group])
+        dissert = dissertation.search_by_education_group([self.education_group_year.education_group])
         self.assertEqual(dissert[0], self.dissertation)

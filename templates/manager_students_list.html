@@ -100,7 +100,7 @@
                                 <div class="div_in_datatable">
                                     <a href="{% url 'manager_dissertations_detail' pk=dissertation.pk %}"  title="{{ dissertation }}" target="_blank">
                                         {{ dissertation|truncatechars:60 }}</a>
-                                        <span class="label label-default pull-right">[{{ dissertation.education_group_year_start}}]</span>
+                                        <span class="label label-default pull-right">[{{ dissertation.education_group_year}}]</span>
                                         <br>
                                 </div>
                             {% endfor %}
