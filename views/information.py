@@ -168,7 +168,7 @@ def _manage_search_form(request, manager=False):
 
 def _get_rendering_data(form, manager, template, template_prefix):
     data = form.cleaned_data
-    person = mdl.person.search_by_email(data['email'])
+    person = Person.objects.filter(email=data['email'])
     message, email, message_add = '', '', ''
     form = ManagerAddAdviserPreForm()
     pers = None
