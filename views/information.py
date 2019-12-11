@@ -168,7 +168,7 @@ def _manage_search_form(request, manager=False):
 
 def _get_rendering_data(form, manager, template, template_prefix):
     data = form.cleaned_data
-    person = mdl.person.search_by_email(data['email'])
+    person = Person.objects.filter(email=data['email'])
     message, email, message_add = '', '', ''
     form = ManagerAddAdviserPreForm()
     pers = None
@@ -316,12 +316,14 @@ def manager_informations_add_person(request):
         if form.is_valid():
             data = form.cleaned_data
             if data['email'] and data['last_name'] and data['first_name']:
-                person = mdl.person.Person(email=data['email'],
-                                           last_name=data['last_name'],
-                                           first_name=data['first_name'],
-                                           phone=data['phone'],
-                                           phone_mobile=data['phone_mobile'],
-                                           source=person_source_type.DISSERTATION)
+                person = Person(
+                    email=data['email'],
+                    last_name=data['last_name'],
+                    first_name=data['first_name'],
+                    phone=data['phone'],
+                    phone_mobile=data['phone_mobile'],
+                    source=person_source_type.DISSERTATION
+                )
                 person.save()
                 adv = adviser.add(person, 'PRF', False, False, False, '')
                 return redirect('manager_informations_detail', pk=adv.pk)
