@@ -58,7 +58,7 @@
             load_faculty_advisers();	
         });	
         function load_faculty_advisers() {	
-            var form = $("#form_offer_prop");	
+            let form = $("#form_offer_prop");	
             $("#tb_faculty_adviser").load(form.attr('action'), form.serialize());	
         }	
     </script>	
