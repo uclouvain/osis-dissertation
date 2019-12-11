@@ -29,7 +29,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
 from base.models.education_group_year import EducationGroupYear
-from base.models.student import find_by_education_group_year
+from base.models.student import Student
 from dissertation.models import adviser
 
 MAX_RETURN = 50
@@ -39,7 +39,7 @@ MAX_RETURN = 50
 @user_passes_test(adviser.is_manager)
 def get_students_list_in_education_group_year(request, education_group_year_id):
     education_group_year = get_object_or_404(EducationGroupYear, pk=education_group_year_id)
-    students_list = find_by_education_group_year(education_group_year)
+    students_list = Student.objects.filter(offerenrollment__education_group_year=education_group_year)
     data = []
     if students_list:
         for student in students_list:
