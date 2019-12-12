@@ -1,8 +1,7 @@
 {% extends "layout.html" %}	
 {% load static %}	
 {% load bootstrap3 i18n %}	
-{% load check %}	
-{% block content %}	
+{% block content %}
     <div class="page-header">	
         <h2>{% trans 'Dissertation Manager' %} - <label>{% for acronym in managed_entities_acronym %}{{ acronym }}	
             {% if not forloop.last %} - {% endif %}{% endfor %}</label></h2>	
