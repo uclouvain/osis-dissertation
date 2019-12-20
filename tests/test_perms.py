@@ -31,8 +31,6 @@ import dissertation.perms
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
-from base.tests.factories.offer import OfferFactory
-from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
 from base.tests.factories.student import StudentFactory
 from dissertation.models.enums import dissertation_role_status
@@ -50,55 +48,56 @@ from dissertation.tests.factories.proposition_offer import PropositionOfferFacto
 
 
 class DecoratorsTestCase(TestCase):
-    def setUp(self):
-        self.person_manager = PersonFactory()
-        self.person_no_manager = PersonFactory()
-        self.person_manager2 = PersonFactory()
-        self.manager = AdviserManagerFactory(person=self.person_manager)
-        self.manager2 = AdviserManagerFactory(person=self.person_manager2)
-        self.a_person_teacher = PersonFactory()
-        self.teacher = AdviserTeacherFactory(person=self.a_person_teacher)
-        self.teacher2 = AdviserTeacherFactory()
-        self.teacher3 = AdviserTeacherFactory()
-        self.a_person_student = PersonWithoutUserFactory()
-        self.student = StudentFactory(person=self.a_person_student)
-        self.education_group = EducationGroupFactory()
-        self.education_group2 = EducationGroupFactory()
-        self.academic_year1 = AcademicYearFactory()
-        self.education_group_year = EducationGroupYearFactory(
+    @classmethod
+    def setUpTestData(cls):
+        cls.person_manager = PersonFactory()
+        cls.person_no_manager = PersonFactory()
+        cls.person_manager2 = PersonFactory()
+        cls.manager = AdviserManagerFactory(person=cls.person_manager)
+        cls.manager2 = AdviserManagerFactory(person=cls.person_manager2)
+        cls.a_person_teacher = PersonFactory()
+        cls.teacher = AdviserTeacherFactory(person=cls.a_person_teacher)
+        cls.teacher2 = AdviserTeacherFactory()
+        cls.teacher3 = AdviserTeacherFactory()
+        cls.a_person_student = PersonWithoutUserFactory()
+        cls.student = StudentFactory(person=cls.a_person_student)
+        cls.education_group = EducationGroupFactory()
+        cls.education_group2 = EducationGroupFactory()
+        cls.academic_year1 = AcademicYearFactory()
+        cls.education_group_year = EducationGroupYearFactory(
             acronym="test_offer1",
             title="test_offer1",
-            education_group=self.education_group,
-            academic_year=self.academic_year1
+            education_group=cls.education_group,
+            academic_year=cls.academic_year1
         )
-        self.faculty_adviser1 = FacultyAdviserFactory(
-            adviser=self.manager,
-            education_group=self.education_group
+        cls.faculty_adviser1 = FacultyAdviserFactory(
+            adviser=cls.manager,
+            education_group=cls.education_group
         )
-        self.faculty_adviser2 = FacultyAdviserFactory(
-            adviser=self.manager2,
-            education_group=self.education_group2
+        cls.faculty_adviser2 = FacultyAdviserFactory(
+            adviser=cls.manager2,
+            education_group=cls.education_group2
         )
-        self.proposition_dissertation = PropositionDissertationFactory(author=self.teacher,
-                                                                       creator=self.teacher3.person)
-        self.offer_propo = OfferPropositionFactory(education_group=self.education_group)
-        self.proposition_offer = PropositionOfferFactory(
-            proposition_dissertation=self.proposition_dissertation,
-            offer_proposition=self.offer_propo
+        cls.proposition_dissertation = PropositionDissertationFactory(author=cls.teacher,
+                                                                      creator=cls.teacher3.person)
+        cls.offer_propo = OfferPropositionFactory(education_group=cls.education_group)
+        cls.proposition_offer = PropositionOfferFactory(
+            proposition_dissertation=cls.proposition_dissertation,
+            offer_proposition=cls.offer_propo
         )
-        self.dissertation1 = DissertationFactory(
-            author=self.student,
-            education_group_year=self.education_group_year,
-            proposition_dissertation=self.proposition_dissertation,
+        cls.dissertation1 = DissertationFactory(
+            author=cls.student,
+            education_group_year=cls.education_group_year,
+            proposition_dissertation=cls.proposition_dissertation,
             status='DIR_SUBMIT',
             active=True,
-            dissertation_role__adviser=self.teacher,
+            dissertation_role__adviser=cls.teacher,
             dissertation_role__status=dissertation_role_status.PROMOTEUR
         )
-        self.dissertation_role = DissertationRoleFactory(
-            adviser=self.teacher3,
+        cls.dissertation_role = DissertationRoleFactory(
+            adviser=cls.teacher3,
             status=dissertation_role_status.READER,
-            dissertation=self.dissertation1
+            dissertation=cls.dissertation1
         )
 
     def test_adviser_is_dissertation_promotor(self):
