@@ -22,14 +22,19 @@ from django.http import HttpResponse
 from django.test import TestCase
 from django.urls import reverse
 
+from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.entity_manager import EntityManagerFactory
 from dissertation.tests.factories.offer_proposition import OfferPropositionFactory
 
 
 class TestOfferPropositionFilterView(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        AcademicYearFactory(current=True)
+        cls.entity_manager = EntityManagerFactory()
+        cls.education_group = OfferPropositionFactory()
+
     def setUp(self):
-        self.entity_manager = EntityManagerFactory()
-        self.education_group = OfferPropositionFactory()
         self.client.force_login(self.entity_manager.person.user)
 
     def test_offer_proposition_search(self):
