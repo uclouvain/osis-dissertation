@@ -33,22 +33,21 @@ from dissertation.tests.factories.proposition_role import PropositionRoleFactory
 
 
 def create_proposition_role(proposition, adviser, status="PROMOTEUR"):
-   proposition_role = PropositionRole.objects.create(proposition_dissertation=proposition, adviser=adviser,
-                                                     status=status)
-   return proposition_role
+    return PropositionRole.objects.create(proposition_dissertation=proposition, adviser=adviser,
+                                          status=status)
 
 
 class PropositionRoleModelTestCase(TestCase):
-    def setUp(self):
-        self.adviser = AdviserTeacherFactory()
-        self.proposition_role = []
-        self.proposition_dissertation = PropositionDissertationFactory()
-        for x in range(0, 3):
-            proposition_role = PropositionRoleFactory(proposition_dissertation=self.proposition_dissertation)
-            self.proposition_role.append(proposition_role)
+    @classmethod
+    def setUpTestData(cls):
+        cls.adviser = AdviserTeacherFactory()
+        cls.proposition_role = []
+        cls.proposition_dissertation = PropositionDissertationFactory()
+        for _ in range(0, 3):
+            proposition_role = PropositionRoleFactory(proposition_dissertation=cls.proposition_dissertation)
+            cls.proposition_role.append(proposition_role)
 
     def test_maximum_jury_reached_exception(self):
         with self.assertRaises(ValidationError):
             a = PropositionRoleFactory(proposition_dissertation=self.proposition_dissertation, adviser=self.adviser)
             a.clean()
-

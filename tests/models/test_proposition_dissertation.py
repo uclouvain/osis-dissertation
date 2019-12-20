@@ -46,6 +46,7 @@ def create_proposition_dissertation(title, adviser, person, offer_proposition=No
     return proposition
 
 
+# WTF ?
 def test_count_dissertations(self):
     self.client.force_login(self.manager.person.user)
     self.dissertation_test_count2015 = DissertationFactory(author=self.student1,
