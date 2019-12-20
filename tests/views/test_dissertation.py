@@ -149,10 +149,10 @@ class DissertationViewTestCase(TestCase):
                                                  active=True,
                                                  dissertation_role__adviser=cls.teacher2,
                                                  dissertation_role__status='PROMOTEUR')
+        cls.url = reverse('manager_dissertations_search')
 
     def setUp(self):
         self.client.force_login(self.manager.person.user)
-        self.url = reverse('manager_dissertations_search')
 
     def test_get_dissertations_list_for_teacher(self):
         self.client.force_login(self.teacher.person.user)
