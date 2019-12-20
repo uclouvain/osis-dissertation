@@ -59,95 +59,100 @@ MAXIMUM_IN_REQUEST = 50
 class DissertationViewTestCase(TestCase):
     fixtures = ['dissertation/fixtures/message_template.json', ]
 
-    def setUp(self):
-        self.maxDiff = None
-        self.manager = AdviserManagerFactory()
+    @classmethod
+    def setUpTestData(cls):
+        cls.maxDiff = None
+        cls.manager = AdviserManagerFactory()
         a_person_teacher = PersonFactory.create(first_name='Pierre',
                                                 last_name='Dupont',
                                                 email='laurent.dermine@uclouvain.be')
-        self.teacher = AdviserTeacherFactory(person=a_person_teacher)
+        cls.teacher = AdviserTeacherFactory(person=a_person_teacher)
         a_person_teacher2 = PersonFactory.create(first_name='Marco',
                                                  last_name='Millet',
                                                  email='laurent.dermine@uclouvain.be')
-        self.teacher2 = AdviserTeacherFactory(person=a_person_teacher2)
+        cls.teacher2 = AdviserTeacherFactory(person=a_person_teacher2)
         a_person_student = PersonWithoutUserFactory.create(last_name="Durant",
                                                            email='laurent.dermine@uclouvain.be')
-        self.student = StudentFactory.create(person=a_person_student)
-        self.education_group = EducationGroupFactory()
-        self.education_group3 = EducationGroupFactory()
-        self.academic_year1 = create_current_academic_year()
-        self.academic_year2 = AcademicYearFactory(year=self.academic_year1.year - 1)
-        self.education_group_year = EducationGroupYearFactory(
-            academic_year=self.academic_year1,
-            education_group=self.education_group,
+        cls.student = StudentFactory.create(person=a_person_student)
+        cls.education_group = EducationGroupFactory()
+        cls.education_group3 = EducationGroupFactory()
+        cls.academic_year1 = create_current_academic_year()
+        cls.academic_year2 = AcademicYearFactory(year=cls.academic_year1.year - 1)
+        cls.education_group_year = EducationGroupYearFactory(
+            academic_year=cls.academic_year1,
+            education_group=cls.education_group,
             acronym="test_offer1"
         )
-        self.faculty_manager = FacultyAdviserFactory(adviser=self.manager, education_group=self.education_group)
-        self.offer_proposition1 = OfferPropositionFactory(
+        cls.faculty_manager = FacultyAdviserFactory(adviser=cls.manager, education_group=cls.education_group)
+        cls.offer_proposition1 = OfferPropositionFactory(
             global_email_to_commission=True,
             evaluation_first_year=True,
-            education_group=self.education_group_year.education_group)
-        self.offer_proposition2 = OfferPropositionFactory(education_group=self.education_group3,
-                                                          global_email_to_commission=False)
-        self.education_group_year2 = EducationGroupYearFactory(acronym="test_offer2",
-                                                               education_group=self.offer_proposition2.education_group,
-                                                               academic_year=self.academic_year1)
-        self.proposition_dissertation = PropositionDissertationFactory(author=self.teacher,
-                                                                       creator=a_person_teacher,
-                                                                       title='Proposition 1212121'
-                                                                       )
-        self.dissertation_test_email = DissertationFactory(author=self.student,
-                                                           title='Dissertation_test_email',
-                                                           proposition_dissertation=self.proposition_dissertation,
-                                                           status='DRAFT',
-                                                           active=True,
-                                                           dissertation_role__adviser=self.teacher,
-                                                           dissertation_role__status='PROMOTEUR',
-                                                           education_group_year=self.education_group_year,
-                                                           )
+            education_group=cls.education_group_year.education_group)
+        cls.offer_proposition2 = OfferPropositionFactory(education_group=cls.education_group3,
+                                                         global_email_to_commission=False)
+        cls.education_group_year2 = EducationGroupYearFactory(acronym="test_offer2",
+                                                              education_group=cls.offer_proposition2.education_group,
+                                                              academic_year=cls.academic_year1)
+        cls.proposition_dissertation = PropositionDissertationFactory(author=cls.teacher,
+                                                                      creator=a_person_teacher,
+                                                                      title='Proposition 1212121'
+                                                                      )
+        cls.dissertation_test_email = DissertationFactory(author=cls.student,
+                                                          title='Dissertation_test_email',
+                                                          proposition_dissertation=cls.proposition_dissertation,
+                                                          status='DRAFT',
+                                                          active=True,
+                                                          dissertation_role__adviser=cls.teacher,
+                                                          dissertation_role__status='PROMOTEUR',
+                                                          education_group_year=cls.education_group_year,
+                                                          )
 
         FacultyAdviserFactory(
-            adviser=self.manager,
-            education_group=self.education_group_year.education_group
+            adviser=cls.manager,
+            education_group=cls.education_group_year.education_group
         )
-        self.manager2 = AdviserManagerFactory()
+        cls.manager2 = AdviserManagerFactory()
         FacultyAdviserFactory(
-            adviser=self.manager,
-            education_group=self.education_group_year2.education_group
+            adviser=cls.manager,
+            education_group=cls.education_group_year2.education_group
         )
         FacultyAdviserFactory(
-            adviser=self.manager,
-            education_group=self.education_group_year.education_group
+            adviser=cls.manager,
+            education_group=cls.education_group_year.education_group
         )
         roles = ['PROMOTEUR', 'CO_PROMOTEUR', 'READER', 'PROMOTEUR', 'ACCOMPANIST', 'PRESIDENT']
         status = ['DRAFT', 'COM_SUBMIT', 'EVA_SUBMIT', 'TO_RECEIVE', 'DIR_SUBMIT', 'DIR_SUBMIT']
-        self.dissertations_list = list()
+        cls.dissertations_list = list()
         for x in range(0, 6):
-            proposition_dissertation = PropositionDissertationFactory(author=self.teacher,
+            proposition_dissertation = PropositionDissertationFactory(author=cls.teacher,
                                                                       creator=a_person_teacher,
                                                                       title='Proposition {}'.format(x)
                                                                       )
             PropositionOfferFactory(proposition_dissertation=proposition_dissertation,
-                                    offer_proposition=self.offer_proposition1)
+                                    offer_proposition=cls.offer_proposition1)
 
-            self.dissertations_list.append(DissertationFactory(
-                author=self.student,
+            cls.dissertations_list.append(DissertationFactory(
+                author=cls.student,
                 title='Dissertation {}'.format(x),
-                education_group_year=self.education_group_year,
+                education_group_year=cls.education_group_year,
                 proposition_dissertation=proposition_dissertation,
                 status=status[x],
                 active=True,
-                dissertation_role__adviser=self.teacher,
+                dissertation_role__adviser=cls.teacher,
                 dissertation_role__status=roles[x]
             ))
-        self.dissertation_1 = DissertationFactory(author=self.student,
-                                                  title='Dissertation 2017',
-                                                  education_group_year=self.education_group_year,
-                                                  proposition_dissertation=self.proposition_dissertation,
-                                                  status='COM_SUBMIT',
-                                                  active=True,
-                                                  dissertation_role__adviser=self.teacher2,
-                                                  dissertation_role__status='PROMOTEUR')
+        cls.dissertation_1 = DissertationFactory(author=cls.student,
+                                                 title='Dissertation 2017',
+                                                 education_group_year=cls.education_group_year,
+                                                 proposition_dissertation=cls.proposition_dissertation,
+                                                 status='COM_SUBMIT',
+                                                 active=True,
+                                                 dissertation_role__adviser=cls.teacher2,
+                                                 dissertation_role__status='PROMOTEUR')
+
+    def setUp(self):
+        self.client.force_login(self.manager.person.user)
+        self.url = reverse('manager_dissertations_search')
 
     def test_get_dissertations_list_for_teacher(self):
         self.client.force_login(self.teacher.person.user)
@@ -160,7 +165,6 @@ class DissertationViewTestCase(TestCase):
         self.assertEqual(response.context[-1]['adviser_list_dissertations_president'].count(), 1)
 
     def test_get_dissertations_list_for_manager(self):
-        self.client.force_login(self.manager.person.user)
         url = reverse('manager_dissertations_list')
         response = self.client.get(url)
         self.assertEqual(response.context[-1]['dissertations'].count(), 8)
@@ -168,15 +172,11 @@ class DissertationViewTestCase(TestCase):
                               [self.dissertation_test_email] + self.dissertations_list)
 
     def test_search_dissertations_for_manager_1(self):
-        self.client.force_login(self.manager.person.user)
-        url = reverse('manager_dissertations_search')
-        response = self.client.get(url, data={"search": "no result search"})
+        response = self.client.get(self.url, data={"search": "no result search"})
         self.assertEqual(response.status_code, HTTP_OK)
 
     def test_search_dissertations_for_manager_2(self):
-        self.client.force_login(self.manager.person.user)
-        url = reverse('manager_dissertations_search')
-        response = self.client.get(url, data={"search": "Dissertation 2"})
+        response = self.client.get(self.url, data={"search": "Dissertation 2"})
         self.assertEqual(response.status_code, HTTP_OK)
         self.assertEqual(response.context[-1]['dissertations'].count(), 2)
         self.assertCountEqual(
@@ -185,9 +185,7 @@ class DissertationViewTestCase(TestCase):
         )
 
     def test_search_dissertations_for_manager_3(self):
-        self.client.force_login(self.manager.person.user)
-        url = reverse('manager_dissertations_search')
-        response = self.client.get(url, data={"search": "Proposition 3"})
+        response = self.client.get(self.url, data={"search": "Proposition 3"})
         self.assertEqual(response.status_code, HTTP_OK)
         self.assertEqual(response.context[-1]['dissertations'].count(), 1)
         self.assertCountEqual(
@@ -196,77 +194,59 @@ class DissertationViewTestCase(TestCase):
         )
 
     def test_search_dissertations_for_manager_4(self):
-        self.client.force_login(self.manager.person.user)
-        url = reverse('manager_dissertations_search')
-        response = self.client.get(url, data={"search": "Dissertation"})
+        response = self.client.get(self.url, data={"search": "Dissertation"})
         self.assertEqual(response.status_code, HTTP_OK)
         self.assertEqual(response.context[-1]['dissertations'].count(), 8)
         self.assertCountEqual(response.context[-1]['dissertations'], [self.dissertation_1] +
                               [self.dissertation_test_email] + self.dissertations_list)
 
     def test_search_dissertations_for_manager_5(self):
-        self.client.force_login(self.manager.person.user)
-        url = reverse('manager_dissertations_search')
-        response = self.client.get(url, data={"search": "Dissertation",
-                                              "offer_prop_search": self.offer_proposition1.id})
+        response = self.client.get(self.url, data={"search": "Dissertation",
+                                                   "offer_prop_search": self.offer_proposition1.id})
         self.assertEqual(response.status_code, HTTP_OK)
         self.assertEqual(response.context[-1]['dissertations'].count(), 8)
         self.assertCountEqual(response.context[-1]['dissertations'], [self.dissertation_1] +
                               [self.dissertation_test_email] + self.dissertations_list)
 
     def test_search_dissertations_for_manager_6(self):
-        self.client.force_login(self.manager.person.user)
-        url = reverse('manager_dissertations_search')
-        response = self.client.get(url, data={"search": "Dissertation",
-                                              "offer_prop_search": self.offer_proposition2.id})
+        response = self.client.get(self.url, data={"search": "Dissertation",
+                                                   "offer_prop_search": self.offer_proposition2.id})
         self.assertEqual(response.status_code, HTTP_OK)
         self.assertEqual(response.context[-1]['dissertations'].count(), 0)
 
     def test_search_dissertations_for_manager_7(self):
-        self.client.force_login(self.manager.person.user)
-        url = reverse('manager_dissertations_search')
-        response = self.client.get(url, data={"academic_year": self.academic_year1.id})
+        response = self.client.get(self.url, data={"academic_year": self.academic_year1.id})
         self.assertEqual(response.status_code, HTTP_OK)
         self.assertEqual(response.context[-1]['dissertations'].count(), 8)
         self.assertCountEqual(response.context[-1]['dissertations'], [self.dissertation_1] +
                               [self.dissertation_test_email] + self.dissertations_list)
 
     def test_search_dissertations_for_manager_8(self):
-        self.client.force_login(self.manager.person.user)
-        url = reverse('manager_dissertations_search')
-        response = self.client.get(url, data={"academic_year": self.academic_year2.id})
+        response = self.client.get(self.url, data={"academic_year": self.academic_year2.id})
         self.assertEqual(response.status_code, HTTP_OK)
         self.assertEqual(response.context[-1]['dissertations'].count(), 0)
 
     def test_search_dissertations_for_manager_9(self):
-        self.client.force_login(self.manager.person.user)
-        url = reverse('manager_dissertations_search')
-        response = self.client.get(url, data={"status_search": "COM_SUBMIT"})
+        response = self.client.get(self.url, data={"status_search": "COM_SUBMIT"})
         self.assertEqual(response.status_code, HTTP_OK)
         self.assertEqual(response.context[-1]['dissertations'].count(), 2)
 
     def test_search_dissertations_for_manager_10(self):
-        self.client.force_login(self.manager.person.user)
-        url = reverse('manager_dissertations_search')
-        response = self.client.get(url, data={"search": "test_offer"})
+        response = self.client.get(self.url, data={"search": "test_offer"})
         self.assertEqual(response.status_code, HTTP_OK)
         self.assertEqual(response.context[-1]['dissertations'].count(), 8)
         self.assertCountEqual(response.context[-1]['dissertations'], [self.dissertation_1] +
                               [self.dissertation_test_email] + self.dissertations_list)
 
     def test_search_dissertations_for_manager_11(self):
-        self.client.force_login(self.manager.person.user)
-        url = reverse('manager_dissertations_search')
-        response = self.client.get(url, data={"search": "Durant"})
+        response = self.client.get(self.url, data={"search": "Durant"})
         self.assertEqual(response.status_code, HTTP_OK)
         self.assertEqual(response.context[-1]['dissertations'].count(), 8)
         self.assertCountEqual(response.context[-1]['dissertations'], [self.dissertation_1] +
                               [self.dissertation_test_email] + self.dissertations_list)
 
     def test_search_dissertations_for_manager_12(self):
-        self.client.force_login(self.manager.person.user)
-        url = reverse('manager_dissertations_search')
-        response = self.client.get(url, data={"search": "Dupont"})
+        response = self.client.get(self.url, data={"search": "Dupont"})
         self.assertEqual(response.status_code, HTTP_OK)
         self.assertEqual(response.context[-1]['dissertations'].count(), 8)
         self.assertCountEqual(response.context[-1]['dissertations'], [self.dissertation_1] +
@@ -294,7 +274,6 @@ class DissertationViewTestCase(TestCase):
         self.assertEqual(self.dissertation_test_email.status, 'TO_RECEIVE')
 
     def test_email_new_dissert(self):
-        self.client.force_login(self.manager.person.user)
         count_messages_before_status_change = message_history.find_my_messages(self.teacher.person.id).count()
         self.dissertation_test_email.status = 'DRAFT'
         self.dissertation_test_email.go_forward()
@@ -421,7 +400,6 @@ class DissertationViewTestCase(TestCase):
         self.assertEqual(len(res), 0)
 
     def test_get_adviser_list_json(self):
-        self.client.force_login(self.manager.person.user)
         response = self.client.get('/dissertation/find_adviser_list/', {'term': 'Dupont'})
         self.assertEqual(response.status_code, HTTP_OK)
         data_json = response.json()
@@ -430,7 +408,6 @@ class DissertationViewTestCase(TestCase):
             self.assertEqual(data['last_name'], 'Dupont')
 
     def test_manager_dissert_jury_new_by_ajax1(self):
-        self.client.force_login(self.manager.person.user)
         dissert_role_count = dissertation_role.count_by_dissertation(self.dissertation_1)
         response = self.client.post('/dissertation/manager_dissertations_jury_new_ajax/',
                                     {'pk_dissertation': str(self.dissertation_1.id)})
@@ -449,7 +426,6 @@ class DissertationViewTestCase(TestCase):
         self.assertEqual(dissert_role_count + 1, dissertation_role.count_by_dissertation(self.dissertation_1))
 
     def test_manager_dissert_jury_del_by_ajax(self):
-        self.client.force_login(self.manager.person.user)
         response = self.client.post('/dissertation/manager_dissertations_jury_new_ajax/',
                                     {'pk_dissertation': str(self.dissertation_1.id),
                                      'status_choice': 'READER',
@@ -465,7 +441,6 @@ class DissertationViewTestCase(TestCase):
             self.assertEqual(dissertation_role.count_by_dissertation(self.dissertation_1), dissert_role_count - 1)
 
     def test_manager_dissert_wait_comm_jsonlist(self):
-        self.client.force_login(self.manager.person.user)
         response = self.client.post('/dissertation/manager_dissertations_wait_comm_json_list', )
         response_data = json.loads(response.content.decode('utf-8'))
         self.assertEqual(response.status_code, HTTP_OK)
@@ -485,7 +460,6 @@ class DissertationViewTestCase(TestCase):
             self.assertEqual(response.status_code, ERROR_403_NOT_AUTORIZED)
 
     def test_manager_students_list(self):
-        self.client.force_login(self.manager.person.user)
         url = reverse('manager_students_list')
         response = self.client.get(url)
         self.assertEqual(response.status_code, HTTP_OK)
@@ -518,7 +492,6 @@ class DissertationViewTestCase(TestCase):
         self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
 
     def test_dissertation_jury_new_view_with_manager(self):
-        self.client.force_login(self.manager.person.user)
         response = self.client.post(
             reverse('dissertations_jury_new', args=[self.dissertation_1.pk]), {"status": "READER",
                                                                                'adviser': self.teacher.pk,
@@ -527,7 +500,6 @@ class DissertationViewTestCase(TestCase):
         self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
 
     def test_dissertation_jury_new_view_promotor_add(self):
-        self.client.force_login(self.manager.person.user)
         response = self.client.post(
             reverse('dissertations_jury_new', args=[self.dissertation_1.pk]), {"status": "PROMOTEUR",
                                                                                'adviser': self.teacher.pk,
@@ -536,13 +508,12 @@ class DissertationViewTestCase(TestCase):
         self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
 
     def test_manager_dissertations_go_forward_from_list(self):
-        self.client.force_login(self.manager.person.user)
-        response = self.client.post(
+        self.client.post(
             reverse('manager_dissertations_go_forward_from_list', args=[self.dissertation_1.pk, "ok"])
         )
         self.dissertation_1.refresh_from_db()
         self.assertEqual(self.dissertation_1.status, "EVA_SUBMIT")
-        response = self.client.post(
+        self.client.post(
             reverse('manager_dissertations_go_forward_from_list', args=[self.dissertation_1.pk, "ko"])
         )
         self.dissertation_1.refresh_from_db()
@@ -557,12 +528,13 @@ class DissertationViewTestCase(TestCase):
 
 
 class TestAdviserAutocomplete(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         a_person_student = PersonFactory(last_name="Durant")
-        self.student = StudentFactory.create(person=a_person_student)
-        self.url = reverse('adviser-autocomplete')
-        self.person = PersonFactory(first_name="pierre")
-        self.adviser = AdviserTeacherFactory(person=self.person)
+        cls.student = StudentFactory.create(person=a_person_student)
+        cls.url = reverse('adviser-autocomplete')
+        cls.person = PersonFactory(first_name="pierre")
+        cls.adviser = AdviserTeacherFactory(person=cls.person)
 
     def test_when_filter(self):
         self.client.force_login(user=self.student.person.user)
