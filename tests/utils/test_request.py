@@ -35,11 +35,13 @@ ERROR_404_PAGE_NO_FOUND = 404
 NO_ERROR_CODE = 200
 ERROR_403_NOT_AUTORIZED=403
 
+
 class UtilsTestCase(TestCase):
-    def setUp(self):
-        self.manager = AdviserManagerFactory()
+    @classmethod
+    def setUpTestData(cls):
+        cls.manager = AdviserManagerFactory()
         a_person_teacher = PersonFactory.create(first_name='Pierre', last_name='Dupont')
-        self.teacher = AdviserTeacherFactory(person=a_person_teacher)
+        cls.teacher = AdviserTeacherFactory(person=a_person_teacher)
 
     def test_find_adviser_list_json(self):
         self.client.force_login(self.manager.person.user)
