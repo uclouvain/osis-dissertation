@@ -102,7 +102,7 @@ class ManagerAddAdviserPerson(ModelForm):
         self.fields['last_name'].label = _("Last name")
         self.fields['first_name'].required = True
         self.fields['first_name'].label = _("First name")
-        self.fields['phone'].label = _("phone")
+        self.fields['phone'].label = _("Phone")
         self.fields['phone_mobile'].label = _("Mobile phone")
 
     def clean_email(self):

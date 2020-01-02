@@ -212,8 +212,6 @@ msgstr "Mémoire-développement"
 msgid "Dissertation"
 msgstr "Mémoire"
 
-#, fuzzy
-#| msgid "Dissertations as reader"
 msgid "Dissertation Manager"
 msgstr "Mémoires encadrés en tant que lecteur"
 
@@ -517,10 +515,9 @@ msgstr "Revue de littérature"
 msgid "Loading..."
 msgstr "Chargement en cours..."
 
-#, fuzzy
-#| msgid "For managers"
+
 msgid "Manager"
-msgstr "Pour les gestionnaires"
+msgstr "Gestionnaires"
 
 msgid "Manager add jury"
 msgstr "Le manager a ajouté un membre du jury"
@@ -1076,7 +1073,7 @@ msgstr "pas de fichier"
 msgid "of"
 msgstr "sur"
 
-msgid "phone"
+msgid "Phone"
 msgstr "Téléphone"
 
 msgid "search_person_explanation"

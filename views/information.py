@@ -314,13 +314,8 @@ def manager_informations_add_person(request):
     if request.method == "POST":
         form = ManagerAddAdviserPerson(request.POST)
         if form.is_valid():
-            data = form.cleaned_data
             person = Person(
-                email=data['email'],
-                last_name=data['last_name'],
-                first_name=data['first_name'],
-                phone=data['phone'],
-                phone_mobile=data['phone_mobile'],
+                **form.cleaned_data,
                 source=person_source_type.DISSERTATION
             )
             person.save()

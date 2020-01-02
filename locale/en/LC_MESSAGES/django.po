@@ -1008,7 +1008,7 @@ msgstr ""
 msgid "of"
 msgstr ""
 
-msgid "phone"
+msgid "Phone"
 msgstr ""
 
 msgid "search_person_explanation"
