@@ -315,27 +315,20 @@ def manager_informations_add_person(request):
         form = ManagerAddAdviserPerson(request.POST)
         if form.is_valid():
             data = form.cleaned_data
-            if data['email'] and data['last_name'] and data['first_name']:
-                person = Person(
-                    email=data['email'],
-                    last_name=data['last_name'],
-                    first_name=data['first_name'],
-                    phone=data['phone'],
-                    phone_mobile=data['phone_mobile'],
-                    source=person_source_type.DISSERTATION
-                )
-                person.save()
-                adv = adviser.add(person, 'PRF', False, False, False, '')
-                return redirect('manager_informations_detail', pk=adv.pk)
-            else:
-                form = ManagerAddAdviserPerson()
-                return render(request, 'manager_information_add_person.html', {'form': form})
-        else:
-            form = ManagerAddAdviserPerson()
-            return render(request, 'manager_information_add_person.html', {'form': form})
+            person = Person(
+                email=data['email'],
+                last_name=data['last_name'],
+                first_name=data['first_name'],
+                phone=data['phone'],
+                phone_mobile=data['phone_mobile'],
+                source=person_source_type.DISSERTATION
+            )
+            person.save()
+            adv = adviser.add(person, 'PRF', False, False, False, '')
+            return redirect('manager_informations_detail', pk=adv.pk)
     else:
         form = ManagerAddAdviserPerson()
-        return render(request, 'manager_information_add_person.html', {'form': form})
+    return render(request, 'manager_information_add_person.html', {'form': form})
 
 
 @login_required

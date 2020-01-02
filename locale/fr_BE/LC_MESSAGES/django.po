@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-06 18:07+0100\n"
+"POT-Creation-Date: 2020-01-02 14:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -211,6 +211,11 @@ msgstr "Mémoire-développement"
 
 msgid "Dissertation"
 msgstr "Mémoire"
+
+#, fuzzy
+#| msgid "Dissertations as reader"
+msgid "Dissertation Manager"
+msgstr "Mémoires encadrés en tant que lecteur"
 
 msgid "Dissertation defended"
 msgstr "Mémoire défendu"
@@ -455,6 +460,9 @@ msgstr "Informations du sujet de mémoire"
 msgid "Internship Master"
 msgstr "Maître de stage"
 
+msgid "Invalid email for external person."
+msgstr "Cet email est incorrect pour une personne externe"
+
 msgid "Invisible"
 msgstr "Invisible"
 
@@ -508,6 +516,11 @@ msgstr "Revue de littérature"
 
 msgid "Loading..."
 msgstr "Chargement en cours..."
+
+#, fuzzy
+#| msgid "For managers"
+msgid "Manager"
+msgstr "Pour les gestionnaires"
 
 msgid "Manager add jury"
 msgstr "Le manager a ajouté un membre du jury"
@@ -761,7 +774,6 @@ msgstr "Soumis à l'éval fin de 1ère"
 
 msgid "Submitted to commission"
 msgstr "Soumis à la commission"
-
 
 msgid "Submitted to first year evaluation"
 msgstr "Soumis à l'évaluation de première année"
