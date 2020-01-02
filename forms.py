@@ -25,9 +25,11 @@
 ##############################################################################
 from dal import autocomplete
 from django import forms
+from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 from django.utils.translation import gettext_lazy as _
 
+from backoffice.settings import base as settings_base
 from base import models as mdl
 from base.models.education_group_year import EducationGroupYear
 from base.models.student import Student
@@ -93,6 +95,21 @@ class ManagerAddAdviserPerson(ModelForm):
     class Meta:
         model = mdl.person.Person
         fields = ('email', 'last_name', 'first_name', 'phone', 'phone_mobile')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['last_name'].required = True
+        self.fields['last_name'].label = _("Last name")
+        self.fields['first_name'].required = True
+        self.fields['first_name'].label = _("First name")
+        self.fields['phone'].label = _("Phone")
+        self.fields['phone_mobile'].label = _("Mobile phone")
+
+    def clean_email(self):
+        if settings_base.INTERNAL_EMAIL_SUFFIX.strip():
+            if settings_base.INTERNAL_EMAIL_SUFFIX in self.data['email'].lower():
+                raise ValidationError(_('Invalid email for external person.'))
+        return self.cleaned_data["email"]
 
 
 class ManagerAddAdviserForm(ModelForm):

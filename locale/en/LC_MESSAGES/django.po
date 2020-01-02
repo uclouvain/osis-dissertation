@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-06 18:07+0100\n"
+"POT-Creation-Date: 2020-01-02 14:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -210,6 +210,9 @@ msgid "Development dissertation"
 msgstr ""
 
 msgid "Dissertation"
+msgstr ""
+
+msgid "Dissertation Manager"
 msgstr ""
 
 msgid "Dissertation defended"
@@ -444,6 +447,9 @@ msgstr ""
 msgid "Internship Master"
 msgstr ""
 
+msgid "Invalid email for external person."
+msgstr ""
+
 msgid "Invisible"
 msgstr ""
 
@@ -496,6 +502,9 @@ msgid "Litterature review"
 msgstr ""
 
 msgid "Loading..."
+msgstr ""
+
+msgid "Manager"
 msgstr ""
 
 msgid "Manager add jury"
@@ -999,7 +1008,7 @@ msgstr ""
 msgid "of"
 msgstr ""
 
-msgid "phone"
+msgid "Phone"
 msgstr ""
 
 msgid "search_person_explanation"

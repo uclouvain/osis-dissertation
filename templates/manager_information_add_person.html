@@ -1,6 +1,5 @@
 {% extends "layout.html" %}
-{% load static %}
-{% load i18n %}
+{% load i18n bootstrap3 static %}
 
 {% comment "License" %}
  * OSIS stands for Open Student Information System. It's an application
@@ -41,7 +40,7 @@
         <div class="row">
             <div class="col-md-10 col-lg-offset-1">
                 <div class="alert alert-warning alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
                     <strong>{% trans 'Warning' %} :</strong> {% trans 'This form is used to add a person to OSIS. Complete carefully the form, you will not be able to edit this person after adding.' %}
                 </div>
@@ -50,41 +49,11 @@
         </div>
         <form method="POST" class="post-form">
             {% csrf_token %}
-            <div class="row">
-                <div class="col-md-8 col-lg-offset-2 form-group">
-                    <label for="txt_email" {% if form.email.errors %} style="color:red;" {% endif %}>{% trans 'email' %} ({% trans 'Required' %})</label>
-                    <input class="form-control" id="txt_email"  name="email"
-                    style="margin:-6px;" value="{{ form.email.value|default_if_none:'' }}">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-8 col-lg-offset-2 form-group">
-                    <label for="txt_last_name" {% if form.last_name.errors %} style="color:red;" {% endif %}>{% trans 'Last name' %} ({% trans 'Required' %})</label>
-                    <input class="form-control" id="txt_last_name"  name="last_name"
-                    style="margin:-6px;" value="{{ form.last_name.value|default_if_none:'' }}">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-8 col-lg-offset-2 form-group">
-                    <label for="txt_first_name" {% if form.first_name.errors %} style="color:red;" {% endif %}>{% trans 'First name' %} ({% trans 'Required' %})</label>
-                    <input class="form-control" id="txt_first_name"  name="first_name"
-                    style="margin:-6px;" value="{{ form.first_name.value|default_if_none:'' }}">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-8 col-lg-offset-2 form-group">
-                    <label for="txt_phone" {% if form.phone.errors %} style="color:red;" {% endif %}>{% trans 'phone' %}</label>
-                    <input class="form-control" id="txt_phone"  name="phone"
-                    style="margin:-6px;" value="{{ form.phone.value|default_if_none:'' }}">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-8 col-lg-offset-2 form-group">
-                    <label for="txt_phone_mobile" {% if form.phone_mobile.errors %} style="color:red;" {% endif %}>{% trans 'Mobile phone' %}</label>
-                    <input class="form-control" id="txt_phone_mobile"  name="phone_mobile"
-                    style="margin:-6px;" value="{{ form.phone_mobile.value|default_if_none:'' }}">
-                </div>
-            </div>
+            {% bootstrap_field form.email form_group_class="col-md-8 col-lg-offset-2 form-group" %}
+            {% bootstrap_field form.last_name form_group_class="col-md-8 col-lg-offset-2 form-group" %}
+            {% bootstrap_field form.first_name form_group_class="col-md-8 col-lg-offset-2 form-group" %}
+            {% bootstrap_field form.phone form_group_class="col-md-8 col-lg-offset-2 form-group" %}
+            {% bootstrap_field form.phone_mobile form_group_class="col-md-8 col-lg-offset-2 form-group" %}
             <div class="row">
                 <div class="col-md-12" style="text-align: right;">
                     <button type="submit" class="save btn btn-primary"
