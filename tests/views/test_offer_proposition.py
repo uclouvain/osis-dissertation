@@ -37,41 +37,43 @@ from dissertation.tests.factories.offer_proposition import OfferPropositionFacto
 
 
 class OfferPropositionViewTestCase(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.person = PersonFactory()
+        cls.manager = AdviserManagerFactory(person=cls.person)
+        cls.education_group = EducationGroupFactory()
+        cls.education_group2 = EducationGroupFactory()
+        cls.education_group_year = EducationGroupYearFactory(education_group=cls.education_group)
+        cls.education_group_year2 = EducationGroupYearFactory(education_group=cls.education_group2)
+        cls.faculty_manager = FacultyAdviserFactory(adviser=cls.manager, education_group=cls.education_group2)
+        cls.faculty_manager2 = FacultyAdviserFactory(adviser=cls.manager, education_group=cls.education_group)
+        cls.offer_proposition = OfferPropositionFactory(pk=12,
+                                                        education_group=cls.education_group,
+                                                        start_visibility_proposition="2018-12-12",
+                                                        end_visibility_proposition="2019-12-12",
+                                                        start_visibility_dissertation="2018-12-12",
+                                                        end_visibility_dissertation="2019-12-12",
+                                                        start_jury_visibility="2018-12-12",
+                                                        end_jury_visibility="2019-12-12",
+                                                        start_edit_title="2018-12-12",
+                                                        end_edit_title="2019-12-12",
+                                                        )
+        cls.offer_proposition2 = OfferPropositionFactory(pk=15,
+                                                         education_group=cls.education_group2,
+                                                         start_visibility_proposition="2018-12-12",
+                                                         end_visibility_proposition="2019-12-12",
+                                                         start_visibility_dissertation="2018-12-12",
+                                                         end_visibility_dissertation="2019-12-12",
+                                                         start_jury_visibility="2018-12-12",
+                                                         end_jury_visibility="2019-12-12",
+                                                         start_edit_title="2018-12-12",
+                                                         end_edit_title="2019-12-12",
+                                                         )
 
     def setUp(self):
-        self.person = PersonFactory()
-        self.manager = AdviserManagerFactory(person=self.person)
-        self.education_group = EducationGroupFactory()
-        self.education_group2 = EducationGroupFactory()
-        self.education_group_year = EducationGroupYearFactory(education_group=self.education_group)
-        self.education_group_year2 = EducationGroupYearFactory(education_group=self.education_group2)
-        self.faculty_manager = FacultyAdviserFactory(adviser=self.manager, education_group=self.education_group2)
-        self.faculty_manager2 = FacultyAdviserFactory(adviser=self.manager, education_group=self.education_group)
-        self.offer_proposition = OfferPropositionFactory(pk=12,
-                                                         education_group=self.education_group,
-                                                         start_visibility_proposition="2018-12-12",
-                                                         end_visibility_proposition="2019-12-12",
-                                                         start_visibility_dissertation="2018-12-12",
-                                                         end_visibility_dissertation="2019-12-12",
-                                                         start_jury_visibility="2018-12-12",
-                                                         end_jury_visibility="2019-12-12",
-                                                         start_edit_title="2018-12-12",
-                                                         end_edit_title="2019-12-12",
-                                                         )
-        self.offer_proposition2 = OfferPropositionFactory(pk=15,
-                                                         education_group=self.education_group2,
-                                                         start_visibility_proposition="2018-12-12",
-                                                         end_visibility_proposition="2019-12-12",
-                                                         start_visibility_dissertation="2018-12-12",
-                                                         end_visibility_dissertation="2019-12-12",
-                                                         start_jury_visibility="2018-12-12",
-                                                         end_jury_visibility="2019-12-12",
-                                                         start_edit_title="2018-12-12",
-                                                         end_edit_title="2019-12-12",
-                                                         )
+        self.client.force_login(self.manager.person.user)
 
     def test_manager_offer_parameters(self):
-        self.client.force_login(self.manager.person.user)
         offer_propositions = [self.offer_proposition, self.offer_proposition2]
         response = self.client.post(reverse("manager_offer_parameters"))
         self.assertEqual(response.status_code, HttpResponse.status_code)
@@ -80,16 +82,15 @@ class OfferPropositionViewTestCase(TestCase):
         self.assertCountEqual(offer_props, offer_propositions)
 
     def test_manager_offer_parameters_edit(self):
-        self.client.force_login(self.manager.person.user)
-        response = self.client.post(reverse("manager_offer_parameters_edit")+"?pk=12&pk=15", {
-            "start_visibility_proposition" : "2018-12-12",
-            "end_visibility_proposition" : "2019-12-12",
-            "start_visibility_dissertation" : "2018-12-12",
-            "end_visibility_dissertation" : "2019-12-12",
-            "start_jury_visibility" : "2018-12-12",
-            "end_jury_visibility" : "2019-12-12",
-            "start_edit_title" : "2018-12-12",
-            "end_edit_title" : "2019-12-12"
+        response = self.client.post(reverse("manager_offer_parameters_edit") + "?pk=12&pk=15", {
+            "start_visibility_proposition": "2018-12-12",
+            "end_visibility_proposition": "2019-12-12",
+            "start_visibility_dissertation": "2018-12-12",
+            "end_visibility_dissertation": "2019-12-12",
+            "start_jury_visibility": "2018-12-12",
+            "end_jury_visibility": "2019-12-12",
+            "start_edit_title": "2018-12-12",
+            "end_edit_title": "2019-12-12"
         })
         self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
         response = self.client.post(reverse("manager_offer_parameters_edit") + "?pk=12&pk=15", {

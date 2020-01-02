@@ -29,15 +29,16 @@ from dissertation.tests.factories.offer_proposition import OfferPropositionFacto
 
 
 class TestFacultyAdviserDeleteView(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.entity_manager = EntityManagerFactory()
+        cls.educ_group = EducationGroupFactory()
+        cls.education_group = OfferPropositionFactory()
+        cls.adviser = AdviserTeacherFactory()
+        cls.faculty_adviser = FacultyAdviserFactory(adviser=cls.adviser, education_group=cls.educ_group)
 
     def setUp(self):
-        self.entity_manager = EntityManagerFactory()
         self.client.force_login(self.entity_manager.person.user)
-        self.educ_group = EducationGroupFactory()
-        self.education_group = OfferPropositionFactory()
-        self.adviser = AdviserTeacherFactory()
-        self.faculty_adviser = FacultyAdviserFactory(adviser=self.adviser, education_group=self.educ_group)
-
 
     def test_delete_get(self):
         response = self.client.get(

@@ -47,50 +47,51 @@ NOW = datetime.datetime.now()
 class DissertationModelTestCase(TestCase):
     fixtures = ['dissertation/fixtures/message_template.json', ]
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         a_person_teacher = PersonFactory(
             first_name='Pierre',
             last_name='Dupont'
         )
-        self.teacher = AdviserTeacherFactory(person=a_person_teacher)
+        cls.teacher = AdviserTeacherFactory(person=a_person_teacher)
         a_person_student = PersonWithoutUserFactory(
             last_name="Durant",
             first_name='jean'
         )
-        self.student = StudentFactory(person=a_person_student)
-        self.education_group = EducationGroupFactory()
-        self.education_group2 = EducationGroupFactory()
-        self.offer_prop = OfferPropositionFactory(education_group=self.education_group,
-                                                  acronym="test_offer1",
-                                                  validation_commission_exists=True)
-        self.proposition_dissertation = PropositionDissertationFactory(author=self.teacher,
-                                                                       title='proposition_x',
-                                                                       creator=a_person_teacher)
+        cls.student = StudentFactory(person=a_person_student)
+        cls.education_group = EducationGroupFactory()
+        cls.education_group2 = EducationGroupFactory()
+        cls.offer_prop = OfferPropositionFactory(education_group=cls.education_group,
+                                                 acronym="test_offer1",
+                                                 validation_commission_exists=True)
+        cls.proposition_dissertation = PropositionDissertationFactory(author=cls.teacher,
+                                                                      title='proposition_x',
+                                                                      creator=a_person_teacher)
 
-        self.academic_year1 = AcademicYearFactory()
-        self.education_group_year = EducationGroupYearFactory(acronym="test_offer1",
-                                                                    education_group=self.education_group,
-                                                                    academic_year=self.academic_year1)
-        self.education_group_year2 = EducationGroupYearFactory(acronym="test_offer1",
-                                                                     education_group=self.education_group2,
-                                                                     academic_year=self.academic_year1)
-        self.dissertation_test_email = DissertationFactory(author=self.student,
-                                                           title='Dissertation_test_email',
-                                                           education_group_year=self.education_group_year,
-                                                           proposition_dissertation=self.proposition_dissertation,
-                                                           status=dissertation_status.DRAFT,
-                                                           active=True,
-                                                           dissertation_role__adviser=self.teacher,
-                                                           dissertation_role__status='PROMOTEUR')
-        self.dissertation = DissertationFactory(author=self.student,
-                                                title='Dissertation_1',
-                                                education_group_year=self.education_group_year,
-                                                proposition_dissertation=self.proposition_dissertation,
-                                                status=dissertation_status.DIR_SUBMIT,
-                                                active=True,
-                                                description='les phobies',
-                                                dissertation_role__adviser=self.teacher,
-                                                dissertation_role__status='PROMOTEUR')
+        cls.academic_year1 = AcademicYearFactory()
+        cls.education_group_year = EducationGroupYearFactory(acronym="test_offer1",
+                                                             education_group=cls.education_group,
+                                                             academic_year=cls.academic_year1)
+        cls.education_group_year2 = EducationGroupYearFactory(acronym="test_offer1",
+                                                              education_group=cls.education_group2,
+                                                              academic_year=cls.academic_year1)
+        cls.dissertation_test_email = DissertationFactory(author=cls.student,
+                                                          title='Dissertation_test_email',
+                                                          education_group_year=cls.education_group_year,
+                                                          proposition_dissertation=cls.proposition_dissertation,
+                                                          status=dissertation_status.DRAFT,
+                                                          active=True,
+                                                          dissertation_role__adviser=cls.teacher,
+                                                          dissertation_role__status='PROMOTEUR')
+        cls.dissertation = DissertationFactory(author=cls.student,
+                                               title='Dissertation_1',
+                                               education_group_year=cls.education_group_year,
+                                               proposition_dissertation=cls.proposition_dissertation,
+                                               status=dissertation_status.DIR_SUBMIT,
+                                               active=True,
+                                               description='les phobies',
+                                               dissertation_role__adviser=cls.teacher,
+                                               dissertation_role__status='PROMOTEUR')
 
     def test_deactivate(self):
         self.dissertation = DissertationFactory(active=True)

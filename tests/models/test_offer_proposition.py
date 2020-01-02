@@ -47,22 +47,22 @@ def create_offer_proposition(acronym, education_group, offer_proposition_group=N
 
 
 class OfferPropositionTestCase(TestCase):
-
-    def setUp(self):
-        self.offer_proposition_with_good_dates = OfferPropositionFactory()
-        self.offer_with_offer_proposition = OfferFactory()
-        self.education_group_with_offer_proposition = EducationGroupFactory()
-        self.offer_without_offer_proposition = OfferFactory()
-        self.offer_proposition_group = OfferPropositionGroupFactory()
-        self.offer_proposition = OfferPropositionFactory(
-            education_group=self.education_group_with_offer_proposition,
-            offer_proposition_group=self.offer_proposition_group
+    @classmethod
+    def setUpTestData(cls):
+        cls.offer_proposition_with_good_dates = OfferPropositionFactory()
+        cls.offer_with_offer_proposition = OfferFactory()
+        cls.education_group_with_offer_proposition = EducationGroupFactory()
+        cls.offer_without_offer_proposition = OfferFactory()
+        cls.offer_proposition_group = OfferPropositionGroupFactory()
+        cls.offer_proposition = OfferPropositionFactory(
+            education_group=cls.education_group_with_offer_proposition,
+            offer_proposition_group=cls.offer_proposition_group
         )
-        self.education_group_year = EducationGroupYearFactory(
-            education_group=self.education_group_with_offer_proposition
+        cls.education_group_year = EducationGroupYearFactory(
+            education_group=cls.education_group_with_offer_proposition
         )
-        self.dissertation = DissertationFactory(
-            education_group_year=self.education_group_year
+        cls.dissertation = DissertationFactory(
+            education_group_year=cls.education_group_year
         )
 
     def test_offer_proposition_exist(self):

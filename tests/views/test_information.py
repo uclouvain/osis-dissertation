@@ -43,13 +43,15 @@ from dissertation.tests.factories.proposition_offer import PropositionOfferFacto
 
 
 class InformationTeacherViewTestCase(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.manager = AdviserManagerFactory()
+        a_person_teacher = PersonFactory(first_name='Pierre', last_name='Dupont', phone_mobile="0472760003")
+        cls.teacher = AdviserTeacherFactory(person=a_person_teacher)
+        cls.person = PersonFactory()
+        cls.manager2 = AdviserManagerFactory()
 
     def setUp(self):
-        self.manager = AdviserManagerFactory()
-        a_person_teacher = PersonFactory(first_name='Pierre', last_name='Dupont', phone_mobile="0472760003")
-        self.teacher = AdviserTeacherFactory(person=a_person_teacher)
-        self.person = PersonFactory()
-        self.manager2 = AdviserManagerFactory()
         self.client.force_login(self.teacher.person.user)
 
     def test_informations(self):
@@ -216,26 +218,26 @@ class InformationTeacherViewTestCase(TestCase):
 
 
 class InformationManagerViewTestCase(TestCase):
-    def setUp(self):
-        self.manager = AdviserManagerFactory()
-        self.client.force_login(self.manager.person.user)
+    @classmethod
+    def setUpTestData(cls):
+        cls.manager = AdviserManagerFactory()
         a_person_teacher = PersonFactory(first_name='Pierre', last_name='Dupont')
-        self.teacher = AdviserTeacherFactory(person=a_person_teacher)
-        self.person = PersonFactory()
-        self.manager2 = AdviserManagerFactory()
+        cls.teacher = AdviserTeacherFactory(person=a_person_teacher)
+        cls.person = PersonFactory()
+        cls.manager2 = AdviserManagerFactory()
         a_person_student = PersonWithoutUserFactory(last_name="Durant")
         student = StudentFactory(person=a_person_student)
         offer_proposition = OfferPropositionFactory()
-        self.education_group_year = EducationGroupYearFactory(education_group=offer_proposition.education_group)
-        FacultyAdviserFactory(adviser=self.manager,
-                              education_group=self.education_group_year.education_group)
+        cls.education_group_year = EducationGroupYearFactory(education_group=offer_proposition.education_group)
+        FacultyAdviserFactory(adviser=cls.manager,
+                              education_group=cls.education_group_year.education_group)
         roles = [dissertation_role_status.PROMOTEUR, dissertation_role_status.CO_PROMOTEUR,
                  dissertation_role_status.READER, dissertation_role_status.PROMOTEUR,
                  dissertation_role_status.ACCOMPANIST, dissertation_role_status.PRESIDENT]
         status = [dissertation_status.DRAFT, dissertation_status.COM_SUBMIT, dissertation_status.EVA_SUBMIT,
                   dissertation_status.TO_RECEIVE, dissertation_status.DIR_SUBMIT, dissertation_status.DIR_SUBMIT]
         for x in range(0, 6):
-            proposition_dissertation = PropositionDissertationFactory(author=self.teacher,
+            proposition_dissertation = PropositionDissertationFactory(author=cls.teacher,
                                                                       creator=a_person_teacher,
                                                                       title='Proposition {}'.format(x)
                                                                       )
@@ -244,13 +246,16 @@ class InformationManagerViewTestCase(TestCase):
 
             DissertationFactory(author=student,
                                 title='Dissertation {}'.format(x),
-                                education_group_year=self.education_group_year,
+                                education_group_year=cls.education_group_year,
                                 proposition_dissertation=proposition_dissertation,
                                 status=status[x],
                                 active=True,
-                                dissertation_role__adviser=self.teacher,
+                                dissertation_role__adviser=cls.teacher,
                                 dissertation_role__status=roles[x]
                                 )
+
+    def setUp(self):
+        self.client.force_login(self.manager.person.user)
 
     def test_manager_informations(self):
         response = self.client.get(
