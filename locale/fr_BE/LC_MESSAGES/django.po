@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-02 14:07+0100\n"
+"POT-Creation-Date: 2020-01-07 13:48+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -162,7 +162,7 @@ msgid "Confirm delete for :"
 msgstr "Confirmez la suppression de :"
 
 msgid "Confirm manager add"
-msgstr "Confirmation d'ajout d'un gesionnaires"
+msgstr "Confirmation d'ajout d'un gestionnaire"
 
 msgid "Continue"
 msgstr "Continuer"
@@ -320,9 +320,6 @@ msgstr "Modifier l'enseignant"
 msgid "Editable"
 msgstr "Modifiable"
 
-msgid "Education Group"
-msgstr "filtre par programme"
-
 msgid "Empirical research"
 msgstr "Recherche empirique"
 
@@ -349,6 +346,9 @@ msgstr "Gestionnaire de programme"
 
 msgid "File"
 msgstr "Fichier"
+
+msgid "Filter by education group"
+msgstr "Filtre par programme"
 
 msgid "First"
 msgstr "Premier"
@@ -515,7 +515,6 @@ msgstr "Revue de littérature"
 msgid "Loading..."
 msgstr "Chargement en cours..."
 
-
 msgid "Manager"
 msgstr "Gestionnaires"
 
@@ -617,6 +616,9 @@ msgstr "Personne ajoutée"
 
 msgid "Person to add"
 msgstr "Personne à ajouter"
+
+msgid "Phone"
+msgstr "Téléphone"
 
 msgid "Photo"
 msgstr "Photo"
@@ -1072,9 +1074,6 @@ msgstr "pas de fichier"
 
 msgid "of"
 msgstr "sur"
-
-msgid "Phone"
-msgstr "Téléphone"
 
 msgid "search_person_explanation"
 msgstr "Recherche d'une personne"
