@@ -33,8 +33,10 @@ from dissertation.models.offer_proposition import OfferProposition
 
 class OfferPropositionFilterSet(django_filters.FilterSet):
 
-    education_group__educationgroupyear__acronym = django_filters.CharFilter(lookup_expr="icontains",
-                                                                             label=gettext_lazy("Education Group"))
+    education_group__educationgroupyear__acronym = django_filters.CharFilter(
+        lookup_expr="icontains",
+        label=gettext_lazy("Filter by education group")
+    )
 
     education_group__facultyadviser__adviser = django_filters.ModelChoiceFilter(
         queryset=Adviser.objects.filter(type='MGR').select_related('person'), label=gettext_lazy("Faculty Adviser")
