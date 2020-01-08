@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-02 14:07+0100\n"
+"POT-Creation-Date: 2020-01-08 15:50+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -515,7 +515,6 @@ msgstr "Revue de littérature"
 msgid "Loading..."
 msgstr "Chargement en cours..."
 
-
 msgid "Manager"
 msgstr "Gestionnaires"
 
@@ -617,6 +616,9 @@ msgstr "Personne ajoutée"
 
 msgid "Person to add"
 msgstr "Personne à ajouter"
+
+msgid "Phone"
+msgstr "Téléphone"
 
 msgid "Photo"
 msgstr "Photo"
@@ -1052,8 +1054,8 @@ msgstr "email"
 msgid "file"
 msgstr "fichier"
 
-msgid "filter by education_group"
-msgstr "filtre par programme"
+msgid "filter by students"
+msgstr "Filtrer par étudiants"
 
 msgid "from"
 msgstr "du"
@@ -1072,9 +1074,6 @@ msgstr "pas de fichier"
 
 msgid "of"
 msgstr "sur"
-
-msgid "Phone"
-msgstr "Téléphone"
 
 msgid "search_person_explanation"
 msgstr "Recherche d'une personne"
