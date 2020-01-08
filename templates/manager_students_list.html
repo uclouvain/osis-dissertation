@@ -58,11 +58,15 @@
                             <td>{{ student }}</td>
                             <td>
                                 {% for offerenrollment in student.offerenrollment_set.all %}
-                                    <div class="div_in_datatable">
-                                        <span class="label label-default">{{ offerenrollment.education_group_year.acronym}}.
-                                    {{ offerenrollment.education_group_year.academic_year }}.
-                                    {{ offerenrollment.enrollment_state }}</span>
-                                    </div>
+                                    {% if offerenrollment.enrollment_state %}
+                                        <div class="div_in_datatable">
+                                            <span class="label label-default">
+                                                {{ offerenrollment.education_group_year.acronym}}.
+                                                {{ offerenrollment.education_group_year.academic_year }}.
+                                                {{ offerenrollment.enrollment_state }}
+                                            </span>
+                                        </div>
+                                    {% endif %}
                                 {% endfor %}
                             </td>
                             <td>
@@ -168,9 +172,9 @@
                     null
                 ],
                 initComplete: function () {
-                    this.api().columns([1]).every( function () {
+                    this.api().columns([0]).every( function () {
                         var column = this;
-                        var select = $('<select class="search_select_filter form-control input-sm"><option value="">{% trans 'filter by education_group'%}</option></select>')
+                        var select = $('<select class="search_select_filter form-control input-sm"><option value="" selected>{% trans 'filter by students'%}</option></select>')
                             .appendTo( $('#students-list_filter'))
                             .on( 'change', function () {
                                 var val = $.fn.dataTable.util.escapeRegex(
