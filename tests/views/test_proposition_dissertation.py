@@ -42,74 +42,74 @@ from dissertation.tests.models import test_proposition_dissertation, test_offer_
 
 
 class PropositionDissertationViewTestCase(TestCase):
-
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         #Teacher
-        self.adviser_teacher = test_adviser.create_adviser_from_scratch(
+        cls.adviser_teacher = test_adviser.create_adviser_from_scratch(
             username='teacher', email='teacher@uclouvain.be',
             password='teacher', type='PRF')
         #Manager
-        self.adviser_manager = test_adviser.create_adviser_from_scratch(
+        cls.adviser_manager = test_adviser.create_adviser_from_scratch(
             username='manager', email='manager@uclouvain.be',
             password='manager', type='MGR')
-        self.teacher = AdviserTeacherFactory()
-        self.manager = AdviserManagerFactory()
-        self.education_group = EducationGroupFactory()
-        self.faculty_manager = FacultyAdviserFactory(adviser=self.manager,
-                                                     education_group=self.education_group)
-        self.offer_proposition = test_offer_proposition.create_offer_proposition(acronym="TEST_OFFER_NOW",
-                                                                                 education_group=self.education_group)
-        self.prop_diss = PropositionDissertationFactory(
+        cls.teacher = AdviserTeacherFactory()
+        cls.manager = AdviserManagerFactory()
+        cls.education_group = EducationGroupFactory()
+        cls.faculty_manager = FacultyAdviserFactory(adviser=cls.manager,
+                                                     education_group=cls.education_group)
+        cls.offer_proposition = test_offer_proposition.create_offer_proposition(acronym="TEST_OFFER_NOW",
+                                                                                 education_group=cls.education_group)
+        cls.prop_diss = PropositionDissertationFactory(
                 title="Teacher proposition ",
-                author=self.teacher,
-                creator=self.teacher.person)
-        self.prop_offer = PropositionOfferFactory(
-            proposition_dissertation=self.prop_diss,
-            offer_proposition=self.offer_proposition
+                author=cls.teacher,
+                creator=cls.teacher.person)
+        cls.prop_offer = PropositionOfferFactory(
+            proposition_dissertation=cls.prop_diss,
+            offer_proposition=cls.offer_proposition
         )
-        self.prop_role1 = PropositionRoleFactory(
+        cls.prop_role1 = PropositionRoleFactory(
             status="PROMOTEUR",
-            adviser=self.teacher,
-            proposition_dissertation=self.prop_diss
+            adviser=cls.teacher,
+            proposition_dissertation=cls.prop_diss
         )
         # Create multiple propositions dissertations
-        self.teacher_propositon_dissertations = []
-        self.manager_proposition_dissertations = []
+        cls.teacher_propositon_dissertations = []
+        cls.manager_proposition_dissertations = []
         for x in range(0, 5):
             # Teacher proposition dissertation creation
             teacher_prop = test_proposition_dissertation.create_proposition_dissertation(
                 title="Teacher proposition " + str(x),
-                adviser=self.adviser_teacher,
-                person=self.adviser_teacher.person,
-                offer_proposition=self.offer_proposition)
-            self.teacher_propositon_dissertations.append(teacher_prop)
+                adviser=cls.adviser_teacher,
+                person=cls.adviser_teacher.person,
+                offer_proposition=cls.offer_proposition)
+            cls.teacher_propositon_dissertations.append(teacher_prop)
             # Manager proposition dissertation creation
             manager_prop = test_proposition_dissertation.create_proposition_dissertation(
                 title="Manager propostion " + str(x),
-                adviser=self.adviser_manager,
-                person=self.adviser_manager.person,
-                offer_proposition=self.offer_proposition)
-            self.manager_proposition_dissertations.append(manager_prop)
+                adviser=cls.adviser_manager,
+                person=cls.adviser_manager.person,
+                offer_proposition=cls.offer_proposition)
+            cls.manager_proposition_dissertations.append(manager_prop)
+
+    def setUp(self):
+        self.client.login(username='teacher', password='teacher')
 
     ###########################
     #         TEACHER         #
     ###########################
     def test_get_new_proposition_dissertation(self):
-        self.client.login(username='teacher', password='teacher')
         url = reverse('proposition_dissertation_new')
         response = self.client.get(url)
         self.assertEqual(response.context['form'].initial['active'], True)
         self.assertEqual(response.context['form'].initial['author'], self.adviser_teacher)
 
     def test_post_new_proposition_dissertation(self):
-        self.client.login(username='teacher', password='teacher')
         url = reverse('proposition_dissertation_new')
         response = self.client.post(url, data=self.get_form_teacher_new_proposition_dissertation())
         # Nous pouvons tester uniquement la redirection, impossible de deviner l'ID
         self.assertEqual(response.status_code, 302)
 
     def test_get_detail_proposition_dissertation(self):
-        self.client.login(username='teacher', password='teacher')
         proposition_dissertation = self.teacher_propositon_dissertations[1]
         url = reverse('proposition_dissertation_detail', args=[proposition_dissertation.id])
         response = self.client.get(url)
@@ -118,7 +118,6 @@ class PropositionDissertationViewTestCase(TestCase):
         self.assertEqual(context.get("proposition_dissertation"), proposition_dissertation)
 
     def test_get_edit_proposition_dissertation(self):
-        self.client.login(username='teacher', password='teacher')
         proposition_dissertation = self.teacher_propositon_dissertations[1]
         url = reverse('proposition_dissertation_edit', args=[proposition_dissertation.id])
         response = self.client.get(url)
@@ -140,7 +139,6 @@ class PropositionDissertationViewTestCase(TestCase):
     #     self.assertEqual(response.status_code, 404)
 
     def test_post_edit_proposition_dissertation(self):
-        self.client.login(username='teacher', password='teacher')
         proposition_dissertation = self.teacher_propositon_dissertations[1]
         url = reverse('proposition_dissertation_edit', args=[proposition_dissertation.id])
         response = self.client.post(url, data = self.get_form_teacher_edit_proposition_dissertation())
@@ -148,19 +146,16 @@ class PropositionDissertationViewTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_get_all_proposition_dissertations(self):
-        self.client.login(username='teacher', password='teacher')
         url = reverse('proposition_dissertations')
         response = self.client.get(url)
         self.assertEqual(len(response.context['propositions_dissertations']), 11) #5 teachers / 5 managers
 
     def test_get_my_proposition_dissertations(self):
-        self.client.login(username='teacher', password='teacher')
         url = reverse('my_dissertation_propositions')
         response = self.client.get(url)
         self.assertEqual(len(response.context['propositions_dissertations']), 5)
 
     def test_delete_proposition_dissertation(self):
-        self.client.login(username='teacher', password='teacher')
         proposition = self.teacher_propositon_dissertations[1]
         url = reverse('proposition_dissertation_delete', args=[proposition.id])
         response = self.client.post(url)
@@ -170,14 +165,12 @@ class PropositionDissertationViewTestCase(TestCase):
         self.assertTrue(is_not_active)
 
     def test_search_proposition_dissertations(self):
-        self.client.login(username='teacher', password='teacher')
         url = reverse('proposition_dissertations_search')
         response = self.client.get(url, data={"search": "Teacher proposition 4"})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context['propositions_dissertations']), 1)
 
     def test_delete_jury_proposition_dissertations(self):
-        self.client.login(username='teacher', password='teacher')
         proposition = self.teacher_propositon_dissertations[1]
         adviser_test = test_adviser.create_adviser_from_scratch(username='thomas', email='thomas@uclouvain.be',
                                                            password='thomas', type='PRF')

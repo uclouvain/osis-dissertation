@@ -28,12 +28,14 @@ from dissertation.tests.factories.offer_proposition import OfferPropositionFacto
 
 
 class TestFacultyAdviserCreateView(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.entity_manager = EntityManagerFactory()
+        cls.education_group = OfferPropositionFactory()
+        cls.adviser = AdviserTeacherFactory()
 
     def setUp(self):
-        self.entity_manager = EntityManagerFactory()
         self.client.force_login(self.entity_manager.person.user)
-        self.education_group = OfferPropositionFactory()
-        self.adviser = AdviserTeacherFactory()
 
     def test_create(self):
         response = self.client.get(

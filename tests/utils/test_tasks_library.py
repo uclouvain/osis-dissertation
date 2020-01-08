@@ -41,17 +41,13 @@ class UtilsTestCase(TestCase):
         self.date_start_after_today = datetime.date(2099, 9, 1)
         self.date_end_after_today = datetime.date(2100, 9, 1)
         self.education_group_outdated = EducationGroupFactory()
-        self.education_group_year_outdated = EducationGroupYearFactory \
-            (education_group=self.education_group_outdated)
-
+        self.education_group_year_outdated = EducationGroupYearFactory(education_group=self.education_group_outdated)
         self.education_group2_outdated = EducationGroupFactory()
-        self.education_group2_year_outdated = EducationGroupYearFactory(
-            education_group=self.education_group2_outdated)
-
+        self.education_group2_year_outdated = EducationGroupYearFactory(education_group=self.education_group2_outdated)
         self.education_group_future_dates = EducationGroupFactory()
         self.education_group_year__future_dates = EducationGroupYearFactory(
-            education_group=self.education_group_future_dates)
-
+            education_group=self.education_group_future_dates
+        )
         self.offer_proposition_outdated = OfferPropositionFactory(
             start_visibility_proposition=self.date_before_today,
             end_visibility_proposition=self.date_end_before_today,

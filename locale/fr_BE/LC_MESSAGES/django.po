@@ -162,7 +162,7 @@ msgid "Confirm delete for :"
 msgstr "Confirmez la suppression de :"
 
 msgid "Confirm manager add"
-msgstr "Confirmation d'ajout d'un gesionnaires"
+msgstr "Confirmation d'ajout d'un gestionnaire"
 
 msgid "Continue"
 msgstr "Continuer"
@@ -320,9 +320,6 @@ msgstr "Modifier l'enseignant"
 msgid "Editable"
 msgstr "Modifiable"
 
-msgid "Education Group"
-msgstr "filtre par programme"
-
 msgid "Empirical research"
 msgstr "Recherche empirique"
 
@@ -349,6 +346,9 @@ msgstr "Gestionnaire de programme"
 
 msgid "File"
 msgstr "Fichier"
+
+msgid "Filter by education group"
+msgstr "Filtre par programme"
 
 msgid "First"
 msgstr "Premier"

@@ -29,8 +29,9 @@ from dissertation.tests.factories.faculty_adviser import FacultyAdviserFactory
 
 
 class FacultyManagerTest(TestCase):
-    def setUp(self):
-        self.faculty_adviser = FacultyAdviserFactory()
+    @classmethod
+    def setUpTestData(cls):
+        cls.faculty_adviser = FacultyAdviserFactory()
 
     def test_str_self(self):
         self.assertEqual(

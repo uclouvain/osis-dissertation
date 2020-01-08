@@ -45,43 +45,44 @@ HTTP_OK = 200
 class DissertationUtilsTestCase(TestCase):
     fixtures = ['dissertation/fixtures/message_template.json', ]
 
-    def setUp(self):
-        self.maxDiff = None
-        self.manager = AdviserManagerFactory()
+    @classmethod
+    def setUpTestData(cls):
+        cls.maxDiff = None
+        cls.manager = AdviserManagerFactory()
         a_person_teacher = PersonFactory.create(first_name='Pierre',
                                                 last_name='Dupont',
                                                 email='pd@uclouvain.be')
-        self.teacher = AdviserTeacherFactory(person=a_person_teacher)
+        cls.teacher = AdviserTeacherFactory(person=a_person_teacher)
         a_person_teacher2 = PersonFactory.create(first_name='Marco',
                                                  last_name='Millet',
                                                  email='mm@uclouvain.be')
-        self.teacher2 = AdviserTeacherFactory(person=a_person_teacher2)
+        cls.teacher2 = AdviserTeacherFactory(person=a_person_teacher2)
         a_person_student = PersonWithoutUserFactory.create(last_name="Durant",
                                                            email='laurent.dermine@uclouvain.be')
-        self.student = StudentFactory.create(person=a_person_student)
-        self.education_group_1 = EducationGroupFactory()
-        self.academic_year1 = AcademicYearFactory()
-        self.education_group_year_1 = EducationGroupYearFactory(acronym="test_offer1",
-                                                                education_group=self.education_group_1,
-                                                                academic_year=self.academic_year1, title="test_offer1")
-        self.offer_proposition1 = OfferPropositionFactory(education_group=self.education_group_1,
-                                                          global_email_to_commission=True)
-        self.proposition_dissertation = PropositionDissertationFactory(author=self.teacher,
-                                                                       creator=a_person_teacher,
-                                                                       title='Proposition 1212121')
-        FacultyAdviserFactory(adviser=self.manager, education_group=self.education_group_1)
-        self.dissertation_1 = DissertationFactory(author=self.student,
-                                                  title='Dissertation_test_email',
-                                                  education_group_year=self.education_group_year_1,
-                                                  proposition_dissertation=self.proposition_dissertation,
-                                                  status='DRAFT',
-                                                  active=True,
-                                                  dissertation_role__adviser=self.teacher,
-                                                  dissertation_role__status='PROMOTEUR')
-        FacultyAdviserFactory(adviser=self.manager, education_group=self.education_group_1)
-        self.dissert_role = DissertationRoleFactory(dissertation=self.dissertation_1,
-                                                    adviser=self.teacher2,
-                                                    status='READER')
+        cls.student = StudentFactory.create(person=a_person_student)
+        cls.education_group_1 = EducationGroupFactory()
+        cls.academic_year1 = AcademicYearFactory()
+        cls.education_group_year_1 = EducationGroupYearFactory(acronym="test_offer1",
+                                                               education_group=cls.education_group_1,
+                                                               academic_year=cls.academic_year1, title="test_offer1")
+        cls.offer_proposition1 = OfferPropositionFactory(education_group=cls.education_group_1,
+                                                         global_email_to_commission=True)
+        cls.proposition_dissertation = PropositionDissertationFactory(author=cls.teacher,
+                                                                      creator=a_person_teacher,
+                                                                      title='Proposition 1212121')
+        FacultyAdviserFactory(adviser=cls.manager, education_group=cls.education_group_1)
+        cls.dissertation_1 = DissertationFactory(author=cls.student,
+                                                 title='Dissertation_test_email',
+                                                 education_group_year=cls.education_group_year_1,
+                                                 proposition_dissertation=cls.proposition_dissertation,
+                                                 status='DRAFT',
+                                                 active=True,
+                                                 dissertation_role__adviser=cls.teacher,
+                                                 dissertation_role__status='PROMOTEUR')
+        FacultyAdviserFactory(adviser=cls.manager, education_group=cls.education_group_1)
+        cls.dissert_role = DissertationRoleFactory(dissertation=cls.dissertation_1,
+                                                   adviser=cls.teacher2,
+                                                   status='READER')
 
     def test_create_string_list_promoteurs(self):
         promotors_string = emails_dissert.create_string_list_promotors(self.dissertation_1)

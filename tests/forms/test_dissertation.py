@@ -35,17 +35,17 @@ from dissertation.tests.factories.proposition_offer import PropositionOfferFacto
 
 
 class DissertationFormsTestCase(TestCase):
-
-    def setUp(self):
-        self.manager = AdviserManagerFactory()
-        self.proposition = PropositionDissertationFactory()
-        self.dissertation = DissertationFactory(proposition_dissertation=self.proposition)
-        self.proposition_offer = PropositionOfferFactory(
-            proposition_dissertation=self.proposition
+    @classmethod
+    def setUpTestData(cls):
+        cls.manager = AdviserManagerFactory()
+        cls.proposition = PropositionDissertationFactory()
+        cls.dissertation = DissertationFactory(proposition_dissertation=cls.proposition)
+        cls.proposition_offer = PropositionOfferFactory(
+            proposition_dissertation=cls.proposition
         )
         FacultyAdviserFactory(
-            adviser=self.manager,
-            education_group=self.proposition_offer.offer_proposition.education_group
+            adviser=cls.manager,
+            education_group=cls.proposition_offer.offer_proposition.education_group
         )
 
     def test_dissertation_manager_edit_form(self):

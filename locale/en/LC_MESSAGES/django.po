@@ -317,9 +317,6 @@ msgstr ""
 msgid "Editable"
 msgstr ""
 
-msgid "Education Group"
-msgstr ""
-
 msgid "Empirical research"
 msgstr ""
 
@@ -345,6 +342,9 @@ msgid "Faculty Adviser"
 msgstr ""
 
 msgid "File"
+msgstr ""
+
+msgid "Filter by education group"
 msgstr ""
 
 msgid "First"
