@@ -28,13 +28,13 @@ from django.db import models
 from django.db.models import Q
 
 from base.models.education_group import EducationGroup
-from base.models.utils.utils import get_object_or_none
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_role import DissertationRole
 from dissertation.models.enums.adviser_types import AdviserTypes, ADVISER_TYPES
 from dissertation.models.proposition_dissertation import PropositionDissertation
 from dissertation.models.proposition_role import PropositionRole
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
+from osis_common.utils.models import get_object_or_none
 
 
 class AdviserAdmin(SerializableModelAdmin):

@@ -33,7 +33,6 @@ from django.utils.translation import gettext_lazy as _
 from base.models import academic_year
 from base.models import student
 from base.models.education_group_year import EducationGroupYear
-from base.models.utils.utils import get_object_or_none
 from dissertation.models import dissertation_location
 from dissertation.models.dissertation_document_file import DissertationDocumentFile
 from dissertation.models.enums import dissertation_status
@@ -44,6 +43,7 @@ from dissertation.models.proposition_dissertation import PropositionDissertation
 from dissertation.utils import emails_dissert
 from osis_common.models.document_file import DocumentFile
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
+from osis_common.utils.models import get_object_or_none
 
 
 class DissertationAdmin(SerializableModelAdmin):
