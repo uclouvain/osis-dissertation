@@ -180,6 +180,12 @@ class PropositionDissertationViewTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context['propositions_dissertations']), 0)
 
+    def test_proposition_dissertations_with_deactivated(self):
+        url = reverse('proposition_dissertations')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(self.proposition_dissertation_deactivated in response.context['propositions_dissertations'])
+
     def test_delete_jury_proposition_dissertations(self):
         proposition = self.teacher_propositon_dissertations[1]
         adviser_test = test_adviser.create_adviser_from_scratch(username='thomas', email='thomas@uclouvain.be',
