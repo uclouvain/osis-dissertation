@@ -44,11 +44,11 @@ from dissertation.tests.models import test_proposition_dissertation, test_offer_
 class PropositionDissertationViewTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
-        #Teacher
+        # Teacher
         cls.adviser_teacher = test_adviser.create_adviser_from_scratch(
             username='teacher', email='teacher@uclouvain.be',
             password='teacher', type='PRF')
-        #Manager
+        # Manager
         cls.adviser_manager = test_adviser.create_adviser_from_scratch(
             username='manager', email='manager@uclouvain.be',
             password='manager', type='MGR')
@@ -56,13 +56,13 @@ class PropositionDissertationViewTestCase(TestCase):
         cls.manager = AdviserManagerFactory()
         cls.education_group = EducationGroupFactory()
         cls.faculty_manager = FacultyAdviserFactory(adviser=cls.manager,
-                                                     education_group=cls.education_group)
+                                                    education_group=cls.education_group)
         cls.offer_proposition = test_offer_proposition.create_offer_proposition(acronym="TEST_OFFER_NOW",
-                                                                                 education_group=cls.education_group)
+                                                                                education_group=cls.education_group)
         cls.prop_diss = PropositionDissertationFactory(
-                title="Teacher proposition ",
-                author=cls.teacher,
-                creator=cls.teacher.person)
+            title="Teacher proposition ",
+            author=cls.teacher,
+            creator=cls.teacher.person)
         cls.prop_offer = PropositionOfferFactory(
             proposition_dissertation=cls.prop_diss,
             offer_proposition=cls.offer_proposition
@@ -90,6 +90,10 @@ class PropositionDissertationViewTestCase(TestCase):
                 person=cls.adviser_manager.person,
                 offer_proposition=cls.offer_proposition)
             cls.manager_proposition_dissertations.append(manager_prop)
+        cls.proposition_dissertation_deactivated = PropositionDissertationFactory(
+            title="It's deactivated",
+            active=False
+        )
 
     def setUp(self):
         self.client.login(username='teacher', password='teacher')
@@ -122,7 +126,7 @@ class PropositionDissertationViewTestCase(TestCase):
         url = reverse('proposition_dissertation_edit', args=[proposition_dissertation.id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        #Check form fields
+        # Check form fields
         form = response.context['form']
         self.assertEqual(form.initial['title'], proposition_dissertation.title)
         self.assertEqual(form.initial['author'], proposition_dissertation.author.id)
@@ -141,14 +145,14 @@ class PropositionDissertationViewTestCase(TestCase):
     def test_post_edit_proposition_dissertation(self):
         proposition_dissertation = self.teacher_propositon_dissertations[1]
         url = reverse('proposition_dissertation_edit', args=[proposition_dissertation.id])
-        response = self.client.post(url, data = self.get_form_teacher_edit_proposition_dissertation())
-        #Si l'objet est mis à jour redirection, impossible de tester actuellement le contenu
+        response = self.client.post(url, data=self.get_form_teacher_edit_proposition_dissertation())
+        # Si l'objet est mis à jour redirection, impossible de tester actuellement le contenu
         self.assertEqual(response.status_code, 302)
 
     def test_get_all_proposition_dissertations(self):
         url = reverse('proposition_dissertations')
         response = self.client.get(url)
-        self.assertEqual(len(response.context['propositions_dissertations']), 11) #5 teachers / 5 managers
+        self.assertEqual(len(response.context['propositions_dissertations']), 11)  # 5 teachers / 5 managers
 
     def test_get_my_proposition_dissertations(self):
         url = reverse('my_dissertation_propositions')
@@ -161,7 +165,7 @@ class PropositionDissertationViewTestCase(TestCase):
         response = self.client.post(url)
         # Si l'objet est mis à jour redirection
         self.assertEqual(response.status_code, 302)
-        is_not_active=PropositionDissertation.objects.filter(pk=proposition.id, active=False).count()
+        is_not_active = PropositionDissertation.objects.filter(pk=proposition.id, active=False).count()
         self.assertTrue(is_not_active)
 
     def test_search_proposition_dissertations(self):
@@ -170,15 +174,21 @@ class PropositionDissertationViewTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context['propositions_dissertations']), 1)
 
+    def test_search_proposition_dissertations_with_deactivated(self):
+        url = reverse('proposition_dissertations_search')
+        response = self.client.get(url, data={"search": self.proposition_dissertation_deactivated.title})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context['propositions_dissertations']), 0)
+
     def test_delete_jury_proposition_dissertations(self):
         proposition = self.teacher_propositon_dissertations[1]
         adviser_test = test_adviser.create_adviser_from_scratch(username='thomas', email='thomas@uclouvain.be',
-                                                           password='thomas', type='PRF')
+                                                                password='thomas', type='PRF')
         status = "CO_PROMOTEUR"
         proposition_role = test_proposition_role.create_proposition_role(proposition=proposition, adviser=adviser_test,
                                                                          status=status)
         nb_occurence = PropositionRole.objects.filter(proposition_dissertation=proposition).count()
-        self.assertEqual(nb_occurence, 2) #teacher as "PROMOTEUR" AND thomas as "CO_PROMOTEUR"
+        self.assertEqual(nb_occurence, 2)  # teacher as "PROMOTEUR" AND thomas as "CO_PROMOTEUR"
 
         url = reverse('proposition_dissertations_role_delete', args=[proposition_role.id])
         response = self.client.post(url)
@@ -201,20 +211,20 @@ class PropositionDissertationViewTestCase(TestCase):
             "level": "SPECIFIC",
             "collaboration": "FORBIDDEN",
             "max_number_student": 5,
-            "txt_checkbox_" + str(self.offer_proposition.id) : "on"  #Simulate checkbox
+            "txt_checkbox_" + str(self.offer_proposition.id): "on"  # Simulate checkbox
         }
 
     def get_form_teacher_edit_proposition_dissertation(self):
         return {
-            "title" : "Updated proposition dissertation",
-            "visibility" : False,
+            "title": "Updated proposition dissertation",
+            "visibility": False,
             "author": self.adviser_teacher.id,
-            "description" : "Updated proposition description",
-            "type" : "OTH",
-            "level" : "SPECIFIC",
-            "collaboration" : "FORBIDDEN",
-            "max_number_student" : 1,
-            "txt_checkbox_" + str(self.offer_proposition.id) : "on"  # Simulate checkbox
+            "description": "Updated proposition description",
+            "type": "OTH",
+            "level": "SPECIFIC",
+            "collaboration": "FORBIDDEN",
+            "max_number_student": 1,
+            "txt_checkbox_" + str(self.offer_proposition.id): "on"  # Simulate checkbox
         }
 
     def test_proposition_dissertation_jury_new_view_with_teacher(self):
