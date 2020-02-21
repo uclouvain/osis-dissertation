@@ -331,7 +331,8 @@ def _export_proposition_dissertation_xlsx(propositions_dissertations):
 
 def _get_all_proposition_by_offer(current_academic_year, prefetch_propositions, request):
     propositions_dissertations = PropositionDissertation.objects.filter(
-        offer_propositions__education_group__facultyadviser__adviser__person__user=request.user
+        offer_propositions__education_group__facultyadviser__adviser__person__user=request.user,
+        active=True
     ).annotate(dissertations_count=Count(
         'dissertations',
         filter=Q(
@@ -349,7 +350,8 @@ def _get_all_proposition_by_offer(current_academic_year, prefetch_propositions, 
 
 def _search_proposition_dissertation(current_academic_year, prefetch_propositions, request, terms):
     propositions_dissertations = PropositionDissertation.objects.filter(
-        offer_propositions__education_group__facultyadviser__adviser__person__user=request.user
+        offer_propositions__education_group__facultyadviser__adviser__person__user=request.user,
+        active=True
     ).filter(
         Q(title__icontains=terms) |
         Q(description__icontains=terms) |
