@@ -57,6 +57,7 @@ from dissertation.models.proposition_offer import PropositionOffer
 from dissertation.models.proposition_role import PropositionRole
 from dissertation.perms import user_is_proposition_promotor, \
     adviser_can_manage_proposition_dissertation, autorized_proposition_dissert_promotor_or_manager_or_author
+from osis_common.decorators.download import set_download_cookie
 
 MAX_PROPOSITION_ROLE = 4
 
@@ -293,6 +294,7 @@ def manager_proposition_dissertations(request):
                       {'propositions_dissertations': propositions_dissertations})
 
 
+@set_download_cookie
 def _export_proposition_dissertation_xlsx(propositions_dissertations):
     filename = "EXPORT_propositions_{}.xlsx".format(time.strftime("%Y-%m-%d_%H:%M"))
     workbook = Workbook(encoding='utf-8')

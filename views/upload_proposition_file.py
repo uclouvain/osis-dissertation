@@ -35,10 +35,12 @@ from dissertation.models.proposition_dissertation import PropositionDissertation
 from dissertation.models.proposition_document_file import PropositionDocumentFile
 from dissertation.perms import autorized_proposition_dissert_promotor_or_manager_or_author
 from osis_common import models as mdl_osis_common
+from osis_common.decorators.download import set_download_cookie
 from osis_common.models.enum import storage_duration
 
 
 @login_required
+@set_download_cookie
 def download(request, proposition_pk):
     proposition = mdl.proposition_dissertation.find_by_id(proposition_pk)
     proposition_document = mdl.proposition_document_file.find_by_proposition(proposition).first()

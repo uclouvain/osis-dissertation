@@ -65,6 +65,7 @@ from dissertation.models.enums.dissertation_status import DISSERTATION_STATUS
 from dissertation.models.offer_proposition import OfferProposition
 from dissertation.perms import adviser_can_manage, autorized_dissert_promotor_or_manager, check_for_dissert, \
     adviser_is_in_jury
+from osis_common.decorators.download import set_download_cookie
 
 
 def _role_can_be_deleted(dissert, dissert_role):
@@ -373,6 +374,7 @@ def get_ordered_roles(dissert):
 @login_required
 @cache_filter()
 @user_passes_test(adviser.is_manager)
+@set_download_cookie
 def manager_dissertations_search(request):
     terms = request.GET.get('search', '')
     disserts = Dissertation.objects.filter(
