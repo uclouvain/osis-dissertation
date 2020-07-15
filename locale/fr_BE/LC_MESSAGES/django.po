@@ -18,7 +18,7 @@ msgstr ""
 
 #, python-format
 msgid "%%"
-msgstr ""
+msgstr "%%"
 
 msgid "(filtered from _MAX_ total entries)"
 msgstr "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)"
@@ -1046,7 +1046,7 @@ msgid "close"
 msgstr "Fermer"
 
 msgid "datatable_infopostfix"
-msgstr ""
+msgstr "datatable_infopostfix"
 
 msgid "email"
 msgstr "email"
