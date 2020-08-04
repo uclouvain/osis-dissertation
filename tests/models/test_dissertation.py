@@ -72,7 +72,7 @@ class DissertationModelTestCase(TestCase):
         cls.education_group_year = EducationGroupYearFactory(acronym="test_offer1",
                                                              education_group=cls.education_group,
                                                              academic_year=cls.academic_year1)
-        cls.education_group_year2 = EducationGroupYearFactory(acronym="test_offer1",
+        cls.education_group_year2 = EducationGroupYearFactory(acronym="test_offer11",
                                                               education_group=cls.education_group2,
                                                               academic_year=cls.academic_year1)
         cls.dissertation_test_email = DissertationFactory(author=cls.student,
