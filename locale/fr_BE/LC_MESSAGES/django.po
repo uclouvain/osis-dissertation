@@ -213,7 +213,7 @@ msgid "Dissertation"
 msgstr "Mémoire"
 
 msgid "Dissertation Manager"
-msgstr "Mémoires encadrés en tant que lecteur"
+msgstr "Gestionnaire Dissertation"
 
 msgid "Dissertation defended"
 msgstr "Mémoire défendu"
