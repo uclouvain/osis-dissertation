@@ -85,7 +85,7 @@ class OfferProposition(SerializableModel):
         most_recent_education_group = self.education_group.educationgroupyear_set.filter(
             education_group=self.education_group
         ).latest('academic_year__year')
-        group_year = GroupYear.objects.filter(
+        group_year = GroupYear.objects.get(
             acronym=most_recent_education_group.acronym,
             academic_year=most_recent_education_group.academic_year,
             education_group=most_recent_education_group.education_group
