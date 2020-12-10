@@ -88,7 +88,6 @@ class OfferProposition(SerializableModel):
         group_year = GroupYear.objects.get(
             acronym=most_recent_education_group.acronym,
             academic_year=most_recent_education_group.academic_year,
-            education_group=self.education_group
         )
         return "{} - {} - {} - {}".format(
             most_recent_education_group.acronym,
