@@ -32,7 +32,6 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from dissertation.models.offer_proposition_group import OfferPropositionGroup
-from education_group.models.group_year import GroupYear
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from osis_common.utils.models import get_object_or_none
 
@@ -85,15 +84,10 @@ class OfferProposition(SerializableModel):
         most_recent_education_group = self.education_group.educationgroupyear_set.filter(
             education_group=self.education_group
         ).latest('academic_year__year')
-        group_year = GroupYear.objects.get(
-            acronym=most_recent_education_group.acronym,
-            academic_year=most_recent_education_group.academic_year,
-        )
-        return "{} - {} - {} - {}".format(
+        return "{} - {} - {}".format(
             most_recent_education_group.acronym,
             most_recent_education_group.title,
-            _(str(most_recent_education_group.schedule_type).capitalize()),
-            group_year.main_teaching_campus.name
+            _(str(most_recent_education_group.schedule_type).capitalize())
         )
 
     @property
