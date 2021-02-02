@@ -27,7 +27,6 @@ from django.test import TestCase
 
 from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
-from base.tests.factories.offer import OfferFactory
 from dissertation.models.offer_proposition import OfferProposition
 from dissertation.models.offer_proposition import get_by_dissertation, get_by_offer_proposition_group, \
     find_by_id
@@ -50,9 +49,7 @@ class OfferPropositionTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.offer_proposition_with_good_dates = OfferPropositionFactory()
-        cls.offer_with_offer_proposition = OfferFactory()
         cls.education_group_with_offer_proposition = EducationGroupFactory()
-        cls.offer_without_offer_proposition = OfferFactory()
         cls.offer_proposition_group = OfferPropositionGroupFactory()
         cls.offer_proposition = OfferPropositionFactory(
             education_group=cls.education_group_with_offer_proposition,
