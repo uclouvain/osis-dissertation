@@ -44,6 +44,7 @@ from openpyxl.writer.excel import save_virtual_workbook
 from rest_framework import status
 
 from base import models as mdl
+from base.auth.roles import tutor
 from base.models import academic_year
 from base.models.academic_year import AcademicYear
 from base.models.education_group import EducationGroup
@@ -88,7 +89,7 @@ def dissertations(request):
     person = get_object_or_404(Person.objects.select_related('adviser'), pk=request.user.person.pk)
 
     if mdl.student.find_by_person(person) and not \
-            mdl.tutor.find_by_person(person) and not \
+            tutor.find_by_person(person) and not \
             adviser.find_by_person(person):
         return redirect('home')
 
