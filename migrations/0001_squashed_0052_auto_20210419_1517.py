@@ -238,4 +238,8 @@ class Migration(migrations.Migration):
                 ('uuid', models.UUIDField(db_index=True, default=uuid.uuid4, editable=False, unique=True)),
             ],
         ),
+        migrations.AlterModelOptions(
+            name='adviser',
+            options={},
+        ),
     ]
