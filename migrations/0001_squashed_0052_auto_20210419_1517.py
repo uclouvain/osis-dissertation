@@ -131,7 +131,6 @@ class Migration(migrations.Migration):
                 'ordering': ['author__person__last_name', 'author__person__middle_name', 'author__person__first_name', 'title'],
             },
         ),
-
         migrations.CreateModel(
             name='DissertationDocumentFile',
             fields=[
@@ -190,6 +189,11 @@ class Migration(migrations.Migration):
                 ('status', models.CharField(choices=[('PROMOTEUR', 'Promotor'), ('CO_PROMOTEUR', 'Co-Promotor'), ('READER', 'Reader'), ('ACCOMPANIST', 'Accompanist'), ('INTERNSHIP', 'Internship Master'), ('PRESIDENT', 'President')], default='PROMOTEUR', max_length=12)),
                 ('uuid', models.UUIDField(db_index=True, default=uuid.uuid4, editable=False, unique=True)),
             ],
+        ),
+        migrations.AddField(
+            model_name='adviser',
+            name='proposition_dissertation',
+            field=models.ManyToManyField(related_name='advisers', through='dissertation.PropositionRole', to='dissertation.PropositionDissertation'),
         ),
         migrations.CreateModel(
             name='FacultyAdviser',
