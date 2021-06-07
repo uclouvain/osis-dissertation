@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(set_uuid_field),
+        migrations.RunPython(set_uuid_field, elidable=True),
         migrations.AlterField(
             model_name='dissertation',
             name='uuid',
