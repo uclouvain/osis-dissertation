@@ -51,6 +51,7 @@ from dissertation.models import dissertation, proposition_dissertation, proposit
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.enums import dissertation_role_status
 from dissertation.models.enums import dissertation_status
+from dissertation.models.enums.dissertation_role_status import DissertationRoleStatus
 from dissertation.models.offer_proposition import OfferProposition
 from dissertation.models.proposition_dissertation import PropositionDissertation
 from dissertation.models.proposition_offer import PropositionOffer
@@ -147,7 +148,7 @@ def manager_proposition_dissertation_detail(request, pk):
     for file in files:
         filename = file.document_file.file_name
     if count_proposition_role < 1:
-        proposition_role.add(dissertation_role_status.PROMOTEUR, proposition.author, proposition)
+        proposition_role.add(DissertationRoleStatus.PROMOTEUR.name, proposition.author, proposition)
     return render(request, 'manager_proposition_dissertation_detail.html',
                   {'proposition_dissertation': proposition,
                    'adviser': adv,
@@ -439,7 +440,7 @@ def proposition_dissertation_detail(request, pk):
     for file in files:
         filename = file.document_file.file_name
     if count_proposition_role < 1:
-        proposition_role.add(dissertation_role_status.PROMOTEUR, proposition.author, proposition)
+        proposition_role.add(DissertationRoleStatus.PROMOTEUR.name, proposition.author, proposition)
     proposition_roles = PropositionRole.objects.filter(proposition_dissertation=proposition) \
         .select_related('adviser__person')
     return render(request, 'proposition_dissertation_detail.html',

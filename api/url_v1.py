@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2019 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,16 +23,18 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import factory
+from django.urls import path
 
-from dissertation.models.enums.dissertation_role_status import DissertationRoleStatus
-from dissertation.tests.factories.adviser import AdviserTeacherFactory
+from dissertation.api.views.proposition_dissertation import PropositionDissertationListView, \
+    PropositionDissertationDetailView
 
+app_name = "dissertation"
+urlpatterns = [
+    path('propositions', PropositionDissertationListView.as_view(), name=PropositionDissertationListView.name),
+    path(
+        'propositions/<uuid:uuid>/',
+        PropositionDissertationDetailView.as_view(),
+        name=PropositionDissertationDetailView.name,
+    ),
 
-class DissertationRoleFactory(factory.DjangoModelFactory):
-    class Meta:
-        model = 'dissertation.DissertationRole'
-
-    status = factory.Iterator(DissertationRoleStatus.choices(), getter=lambda c: c[0])
-    adviser = factory.SubFactory(AdviserTeacherFactory)
-    dissertation = None
+]

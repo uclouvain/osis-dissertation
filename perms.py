@@ -34,20 +34,20 @@ from django.utils.decorators import available_attrs
 from base.models.education_group import EducationGroup
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_role import DissertationRole
-from dissertation.models.enums import dissertation_role_status
+from dissertation.models.enums.dissertation_role_status import DissertationRoleStatus
 from dissertation.models.proposition_role import PropositionRole
 
 
 def user_is_dissertation_promotor(user, dissert):
     this_adviser = user.person.adviser
     return DissertationRole.objects.filter(dissertation=dissert). \
-        filter(status=dissertation_role_status.PROMOTEUR).filter(adviser=this_adviser).exists()
+        filter(status=DissertationRoleStatus.PROMOTEUR.name).filter(adviser=this_adviser).exists()
 
 
 def user_is_proposition_promotor(user, prop_diss):
     return PropositionRole.objects.filter(
         proposition_dissertation=prop_diss,
-        status=dissertation_role_status.PROMOTEUR,
+        status=DissertationRoleStatus.PROMOTEUR.name,
         adviser__person__user=user).exists()
 
 

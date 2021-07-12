@@ -1,0 +1,282 @@
+openapi: 3.0.0
+servers:
+ - url: https://{environment}.osis.uclouvain.be/api/v1/dissertation/
+   variables:
+     environment:
+       default: dev
+       enum:
+         - dev # Development server
+         - qa # Staging server
+         - test # Test server
+ - url: https://osis.uclouvain.be/api/v1/dissertation/
+   description: 'Production server'
+info:
+  version: '1.00'
+  title: 'Dissertation Service'
+  description: |-
+    A set of API endpoints that allow you to get information about dissertation
+paths:
+  /propositions:
+    get:
+      description: "Return all dissertation's propositions available for the user currently connected"
+      operationId: propositions_list
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            description: Number of results to return per page.
+            type: integer
+        - in: query
+          name: offset
+          schema:
+            description: The initial index from which to return the results.
+            type: integer
+        - in: query
+          name: search
+          schema:
+            description: A search term which will look up at title
+            type: string
+        - $ref: '#/components/parameters/Accept-Language'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Pagination'
+                  - type: object
+                    properties:
+                      results:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/PropositionDissertationRow'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      tags:
+        - proposition_dissertation
+  /propositions/{uuid}/:
+    get:
+      description: "Return detail of a proposition dissertation available for the user currently connected"
+      operationId: proposition_detail
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            description: 'The uuid of the proposition dissertation'
+            type: string
+        - $ref: '#/components/parameters/Accept-Language'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropositionDissertationDetail'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - proposition_dissertation
+components:
+  securitySchemes:
+    Token:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Enter your token in the format **Token &lt;token>**
+  parameters:
+    Accept-Language:
+      in: header
+      name: Accept-Language
+      description: >
+        The header advertises which languages the client is able to understand, and which locale variant is preferred. (By languages, we mean natural languages, such as English, and not programming languages.)
+      schema:
+        $ref: '#/components/schemas/AcceptedLanguageEnum'
+      required: false
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Pagination:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+        previous:
+          type: string
+          format: uri
+    PropositionDissertationRow:
+      type: object
+      properties:
+        uuid:
+          type: string
+        title:
+          type: string
+        author:
+          type: string
+        offers:
+          type: array
+          items:
+            type: string
+        max_number_student:
+          type: integer
+        remaining_places:
+          type: integer
+      required:
+        - uuid
+        - title
+        - author
+        - offers
+        - max_number_student
+        - remaining_places
+    PropositionDissertationDetail:
+      type: object
+      properties:
+        uuid:
+          type: string
+          example: 'f8b61488-f32b-4382-8633-3bf81fcacatb'
+        title:
+          type: string
+          example: "Autres sujets - Sandrine Durant"
+        offers:
+          type: array
+          items:
+            type: string
+        max_number_student:
+          type: integer
+          example: 5
+        dissertations_count:
+          type: integer
+          example: 2
+        author:
+          $ref: '#/components/schemas/PropositionDissertationAuthor'
+        jury:
+          type: array
+          items:
+            $ref: '#/components/schemas/PropositionDissertationJury'
+        link:
+          $ref: '#/components/schemas/PropositionDissertationLink'
+      required:
+        - uuid
+        - title
+        - offers
+        - max_number_student
+        - dissertations_count
+        - author
+        - jury
+        - link
+    PropositionDissertationAuthor:
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: "Sandrine"
+        last_name:
+          type: string
+          example: "Durant"
+        middle_name:
+          type: string
+          example: ""
+        available_by_email:
+          type: boolean
+          example: true
+        email:
+          type: string
+          example: "dummy@uclouvain.be"
+        available_by_phone:
+          type: boolean
+          example: true
+        phone:
+          type: string
+          example: "+3244477889"
+        mobile_phone:
+          type: string
+          example: "+32444778899"
+        comment:
+          type: string
+          example: "Business hours only"
+      required:
+        - first_name
+        - last_name
+        - middle_name
+        - available_by_email
+        - email
+        - available_by_phone
+        - phone
+        - mobile_phone
+        - comment
+    PropositionDissertationJury:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/DissertationRoleStatusEnum'
+        status_text:
+          type: string
+          example: "Promoteur"
+        adviser:
+          type: string
+          example: "Durant, Sandrine"
+      required:
+        - status
+        - status_text
+        - adviser
+    PropositionDissertationLink:
+      type: object
+      properties:
+        document_url:
+          type: string
+          format: uri
+      required:
+        - document_url
+    DissertationRoleStatusEnum:
+      type: string
+      enum:
+        - 'PROMOTEUR'
+        - 'CO_PROMOTEUR'
+        - 'READER'
+        - 'ACCOMPANIST'
+        - 'INTERNSHIP'
+        - 'PRESIDENT'
+    AcceptedLanguageEnum:
+      type: string
+      enum:
+        - 'en'
+        - 'fr-be'
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
+security:
+  - Token: [ ]

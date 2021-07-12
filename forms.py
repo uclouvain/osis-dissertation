@@ -38,7 +38,7 @@ from dissertation.models.adviser import Adviser
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_role import DissertationRole
 from dissertation.models.dissertation_update import DissertationUpdate
-from dissertation.models.enums import dissertation_role_status
+from dissertation.models.enums.dissertation_role_status import DissertationRoleStatus
 from dissertation.models.faculty_adviser import FacultyAdviser
 from dissertation.models.offer_proposition import OfferProposition
 from dissertation.models.proposition_dissertation import PropositionDissertation
@@ -184,7 +184,7 @@ class ManagerDissertationRoleForm(ModelForm):
         diss = data['dissertation']
         justification = self._get_justification()
         dissertation_update.add(self.request, diss, status, justification=justification)
-        if status == dissertation_role_status.PROMOTEUR:
+        if status == DissertationRoleStatus.PROMOTEUR.name:
             instance, created = DissertationRole.objects.update_or_create(
                 dissertation=diss,
                 status=status,
@@ -256,7 +256,7 @@ class ManagerPropositionRoleForm(ModelForm):
         status = data['status']
         adv = data['adviser']
         prop = data['proposition_dissertation']
-        if status == dissertation_role_status.PROMOTEUR:
+        if status == DissertationRoleStatus.PROMOTEUR.name:
             instance, created = PropositionRole.objects.update_or_create(
                 proposition_dissertation=prop,
                 status=status,
