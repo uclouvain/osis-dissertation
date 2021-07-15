@@ -43,14 +43,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/Pagination'
-                  - type: object
-                    properties:
-                      results:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/PropositionDissertationRow'
+                $ref: '#/components/schemas/PropositionDissertationPaginatedList'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -120,7 +113,7 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
-    Pagination:
+    PropositionDissertationPaginatedList:
       type: object
       properties:
         count:
@@ -131,6 +124,10 @@ components:
         previous:
           type: string
           format: uri
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PropositionDissertationRow'
     PropositionDissertationRow:
       type: object
       properties:
