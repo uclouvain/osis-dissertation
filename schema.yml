@@ -121,9 +121,11 @@ components:
         next:
           type: string
           format: uri
+          nullable: true
         previous:
           type: string
           format: uri
+          nullable: true
         results:
           type: array
           items:
