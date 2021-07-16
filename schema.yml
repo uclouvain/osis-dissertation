@@ -77,6 +77,61 @@ paths:
           $ref: '#/components/responses/NotFound'
       tags:
         - proposition_dissertation
+  /dissertation:
+    get:
+      description: 'Return all dissertations of connected user'
+      operationId: dissertation_list
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            description: Number of results to return per page.
+            type: integer
+        - in: query
+          name: offset
+          schema:
+            description: The initial index from which to return the results.
+            type: integer
+        - $ref: '#/components/parameters/Accept-Language'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DissertationPaginatedList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      tags:
+        - dissertation
+    post:
+      description: "Create a dissertation"
+      operationId: dissertation_create
+      parameters:
+        - $ref: '#/components/parameters/Accept-Language'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DissertationCreateCommand'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DissertationCreatedResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - dissertation
 components:
   securitySchemes:
     Token:
@@ -301,6 +356,111 @@ components:
         - 'ACCOMPANIST'
         - 'INTERNSHIP'
         - 'PRESIDENT'
+    DissertationPaginatedList:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DissertationRow'
+    DissertationRow:
+      type: object
+      properties:
+        uuid:
+          type: string
+          example: 'f8b61488-f32b-4382-8633-3bf81fcacatb'
+        title:
+          type: string
+          example: "Big data, l'or numérique"
+        author:
+          type: string
+          example: "DURANT Thomas"
+        status:
+          $ref: '#/components/schemas/DissertationStatusEnum'
+        status_text:
+          type: string
+        offer_acronym:
+          type: string
+        start_year:
+          type: integer
+          example: 2019
+        dissertation_subject:
+          type: string
+    DissertationStatusEnum:
+      type: string
+      enum:
+        - 'DRAFT'
+        - 'DIR_SUBMIT'
+        - 'DIR_OK'
+        - 'DIR_KO'
+        - 'COM_SUBMIT'
+        - 'COM_OK'
+        - 'COM_KO'
+        - 'EVA_SUBMIT'
+        - 'EVA_OK'
+        - 'EVA_KO'
+        - 'TO_RECEIVE'
+        - 'TO_DEFEND'
+        - 'DEFENDED'
+        - 'ENDED'
+        - 'ENDED_WIN'
+        - 'ENDED_LOS'
+    DissertationCreateCommand:
+      type: object
+      properties:
+        proposition_dissertation_uuid:
+          type: string
+          example: "f8b61488-f32b-4382-8633-3bf81fc5d6a5"
+        title:
+          type: string
+          example: "Big data, l'or numérique"
+        description:
+          type: string
+          example: "Mémoire portant sur le big data"
+        defend_year:
+          type: integer
+          example: 2019
+        defend_period:
+          $ref: '#/components/schemas/DefendPeriodEnum'
+        location_uuid:
+          type: string
+          example: "f8b61488-f32b-4382-8633-3bf81fc5d6a5"
+        education_group_year_uuid:
+          type: string
+          example: "f8b61488-f32b-4382-8633-3bf81fc5d6a5"
+      required:
+        - proposition_dissertation_uuid
+        - title
+        - description
+        - defend_year
+        - defend_period
+        - location_uuid
+        - education_group_year_uuid
+    DefendPeriodEnum:
+      type: string
+      enum:
+        - 'UNDEFINED'
+        - 'JANUARY'
+        - 'JUNE'
+        - 'SEPTEMBER'
+    DissertationCreatedResponse:
+      type: object
+      properties:
+        dissertation_uuid:
+          type: string
+          example: "f8b61488-f32b-4382-8633-3bf81fc5d6a5"
+      required:
+        - dissertation_uuid
     AcceptedLanguageEnum:
       type: string
       enum:
