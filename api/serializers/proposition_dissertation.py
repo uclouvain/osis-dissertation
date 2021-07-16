@@ -95,6 +95,13 @@ class PropositionDissertationLinkSerializer(serializers.Serializer):
 class PropositionDissertationDetailSerializer(serializers.Serializer):
     uuid = serializers.CharField(read_only=True)
     title = serializers.CharField(default='', read_only=True)
+    description = serializers.CharField(default='', read_only=True)
+    type = serializers.CharField(read_only=True)
+    type_text = serializers.CharField(source='get_type_display', read_only=True)
+    level = serializers.CharField(read_only=True)
+    level_text = serializers.CharField(source='get_level_display', read_only=True)
+    collaboration = serializers.CharField(read_only=True)
+    collaboration_text = serializers.CharField(source='get_collaboration_display', read_only=True)
     offers = serializers.SerializerMethodField()
     max_number_student = serializers.IntegerField(default=0, read_only=True)
     dissertations_count = serializers.IntegerField(default=0, read_only=True)

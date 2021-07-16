@@ -163,6 +163,24 @@ components:
         title:
           type: string
           example: "Autres sujets - Sandrine Durant"
+        description:
+          type: string
+          example: "Liste de tous les autres sujets"
+        type:
+          $ref: '#/components/schemas/PropositionDissertationTypeEnum'
+        type_text:
+          type: string
+          example: "Revue de littérature"
+        level:
+          $ref: '#/components/schemas/PropositionDissertationLevelEnum'
+        level_text:
+          type: string
+          example: "Sujet précis"
+        collaboration:
+          $ref: '#/components/schemas/PropositionDissertationCollaborationEnum'
+        collaboration_text:
+          type: string
+          example: "Possible"
         offers:
           type: array
           items:
@@ -184,6 +202,7 @@ components:
       required:
         - uuid
         - title
+        - description
         - offers
         - max_number_student
         - dissertations_count
@@ -253,6 +272,26 @@ components:
           format: uri
       required:
         - document_url
+    PropositionDissertationTypeEnum:
+      type: string
+      enum:
+        - 'RDL'
+        - 'EMP'
+        - 'THE'
+        - 'PRO'
+        - 'DEV'
+        - 'OTH'
+    PropositionDissertationLevelEnum:
+      type: string
+      enum:
+        - 'SPECIFIC'
+        - 'THEME'
+    PropositionDissertationCollaborationEnum:
+      type: string
+      enum:
+        - 'POSSIBLE'
+        - 'REQUIRED'
+        - 'FORBIDDEN'
     DissertationRoleStatusEnum:
       type: string
       enum:
