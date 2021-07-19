@@ -26,8 +26,11 @@
 from rest_framework import serializers
 
 from base.models.education_group_year import EducationGroupYear
+from dissertation.models import dissertation_role
+from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_location import DissertationLocation
 from dissertation.models.enums.defend_periodes import DefendPeriodes
+from dissertation.models.enums.dissertation_role_status import DissertationRoleStatus
 from dissertation.models.proposition_dissertation import PropositionDissertation
 
 
@@ -71,3 +74,69 @@ class DissertationCreateSerializer(serializers.Serializer):
             return obj.pk
         except EducationGroupYear.DoesNotExist:
             raise serializers.ValidationError("Not found")
+
+
+class DissertationAuthorSerializer(serializers.Serializer):
+    first_name = serializers.CharField(default='', read_only=True)
+    last_name = serializers.CharField(default='', read_only=True)
+    middle_name = serializers.CharField(default='', read_only=True)
+
+
+class DissertationLocation(serializers.Serializer):
+    uuid = serializers.CharField(read_only=True)
+    name = serializers.CharField(read_only=True)
+
+
+class DissertationJurySerializer(serializers.Serializer):
+    status = serializers.CharField(read_only=True)
+    status_text = serializers.CharField(source='get_status_display', read_only=True)
+    adviser = serializers.CharField(default='', read_only=True)
+
+
+class DissertationLinkSerializer(serializers.Serializer):
+    document_url = serializers.SerializerMethodField()
+    delete_document_url = serializers.SerializerMethodField()
+
+    def get_document_url(self, obj) -> str:
+        return ''
+
+    def get_delete_document_url(self, obj) -> str:
+        return ''
+
+
+class DissertationDetailSerializer(serializers.Serializer):
+    uuid = serializers.CharField(read_only=True)
+    proposition_uuid = serializers.CharField(read_only=True, source="proposition_dissertation.uuid")
+    title = serializers.CharField(default='', read_only=True)
+    description = serializers.CharField(default='', read_only=True)
+    author = DissertationAuthorSerializer(source='author.person')
+    status = serializers.CharField(read_only=True)
+    status_text = serializers.CharField(source='get_status_display', read_only=True)
+    defend_period = serializers.CharField(read_only=True, source='defend_periode')
+    defend_period_text = serializers.CharField(source='get_defend_periode_display', read_only=True)
+    defend_year = serializers.IntegerField(read_only=True)
+    location = DissertationLocation()
+    jury = serializers.SerializerMethodField()
+    link = DissertationLinkSerializer(source='*')
+
+    def get_jury(self, obj: Dissertation):
+        results = DissertationJurySerializer(obj.dissertationrole_set.all(), many=True).data
+        if results:
+            return results
+
+        results = DissertationJurySerializer(obj.proposition_dissertation.propositionrole_set.all(), many=True).data
+        if results:
+            # TODO: Remove logic inside - must be done at creation
+            for role in obj.proposition_dissertation.propositionrole_set.all():
+                dissertation_role.add(role.status, role.adviser, obj)
+            return results
+
+        if not results:
+            # TODO: Remove logic inside - must be done at creation
+            dissertation_role.add(DissertationRoleStatus.PROMOTEUR.name, obj.proposition_dissertation.author, obj)
+            return [{
+                'status': DissertationRoleStatus.PROMOTEUR.name,
+                'status_text': DissertationRoleStatus.PROMOTEUR.value,
+                'adviser': str(obj.author)
+            }]
+        return results

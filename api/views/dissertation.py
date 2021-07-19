@@ -27,7 +27,8 @@ from django.utils.functional import cached_property
 from rest_framework import generics, status
 from rest_framework.response import Response
 
-from dissertation.api.serializers.dissertation import DissertationListSerializer, DissertationCreateSerializer
+from dissertation.api.serializers.dissertation import DissertationListSerializer, DissertationCreateSerializer, \
+    DissertationDetailSerializer
 from dissertation.models.dissertation import Dissertation
 
 
@@ -35,7 +36,7 @@ class DissertationListCreateView(generics.ListCreateAPIView):
     """
        POST: Create a dissertation
        GET: Return all dissertations available of the user currently connected
-   """
+    """
     name = 'dissertation-list-create'
     serializer_class = DissertationListSerializer
     search_fields = ('title',)
@@ -44,6 +45,7 @@ class DissertationListCreateView(generics.ListCreateAPIView):
     def student(self):
         return self.request.user.person.student_set.first()
 
+    # TODO: Implement filter on active tag !
     def get_queryset(self):
         return Dissertation.objects.filter(
             author__person__user=self.request.user
@@ -73,3 +75,27 @@ class DissertationListCreateView(generics.ListCreateAPIView):
             proposition_dissertation_id=serializer.validated_data['proposition_dissertation_uuid'],
         )
         return obj_created.uuid
+
+
+class DissertationDetailDeleteView(generics.RetrieveDestroyAPIView):
+    """
+       GET: Return all dissertations available of the user currently connected
+       DELETE: Desactivate user's dissertation
+    """
+    name = 'dissertation-get-delete'
+    serializer_class = DissertationDetailSerializer
+
+    def get_object(self) -> Dissertation:
+        return Dissertation.objects.select_related(
+            'author__person',
+            'location'
+        ).prefetch_related(
+            'dissertationrole_set__adviser__person',
+            'proposition_dissertation__propositionrole_set__adviser__person'
+        ).get(
+            author__person__user=self.request.user,
+            uuid=self.kwargs['uuid']
+        )
+
+    def perform_destroy(self, instance: Dissertation):
+        instance.deactivate()
