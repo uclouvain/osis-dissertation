@@ -29,6 +29,7 @@ from rest_framework.response import Response
 
 from dissertation.api.serializers.dissertation import DissertationListSerializer, DissertationCreateSerializer, \
     DissertationDetailSerializer
+from dissertation.models import dissertation_update
 from dissertation.models.dissertation import Dissertation
 
 
@@ -74,6 +75,13 @@ class DissertationListCreateView(generics.ListCreateAPIView):
             education_group_year_id=serializer.validated_data['education_group_year_uuid'],
             proposition_dissertation_id=serializer.validated_data['proposition_dissertation_uuid'],
         )
+
+        dissertation_update.add(
+            self.request,
+            obj_created,
+            obj_created.status,
+            justification="Student created the dissertation : {}".format(obj_created.title)
+        )
         return obj_created.uuid
 
 
@@ -99,3 +107,10 @@ class DissertationDetailDeleteView(generics.RetrieveDestroyAPIView):
 
     def perform_destroy(self, instance: Dissertation):
         instance.deactivate()
+        dissertation_update.add(
+            self.request,
+            instance,
+            instance.status,
+            justification="Student set dissertation inactive",
+        )
+

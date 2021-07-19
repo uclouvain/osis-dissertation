@@ -165,8 +165,8 @@ paths:
       tags:
         - dissertation
     delete:
-      description: 'Desactivate a dissertation of the current user'
-      operationId: dissertation_desactivate
+      description: 'Deactivate a dissertation of the current user'
+      operationId: dissertation_deactivate
       parameters:
         - in: path
           name: uuid
