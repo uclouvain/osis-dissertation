@@ -38,7 +38,7 @@ class DissertationListSerializer(serializers.Serializer):
     status = serializers.CharField(read_only=True)
     status_text = serializers.CharField(source='get_status_display', read_only=True)
     offer_acronym = serializers.CharField(source='education_group_year.acronym', read_only=True)
-    start_year = serializers.CharField(source='education_group_year.academic_year.year', read_only=True)
+    start_year = serializers.IntegerField(source='education_group_year.academic_year.year', read_only=True)
     dissertation_subject = serializers.CharField(source='proposition_dissertation', read_only=True)
 
 

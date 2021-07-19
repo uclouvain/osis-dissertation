@@ -38,6 +38,7 @@ class DissertationListCreateView(generics.ListCreateAPIView):
    """
     name = 'dissertation-list-create'
     serializer_class = DissertationListSerializer
+    search_fields = ('title',)
 
     @cached_property
     def student(self):
@@ -63,7 +64,7 @@ class DissertationListCreateView(generics.ListCreateAPIView):
             title=serializer.validated_data['title'],
             description=serializer.validated_data['description'],
             defend_year=serializer.validated_data['defend_year'],
-            defend_period=serializer.validated_data['defend_period'],
+            defend_periode=serializer.validated_data['defend_period'],
             author=self.student,
 
             # Conversion uuid to id is made in Serializer
