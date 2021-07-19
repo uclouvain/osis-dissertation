@@ -23,14 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.db.models import Q
 from django.utils.functional import cached_property
 from rest_framework import generics, status
 from rest_framework.response import Response
 
 from dissertation.api.serializers.dissertation import DissertationListSerializer, DissertationCreateSerializer, \
-    DissertationDetailSerializer
+    DissertationDetailSerializer, DissertationHistoryListSerializer
 from dissertation.models import dissertation_update
 from dissertation.models.dissertation import Dissertation
+from dissertation.models.dissertation_update import DissertationUpdate
 
 
 class DissertationListCreateView(generics.ListCreateAPIView):
@@ -114,3 +116,33 @@ class DissertationDetailDeleteView(generics.RetrieveDestroyAPIView):
             justification="Student set dissertation inactive",
         )
 
+
+class DissertationHistoryListView(generics.ListAPIView):
+    """
+       GET: Return dissertation's modification history
+    """
+    name = 'dissertation-history-list'
+    serializer_class = DissertationHistoryListSerializer
+
+    def get_queryset(self):
+        return DissertationUpdate.objects.filter(
+            dissertation__uuid=self.kwargs['uuid'],
+            dissertation__author__person__user=self.request.user
+        ).exclude(
+            Q(justification__contains='auto_add_jury') |
+            Q(justification__contains='Auto add jury') |
+            Q(justification__contains='manager_add_jury') |
+            Q(justification__contains='Manager add jury') |
+            Q(justification__contains='Le manager a ajouté un membre du jury') |
+            Q(justification__contains='manager_creation_dissertation') |
+            Q(justification__contains='manager_delete_jury') |
+            Q(justification__contains='Manager deleted jury') |
+            Q(justification__contains='manager_edit_dissertation') |
+            Q(justification__contains='manager has edited the dissertation') |
+            Q(justification__contains='manager_set_active_false') |
+            Q(justification__contains='teacher_add_jury') |
+            Q(justification__contains='Teacher added jury') |
+            Q(justification__contains='teacher_delete_jury') |
+            Q(justification__contains='Teacher deleted jury') |
+            Q(justification__contains='teacher_set_active_false')
+        ).select_related('person',)

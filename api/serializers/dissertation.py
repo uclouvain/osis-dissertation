@@ -88,6 +88,7 @@ class DissertationLocation(serializers.Serializer):
 
 
 class DissertationJurySerializer(serializers.Serializer):
+    uuid = serializers.CharField(read_only=True)
     status = serializers.CharField(read_only=True)
     status_text = serializers.CharField(source='get_status_display', read_only=True)
     adviser = serializers.CharField(default='', read_only=True)
@@ -140,3 +141,13 @@ class DissertationDetailSerializer(serializers.Serializer):
                 'adviser': str(obj.author)
             }]
         return results
+
+
+class DissertationHistoryListSerializer(serializers.Serializer):
+    status_from = serializers.CharField(read_only=True)
+    status_from_text = serializers.CharField(read_only=True, source="get_status_from_display")
+    status_to = serializers.CharField(read_only=True)
+    status_to_text = serializers.CharField(read_only=True, source="get_status_to_display")
+    author = serializers.CharField(read_only=True, source="person")
+    created_at = serializers.DateTimeField(read_only=True, format="%d-%m-%Y %H:%M:%S", source="created")
+    justification = serializers.CharField(read_only=True)

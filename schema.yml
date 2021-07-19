@@ -186,6 +186,33 @@ paths:
           $ref: '#/components/responses/NotFound'
       tags:
         - dissertation
+  /dissertations/{uuid}/history:
+    get:
+      description: "Return dissertation's modification history"
+      operationId: dissertation_history
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            description: 'The uuid of the dissertation'
+            type: string
+        - $ref: '#/components/parameters/Accept-Language'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DissertationHistoryPaginatedList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - dissertation
 components:
   securitySchemes:
     Token:
@@ -582,6 +609,42 @@ components:
         document_url:
           type: string
         delete_document_url:
+          type: string
+    DissertationHistoryPaginatedList:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DissertationHistoryRow'
+    DissertationHistoryRow:
+      type: object
+      properties:
+        status_from:
+          $ref: '#/components/schemas/DissertationStatusEnum'
+        status_from_text:
+          type: string
+        status_to:
+           $ref: '#/components/schemas/DissertationStatusEnum'
+        status_to_text:
+          type: string
+        author:
+          type: string
+          example: "DURANT Thomas"
+        created_at:
+          type: string
+          example: "03-12-2016 07:19:46"
+        justification:
           type: string
     DefendPeriodEnum:
       type: string
