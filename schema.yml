@@ -77,7 +77,7 @@ paths:
           $ref: '#/components/responses/NotFound'
       tags:
         - proposition_dissertation
-  /dissertation:
+  /dissertations:
     get:
       description: 'Return all dissertations of connected user'
       operationId: dissertation_list
