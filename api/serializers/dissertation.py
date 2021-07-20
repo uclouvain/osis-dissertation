@@ -25,13 +25,13 @@
 ##############################################################################
 from rest_framework import serializers
 
-from base.models.education_group_year import EducationGroupYear
+from base.models.education_group_year import EducationGroupYear as EducationGroupYearDB
 from dissertation.models import dissertation_role
 from dissertation.models.dissertation import Dissertation
-from dissertation.models.dissertation_location import DissertationLocation
+from dissertation.models.dissertation_location import DissertationLocation as DissertationLocationDB
 from dissertation.models.enums.defend_periodes import DefendPeriodes
 from dissertation.models.enums.dissertation_role_status import DissertationRoleStatus
-from dissertation.models.proposition_dissertation import PropositionDissertation
+from dissertation.models.proposition_dissertation import PropositionDissertation as PropositionDissertationDB
 
 
 class DissertationListSerializer(serializers.Serializer):
@@ -48,7 +48,7 @@ class DissertationListSerializer(serializers.Serializer):
 class DissertationCreateSerializer(serializers.Serializer):
     proposition_dissertation_uuid = serializers.CharField(required=True)
     title = serializers.CharField(required=True)
-    description = serializers.CharField(required=True)
+    description = serializers.CharField(required=True, allow_blank=True)
     defend_year = serializers.IntegerField(required=True)
     defend_period = serializers.ChoiceField(required=True, choices=DefendPeriodes.choices())
     location_uuid = serializers.CharField(required=True)
@@ -56,23 +56,23 @@ class DissertationCreateSerializer(serializers.Serializer):
 
     def validate_proposition_dissertation_uuid(self, proposition_dissertation_uuid: str):
         try:
-            obj = PropositionDissertation.objects.get(uuid=proposition_dissertation_uuid)
+            obj = PropositionDissertationDB.objects.get(uuid=proposition_dissertation_uuid)
             return obj.pk
-        except PropositionDissertation.DoesNotExist:
+        except PropositionDissertationDB.DoesNotExist:
             raise serializers.ValidationError("Not found")
 
     def validate_location_uuid(self, location_uuid: str):
         try:
-            obj = DissertationLocation.objects.get(uuid=location_uuid)
+            obj = DissertationLocationDB.objects.get(uuid=location_uuid)
             return obj.pk
-        except DissertationLocation.DoesNotExist:
+        except DissertationLocationDB.DoesNotExist:
             raise serializers.ValidationError("Not found")
 
     def validate_education_group_year_uuid(self, education_group_year_uuid: str):
         try:
-            obj = EducationGroupYear.objects.get(uuid=education_group_year_uuid)
+            obj = EducationGroupYearDB.objects.get(uuid=education_group_year_uuid)
             return obj.pk
-        except EducationGroupYear.DoesNotExist:
+        except EducationGroupYearDB.DoesNotExist:
             raise serializers.ValidationError("Not found")
 
 
