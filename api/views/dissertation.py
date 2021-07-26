@@ -229,10 +229,10 @@ class DissertationJuryAddView(generics.CreateAPIView):
         dissertation_jury_uuid = self.perform_create(serializer)
         return Response({'dissertation_jury_uuid': dissertation_jury_uuid}, status=status.HTTP_201_CREATED)
 
-    def perform_create(self, serializer):
+    def perform_create(self, serializer) -> str:
         # Conversion uuid to id done in serializer
         adviser = Adviser.objects.select_related('person').get(pk=serializer.validated_data['adviser_uuid'])
-        DissertationRole.objects.create(
+        obj_created = DissertationRole.objects.create(
             adviser_id=adviser.pk,
             dissertation_id=self.dissertation.pk,
             status=DissertationRoleStatus.READER.name,
@@ -245,6 +245,7 @@ class DissertationJuryAddView(generics.CreateAPIView):
             self.dissertation.status,
             justification=justification
         )
+        return obj_created.uuid
 
     def _can_create(self) -> bool:
         all_jury_members = self.dissertation.dissertationrole_set.all()
@@ -252,8 +253,8 @@ class DissertationJuryAddView(generics.CreateAPIView):
             jury_member for jury_member in all_jury_members if jury_member.status == DissertationRoleStatus.READER.name
         ]
 
-        return len(all_jury_members) < 5 and \
-            len(all_jury_readers_members) < 3 and \
+        return len(all_jury_members) < 4 and \
+            len(all_jury_readers_members) < 2 and \
             self.dissertation.education_group_year.education_group.offer_proposition.student_can_manage_readers
 
 
