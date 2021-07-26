@@ -24,15 +24,18 @@
 #
 ##############################################################################
 from django.db.models import Q
+from django.http import HttpResponseNotAllowed
 from django.utils.functional import cached_property
+from django.utils.translation import gettext_lazy as _
 from rest_framework import generics, status
 from rest_framework.response import Response
 
 from dissertation.api.serializers.dissertation import DissertationListSerializer, DissertationCreateSerializer, \
-    DissertationDetailSerializer, DissertationHistoryListSerializer
+    DissertationDetailSerializer, DissertationHistoryListSerializer, DissertationUpdateSerializer
 from dissertation.models import dissertation_update
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_update import DissertationUpdate
+from dissertation.models.enums.dissertation_status import DissertationStatus
 
 
 class DissertationListCreateView(generics.ListCreateAPIView):
@@ -87,13 +90,57 @@ class DissertationListCreateView(generics.ListCreateAPIView):
         return obj_created.uuid
 
 
-class DissertationDetailDeleteView(generics.RetrieveDestroyAPIView):
+class DissertationDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     """
-       GET: Return all dissertations available of the user currently connected
-       DELETE: Desactivate user's dissertation
+       GET: Return dissertation's detail of the user currently connected
+       DELETE: Deactivate user's dissertation
+       PUT: Update user's dissertation
     """
     name = 'dissertation-get-delete'
     serializer_class = DissertationDetailSerializer
+
+    def patch(self, request, *args, **kwargs):
+        allowed_http_methods = ["get", "post", "delete"]
+        return HttpResponseNotAllowed(allowed_http_methods)
+
+    def update(self, request, *args, **kwargs):
+        serializer = DissertationUpdateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+    def perform_update(self, serializer):
+        disseration = self.get_object()
+        if disseration.status in [DissertationStatus.DRAFT.name, DissertationStatus.DIR_KO.name, ]:
+            self._perform_only_title_update(serializer, disseration)
+        else:
+            self._perform_full_update(serializer, disseration)
+
+    def _perform_only_title_update(self, serializer, instance: Dissertation):
+        if instance.title != serializer.validated_data['title']:
+            justification_str = "student_edit_title: {} : {}, {} : {}".format(
+                _("original title"),
+                instance.title,
+                _("new title"),
+                serializer.validated_data['title']
+            )
+
+            instance.title = serializer.validated_data['title']
+            instance.save()
+            dissertation_update.add(self.request, instance, instance.status, justification=justification_str)
+
+    def _perform_full_update(self, serializer, instance: Dissertation):
+        instance.title = serializer.validated_data['title']
+        instance.description = serializer.validated_data['description'],
+        instance.defend_year = serializer.validated_data['defend_year'],
+        instance.defend_period = serializer.validated_data['defend_period'],
+        instance.location_id = serializer.validated_data['location'],
+        instance.save()
+        dissertation_update.add(
+            self.request,
+            instance,
+            instance.status,
+            justification="student edited the dissertation",
+        )
 
     def get_object(self) -> Dissertation:
         return Dissertation.objects.select_related(

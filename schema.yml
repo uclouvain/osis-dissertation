@@ -164,6 +164,34 @@ paths:
           $ref: '#/components/responses/NotFound'
       tags:
         - dissertation
+    put:
+      description: "Update user's dissertation"
+      operationId: dissertation_update
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            description: 'The uuid of the dissertation'
+            type: string
+        - $ref: '#/components/parameters/Accept-Language'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DissertationUpdateCommand'
+      responses:
+        '204':
+          description: 'The resource was been updated successfully.'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - dissertation
     delete:
       description: 'Deactivate a dissertation of the current user'
       operationId: dissertation_deactivate
@@ -530,6 +558,29 @@ components:
         - defend_period
         - location_uuid
         - education_group_year_uuid
+    DissertationUpdateCommand:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "Big data, l'or numérique"
+        description:
+          type: string
+          example: "Mémoire portant sur le big data"
+        defend_year:
+          type: integer
+          example: 2019
+        defend_period:
+          $ref: '#/components/schemas/DefendPeriodEnum'
+        location_uuid:
+          type: string
+          example: "f8b61488-f32b-4382-8633-3bf81fc5d6a5"
+      required:
+        - title
+        - description
+        - defend_year
+        - defend_period
+        - location_uuid
     DissertationDetail:
       type: object
       properties:

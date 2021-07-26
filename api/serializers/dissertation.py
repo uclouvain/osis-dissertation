@@ -76,6 +76,21 @@ class DissertationCreateSerializer(serializers.Serializer):
             raise serializers.ValidationError("Not found")
 
 
+class DissertationUpdateSerializer(serializers.Serializer):
+    title = serializers.CharField(required=True)
+    description = serializers.CharField(required=True, allow_blank=True)
+    defend_year = serializers.IntegerField(required=True)
+    defend_period = serializers.ChoiceField(required=True, choices=DefendPeriodes.choices())
+    location_uuid = serializers.CharField(required=True)
+
+    def validate_location_uuid(self, location_uuid: str):
+        try:
+            obj = DissertationLocationDB.objects.get(uuid=location_uuid)
+            return obj.pk
+        except DissertationLocationDB.DoesNotExist:
+            raise serializers.ValidationError("Not found")
+
+
 class DissertationAuthorSerializer(serializers.Serializer):
     first_name = serializers.CharField(default='', read_only=True)
     last_name = serializers.CharField(default='', read_only=True)

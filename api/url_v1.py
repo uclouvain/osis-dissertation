@@ -25,7 +25,7 @@
 ##############################################################################
 from django.urls import path
 
-from dissertation.api.views.dissertation import DissertationListCreateView, DissertationDetailDeleteView, \
+from dissertation.api.views.dissertation import DissertationListCreateView, DissertationDetailUpdateDeleteView, \
     DissertationHistoryListView
 from dissertation.api.views.proposition_dissertation import PropositionDissertationListView, \
     PropositionDissertationDetailView
@@ -39,7 +39,11 @@ urlpatterns = [
         name=PropositionDissertationDetailView.name,
     ),
     path('dissertations', DissertationListCreateView.as_view(), name=DissertationListCreateView.name),
-    path('dissertations/<uuid:uuid>/', DissertationDetailDeleteView.as_view(), name=DissertationDetailDeleteView.name),
+    path(
+        'dissertations/<uuid:uuid>/',
+        DissertationDetailUpdateDeleteView.as_view(),
+        name=DissertationDetailUpdateDeleteView.name
+    ),
     path(
         'dissertations/<uuid:uuid>/history',
         DissertationHistoryListView.as_view(),
