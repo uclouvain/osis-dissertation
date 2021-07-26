@@ -29,6 +29,7 @@ from base.models.education_group_year import EducationGroupYear as EducationGrou
 from dissertation.models import dissertation_role
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_location import DissertationLocation as DissertationLocationDB
+from dissertation.models.adviser import Adviser as AdviserDB
 from dissertation.models.enums.defend_periodes import DefendPeriodes
 from dissertation.models.enums.dissertation_role_status import DissertationRoleStatus
 from dissertation.models.proposition_dissertation import PropositionDissertation as PropositionDissertationDB
@@ -166,3 +167,14 @@ class DissertationHistoryListSerializer(serializers.Serializer):
     author = serializers.CharField(read_only=True, source="person")
     created_at = serializers.DateTimeField(read_only=True, format="%d-%m-%Y %H:%M:%S", source="created")
     justification = serializers.CharField(read_only=True)
+
+
+class DissertationJuryAddSerializer(serializers.Serializer):
+    adviser_uuid = serializers.CharField(required=True)
+
+    def validate_adviser_uuid(self, adviser_uuid: str):
+        try:
+            obj = AdviserDB.objects.get(uuid=adviser_uuid)
+            return obj.pk
+        except AdviserDB.DoesNotExist:
+            raise serializers.ValidationError("Not found")

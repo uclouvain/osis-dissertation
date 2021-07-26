@@ -23,10 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.urls import path
+from django.urls import path, include
 
 from dissertation.api.views.dissertation import DissertationListCreateView, DissertationDetailUpdateDeleteView, \
-    DissertationHistoryListView
+    DissertationHistoryListView, DissertationJuryDeleteView, DissertationJuryAddView
 from dissertation.api.views.proposition_dissertation import PropositionDissertationListView, \
     PropositionDissertationDetailView
 
@@ -38,15 +38,18 @@ urlpatterns = [
         PropositionDissertationDetailView.as_view(),
         name=PropositionDissertationDetailView.name,
     ),
+
     path('dissertations', DissertationListCreateView.as_view(), name=DissertationListCreateView.name),
-    path(
-        'dissertations/<uuid:uuid>/',
-        DissertationDetailUpdateDeleteView.as_view(),
-        name=DissertationDetailUpdateDeleteView.name
-    ),
-    path(
-        'dissertations/<uuid:uuid>/history',
-        DissertationHistoryListView.as_view(),
-        name=DissertationHistoryListView.name,
-    ),
+    path('dissertations/<uuid:uuid>/', include(([
+        path('', DissertationDetailUpdateDeleteView.as_view(), name=DissertationDetailUpdateDeleteView.name),
+        path('history', DissertationHistoryListView.as_view(), name=DissertationHistoryListView.name),
+        path('jury', DissertationJuryAddView.as_view(), name=DissertationJuryAddView.name),
+        path('jury/', include(([
+            path(
+                '<uuid:uuid_jury_member>/',
+                DissertationJuryDeleteView.as_view(),
+                name=DissertationJuryDeleteView.name,
+            ),
+        ]))),
+    ]))),
 ]

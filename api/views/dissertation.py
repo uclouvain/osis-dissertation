@@ -28,13 +28,18 @@ from django.http import HttpResponseNotAllowed
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from rest_framework import generics, status
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 
 from dissertation.api.serializers.dissertation import DissertationListSerializer, DissertationCreateSerializer, \
-    DissertationDetailSerializer, DissertationHistoryListSerializer, DissertationUpdateSerializer
+    DissertationDetailSerializer, DissertationHistoryListSerializer, DissertationUpdateSerializer, \
+    DissertationJuryAddSerializer
 from dissertation.models import dissertation_update
+from dissertation.models.adviser import Adviser
 from dissertation.models.dissertation import Dissertation
+from dissertation.models.dissertation_role import DissertationRole
 from dissertation.models.dissertation_update import DissertationUpdate
+from dissertation.models.enums.dissertation_role_status import DissertationRoleStatus
 from dissertation.models.enums.dissertation_status import DissertationStatus
 
 
@@ -107,13 +112,14 @@ class DissertationDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
         serializer = DissertationUpdateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     def perform_update(self, serializer):
         disseration = self.get_object()
         if disseration.status in [DissertationStatus.DRAFT.name, DissertationStatus.DIR_KO.name, ]:
-            self._perform_only_title_update(serializer, disseration)
-        else:
             self._perform_full_update(serializer, disseration)
+        else:
+            self._perform_only_title_update(serializer, disseration)
 
     def _perform_only_title_update(self, serializer, instance: Dissertation):
         if instance.title != serializer.validated_data['title']:
@@ -130,10 +136,11 @@ class DissertationDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
 
     def _perform_full_update(self, serializer, instance: Dissertation):
         instance.title = serializer.validated_data['title']
-        instance.description = serializer.validated_data['description'],
-        instance.defend_year = serializer.validated_data['defend_year'],
-        instance.defend_period = serializer.validated_data['defend_period'],
-        instance.location_id = serializer.validated_data['location'],
+        instance.description = serializer.validated_data['description']
+        instance.defend_year = serializer.validated_data['defend_year']
+        instance.defend_periode = serializer.validated_data['defend_period']
+        # Conversion uuid to id is made in Serializer
+        instance.location_id = serializer.validated_data['location_uuid']
         instance.save()
         dissertation_update.add(
             self.request,
@@ -193,3 +200,91 @@ class DissertationHistoryListView(generics.ListAPIView):
             Q(justification__contains='Teacher deleted jury') |
             Q(justification__contains='teacher_set_active_false')
         ).select_related('person',)
+
+
+class DissertationJuryAddView(generics.CreateAPIView):
+    """
+       POST: Add a reader jury member on dissertation
+    """
+    name = 'dissertation-jury-add'
+    serializer_class = DissertationJuryAddSerializer
+
+    @cached_property
+    def dissertation(self):
+        return Dissertation.objects.prefetch_related(
+            'dissertationrole_set'
+        ).select_related(
+            'education_group_year__education_group__offer_proposition'
+        ).get(
+            author__person__user=self.request.user,
+            uuid=self.kwargs['uuid']
+        )
+
+    def create(self, request, *args, **kwargs):
+        if not self._can_create():
+            raise PermissionDenied()
+
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        dissertation_jury_uuid = self.perform_create(serializer)
+        return Response({'dissertation_jury_uuid': dissertation_jury_uuid}, status=status.HTTP_201_CREATED)
+
+    def perform_create(self, serializer):
+        # Conversion uuid to id done in serializer
+        adviser = Adviser.objects.select_related('person').get(pk=serializer.validated_data['adviser_uuid'])
+        DissertationRole.objects.create(
+            adviser_id=adviser.pk,
+            dissertation_id=self.dissertation.pk,
+            status=DissertationRoleStatus.READER.name,
+        )
+
+        justification = "{} {}".format("Student added reader", adviser)
+        dissertation_update.add(
+            self.request,
+            self.dissertation,
+            self.dissertation.status,
+            justification=justification
+        )
+
+    def _can_create(self) -> bool:
+        all_jury_members = self.dissertation.dissertationrole_set.all()
+        all_jury_readers_members = [
+            jury_member for jury_member in all_jury_members if jury_member.status == DissertationRoleStatus.READER.name
+        ]
+
+        return len(all_jury_members) < 5 and \
+            len(all_jury_readers_members) < 3 and \
+            self.dissertation.education_group_year.education_group.offer_proposition.student_can_manage_readers
+
+
+class DissertationJuryDeleteView(generics.DestroyAPIView):
+    """
+       DELETE: Delete a jury member of dissertation
+    """
+    name = 'dissertation-jury-delete'
+
+    def get_object(self):
+        return DissertationRole.objects.select_related(
+            'dissertation__education_group_year__education_group__offer_proposition'
+        ).get(
+            dissertation__uuid=self.kwargs['uuid'],
+            uuid=self.kwargs['uuid_jury_member'],
+        )
+
+    def perform_destroy(self, instance: DissertationRole):
+        if not self._can_delete(instance):
+            raise PermissionDenied()
+
+        justification = "Student deleted reader {}".format(instance)
+        dissertation_update.add(
+            self.request,
+            instance.dissertation,
+            instance.dissertation.status,
+            justification=justification,
+        )
+        instance.delete()
+
+    def _can_delete(self, instance: DissertationRole) -> bool:
+        return instance.dissertation.status == DissertationStatus.DRAFT.name and \
+            instance.status == DissertationRoleStatus.READER.name and \
+            instance.dissertation.education_group_year.education_group.offer_proposition.student_can_manage_readers
