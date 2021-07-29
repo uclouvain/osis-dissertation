@@ -25,7 +25,7 @@
 ##############################################################################
 import datetime
 
-from coverage.backunittest import TestCase
+from django.test import TestCase
 
 from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
