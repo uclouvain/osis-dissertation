@@ -21,5 +21,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(populate_adviser_uuid),
+        migrations.RunPython(populate_adviser_uuid, elidable=True),
     ]
