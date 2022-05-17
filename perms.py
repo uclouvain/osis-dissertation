@@ -29,7 +29,6 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
-from django.utils.decorators import available_attrs
 
 from base.models.education_group import EducationGroup
 from dissertation.models.dissertation import Dissertation
@@ -92,7 +91,7 @@ def autorized_proposition_dissert_promotor_or_manager_or_author(user, propositio
 
 def check_for_dissert(test_func):
     def f_check_for_dissert_or_redirect(view_func):
-        @wraps(view_func, assigned=available_attrs(view_func))
+        @wraps(view_func)
         def _wrapped_view(request, *args, **kwargs):
             if test_func(return_user_with_adviser(request.user), kwargs['pk']):
                 return view_func(request, *args, **kwargs)
