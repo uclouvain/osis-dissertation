@@ -242,7 +242,7 @@ paths:
           $ref: '#/components/responses/NotFound'
       tags:
         - dissertation
-/dissertations/{uuid}/submit:
+  /dissertations/{uuid}/submit:
     post:
       description: "Submit dissertation"
       operationId: dissertation_submit
@@ -275,7 +275,7 @@ paths:
           $ref: '#/components/responses/NotFound'
       tags:
         - dissertation
-/dissertations/{uuid}/back_to_draft:
+  /dissertations/{uuid}/back_to_draft:
     post:
       description: "Back to draft dissertation"
       operationId: dissertation_back_to_draft
