@@ -40,7 +40,7 @@ from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_role import DissertationRole
 from dissertation.models.dissertation_update import DissertationUpdate
 from dissertation.models.enums.dissertation_role_status import DissertationRoleStatus
-from dissertation.models.enums.dissertation_status import DissertationStatus
+from dissertation.models.enums.dissertation_status import DissertationStatus, DISSERTATION_STATUS
 
 
 class DissertationListCreateView(generics.ListCreateAPIView):
@@ -199,7 +199,7 @@ class DissertationHistoryListView(generics.ListAPIView):
             Q(justification__contains='teacher_delete_jury') |
             Q(justification__contains='Teacher deleted jury') |
             Q(justification__contains='teacher_set_active_false')
-        ).select_related('person',)
+        ).select_related('person', )
 
 
 class DissertationJuryAddView(generics.CreateAPIView):
@@ -289,3 +289,32 @@ class DissertationJuryDeleteView(generics.DestroyAPIView):
         return instance.dissertation.status == DissertationStatus.DRAFT.name and \
             instance.status == DissertationRoleStatus.READER.name and \
             instance.dissertation.education_group_year.education_group.offer_proposition.student_can_manage_readers
+
+
+class DissertationSubmitView(generics.CreateAPIView):
+    """
+       POST: Return dissertation's detail of the user currently connected
+    """
+    name = 'dissertation-submit'
+
+    @cached_property
+    def dissertation(self):
+        return Dissertation.objects.prefetch_related(
+            'dissertationrole_set'
+        ).select_related(
+            'education_group_year__education_group__offer_proposition'
+        ).get(
+            author__person__user=self.request.user,
+            uuid=self.kwargs['uuid']
+        )
+
+    def dissertation_update_create(self):
+        self.dissertation.status = DissertationStatus.DIR_OK.name
+        self.dissertation.save()
+
+        dissertation_update.add(
+            self.request,
+            self.dissertation,
+            self.dissertation.status,
+            justification=self.kwargs['justification']
+        )

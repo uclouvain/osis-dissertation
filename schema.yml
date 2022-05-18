@@ -37,6 +37,10 @@ paths:
             description: A search term which will look up at title
             type: string
         - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
       responses:
         '200':
           description: OK
@@ -62,6 +66,10 @@ paths:
             description: 'The uuid of the proposition dissertation'
             type: string
         - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
       responses:
         '200':
           description: OK
@@ -98,6 +106,10 @@ paths:
             description: A search term which will look up at title
             type: string
         - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
       responses:
         '200':
           description: OK
@@ -116,6 +128,10 @@ paths:
       operationId: dissertation_create
       parameters:
         - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
       requestBody:
         required: true
         content:
@@ -149,6 +165,10 @@ paths:
             description: 'The uuid of the dissertation'
             type: string
         - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
       responses:
         '200':
           description: OK
@@ -175,6 +195,10 @@ paths:
             description: 'The uuid of the dissertation'
             type: string
         - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
       requestBody:
         required: true
         content:
@@ -203,9 +227,79 @@ paths:
             description: 'The uuid of the dissertation'
             type: string
         - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
       responses:
         '204':
           description: 'The resource was deleted successfully.'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - dissertation
+/dissertations/{uuid}/submit:
+    post:
+      description: "Submit dissertation"
+      operationId: dissertation_submit
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            description: 'The uuid of the dissertation'
+            type: string
+        - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DissertationSubmitCommand'
+      responses:
+        '204':
+          description: 'The resource was updated successfully.'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - dissertation
+/dissertations/{uuid}/back_to_draft:
+    post:
+      description: "Back to draft dissertation"
+      operationId: dissertation_back_to_draft
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            description: 'The uuid of the dissertation'
+            type: string
+        - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DissertationBackToDraftCommand'
+      responses:
+        '204':
+          description: 'The resource was updated successfully.'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -226,6 +320,10 @@ paths:
             description: 'The uuid of the dissertation'
             type: string
         - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
       responses:
         '200':
           description: OK
@@ -253,6 +351,10 @@ paths:
             description: 'The uuid of the dissertation'
             type: string
         - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
       requestBody:
         required: true
         content:
@@ -292,6 +394,10 @@ paths:
             description: 'The uuid of the jury member'
             type: string
         - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
       responses:
         '204':
           description: 'The resource was deleted successfully.'
@@ -643,6 +749,28 @@ components:
         - defend_year
         - defend_period
         - location_uuid
+    DissertationSubmitCommand:
+      type: object
+      properties:
+        justification:
+          type: string
+          example: "Raison de la soumission"
+        dissertation_uuid:
+          type: string
+          example: "f8b61488-f32b-4382-8633-3bf81fc5d6a5"
+      required:
+        - dissertation_uuid
+    DissertationBackToDraftCommand:
+      type: object
+      properties:
+        justification:
+          type: string
+          example: "Raison du retour en brouillon"
+        dissertation_uuid:
+          type: string
+          example: "f8b61488-f32b-4382-8633-3bf81fc5d6a5"
+      required:
+        - dissertation_uuid
     DissertationDetail:
       type: object
       properties:
