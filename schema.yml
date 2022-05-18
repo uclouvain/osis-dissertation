@@ -263,7 +263,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DissertationSubmitCommand'
+              $ref: '#/components/schemas/DissertationSubmit'
       responses:
         '204':
           description: 'The resource was updated successfully.'
@@ -296,7 +296,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DissertationBackToDraftCommand'
+              $ref: '#/components/schemas/DissertationBackToDraft'
       responses:
         '204':
           description: 'The resource was updated successfully.'
@@ -749,7 +749,7 @@ components:
         - defend_year
         - defend_period
         - location_uuid
-    DissertationSubmitCommand:
+    DissertationSubmit:
       type: object
       properties:
         justification:
@@ -760,7 +760,7 @@ components:
           example: "f8b61488-f32b-4382-8633-3bf81fc5d6a5"
       required:
         - dissertation_uuid
-    DissertationBackToDraftCommand:
+    DissertationBackToDraft:
       type: object
       properties:
         justification:

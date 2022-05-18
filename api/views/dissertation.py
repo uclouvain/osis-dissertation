@@ -318,3 +318,32 @@ class DissertationSubmitView(generics.CreateAPIView):
             self.dissertation.status,
             justification=self.kwargs['justification']
         )
+
+
+class DissertationBackToDraftView(generics.CreateAPIView):
+    """
+       POST: Return dissertation's detail of the user currently connected
+    """
+    name = 'dissertation-submit'
+
+    @cached_property
+    def dissertation(self):
+        return Dissertation.objects.prefetch_related(
+            'dissertationrole_set'
+        ).select_related(
+            'education_group_year__education_group__offer_proposition'
+        ).get(
+            author__person__user=self.request.user,
+            uuid=self.kwargs['uuid']
+        )
+
+    def dissertation_update_create(self):
+        self.dissertation.status = DissertationStatus.DRAFT.name
+        self.dissertation.save()
+
+        dissertation_update.add(
+            self.request,
+            self.dissertation,
+            self.dissertation.status,
+            justification=self.kwargs['justification']
+        )
