@@ -24,6 +24,7 @@
 #
 ##############################################################################
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from base import models as mdl
 from dissertation.models.enums import dissertation_status
@@ -31,7 +32,7 @@ from osis_common.models.serializable_model import SerializableModel, Serializabl
 from . import adviser
 from . import dissertation
 
-JUSTIFICATION_LINK = "_set_to_"
+JUSTIFICATION_LINK = _("set to")
 
 
 class DissertationUpdateAdmin(SerializableModelAdmin):
@@ -80,7 +81,11 @@ def add(request, dissert, old_status, justification=None):
     if justification:
         update.justification = justification
     else:
-        update.justification = "%s%s%s" % (adv.type, JUSTIFICATION_LINK, dissert.status)
+        update.justification = "{} {} {}".format(
+            adv.type if adv else person.full_name,
+            JUSTIFICATION_LINK,
+            dissert.status
+        )
     update.person = person
     update.dissertation = dissert
     update.save()

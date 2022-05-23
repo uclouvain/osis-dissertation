@@ -178,3 +178,11 @@ class DissertationJuryAddSerializer(serializers.Serializer):
             return obj.pk
         except AdviserDB.DoesNotExist:
             raise serializers.ValidationError("Not found")
+
+
+class DissertationSubmitSerializer(serializers.Serializer):
+    justification = serializers.CharField(read_only=True)
+
+
+class DissertationBackToDraftSerializer(serializers.Serializer):
+    justification = serializers.CharField(read_only=True)

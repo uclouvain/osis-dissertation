@@ -33,7 +33,7 @@ from rest_framework.response import Response
 
 from dissertation.api.serializers.dissertation import DissertationListSerializer, DissertationCreateSerializer, \
     DissertationDetailSerializer, DissertationHistoryListSerializer, DissertationUpdateSerializer, \
-    DissertationJuryAddSerializer
+    DissertationJuryAddSerializer, DissertationSubmitSerializer, DissertationBackToDraftSerializer
 from dissertation.models import dissertation_update
 from dissertation.models.adviser import Adviser
 from dissertation.models.dissertation import Dissertation
@@ -291,11 +291,12 @@ class DissertationJuryDeleteView(generics.DestroyAPIView):
             instance.dissertation.education_group_year.education_group.offer_proposition.student_can_manage_readers
 
 
-class DissertationSubmitView(generics.CreateAPIView):
+class DissertationSubmitView(generics.ListCreateAPIView):
     """
        POST: Return dissertation's detail of the user currently connected
     """
     name = 'dissertation-submit'
+    serializer_class = DissertationSubmitSerializer
 
     @cached_property
     def dissertation(self):
@@ -308,23 +309,25 @@ class DissertationSubmitView(generics.CreateAPIView):
             uuid=self.kwargs['uuid']
         )
 
-    def dissertation_update_create(self):
-        self.dissertation.status = DissertationStatus.DIR_OK.name
+    def create(self, request, *args, **kwargs):
+        self.dissertation.status = DissertationStatus.DIR_SUBMIT.name
         self.dissertation.save()
 
         dissertation_update.add(
             self.request,
             self.dissertation,
             self.dissertation.status,
-            justification=self.kwargs['justification']
+            justification=request.data["justification"]
         )
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class DissertationBackToDraftView(generics.CreateAPIView):
+class DissertationBackToDraftView(generics.ListCreateAPIView):
     """
        POST: Return dissertation's detail of the user currently connected
     """
     name = 'dissertation-submit'
+    serializer_class = DissertationBackToDraftSerializer
 
     @cached_property
     def dissertation(self):
@@ -337,7 +340,7 @@ class DissertationBackToDraftView(generics.CreateAPIView):
             uuid=self.kwargs['uuid']
         )
 
-    def dissertation_update_create(self):
+    def create(self, request, *args, **kwargs):
         self.dissertation.status = DissertationStatus.DRAFT.name
         self.dissertation.save()
 
@@ -345,5 +348,6 @@ class DissertationBackToDraftView(generics.CreateAPIView):
             self.request,
             self.dissertation,
             self.dissertation.status,
-            justification=self.kwargs['justification']
+            justification=request.data["justification"]
         )
+        return Response(status=status.HTTP_204_NO_CONTENT)
