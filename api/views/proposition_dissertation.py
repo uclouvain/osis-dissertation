@@ -68,12 +68,7 @@ class PropositionDissertationViewMixin:
             )).distinct()
         )
 
-        return PropositionDissertation.objects.filter(
-            active=True,
-            visibility=True,
-            #offer_propositions__education_group__educationgroupyear__offerenrollment__in=self.offer_enrollment_ids
-        ).select_related('author__person')\
-         .prefetch_related(prefetch_propositions)
+        return PropositionDissertation.objects.select_related('author__person').prefetch_related(prefetch_propositions)
 
 
 class PropositionDissertationListView(PropositionDissertationViewMixin, generics.ListAPIView):
@@ -85,7 +80,10 @@ class PropositionDissertationListView(PropositionDissertationViewMixin, generics
     search_fields = ('title',)
 
     def get_queryset(self):
-        qs = super().get_queryset().annotate(
+        qs = super().get_queryset().filter(
+            active=True,
+            visibility=True
+        ).annotate(
             dissertations_count=Sum(
                 Case(
                     When(
