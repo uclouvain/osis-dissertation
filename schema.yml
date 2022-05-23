@@ -779,16 +779,12 @@ components:
         justification:
           type: string
           example: "Raison de la soumission"
-      required:
-        - dissertation_uuid
     DissertationBackToDraftCommand:
       type: object
       properties:
         justification:
           type: string
           example: "Raison du retour en brouillon"
-      required:
-        - dissertation_uuid
     DissertationDetail:
       type: object
       properties:
