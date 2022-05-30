@@ -973,7 +973,7 @@ components:
       type: object
       properties:
         can_manage_jury:
-          type: bool
+          type: boolean
           example: 'True'
     AcceptedLanguageEnum:
       type: string
