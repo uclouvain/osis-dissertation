@@ -25,6 +25,7 @@
 ##############################################################################
 from django.db import models
 from django.db.models import Sum, Case, When, Q, ExpressionWrapper, F, Prefetch, Subquery, OuterRef
+from django.utils import timezone
 from django.utils.functional import cached_property
 from rest_framework import generics
 
@@ -46,14 +47,25 @@ class PropositionDissertationViewMixin:
 
     @cached_property
     def offer_enrollment_ids(self):
-        return OfferEnrollment.objects.filter(
+        offer_enrollments = list(OfferEnrollment.objects.filter(
             student__person__user=self.request.user,
             education_group_year__academic_year=self.academic_year,
             enrollment_state__in=[
                 offer_enrollment_state.SUBSCRIBED,
                 offer_enrollment_state.PROVISORY
             ]
-        ).values_list('id', flat=True)
+        ))
+        offer_propositions = OfferProposition.objects.filter(
+            education_group__in=[
+                offer_enrollment.education_group_year.education_group for offer_enrollment in offer_enrollments
+            ]
+        )
+        date_now = timezone.now().date()
+        offer_enrollment_ids = [
+            o.id for o in offer_propositions
+            if o.start_visibility_proposition <= date_now <= o.end_visibility_proposition
+        ]
+        return offer_enrollment_ids
 
     def get_queryset(self):
         prefetch_propositions = Prefetch(
@@ -82,7 +94,8 @@ class PropositionDissertationListView(PropositionDissertationViewMixin, generics
     def get_queryset(self):
         qs = super().get_queryset().filter(
             active=True,
-            visibility=True
+            visibility=True,
+            offer_propositions__in=self.offer_enrollment_ids
         ).annotate(
             dissertations_count=Sum(
                 Case(
@@ -110,7 +123,7 @@ class PropositionDissertationListView(PropositionDissertationViewMixin, generics
                 output_field=models.IntegerField()
             ),
         )
-        return qs.only('title', 'max_number_student', 'author', 'offer_propositions',)
+        return qs.only('title', 'max_number_student', 'author', 'offer_propositions', )
 
 
 class PropositionDissertationDetailView(PropositionDissertationViewMixin, generics.RetrieveAPIView):
@@ -121,9 +134,9 @@ class PropositionDissertationDetailView(PropositionDissertationViewMixin, generi
     serializer_class = PropositionDissertationDetailSerializer
 
     def get_object(self):
-        qs = self.get_queryset().\
+        qs = self.get_queryset(). \
             prefetch_related(
-                'propositionrole_set__adviser__person',
-                'propositiondocumentfile_set__document_file'
-            )
+            'propositionrole_set__adviser__person',
+            'propositiondocumentfile_set__document_file'
+        )
         return qs.get(uuid=self.kwargs['uuid'])
