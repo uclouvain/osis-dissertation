@@ -310,7 +310,7 @@ paths:
         - dissertation
   /dissertations/{uuid}/can_manage_jury_member:
     get:
-      description: ""Can manage jury on this dissertation""
+      description: "Can manage jury on this dissertation"
       operationId: dissertation_can_manage_jury_member
       parameters:
         - in: path
