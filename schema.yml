@@ -325,6 +325,12 @@ paths:
         - $ref: '#/components/parameters/X-User-Email'
         - $ref: '#/components/parameters/X-User-GlobalID'
       responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DissertationCanManageJury'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -963,6 +969,12 @@ components:
           example: "f8b61488-f32b-4382-8633-3bf81fc5d6a5"
       required:
         - dissertation_jury_uuid
+    DissertationCanManageJury:
+      type: object
+      properties:
+        can_manage_jury:
+          type: bool
+          example: 'True'
     AcceptedLanguageEnum:
       type: string
       enum:
