@@ -186,3 +186,7 @@ class DissertationSubmitSerializer(serializers.Serializer):
 
 class DissertationBackToDraftSerializer(serializers.Serializer):
     justification = serializers.CharField(read_only=True)
+
+
+class DissertationCanManageJurySerializer(serializers.Serializer):
+    can_manage_jury = serializers.BooleanField(read_only=True)

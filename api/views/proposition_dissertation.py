@@ -46,7 +46,7 @@ class PropositionDissertationViewMixin:
         return AcademicYear.objects.current()
 
     @cached_property
-    def offer_enrollment_ids(self):
+    def offer_propositions_ids(self):
         offer_enrollments = list(OfferEnrollment.objects.filter(
             student__person__user=self.request.user,
             education_group_year__academic_year=self.academic_year,
@@ -61,17 +61,28 @@ class PropositionDissertationViewMixin:
             ]
         )
         date_now = timezone.now().date()
-        offer_enrollment_ids = [
+        offer_propositions_ids = [
             o.id for o in offer_propositions
             if o.start_visibility_proposition <= date_now <= o.end_visibility_proposition
         ]
-        return offer_enrollment_ids
+        return offer_propositions_ids
+
+    @cached_property
+    def offer_enrollments_ids(self):
+        return OfferEnrollment.objects.filter(
+            student__person__user=self.request.user,
+            education_group_year__academic_year=self.academic_year,
+            enrollment_state__in=[
+                offer_enrollment_state.SUBSCRIBED,
+                offer_enrollment_state.PROVISORY
+            ]
+        ).values_list('id', flat=True)
 
     def get_queryset(self):
         prefetch_propositions = Prefetch(
             "offer_propositions",
             queryset=OfferProposition.objects.filter(
-                education_group__educationgroupyear__offerenrollment__in=self.offer_enrollment_ids
+                education_group__educationgroupyear__offerenrollment__in=self.offer_enrollments_ids
             ).annotate(last_acronym=Subquery(
                 EducationGroupYear.objects.filter(
                     education_group__offer_proposition=OuterRef('pk'),
@@ -95,7 +106,7 @@ class PropositionDissertationListView(PropositionDissertationViewMixin, generics
         qs = super().get_queryset().filter(
             active=True,
             visibility=True,
-            offer_propositions__in=self.offer_enrollment_ids
+            offer_propositions__in=self.offer_propositions_ids
         ).annotate(
             dissertations_count=Sum(
                 Case(

@@ -308,6 +308,31 @@ paths:
           $ref: '#/components/responses/NotFound'
       tags:
         - dissertation
+  /dissertations/{uuid}/can_manage_jury_member:
+    get:
+      description: ""Can manage jury on this dissertation""
+      operationId: dissertation_can_manage_jury_member
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            description: 'The uuid of the dissertation'
+            type: string
+        - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
+      responses:
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - dissertation
   /dissertations/{uuid}/history:
     get:
       description: "Return dissertation's modification history"

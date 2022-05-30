@@ -25,6 +25,7 @@
 ##############################################################################
 from django.db.models import Q
 from django.http import HttpResponseNotAllowed
+from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from rest_framework import generics, status
@@ -33,7 +34,8 @@ from rest_framework.response import Response
 
 from dissertation.api.serializers.dissertation import DissertationListSerializer, DissertationCreateSerializer, \
     DissertationDetailSerializer, DissertationHistoryListSerializer, DissertationUpdateSerializer, \
-    DissertationJuryAddSerializer, DissertationSubmitSerializer, DissertationBackToDraftSerializer
+    DissertationJuryAddSerializer, DissertationSubmitSerializer, DissertationBackToDraftSerializer, \
+    DissertationCanManageJurySerializer
 from dissertation.models import dissertation_update
 from dissertation.models.adviser import Adviser
 from dissertation.models.dissertation import Dissertation
@@ -41,6 +43,7 @@ from dissertation.models.dissertation_role import DissertationRole
 from dissertation.models.dissertation_update import DissertationUpdate
 from dissertation.models.enums.dissertation_role_status import DissertationRoleStatus
 from dissertation.models.enums.dissertation_status import DissertationStatus, DISSERTATION_STATUS
+from dissertation.models.offer_proposition import OfferProposition
 
 
 class DissertationListCreateView(generics.ListCreateAPIView):
@@ -287,8 +290,8 @@ class DissertationJuryDeleteView(generics.DestroyAPIView):
 
     def _can_delete(self, instance: DissertationRole) -> bool:
         return instance.dissertation.status == DissertationStatus.DRAFT.name and \
-            instance.status == DissertationRoleStatus.READER.name and \
-            instance.dissertation.education_group_year.education_group.offer_proposition.student_can_manage_readers
+               instance.status == DissertationRoleStatus.READER.name and \
+               instance.dissertation.education_group_year.education_group.offer_proposition.student_can_manage_readers
 
 
 class DissertationSubmitView(generics.ListCreateAPIView):
@@ -351,3 +354,21 @@ class DissertationBackToDraftView(generics.ListCreateAPIView):
             justification=request.data["justification"]
         )
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class DissertationCanManageJuryView(generics.ListAPIView):
+    """
+       GET: Return if student can manage jury
+    """
+    name = 'dissertation-can-manage-jury'
+    serializer_class = DissertationCanManageJurySerializer
+
+    def get_queryset(self):
+        dissertation = Dissertation.objects.filter(
+            dissertation__uuid=self.kwargs['uuid'],
+        )
+        offer_proposition = OfferProposition.objects.filter(
+            education_group=dissertation.education_group_year.education_group
+        )
+        return offer_proposition.start_visibility_proposition <= \
+            timezone.now().date() <= offer_proposition.end_visibility_proposition
