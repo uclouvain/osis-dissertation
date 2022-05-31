@@ -189,4 +189,4 @@ class DissertationBackToDraftSerializer(serializers.Serializer):
 
 
 class DissertationCanManageJurySerializer(serializers.Serializer):
-    can_manage_jury = serializers.BooleanField(read_only=True)
+    can_manage_jury = serializers.BooleanField(read_only=True, source="student_can_manage_readers")

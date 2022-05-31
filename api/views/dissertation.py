@@ -31,6 +31,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import generics, status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from dissertation.api.serializers.dissertation import DissertationListSerializer, DissertationCreateSerializer, \
     DissertationDetailSerializer, DissertationHistoryListSerializer, DissertationUpdateSerializer, \
@@ -356,19 +357,18 @@ class DissertationBackToDraftView(generics.ListCreateAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class DissertationCanManageJuryView(generics.ListAPIView):
+class DissertationCanManageJuryView(generics.RetrieveAPIView):
     """
        GET: Return if student can manage jury
     """
     name = 'dissertation-can-manage-jury'
     serializer_class = DissertationCanManageJurySerializer
 
-    def get_queryset(self):
-        dissertation = Dissertation.objects.filter(
-            dissertation__uuid=self.kwargs['uuid'],
+    def get_object(self):
+        dissertation = Dissertation.objects.get(
+            uuid=self.kwargs['uuid'],
         )
-        offer_proposition = OfferProposition.objects.filter(
+        return OfferProposition.objects.get(
             education_group=dissertation.education_group_year.education_group
         )
-        return offer_proposition.start_visibility_proposition <= \
-            timezone.now().date() <= offer_proposition.end_visibility_proposition
+

@@ -55,7 +55,11 @@ urlpatterns = [
                 ),
             ]))
         ),
-        path('can_manage_jury', DissertationCanManageJuryView.as_view(), name=DissertationCanManageJuryView.name),
+        path(
+            'can_manage_jury_member',
+            DissertationCanManageJuryView.as_view(),
+            name=DissertationCanManageJuryView.name
+        ),
         path('submit', DissertationSubmitView.as_view(), name=DissertationSubmitView.name),
         path('back_to_draft', DissertationBackToDraftView.as_view(), name=DissertationBackToDraftView.name),
     ]))),
