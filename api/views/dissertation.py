@@ -25,25 +25,23 @@
 ##############################################################################
 from django.db.models import Q
 from django.http import HttpResponseNotAllowed
-from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from rest_framework import generics, status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from dissertation.api.serializers.dissertation import DissertationListSerializer, DissertationCreateSerializer, \
     DissertationDetailSerializer, DissertationHistoryListSerializer, DissertationUpdateSerializer, \
     DissertationJuryAddSerializer, DissertationSubmitSerializer, DissertationBackToDraftSerializer, \
-    DissertationCanManageJurySerializer
+    DissertationCanManageJurySerializer, DissertationCanEditDissertationSerializer
 from dissertation.models import dissertation_update
 from dissertation.models.adviser import Adviser
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_role import DissertationRole
 from dissertation.models.dissertation_update import DissertationUpdate
 from dissertation.models.enums.dissertation_role_status import DissertationRoleStatus
-from dissertation.models.enums.dissertation_status import DissertationStatus, DISSERTATION_STATUS
+from dissertation.models.enums.dissertation_status import DissertationStatus
 from dissertation.models.offer_proposition import OfferProposition
 
 
@@ -372,3 +370,18 @@ class DissertationCanManageJuryView(generics.RetrieveAPIView):
             education_group=dissertation.education_group_year.education_group
         )
 
+
+class DissertationCanEditDissertationView(generics.RetrieveAPIView):
+    """
+       GET: Return if student can manage jury
+    """
+    name = 'dissertation-can-manage-jury'
+    serializer_class = DissertationCanEditDissertationSerializer
+
+    def get_object(self):
+        dissertation = Dissertation.objects.get(
+            uuid=self.kwargs['uuid'],
+        )
+        return OfferProposition.objects.get(
+            education_group=dissertation.education_group_year.education_group
+        )

@@ -27,7 +27,7 @@ from django.urls import path, include
 
 from dissertation.api.views.dissertation import DissertationListCreateView, DissertationDetailUpdateDeleteView, \
     DissertationHistoryListView, DissertationJuryDeleteView, DissertationJuryAddView, DissertationSubmitView, \
-    DissertationBackToDraftView, DissertationCanManageJuryView
+    DissertationBackToDraftView, DissertationCanManageJuryView, DissertationCanEditDissertationView
 from dissertation.api.views.proposition_dissertation import PropositionDissertationListView, \
     PropositionDissertationDetailView
 
@@ -59,6 +59,11 @@ urlpatterns = [
             'can_manage_jury_member',
             DissertationCanManageJuryView.as_view(),
             name=DissertationCanManageJuryView.name
+        ),
+        path(
+            'can_edit_dissertation',
+            DissertationCanEditDissertationView.as_view(),
+            name=DissertationCanEditDissertationView.name
         ),
         path('submit', DissertationSubmitView.as_view(), name=DissertationSubmitView.name),
         path('back_to_draft', DissertationBackToDraftView.as_view(), name=DissertationBackToDraftView.name),

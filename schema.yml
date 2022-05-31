@@ -339,6 +339,37 @@ paths:
           $ref: '#/components/responses/NotFound'
       tags:
         - dissertation
+  /dissertations/{uuid}/can_edit_dissertation:
+    get:
+      description: "Can edit dissertation"
+      operationId: dissertation_can_edit_dissertation
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            description: 'The uuid of the dissertation'
+            type: string
+        - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DissertationCanEditDissertation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - dissertation
   /dissertations/{uuid}/history:
     get:
       description: "Return dissertation's modification history"
@@ -972,7 +1003,13 @@ components:
     DissertationCanManageJury:
       type: object
       properties:
-        can_manage_jury:
+        can_manage_jury_members:
+          type: boolean
+          example: 'True'
+    DissertationCanEditDissertation:
+      type: object
+      properties:
+        can_edit_dissertation:
           type: boolean
           example: 'True'
     AcceptedLanguageEnum:

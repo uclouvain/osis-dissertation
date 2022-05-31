@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.utils import timezone
 from rest_framework import serializers
 
 from base.models.education_group_year import EducationGroupYear as EducationGroupYearDB
@@ -189,4 +190,14 @@ class DissertationBackToDraftSerializer(serializers.Serializer):
 
 
 class DissertationCanManageJurySerializer(serializers.Serializer):
-    can_manage_jury = serializers.BooleanField(read_only=True, source="student_can_manage_readers")
+    can_manage_jury_members = serializers.BooleanField(read_only=True, source="student_can_manage_readers")
+
+
+class DissertationCanEditDissertationSerializer(serializers.Serializer):
+    can_edit_dissertation = serializers.SerializerMethodField(read_only=True)
+
+    @staticmethod
+    def get_can_edit_dissertation(obj):
+        if obj:
+            return obj.start_edit_title <= timezone.now().date() <= obj.end_edit_title
+        return False
