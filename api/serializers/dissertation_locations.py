@@ -34,4 +34,4 @@ from dissertation.models.proposition_dissertation import PropositionDissertation
 
 class DissertationLocationsListSerializer(serializers.Serializer):
     uuid = serializers.CharField(read_only=True)
-    name = serializers.CharField(default='', read_only=True)
+    name = serializers.CharField(read_only=True)

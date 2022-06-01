@@ -30,12 +30,8 @@ from dissertation.models.dissertation_location import DissertationLocation
 
 
 class DissertationLocationsListView(generics.ListAPIView):
-    """
-       Return all dissertation's propositions available for the user currently connected
-    """
-    name = 'propositions'
+    name = 'dissertation-locations-list'
     serializer_class = DissertationLocationsListSerializer
-    search_fields = ('title',)
 
     def get_queryset(self):
         qs = DissertationLocation.objects.all()
