@@ -158,6 +158,21 @@ paths:
       description: "Return all dissertation locations available"
       operationId: dissertation_locations_list
       parameters:
+        - in: query
+          name: limit
+          schema:
+            description: Number of results to return per page.
+            type: integer
+        - in: query
+          name: offset
+          schema:
+            description: The initial index from which to return the results.
+            type: integer
+        - in: query
+          name: search
+          schema:
+            description: A search term which will look up at title
+            type: string
         - $ref: '#/components/parameters/Accept-Language'
         - $ref: '#/components/parameters/X-User-FirstName'
         - $ref: '#/components/parameters/X-User-LastName'
