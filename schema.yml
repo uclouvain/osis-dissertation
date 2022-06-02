@@ -843,7 +843,7 @@ components:
           type: string
           example: "PSY2MS/PS"
         education_group_year_year:
-          type: int
+          type: integer
           example: "2020"
       required:
         - proposition_dissertation_uuid
