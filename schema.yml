@@ -839,9 +839,12 @@ components:
         location_uuid:
           type: string
           example: "f8b61488-f32b-4382-8633-3bf81fc5d6a5"
-        education_group_year_uuid:
+        education_group_year_acronym:
           type: string
-          example: "f8b61488-f32b-4382-8633-3bf81fc5d6a5"
+          example: "PSY2MS/PS"
+        education_group_year_year:
+          type: int
+          example: "2020"
       required:
         - proposition_dissertation_uuid
         - title
@@ -849,7 +852,8 @@ components:
         - defend_year
         - defend_period
         - location_uuid
-        - education_group_year_uuid
+        - education_group_year_acronym
+        - education_group_year_year
     DissertationUpdateCommand:
       type: object
       properties:

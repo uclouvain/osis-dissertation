@@ -31,6 +31,7 @@ from rest_framework import generics, status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 
+from base.models.education_group_year import EducationGroupYear
 from dissertation.api.serializers.dissertation import DissertationListSerializer, DissertationCreateSerializer, \
     DissertationDetailSerializer, DissertationHistoryListSerializer, DissertationUpdateSerializer, \
     DissertationJuryAddSerializer, DissertationSubmitSerializer, DissertationBackToDraftSerializer, \
@@ -68,6 +69,12 @@ class DissertationListCreateView(generics.ListCreateAPIView):
             'education_group_year__academic_year'
         )
 
+    def get_education_group_year_uuid(self, acronym, year):
+        return EducationGroupYear.objects.get(
+            acronym=acronym,
+            academic_year__year=year
+        ).uuid
+
     def create(self, request, *args, **kwargs):
         serializer = DissertationCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -84,7 +91,10 @@ class DissertationListCreateView(generics.ListCreateAPIView):
 
             # Conversion uuid to id is made in Serializer
             location_id=serializer.validated_data['location_uuid'],
-            education_group_year_id=serializer.validated_data['education_group_year_uuid'],
+            education_group_year_id=self.get_education_group_year_uuid(
+                serializer.validated_data['education_group_year_acronym'],
+                serializer.validated_data['education_group_year_year']
+            ),
             proposition_dissertation_id=serializer.validated_data['proposition_dissertation_uuid'],
         )
 
