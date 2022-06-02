@@ -839,10 +839,10 @@ components:
         location_uuid:
           type: string
           example: "f8b61488-f32b-4382-8633-3bf81fc5d6a5"
-        education_group_year_acronym:
+        acronym:
           type: string
           example: "PSY2MS/PS"
-        education_group_year_year:
+        year:
           type: integer
           example: "2020"
       required:

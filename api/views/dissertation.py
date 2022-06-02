@@ -69,11 +69,11 @@ class DissertationListCreateView(generics.ListCreateAPIView):
             'education_group_year__academic_year'
         )
 
-    def get_education_group_year_uuid(self, acronym, year):
+    def get_education_group_year(self, acronym, year):
         return EducationGroupYear.objects.get(
             acronym=acronym,
             academic_year__year=year
-        ).uuid
+        )
 
     def create(self, request, *args, **kwargs):
         serializer = DissertationCreateSerializer(data=request.data)
@@ -91,9 +91,9 @@ class DissertationListCreateView(generics.ListCreateAPIView):
 
             # Conversion uuid to id is made in Serializer
             location_id=serializer.validated_data['location_uuid'],
-            education_group_year_id=self.get_education_group_year_uuid(
-                serializer.validated_data['education_group_year_acronym'],
-                serializer.validated_data['education_group_year_year']
+            education_group_year=self.get_education_group_year(
+                serializer.validated_data['acronym'],
+                serializer.validated_data['year']
             ),
             proposition_dissertation_id=serializer.validated_data['proposition_dissertation_uuid'],
         )

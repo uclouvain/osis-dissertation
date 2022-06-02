@@ -54,7 +54,8 @@ class DissertationCreateSerializer(serializers.Serializer):
     defend_year = serializers.IntegerField(required=True)
     defend_period = serializers.ChoiceField(required=True, choices=DefendPeriodes.choices())
     location_uuid = serializers.CharField(required=True)
-    education_group_year_uuid = serializers.CharField(required=True)
+    acronym = serializers.CharField(required=True)
+    year = serializers.IntegerField(required=True)
 
     def validate_proposition_dissertation_uuid(self, proposition_dissertation_uuid: str):
         try:
