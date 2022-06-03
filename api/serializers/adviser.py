@@ -23,15 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from typing import List
 
 from rest_framework import serializers
 
-from dissertation.models.adviser import Adviser
-from dissertation.models.enums.dissertation_role_status import DissertationRoleStatus
-from dissertation.models.proposition_dissertation import PropositionDissertation
 
-
-class DissertationLocationsListSerializer(serializers.Serializer):
+class AdvisersListSerializer(serializers.Serializer):
     uuid = serializers.CharField(read_only=True)
-    name = serializers.CharField(read_only=True)
+    name = serializers.CharField(read_only=True, source='person')

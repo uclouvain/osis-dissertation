@@ -23,16 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from rest_framework import generics
 
-from dissertation.api.serializers.dissertation_locations import DissertationLocationsListSerializer
-from dissertation.models.dissertation_location import DissertationLocation
+from rest_framework import serializers
 
 
-class DissertationLocationsListView(generics.ListAPIView):
-    name = 'dissertation-locations-list'
-    serializer_class = DissertationLocationsListSerializer
-
-    def get_queryset(self):
-        qs = DissertationLocation.objects.all()
-        return qs.only('uuid', 'name',)
+class DissertationLocationsListSerializer(serializers.Serializer):
+    uuid = serializers.CharField(read_only=True)
+    name = serializers.CharField(read_only=True)

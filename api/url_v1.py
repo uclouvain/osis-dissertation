@@ -25,10 +25,11 @@
 ##############################################################################
 from django.urls import path, include
 
+from dissertation.api.views.adviser import AdvisersListView
 from dissertation.api.views.dissertation import DissertationListCreateView, DissertationDetailUpdateDeleteView, \
     DissertationHistoryListView, DissertationJuryDeleteView, DissertationJuryAddView, DissertationSubmitView, \
     DissertationBackToDraftView, DissertationCanManageJuryView, DissertationCanEditDissertationView
-from dissertation.api.views.dissertation_locations import DissertationLocationsListView
+from dissertation.api.views.dissertation_location import DissertationLocationsListView
 from dissertation.api.views.proposition_dissertation import PropositionDissertationListView, \
     PropositionDissertationDetailView
 
@@ -41,6 +42,7 @@ urlpatterns = [
         name=PropositionDissertationDetailView.name,
     ),
     path('dissertation_locations', DissertationLocationsListView.as_view(), name=DissertationLocationsListView.name),
+    path('advisers', AdvisersListView.as_view(), name=AdvisersListView.name),
     path('dissertations', DissertationListCreateView.as_view(), name=DissertationListCreateView.name),
     path('dissertations/<uuid:uuid>/', include(([
         path('', DissertationDetailUpdateDeleteView.as_view(), name=DissertationDetailUpdateDeleteView.name),
