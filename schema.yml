@@ -191,7 +191,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
       tags:
         - dissertation_location
-  /adviser:
+  /advisers:
     get:
       description: "Return advisers list"
       operationId: advisers_list

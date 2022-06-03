@@ -32,6 +32,7 @@ from dissertation.models.adviser import Adviser
 class AdvisersListView(generics.ListAPIView):
     name = 'advisers-list'
     serializer_class = AdvisersListSerializer
+    search_fields = ('name',)
 
     def get_queryset(self):
         qs = Adviser.objects.all()
