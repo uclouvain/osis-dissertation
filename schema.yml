@@ -153,6 +153,60 @@ paths:
           $ref: '#/components/responses/NotFound'
       tags:
         - dissertation
+  /dissertations/{uuid}/file:
+    get:
+      operationId: retrieveDissertationFile
+      description: ''
+      parameters:
+        - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DissertationFile'
+          description: ''
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - person
+    put:
+      operationId: updateDissertationFile
+      description: ''
+      parameters:
+        - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DissertationFile'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DissertationFile'
+          description: ''
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - person
   /dissertation_locations:
     get:
       description: "Return all dissertation locations available"
@@ -1135,6 +1189,14 @@ components:
         name:
           type: string
           example: "Eric Judor"
+    DissertationFile:
+      type: object
+      properties:
+        dissertation:
+          type: array
+          items:
+            type: string
+          nullable: true
     AcceptedLanguageEnum:
       type: string
       enum:

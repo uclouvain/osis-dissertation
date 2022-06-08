@@ -202,3 +202,11 @@ class DissertationCanEditDissertationSerializer(serializers.Serializer):
         if obj:
             return obj.start_edit_title <= timezone.now().date() <= obj.end_edit_title
         return False
+
+
+class DissertationFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Dissertation
+        fields = [
+            'dissertation_document_file',
+        ]

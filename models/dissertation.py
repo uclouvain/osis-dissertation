@@ -25,6 +25,7 @@
 ##############################################################################
 
 
+from osis_document.contrib import FileField
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import Q
@@ -73,6 +74,11 @@ class DissertationAdmin(SerializableModelAdmin):
         'proposition_dissertation__author__person__first_name',
         'education_group_year__acronym'
     )
+
+
+def dissertation_directory_path(dissertation: 'Dissertation', filename: str):
+    """Return the file upload directory path."""
+    return '{}/{}'.format(dissertation.uuid, filename)
 
 
 class Dissertation(SerializableModel):
@@ -142,6 +148,14 @@ class Dissertation(SerializableModel):
     dissertation_documents_files = models.ManyToManyField(
         DocumentFile,
         through=DissertationDocumentFile
+    )
+    dissertation_document_file = FileField(
+        mimetypes=['image/jpeg', 'image/png', 'application/pdf'],
+        max_size=None,  # TODO : Fixer taille maximum
+        max_files=2,
+        min_files=1,
+        upload_to=dissertation_directory_path,
+        null=True
     )
 
     def __str__(self):
