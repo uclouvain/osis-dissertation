@@ -177,7 +177,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
       tags:
-        - person
+        - dissertation
     put:
       operationId: updateDissertationFile
       description: ''
@@ -206,7 +206,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
       tags:
-        - person
+        - dissertation
   /dissertation_locations:
     get:
       description: "Return all dissertation locations available"
