@@ -159,11 +159,11 @@ paths:
       description: ''
       parameters:
         - in: path
-            name: uuid
-            required: true
-            schema:
-              description: 'The uuid of the dissertation'
-              type: string
+          name: uuid
+          required: true
+          schema:
+            description: 'The uuid of the dissertation'
+            type: string
         - $ref: '#/components/parameters/Accept-Language'
         - $ref: '#/components/parameters/X-User-FirstName'
         - $ref: '#/components/parameters/X-User-LastName'
@@ -189,11 +189,11 @@ paths:
       description: ''
       parameters:
         - in: path
-            name: uuid
-            required: true
-            schema:
-              description: 'The uuid of the dissertation'
-              type: string
+          name: uuid
+          required: true
+          schema:
+            description: 'The uuid of the dissertation'
+            type: string
         - $ref: '#/components/parameters/Accept-Language'
         - $ref: '#/components/parameters/X-User-FirstName'
         - $ref: '#/components/parameters/X-User-LastName'
