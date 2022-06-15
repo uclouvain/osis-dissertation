@@ -155,7 +155,7 @@ paths:
         - dissertation
   /dissertations/{uuid}/file:
     get:
-      operationId: retrieveDissertationFile
+      operationId: retrieve_dissertation_file
       description: ''
       parameters:
         - $ref: '#/components/parameters/Accept-Language'
@@ -179,7 +179,7 @@ paths:
       tags:
         - dissertation
     put:
-      operationId: updateDissertationFile
+      operationId: update_dissertation_file
       description: ''
       parameters:
         - $ref: '#/components/parameters/Accept-Language'
