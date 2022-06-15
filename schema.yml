@@ -153,7 +153,7 @@ paths:
           $ref: '#/components/responses/NotFound'
       tags:
         - dissertation
-  /dissertations/{uuid}/file:
+  /dissertations/file/{uuid}:
     get:
       operationId: retrieve_dissertation_file
       description: ''
