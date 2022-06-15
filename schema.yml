@@ -158,6 +158,12 @@ paths:
       operationId: retrieve_dissertation_file
       description: ''
       parameters:
+        - in: path
+            name: uuid
+            required: true
+            schema:
+              description: 'The uuid of the dissertation'
+              type: string
         - $ref: '#/components/parameters/Accept-Language'
         - $ref: '#/components/parameters/X-User-FirstName'
         - $ref: '#/components/parameters/X-User-LastName'
@@ -182,6 +188,12 @@ paths:
       operationId: update_dissertation_file
       description: ''
       parameters:
+        - in: path
+            name: uuid
+            required: true
+            schema:
+              description: 'The uuid of the dissertation'
+              type: string
         - $ref: '#/components/parameters/Accept-Language'
         - $ref: '#/components/parameters/X-User-FirstName'
         - $ref: '#/components/parameters/X-User-LastName'
