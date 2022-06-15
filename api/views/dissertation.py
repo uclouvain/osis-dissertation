@@ -29,6 +29,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from rest_framework import generics, status
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.generics import RetrieveAPIView
 from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
 
@@ -398,7 +399,7 @@ class DissertationCanEditDissertationView(generics.RetrieveAPIView):
         )
 
 
-class DissertationFileView(UpdateModelMixin, generics.RetrieveAPIView):
+class DissertationFileView(UpdateModelMixin, RetrieveAPIView):
     name = "dissertation_file"
     pagination_class = None
     filter_backends = []
