@@ -1204,7 +1204,7 @@ components:
     DissertationFile:
       type: object
       properties:
-        dissertation:
+        dissertation_file:
           type: array
           items:
             type: string

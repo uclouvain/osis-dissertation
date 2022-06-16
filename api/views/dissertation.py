@@ -29,7 +29,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from rest_framework import generics, status
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.generics import RetrieveAPIView
+from rest_framework.generics import RetrieveAPIView, get_object_or_404
 from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
 
@@ -404,6 +404,11 @@ class DissertationFileView(UpdateModelMixin, RetrieveAPIView):
     pagination_class = None
     filter_backends = []
     serializer_class = DissertationFileSerializer
+
+    def get_object(self):
+        if self.kwargs.get('uuid'):
+            return get_object_or_404(Dissertation, uuid=self.kwargs.get('uuid')).dissertation_document_file
+        return self.request.user.person
 
     def put(self, request, *args, **kwargs):
         response = self.update(request, *args, **kwargs)

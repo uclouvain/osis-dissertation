@@ -56,7 +56,8 @@ class DissertationAdmin(SerializableModelAdmin):
         'active',
         'proposition_dissertation',
         'modification_date',
-        'education_group_year'
+        'education_group_year',
+        'dissertation_document_file'
     )
     raw_id_fields = (
         'author',
