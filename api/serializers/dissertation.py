@@ -29,6 +29,7 @@ from rest_framework import serializers
 from base.models.education_group_year import EducationGroupYear as EducationGroupYearDB
 from dissertation.models import dissertation_role
 from dissertation.models.dissertation import Dissertation
+from dissertation.models.dissertation_document_file import DissertationDocumentFile
 from dissertation.models.dissertation_location import DissertationLocation as DissertationLocationDB
 from dissertation.models.adviser import Adviser as AdviserDB
 from dissertation.models.enums.defend_periodes import DefendPeriodes
@@ -209,4 +210,12 @@ class DissertationFileSerializer(serializers.ModelSerializer):
         model = Dissertation
         fields = [
             'dissertation_file',
+        ]
+
+
+class DissertationFileOldSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DissertationDocumentFile
+        fields = [
+            'document_file',
         ]
