@@ -174,7 +174,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DissertationFile'
+                $ref: '#/components/schemas/DissertationOldFile'
           description: ''
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -1235,7 +1235,7 @@ components:
     DissertationFile:
       type: object
       properties:
-        document_file:
+        dissertation_file:
           type: array
           items:
             type: string
@@ -1243,7 +1243,7 @@ components:
     DissertationOldFile:
       type: object
       properties:
-        dissertation_file:
+        document_file:
           type: array
           items:
             type: string
