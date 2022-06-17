@@ -406,9 +406,7 @@ class DissertationFileView(UpdateModelMixin, RetrieveAPIView):
     serializer_class = DissertationFileSerializer
 
     def get_object(self):
-        if self.kwargs.get('uuid'):
-            return get_object_or_404(Dissertation, uuid=self.kwargs.get('uuid')).dissertation_document_file
-        return self.request.user.person
+        return get_object_or_404(Dissertation, uuid=self.kwargs.get('uuid'))
 
     def put(self, request, *args, **kwargs):
         response = self.update(request, *args, **kwargs)

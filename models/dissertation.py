@@ -57,7 +57,7 @@ class DissertationAdmin(SerializableModelAdmin):
         'proposition_dissertation',
         'modification_date',
         'education_group_year',
-        'dissertation_document_file'
+        'dissertation_file'
     )
     raw_id_fields = (
         'author',
@@ -150,7 +150,7 @@ class Dissertation(SerializableModel):
         DocumentFile,
         through=DissertationDocumentFile
     )
-    dissertation_document_file = FileField(
+    dissertation_file = FileField(
         mimetypes=['image/jpeg', 'image/png', 'application/pdf'],
         max_size=None,  # TODO : Fixer taille maximum
         max_files=2,

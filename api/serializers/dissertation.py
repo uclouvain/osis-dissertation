@@ -208,5 +208,5 @@ class DissertationFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dissertation
         fields = [
-            'dissertation_document_file',
+            'dissertation_file',
         ]
