@@ -37,12 +37,10 @@ from base.models.education_group_year import EducationGroupYear
 from dissertation.api.serializers.dissertation import DissertationListSerializer, DissertationCreateSerializer, \
     DissertationDetailSerializer, DissertationHistoryListSerializer, DissertationUpdateSerializer, \
     DissertationJuryAddSerializer, DissertationSubmitSerializer, DissertationBackToDraftSerializer, \
-    DissertationCanManageJurySerializer, DissertationCanEditDissertationSerializer, DissertationFileSerializer, \
-    DissertationFileOldSerializer
+    DissertationCanManageJurySerializer, DissertationCanEditDissertationSerializer, DissertationFileSerializer
 from dissertation.models import dissertation_update
 from dissertation.models.adviser import Adviser
 from dissertation.models.dissertation import Dissertation
-from dissertation.models.dissertation_document_file import DissertationDocumentFile
 from dissertation.models.dissertation_role import DissertationRole
 from dissertation.models.dissertation_update import DissertationUpdate
 from dissertation.models.enums.dissertation_role_status import DissertationRoleStatus
@@ -413,13 +411,3 @@ class DissertationFileView(UpdateModelMixin, RetrieveAPIView):
     def put(self, request, *args, **kwargs):
         response = self.update(request, *args, **kwargs)
         return response
-
-
-class DissertationFileOldView(RetrieveAPIView):
-    name = "dissertation_old_file"
-    pagination_class = None
-    filter_backends = []
-    serializer_class = DissertationFileOldSerializer
-
-    def get_object(self):
-        return get_object_or_404(DissertationDocumentFile, dissertation__uuid=self.kwargs.get('uuid'))

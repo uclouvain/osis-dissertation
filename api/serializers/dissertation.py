@@ -211,11 +211,3 @@ class DissertationFileSerializer(serializers.ModelSerializer):
         fields = [
             'dissertation_file',
         ]
-
-
-class DissertationFileOldSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DissertationDocumentFile
-        fields = [
-            'document_file',
-        ]

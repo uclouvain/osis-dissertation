@@ -29,7 +29,7 @@ from dissertation.api.views.adviser import AdvisersListView
 from dissertation.api.views.dissertation import DissertationListCreateView, DissertationDetailUpdateDeleteView, \
     DissertationHistoryListView, DissertationJuryDeleteView, DissertationJuryAddView, DissertationSubmitView, \
     DissertationBackToDraftView, DissertationCanManageJuryView, DissertationCanEditDissertationView, \
-    DissertationFileView, DissertationFileOldView
+    DissertationFileView
 from dissertation.api.views.dissertation_location import DissertationLocationsListView
 from dissertation.api.views.proposition_dissertation import PropositionDissertationListView, \
     PropositionDissertationDetailView
@@ -45,8 +45,6 @@ urlpatterns = [
     path('dissertation_locations', DissertationLocationsListView.as_view(), name=DissertationLocationsListView.name),
     path('advisers', AdvisersListView.as_view(), name=AdvisersListView.name),
     path('dissertations', DissertationListCreateView.as_view(), name=DissertationListCreateView.name),
-    path('migration_dissertations/<uuid:uuid>/file', DissertationFileOldView.as_view(),
-         name=DissertationFileOldView.name),
     path('dissertations/<uuid:uuid>/', include(([
         path('', DissertationDetailUpdateDeleteView.as_view(), name=DissertationDetailUpdateDeleteView.name),
         path('history', DissertationHistoryListView.as_view(), name=DissertationHistoryListView.name),
