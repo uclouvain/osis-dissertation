@@ -219,7 +219,7 @@ paths:
           $ref: '#/components/responses/NotFound'
       tags:
         - dissertation
-  /proposition_dissertations/{uuid}/file:
+  /propositions/{uuid}/file:
     get:
       operationId: retrieve_proposition_dissertation_file
       description: ''
