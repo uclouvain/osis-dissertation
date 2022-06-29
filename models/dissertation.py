@@ -79,7 +79,7 @@ class DissertationAdmin(SerializableModelAdmin):
 
 def dissertation_directory_path(dissertation: 'Dissertation', filename: str):
     """Return the file upload directory path."""
-    return '{}/{}'.format(dissertation.uuid, filename)
+    return 'dissertation/{}/{}'.format(dissertation.uuid, filename)
 
 
 class Dissertation(SerializableModel):
@@ -153,7 +153,7 @@ class Dissertation(SerializableModel):
     dissertation_file = FileField(
         mimetypes=['image/jpeg', 'image/png', 'application/pdf'],
         max_size=None,  # TODO : Fixer taille maximum
-        max_files=2,
+        max_files=1,
         min_files=1,
         upload_to=dissertation_directory_path,
         null=True
