@@ -32,16 +32,15 @@ from dissertation.api.views.dissertation import DissertationListCreateView, Diss
     DissertationFileView
 from dissertation.api.views.dissertation_location import DissertationLocationsListView
 from dissertation.api.views.proposition_dissertation import PropositionDissertationListView, \
-    PropositionDissertationDetailView
+    PropositionDissertationDetailView, PropositionDissertationFileView
 
 app_name = "dissertation"
 urlpatterns = [
     path('propositions', PropositionDissertationListView.as_view(), name=PropositionDissertationListView.name),
-    path(
-        'propositions/<uuid:uuid>/',
-        PropositionDissertationDetailView.as_view(),
-        name=PropositionDissertationDetailView.name,
-    ),
+    path('propositions/<uuid:uuid>/', include(([
+        path('', PropositionDissertationDetailView.as_view(), name=PropositionDissertationDetailView.name),
+        path('file', PropositionDissertationFileView.as_view(), name=PropositionDissertationFileView.name),
+    ]))),
     path('dissertation_locations', DissertationLocationsListView.as_view(), name=DissertationLocationsListView.name),
     path('advisers', AdvisersListView.as_view(), name=AdvisersListView.name),
     path('dissertations', DissertationListCreateView.as_view(), name=DissertationListCreateView.name),

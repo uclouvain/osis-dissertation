@@ -25,16 +25,19 @@
 ##############################################################################
 from django.db import models
 from django.db.models import Sum, Case, When, Q, ExpressionWrapper, F, Prefetch, Subquery, OuterRef
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.utils.functional import cached_property
 from rest_framework import generics
+from rest_framework.generics import RetrieveAPIView
+from rest_framework.mixins import UpdateModelMixin
 
 from base.models.academic_year import AcademicYear
 from base.models.education_group_year import EducationGroupYear
 from base.models.enums import offer_enrollment_state
 from base.models.offer_enrollment import OfferEnrollment
 from dissertation.api.serializers.proposition_dissertation import PropositionDissertationListSerializer, \
-    PropositionDissertationDetailSerializer
+    PropositionDissertationDetailSerializer, PropositionDissertationFileSerializer
 from dissertation.models.enums.dissertation_status import DissertationStatus
 from dissertation.models.offer_proposition import OfferProposition
 from dissertation.models.proposition_dissertation import PropositionDissertation
@@ -151,3 +154,17 @@ class PropositionDissertationDetailView(PropositionDissertationViewMixin, generi
             'propositiondocumentfile_set__document_file'
         )
         return qs.get(uuid=self.kwargs['uuid'])
+
+
+class PropositionDissertationFileView(UpdateModelMixin, RetrieveAPIView):
+    name = "proposition_dissertation_file"
+    pagination_class = None
+    filter_backends = []
+    serializer_class = PropositionDissertationFileSerializer
+
+    def get_object(self):
+        return get_object_or_404(PropositionDissertation, uuid=self.kwargs.get('uuid'))
+
+    def put(self, request, *args, **kwargs):
+        response = self.update(request, *args, **kwargs)
+        return response

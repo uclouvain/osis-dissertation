@@ -125,3 +125,11 @@ class PropositionDissertationDetailSerializer(serializers.Serializer):
                 'adviser': str(obj.author)
             }]
         return results
+
+
+class PropositionDissertationFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PropositionDissertation
+        fields = [
+            'proposition_dissertation_file',
+        ]
