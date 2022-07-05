@@ -28,7 +28,7 @@ from django.db import models
 from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from osis_document.contrib import FileField
+from osis_document.contrib import FileUploadField, FileField
 
 from dissertation.models import proposition_offer
 from dissertation.models.offer_proposition import OfferProposition
@@ -93,7 +93,8 @@ class PropositionDissertation(SerializableModel):
         max_files=1,
         min_files=1,
         upload_to=proposition_dissertation_directory_path,
-        null=True
+        null=True,
+        can_edit_filename=False
     )
 
     def __str__(self):

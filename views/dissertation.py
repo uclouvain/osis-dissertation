@@ -53,7 +53,7 @@ from base.models.student import Student
 from base.utils.cache import cache_filter
 from base.views.mixins import AjaxTemplateMixin
 from dissertation.forms import ManagerDissertationEditForm, ManagerDissertationRoleForm, \
-    ManagerDissertationUpdateForm, AdviserForm
+    ManagerDissertationUpdateForm, AdviserForm, PropositionDissertationFileForm, DissertationFileForm
 from dissertation.models import adviser, dissertation, dissertation_document_file, dissertation_role, \
     dissertation_update, offer_proposition, proposition_role
 from dissertation.models.adviser import Adviser
@@ -145,8 +145,18 @@ def manager_dissertations_detail(request, pk):
 
     if offer_prop is None:
         return redirect('manager_dissertations_list')
-    files = dissertation_document_file.find_by_dissertation(dissert)
-    filename = files.last().document_file.file_name if files else ""
+    if request.method == "POST":
+        dissertation_file_form = DissertationFileForm(
+            request.POST,
+            instance=dissert
+        )
+        if dissertation_file_form.is_valid():
+            dissertation_file_form.save()
+            return redirect('manager_dissertations_detail', pk=dissert.pk)
+    else:
+        dissertation_file_form = DissertationFileForm(
+            instance=dissert
+        )
 
     if count_proposition_role == 0 and count_dissertation_role == 0:
         justification = "%s %s %s" % (_("Auto add jury"),
@@ -194,21 +204,23 @@ def manager_dissertations_detail(request, pk):
     promotors_count = dissertation_role.count_by_status_dissertation(DissertationRoleStatus.PROMOTEUR.name, dissert)
 
     return render(request, 'manager_dissertations_detail.html',
-                  {'dissertation': dissert,
-                   'adviser': adv,
-                   'dissertation_roles': dissertation_roles,
-                   'count_dissertation_role': count_dissertation_role,
-                   'jury_manager_visibility': jury_manager_visibility,
-                   'jury_manager_can_edit': jury_manager_can_edit,
-                   'jury_manager_message': jury_manager_message,
-                   'jury_teacher_visibility': jury_teacher_visibility,
-                   'jury_teacher_can_edit': jury_teacher_can_edit,
-                   'jury_teacher_message': jury_teacher_message,
-                   'jury_student_visibility': jury_student_visibility,
-                   'jury_student_can_edit': jury_student_can_edit,
-                   'jury_student_message': jury_student_message,
-                   'promotors_count': promotors_count,
-                   'filename': filename})
+                  {
+                      'dissertation': dissert,
+                      'adviser': adv,
+                      'dissertation_roles': dissertation_roles,
+                      'count_dissertation_role': count_dissertation_role,
+                      'jury_manager_visibility': jury_manager_visibility,
+                      'jury_manager_can_edit': jury_manager_can_edit,
+                      'jury_manager_message': jury_manager_message,
+                      'jury_teacher_visibility': jury_teacher_visibility,
+                      'jury_teacher_can_edit': jury_teacher_can_edit,
+                      'jury_teacher_message': jury_teacher_message,
+                      'jury_student_visibility': jury_student_visibility,
+                      'jury_student_can_edit': jury_student_can_edit,
+                      'jury_student_message': jury_student_message,
+                      'promotors_count': promotors_count,
+                      'document': dissertation_file_form.initial['dissertation_file']
+                  })
 
 
 @login_required
@@ -380,21 +392,21 @@ def manager_dissertations_search(request):
     disserts = Dissertation.objects.filter(
         education_group_year__education_group__facultyadviser__adviser__person__user=request.user,
         active=True).filter(
-            Q(author__person__first_name__icontains=terms) |
-            Q(author__person__middle_name__icontains=terms) |
-            Q(author__person__last_name__icontains=terms) |
-            Q(description__icontains=terms) |
-            Q(proposition_dissertation__title__icontains=terms) |
-            Q(proposition_dissertation__author__person__first_name__icontains=terms) |
-            Q(proposition_dissertation__author__person__middle_name__icontains=terms) |
-            Q(proposition_dissertation__author__person__last_name__icontains=terms) |
-            Q(status__icontains=terms) |
-            Q(title__icontains=terms) |
-            Q(education_group_year__acronym__icontains=terms)
-        ).select_related('author__person',
-                         'education_group_year',
-                         'education_group_year__academic_year',
-                         'proposition_dissertation__author__person').distinct()
+        Q(author__person__first_name__icontains=terms) |
+        Q(author__person__middle_name__icontains=terms) |
+        Q(author__person__last_name__icontains=terms) |
+        Q(description__icontains=terms) |
+        Q(proposition_dissertation__title__icontains=terms) |
+        Q(proposition_dissertation__author__person__first_name__icontains=terms) |
+        Q(proposition_dissertation__author__person__middle_name__icontains=terms) |
+        Q(proposition_dissertation__author__person__last_name__icontains=terms) |
+        Q(status__icontains=terms) |
+        Q(title__icontains=terms) |
+        Q(education_group_year__acronym__icontains=terms)
+    ).select_related('author__person',
+                     'education_group_year',
+                     'education_group_year__academic_year',
+                     'proposition_dissertation__author__person').distinct()
     offer_prop_search = request.GET.get('offer_prop_search', '')
     academic_year_search = request.GET.get('academic_year', '')
     status_search = request.GET.get('status_search', '')
@@ -706,7 +718,7 @@ def manager_dissertations_wait_eval_list(request):
 @login_required
 @user_passes_test(adviser.is_manager)
 def manager_dissertations_wait_recep_list(request):
-    offer_props = OfferProposition.objects.filter(education_group__facultyadviser__adviser__person__user=request.user).\
+    offer_props = OfferProposition.objects.filter(education_group__facultyadviser__adviser__person__user=request.user). \
         distinct()
     show_validation_commission = offer_proposition.show_validation_commission(offer_props)
     show_evaluation_first_year = offer_proposition.show_evaluation_first_year(offer_props)
@@ -801,14 +813,11 @@ def dissertations_detail(request, pk):
         offer_prop = dissert.education_group_year.education_group.offer_proposition
         promotors_count = DissertationRole.objects.filter(dissertation=dissert). \
             filter(status=DissertationRoleStatus.PROMOTEUR.name).count()
-
-        files = DissertationDocumentFile.objects.filter(dissertation=dissert)
-        filename = ""
-        for file in files:
-            filename = file.document_file.file_name
-
         dissertation_roles = dissert.dissertationrole_set.all().order_by('status'). \
             select_related('adviser__person')
+        dissertation_file_form = DissertationFileForm(
+            instance=dissert
+        )
         return render(request, 'dissertations_detail.html',
                       {'dissertation': dissert,
                        'adviser': adv,
@@ -817,7 +826,8 @@ def dissertations_detail(request, pk):
                        'offer_prop': offer_prop,
                        'promotors_count': promotors_count,
                        'teacher_is_promotor': teacher_is_promotor(adv, dissert),
-                       'filename': filename})
+                       'document': dissertation_file_form.initial['dissertation_file']
+                       })
     else:
         return redirect('dissertations_list')
 
@@ -941,7 +951,7 @@ class DissertationJuryNewView(AjaxTemplateMixin, UserPassesTestMixin, CreateView
         if offer_prop is not None:
             if adviser.is_teacher(self.request.user):
                 return offer_prop.adviser_can_suggest_reader \
-                    and count_dissertation_role < MAX_DISSERTATION_ROLE_FOR_ONE_DISSERTATION
+                       and count_dissertation_role < MAX_DISSERTATION_ROLE_FOR_ONE_DISSERTATION
             if adviser.is_manager(self.request.user):
                 return count_dissertation_role < MAX_DISSERTATION_ROLE_FOR_ONE_DISSERTATION \
                        and dissert.status != 'DRAFT'

@@ -28,6 +28,8 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 from django.utils.translation import gettext_lazy as _
+from osis_document.contrib import FileUploadField, FileField
+from osis_document.utils import save_raw_content_remotely
 
 from backoffice.settings import base as settings_base
 from base import models as mdl
@@ -270,3 +272,15 @@ class ManagerDissertationUpdateForm(ModelForm):
     class Meta:
         model = DissertationUpdate
         fields = ('justification',)
+
+
+class PropositionDissertationFileForm(ModelForm):
+    class Meta:
+        model = PropositionDissertation
+        fields = ('proposition_dissertation_file',)
+
+
+class DissertationFileForm(ModelForm):
+    class Meta:
+        model = Dissertation
+        fields = ('dissertation_file',)
