@@ -375,11 +375,8 @@ class DissertationCanManageJuryView(generics.RetrieveAPIView):
     serializer_class = DissertationCanManageJurySerializer
 
     def get_object(self):
-        dissertation = Dissertation.objects.get(
-            uuid=self.kwargs['uuid'],
-        )
         return OfferProposition.objects.get(
-            education_group=dissertation.education_group_year.education_group
+            education_group__educationgroupyear__education_group_years__uuid=self.kwargs['uuid']
         )
 
 
@@ -391,11 +388,8 @@ class DissertationCanEditDissertationView(generics.RetrieveAPIView):
     serializer_class = DissertationCanEditDissertationSerializer
 
     def get_object(self):
-        dissertation = Dissertation.objects.get(
-            uuid=self.kwargs['uuid'],
-        )
         return OfferProposition.objects.get(
-            education_group=dissertation.education_group_year.education_group
+            education_group__educationgroupyear__education_group_years__uuid=self.kwargs['uuid']
         )
 
 

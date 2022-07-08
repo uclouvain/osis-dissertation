@@ -50,25 +50,12 @@ class PropositionDissertationViewMixin:
 
     @cached_property
     def offer_propositions_ids(self):
-        offer_enrollments = list(OfferEnrollment.objects.filter(
-            student__person__user=self.request.user,
-            education_group_year__academic_year=self.academic_year,
-            enrollment_state__in=[
-                offer_enrollment_state.SUBSCRIBED,
-                offer_enrollment_state.PROVISORY
-            ]
-        ))
-        offer_propositions = OfferProposition.objects.filter(
-            education_group__in=[
-                offer_enrollment.education_group_year.education_group for offer_enrollment in offer_enrollments
-            ]
-        )
         date_now = timezone.now().date()
-        offer_propositions_ids = [
-            o.id for o in offer_propositions
-            if o.start_visibility_proposition <= date_now <= o.end_visibility_proposition
-        ]
-        return offer_propositions_ids
+        return OfferProposition.objects.filter(
+            Q(education_group__educationgroupyear__offerenrollment__id__in=self.offer_enrollments_ids) &
+            Q(start_visibility_proposition__lte=date_now) &
+            Q(end_visibility_proposition__gte=date_now)
+        ).values_list('id', flat=True)
 
     @cached_property
     def offer_enrollments_ids(self):
