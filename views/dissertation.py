@@ -54,11 +54,10 @@ from base.utils.cache import cache_filter
 from base.views.mixins import AjaxTemplateMixin
 from dissertation.forms import ManagerDissertationEditForm, ManagerDissertationRoleForm, \
     ManagerDissertationUpdateForm, AdviserForm, PropositionDissertationFileForm, DissertationFileForm
-from dissertation.models import adviser, dissertation, dissertation_document_file, dissertation_role, \
+from dissertation.models import adviser, dissertation, dissertation_role, \
     dissertation_update, offer_proposition, proposition_role
 from dissertation.models.adviser import Adviser
 from dissertation.models.dissertation import Dissertation
-from dissertation.models.dissertation_document_file import DissertationDocumentFile
 from dissertation.models.dissertation_role import DissertationRole, MAX_DISSERTATION_ROLE_FOR_ONE_DISSERTATION
 from dissertation.models.enums import dissertation_role_status
 from dissertation.models.enums import dissertation_status
@@ -157,6 +156,9 @@ def manager_dissertations_detail(request, pk):
         dissertation_file_form = DissertationFileForm(
             instance=dissert
         )
+    proposition_dissertation_file_form = PropositionDissertationFileForm(
+        instance=dissert.proposition_dissertation
+    )
 
     if count_proposition_role == 0 and count_dissertation_role == 0:
         justification = "%s %s %s" % (_("Auto add jury"),
@@ -219,7 +221,11 @@ def manager_dissertations_detail(request, pk):
                       'jury_student_can_edit': jury_student_can_edit,
                       'jury_student_message': jury_student_message,
                       'promotors_count': promotors_count,
-                      'document': dissertation_file_form.initial['dissertation_file']
+                      'dissertation_file': dissertation_file_form.initial['dissertation_file'],
+                      'dissertation_file_form': dissertation_file_form,
+                      'proposition_dissertation_file':
+                          proposition_dissertation_file_form.initial['proposition_dissertation_file'],
+                      'proposition_dissertation_file_form': proposition_dissertation_file_form
                   })
 
 
@@ -818,6 +824,9 @@ def dissertations_detail(request, pk):
         dissertation_file_form = DissertationFileForm(
             instance=dissert
         )
+        proposition_dissertation_file_form = PropositionDissertationFileForm(
+            instance=dissert.proposition_dissertation
+        )
         return render(request, 'dissertations_detail.html',
                       {'dissertation': dissert,
                        'adviser': adv,
@@ -826,7 +835,11 @@ def dissertations_detail(request, pk):
                        'offer_prop': offer_prop,
                        'promotors_count': promotors_count,
                        'teacher_is_promotor': teacher_is_promotor(adv, dissert),
-                       'document': dissertation_file_form.initial['dissertation_file']
+                       'dissertation_file_form': dissertation_file_form,
+                       'dissertation_file': dissertation_file_form.initial['dissertation_file'],
+                       'proposition_dissertation_file_form': proposition_dissertation_file_form,
+                       'proposition_dissertation_file':
+                           proposition_dissertation_file_form.initial['proposition_dissertation_file']
                        })
     else:
         return redirect('dissertations_list')
