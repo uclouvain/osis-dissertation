@@ -81,7 +81,10 @@ class PropositionDissertationViewMixin:
             )).distinct()
         )
 
-        return PropositionDissertation.objects.select_related('author__person').prefetch_related(prefetch_propositions)
+        return PropositionDissertation.objects.filter(
+            active=True,
+            visibility=True,
+        ).select_related('author__person').prefetch_related(prefetch_propositions)
 
 
 class PropositionDissertationListView(PropositionDissertationViewMixin, generics.ListAPIView):

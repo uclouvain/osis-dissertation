@@ -300,8 +300,7 @@ class DissertationJuryDeleteView(generics.DestroyAPIView):
         instance.delete()
 
     def _can_delete(self, instance: DissertationRole) -> bool:
-        return instance.dissertation.status == DissertationStatus.DRAFT.name and \
-               instance.status == DissertationRoleStatus.READER.name and \
+        return instance.status == DissertationRoleStatus.READER.name and \
                instance.dissertation.education_group_year.education_group.offer_proposition.student_can_manage_readers
 
 

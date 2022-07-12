@@ -79,7 +79,7 @@ class DissertationAdmin(SerializableModelAdmin):
 
 def dissertation_directory_path(dissertation: 'Dissertation', filename: str):
     """Return the file upload directory path."""
-    return 'dissertation/{}/{}'.format(dissertation.uuid, filename)
+    return f"dissertation/{dissertation.uuid}/{filename}"
 
 
 class Dissertation(SerializableModel):

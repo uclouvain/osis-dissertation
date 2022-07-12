@@ -30,13 +30,13 @@ register = template.Library()
 
 
 @register.inclusion_tag('field_data.html')
-def field_data(name, data=None):
+def field_data(data=None):
     if isinstance(data, list):
         template_string = "{% load osis_document %}{% if files %}{% document_visualizer files %}{% endif %}"
         template_context = {'files': data}
         data = template.Template(template_string).render(template.Context(template_context))
 
     return {
-        'name': name,
+        'name': "",
         'data': data,
     }

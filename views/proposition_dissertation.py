@@ -143,18 +143,17 @@ def manager_proposition_dissertation_detail(request, pk):
     count_use = dissertation.count_by_proposition(proposition)
     percent = count_use * 100 / proposition.max_number_student if proposition.max_number_student else 0
     count_proposition_role = proposition_role.count_by_proposition(proposition)
-    if request.method == "POST":
-        proposition_dissertation_file_form = PropositionDissertationFileForm(
-            request.POST,
-            instance=proposition
-        )
-        if proposition_dissertation_file_form.is_valid():
-            proposition_dissertation_file_form.save()
-            return redirect('proposition_dissertation_detail', pk=proposition.pk)
-    else:
-        proposition_dissertation_file_form = PropositionDissertationFileForm(
-            instance=proposition
-        )
+    proposition_dissertation_file_form = PropositionDissertationFileForm(
+        request.POST or None,
+        instance=proposition
+    )
+    if request.method == 'POST' and proposition_dissertation_file_form.is_valid():
+        proposition_dissertation_file_form.save()
+        return redirect(...)
+    proposition_dissertation_file_form = PropositionDissertationFileForm(
+        instance=proposition
+    )
+
     check_authorisation_of_proposition = autorized_proposition_dissert_promotor_or_manager_or_author(
         request.user,
         proposition

@@ -49,19 +49,10 @@ urlpatterns = [
         path('history', DissertationHistoryListView.as_view(), name=DissertationHistoryListView.name),
         path('jury', DissertationJuryAddView.as_view(), name=DissertationJuryAddView.name),
         path(
-            'jury/',
-            include(([
-                path(
-                    '<uuid:uuid_jury_member>/',
-                    DissertationJuryDeleteView.as_view(),
-                    name=DissertationJuryDeleteView.name,
-                ),
-            ]))
+            'jury/<uuid:uuid_jury_member>/', DissertationJuryDeleteView.as_view(), name=DissertationJuryDeleteView.name
         ),
         path(
-            'can_manage_jury_member',
-            DissertationCanManageJuryView.as_view(),
-            name=DissertationCanManageJuryView.name
+            'can_manage_jury_member', DissertationCanManageJuryView.as_view(), name=DissertationCanManageJuryView.name
         ),
         path(
             'can_edit_dissertation',

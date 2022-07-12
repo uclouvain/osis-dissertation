@@ -44,7 +44,7 @@ class PropositionDissertationAdmin(SerializableModelAdmin):
 
 def proposition_dissertation_directory_path(proposition_dissertation: 'PropositionDissertation', filename: str):
     """Return the file upload directory path."""
-    return 'proposition_dissertation/{}/{}'.format(proposition_dissertation.uuid, filename)
+    return f"proposition_dissertation/{proposition_dissertation.uuid}/{filename}"
 
 
 class PropositionDissertation(SerializableModel):

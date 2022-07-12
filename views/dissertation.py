@@ -144,18 +144,13 @@ def manager_dissertations_detail(request, pk):
 
     if offer_prop is None:
         return redirect('manager_dissertations_list')
-    if request.method == "POST":
-        dissertation_file_form = DissertationFileForm(
-            request.POST,
-            instance=dissert
-        )
-        if dissertation_file_form.is_valid():
-            dissertation_file_form.save()
-            return redirect('manager_dissertations_detail', pk=dissert.pk)
-    else:
-        dissertation_file_form = DissertationFileForm(
-            instance=dissert
-        )
+    dissertation_file_form = DissertationFileForm(
+        request.POST or None,
+        instance=dissert
+    )
+    if request.method == 'POST' and dissertation_file_form.is_valid():
+        dissertation_file_form.save()
+        return redirect(...)
     proposition_dissertation_file_form = PropositionDissertationFileForm(
         instance=dissert.proposition_dissertation
     )
@@ -827,20 +822,24 @@ def dissertations_detail(request, pk):
         proposition_dissertation_file_form = PropositionDissertationFileForm(
             instance=dissert.proposition_dissertation
         )
-        return render(request, 'dissertations_detail.html',
-                      {'dissertation': dissert,
-                       'adviser': adv,
-                       'dissertation_roles': dissertation_roles,
-                       'count_dissertation_role': count_dissertation_role,
-                       'offer_prop': offer_prop,
-                       'promotors_count': promotors_count,
-                       'teacher_is_promotor': teacher_is_promotor(adv, dissert),
-                       'dissertation_file_form': dissertation_file_form,
-                       'dissertation_file': dissertation_file_form.initial['dissertation_file'],
-                       'proposition_dissertation_file_form': proposition_dissertation_file_form,
-                       'proposition_dissertation_file':
-                           proposition_dissertation_file_form.initial['proposition_dissertation_file']
-                       })
+        return render(
+            request,
+            'dissertations_detail.html',
+            {
+                'dissertation': dissert,
+                'adviser': adv,
+                'dissertation_roles': dissertation_roles,
+                'count_dissertation_role': count_dissertation_role,
+                'offer_prop': offer_prop,
+                'promotors_count': promotors_count,
+                'teacher_is_promotor': teacher_is_promotor(adv, dissert),
+                'dissertation_file_form': dissertation_file_form,
+                'dissertation_file': dissertation_file_form.initial['dissertation_file'],
+                'proposition_dissertation_file_form': proposition_dissertation_file_form,
+                'proposition_dissertation_file':
+                    proposition_dissertation_file_form.initial['proposition_dissertation_file']
+            }
+        )
     else:
         return redirect('dissertations_list')
 
