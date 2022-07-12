@@ -150,7 +150,7 @@ def manager_dissertations_detail(request, pk):
     )
     if request.method == 'POST' and dissertation_file_form.is_valid():
         dissertation_file_form.save()
-        return redirect(...)
+        return redirect('manager_dissertations_detail', pk=dissert.pk)
     proposition_dissertation_file_form = PropositionDissertationFileForm(
         instance=dissert.proposition_dissertation
     )
