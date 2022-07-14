@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% load i18n static dissertation %}
+{% load i18n static osis_document %}
 
 {% comment "License" %}
  * OSIS stands for Open Student Information System. It's an application
@@ -83,7 +83,7 @@
                 <div class="col-md-4" style="text-align:right">
                 </div>
                 <div class="col-md-4" style="text-align:right">
-                    {% field_data document %}
+                    {% if files %}{% document_visualizer document %}{% endif %}
                 </div>
             </div>
             <div class="row">
