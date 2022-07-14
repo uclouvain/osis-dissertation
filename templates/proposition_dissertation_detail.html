@@ -80,13 +80,15 @@
                 </div>
             </div>
             <br>
-            <div class="row">
-                <div class="col-md-4" style="text-align:right">
+            {% if document %}
+                <div class="row">
+                    <div class="col-md-4" style="text-align:right">
+                    </div>
+                    <div class="col-md-4" style="text-align:right">
+                        {% document_visualizer document %}
+                    </div>
                 </div>
-                <div class="col-md-4" style="text-align:right">
-                    {% if files %}{% document_visualizer document %}{% endif %}
-                </div>
-            </div>
+            {% endif %}
             <div class="row">
                 <div class="col-md-4" style="text-align: right">
                     <label>{% trans 'Visibility' %}</label>

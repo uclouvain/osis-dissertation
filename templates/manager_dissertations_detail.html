@@ -87,13 +87,15 @@
                     </div>
                 </div>
                 <br>
-                <div class="row">
-                    <div class="col-md-4" style="text-align:right">
+                {% if dissertation_file %}
+                    <div class="row">
+                        <div class="col-md-4" style="text-align:right">
+                        </div>
+                        <div class="col-md-4" style="text-align:right">
+                                {% document_visualizer dissertation_file %}
+                        </div>
                     </div>
-                    <div class="col-md-4" style="text-align:right">
-                        {% if files %}{% document_visualizer dissertation_file %}{% endif %}
-                    </div>
-                </div>
+                {% endif %}
                 <div class="row">
                     <div class="col-md-3" style="text-align: right">
                         <label>{% trans 'Status' %}</label>
@@ -282,7 +284,7 @@
                         <div class="col-md-3" style="text-align:right">
                         </div>
                         <div class="col-md-6" style="text-align:right">
-                            {% if files %}{% document_visualizer proposition_dissertation_file %}{% endif %}
+                            {% document_visualizer proposition_dissertation_file %}
                         </div>
                     </div>
                 {% endif %}
