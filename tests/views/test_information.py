@@ -513,4 +513,4 @@ class InformationManagerViewTestCase(TestCase):
                     )
             }
         )
-        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
+        self.assertEqual(response.status_code, HttpResponse.status_code)
