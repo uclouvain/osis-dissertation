@@ -25,18 +25,13 @@
 ##############################################################################
 from django.utils.translation import gettext_lazy as _
 
-PROMOTEUR = 'PROMOTEUR'
-CO_PROMOTEUR = 'CO_PROMOTEUR'
-READER = 'READER'
-ACCOMPANIST = 'ACCOMPANIST'
-INTERNSHIP = 'INTERNSHIP'
-PRESIDENT = 'PRESIDENT'
+from base.models.utils.utils import ChoiceEnum
 
-STATUS_CHOICES = (
-    (PROMOTEUR, _('Promotor')),
-    (CO_PROMOTEUR, _('Co-Promotor')),
-    (READER, _('Reader')),
-    (ACCOMPANIST, _('Accompanist')),
-    (INTERNSHIP, _('Internship Master')),
-    (PRESIDENT, _('President')),
-)
+
+class DissertationRoleStatus(ChoiceEnum):
+    PROMOTEUR = _('Promotor')
+    CO_PROMOTEUR = _('Co-Promotor')
+    READER = _('Reader')
+    ACCOMPANIST = _('Accompanist')
+    INTERNSHIP = _('Internship Master')
+    PRESIDENT = _('President')

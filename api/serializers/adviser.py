@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2019 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,16 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import factory
 
-from dissertation.models.enums.dissertation_role_status import DissertationRoleStatus
-from dissertation.tests.factories.adviser import AdviserTeacherFactory
+from rest_framework import serializers
 
 
-class DissertationRoleFactory(factory.DjangoModelFactory):
-    class Meta:
-        model = 'dissertation.DissertationRole'
-
-    status = factory.Iterator(DissertationRoleStatus.choices(), getter=lambda c: c[0])
-    adviser = factory.SubFactory(AdviserTeacherFactory)
-    dissertation = None
+class AdvisersListSerializer(serializers.Serializer):
+    uuid = serializers.CharField(read_only=True)
+    name = serializers.CharField(read_only=True, source='person')
