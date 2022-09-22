@@ -28,7 +28,7 @@ from django.db import models
 from django.db.models import Q
 
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
-from .enums import dissertation_role_status
+from .enums.dissertation_role_status import DissertationRoleStatus
 
 MAX_DISSERTATION_ROLE_FOR_ONE_DISSERTATION = 4
 
@@ -41,7 +41,7 @@ class DissertationRoleAdmin(SerializableModelAdmin):
 
 
 class DissertationRole(SerializableModel):
-    status = models.CharField(max_length=12, choices=dissertation_role_status.STATUS_CHOICES)
+    status = models.CharField(max_length=12, choices=DissertationRoleStatus.choices())
     adviser = models.ForeignKey('Adviser', related_name='dissertations_roles', on_delete=models.CASCADE)
     dissertation = models.ForeignKey('Dissertation', on_delete=models.CASCADE)
 

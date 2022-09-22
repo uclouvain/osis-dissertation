@@ -305,9 +305,6 @@ msgstr "Nombre de mémoires attendant réponse"
 msgid "Dissertations waiting validation"
 msgstr "mémoires en attente de validation"
 
-msgid "Download"
-msgstr "Télécharger"
-
 msgid "Draft"
 msgstr "Brouillon"
 
@@ -882,6 +879,12 @@ msgstr "Indéfini"
 msgid "Update date"
 msgstr "Date de mise-à-jour"
 
+msgid "Upload"
+msgstr "Upload"
+
+msgid "Upload your file"
+msgstr "Upload votre fichier"
+
 msgid "Validation commission exists"
 msgstr "Présence d'une commission Mémoires"
 
@@ -1039,9 +1042,6 @@ msgstr "Vous avez"
 msgid "Your dissertations history"
 msgstr "Historique de votre mémoire"
 
-msgid "cancel"
-msgstr "Annuler"
-
 msgid "close"
 msgstr "Fermer"
 
@@ -1050,9 +1050,6 @@ msgstr "datatable_infopostfix"
 
 msgid "email"
 msgstr "email"
-
-msgid "file"
-msgstr "fichier"
 
 msgid "filter by students"
 msgstr "Filtrer par étudiants"
@@ -1066,17 +1063,23 @@ msgstr "Principal"
 msgid "manager has edited the dissertation"
 msgstr "Le manager a édité la dissertation"
 
+msgid "new title"
+msgstr "nouveau titre"
+
 msgid "no"
 msgstr "non"
-
-msgid "no file"
-msgstr "pas de fichier"
 
 msgid "of"
 msgstr "sur"
 
+msgid "original title"
+msgstr "titre original"
+
 msgid "search_person_explanation"
 msgstr "Recherche d'une personne"
+
+msgid "set to"
+msgstr "mise à"
 
 msgid "to"
 msgstr "au"

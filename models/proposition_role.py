@@ -27,7 +27,7 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
 
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
-from .enums import dissertation_role_status
+from .enums.dissertation_role_status import DissertationRoleStatus
 
 MAX_PROPOSITION_ROLE = 4
 
@@ -45,8 +45,9 @@ class PropositionRoleAdmin(SerializableModelAdmin):
 class PropositionRole(SerializableModel):
     status = models.CharField(
         max_length=12,
-        choices=dissertation_role_status.STATUS_CHOICES,
-        default=dissertation_role_status.PROMOTEUR)
+        choices=DissertationRoleStatus.choices(),
+        default=DissertationRoleStatus.PROMOTEUR.name
+    )
     adviser = models.ForeignKey('Adviser', on_delete=models.CASCADE)
     proposition_dissertation = models.ForeignKey('PropositionDissertation', on_delete=models.CASCADE)
 
