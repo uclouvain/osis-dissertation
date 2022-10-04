@@ -28,6 +28,7 @@ from django.db import models
 from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from osis_document.contrib import FileUploadField, FileField
 
 from dissertation.models import proposition_offer
 from dissertation.models.offer_proposition import OfferProposition
@@ -36,9 +37,14 @@ from osis_common.models.serializable_model import SerializableModel, Serializabl
 
 
 class PropositionDissertationAdmin(SerializableModelAdmin):
-    list_display = ('title', 'author', 'visibility', 'active', 'creator')
+    list_display = ('uuid', 'title', 'author', 'visibility', 'active', 'creator')
     raw_id_fields = ('creator', 'author')
     search_fields = ('uuid', 'title', 'author__person__last_name', 'author__person__first_name')
+
+
+def proposition_dissertation_directory_path(proposition_dissertation: 'PropositionDissertation', filename: str):
+    """Return the file upload directory path."""
+    return f"proposition_dissertation/{proposition_dissertation.uuid}/{filename}"
 
 
 class PropositionDissertation(SerializableModel):
@@ -80,6 +86,15 @@ class PropositionDissertation(SerializableModel):
         through=PropositionOffer,
         verbose_name=_('Links to offer_propositions'),
         related_name='offer_propositions'
+    )
+    proposition_dissertation_file = FileField(
+        mimetypes=['image/jpeg', 'image/png', 'application/pdf'],
+        max_size=None,  # TODO : Fixer taille maximum
+        max_files=1,
+        min_files=1,
+        upload_to=proposition_dissertation_directory_path,
+        null=True,
+        can_edit_filename=False
     )
 
     def __str__(self):
