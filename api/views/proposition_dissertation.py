@@ -83,7 +83,6 @@ class PropositionDissertationViewMixin:
 
         return PropositionDissertation.objects.filter(
             active=True,
-            visibility=True,
         ).select_related('author__person').prefetch_related(prefetch_propositions)
 
 
