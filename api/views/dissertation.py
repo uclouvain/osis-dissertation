@@ -29,8 +29,8 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from rest_framework import generics, status
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.generics import RetrieveAPIView, get_object_or_404
-from rest_framework.mixins import UpdateModelMixin
+from rest_framework.generics import RetrieveAPIView, get_object_or_404, GenericAPIView
+from rest_framework.mixins import UpdateModelMixin, RetrieveModelMixin
 from rest_framework.response import Response
 
 from base.models.education_group_year import EducationGroupYear
@@ -402,5 +402,6 @@ class DissertationFileView(UpdateModelMixin, RetrieveAPIView):
         return get_object_or_404(Dissertation, uuid=self.kwargs.get('uuid'))
 
     def put(self, request, *args, **kwargs):
-        response = self.update(request, *args, **kwargs)
-        return response
+        instance = self.get_object()
+        instance.dissertation_file = self.request.data['dissertation_file']
+        instance.save()
