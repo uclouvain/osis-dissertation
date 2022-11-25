@@ -48,6 +48,9 @@ from osis_common.utils.models import get_object_or_none
 
 
 class DissertationAdmin(SerializableModelAdmin):
+    exclude = (
+        'dissertation_file',
+    )
     list_display = (
         'uuid',
         'title',
