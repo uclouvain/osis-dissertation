@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.db import models
 from django.utils import timezone
 from rest_framework import serializers
 
@@ -206,6 +207,9 @@ class DissertationCanEditDissertationSerializer(serializers.Serializer):
 
 
 class DissertationFileSerializer(serializers.ModelSerializer):
+    serializer_field_mapping = serializers.ModelSerializer.serializer_field_mapping
+    serializer_field_mapping[models.UUIDField] = serializers.CharField
+
     class Meta:
         model = Dissertation
         fields = [

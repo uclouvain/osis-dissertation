@@ -402,6 +402,5 @@ class DissertationFileView(UpdateModelMixin, RetrieveAPIView):
         return get_object_or_404(Dissertation, uuid=self.kwargs.get('uuid'))
 
     def put(self, request, *args, **kwargs):
-        instance = self.get_object()
-        instance.dissertation_file = self.request.data['dissertation_file']
-        instance.save()
+        response = self.update(request, *args, **kwargs)
+        return response
