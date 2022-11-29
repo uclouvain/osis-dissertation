@@ -41,7 +41,8 @@ from dissertation.models import dissertation_role
 from dissertation.models import faculty_adviser
 from dissertation.models.adviser import Adviser
 from dissertation.models.dissertation_role import DissertationRole
-from dissertation.models.enums import dissertation_role_status, dissertation_status
+from dissertation.models.enums import dissertation_status
+from dissertation.models.enums.dissertation_role_status import DissertationRoleStatus
 from dissertation.models.faculty_adviser import FacultyAdviser
 
 
@@ -237,42 +238,42 @@ def manager_informations(request):
         dissertations_count_promotor_actif=models.Sum(
             models.Case(
                 models.When(active_dissert & Q(
-                    dissertations_roles__status=dissertation_role_status.PROMOTEUR
+                    dissertations_roles__status=DissertationRoleStatus.PROMOTEUR.name
                 ), then=1), default=0,
                 output_field=models.IntegerField()
             )),
         dissertations_count_copromoteur_actif=models.Sum(
             models.Case(
                 models.When(active_dissert & Q(
-                    dissertations_roles__status=dissertation_role_status.CO_PROMOTEUR
+                    dissertations_roles__status=DissertationRoleStatus.CO_PROMOTEUR.name
                 ), then=1), default=0,
                 output_field=models.IntegerField()
             )),
         dissertations_count_reader_actif=models.Sum(
             models.Case(
                 models.When(active_dissert & Q(
-                    dissertations_roles__status=dissertation_role_status.READER
+                    dissertations_roles__status=DissertationRoleStatus.READER.name
                 ), then=1), default=0,
                 output_field=models.IntegerField()
             )),
         dissertations_count_accompanist_actif=models.Sum(
             models.Case(
                 models.When(active_dissert & Q(
-                    dissertations_roles__status=dissertation_role_status.ACCOMPANIST
+                    dissertations_roles__status=DissertationRoleStatus.ACCOMPANIST.name
                 ), then=1), default=0,
                 output_field=models.IntegerField()
             )),
         dissertations_count_internship_actif=models.Sum(
             models.Case(
                 models.When(active_dissert & Q(
-                    dissertations_roles__status=dissertation_role_status.INTERNSHIP
+                    dissertations_roles__status=DissertationRoleStatus.INTERNSHIP.name
                 ), then=1), default=0,
                 output_field=models.IntegerField()
             )),
         dissertations_count_president_actif=models.Sum(
             models.Case(
                 models.When(active_dissert & Q(
-                    dissertations_roles__status=dissertation_role_status.PRESIDENT
+                    dissertations_roles__status=DissertationRoleStatus.PRESIDENT.name
                 ), then=1), default=0,
                 output_field=models.IntegerField()
             )),
@@ -281,7 +282,7 @@ def manager_informations(request):
                 models.When(Q(
                     dissertations__active=True,
                     dissertations__status=dissertation_status.DIR_SUBMIT,
-                    dissertations_roles__status=dissertation_role_status.PROMOTEUR
+                    dissertations_roles__status=DissertationRoleStatus.PROMOTEUR.name
                 ), then=1), default=0,
                 output_field=models.IntegerField()
             )))
@@ -376,7 +377,7 @@ def manager_informations_list_request(request):
         Q(
             dissertations__active=True,
             dissertations__status=dissertation_status.DIR_SUBMIT,
-            dissertations_roles__status=dissertation_role_status.PROMOTEUR,
+            dissertations_roles__status=DissertationRoleStatus.PROMOTEUR.name,
             dissertations__education_group_year__education_group__in=educ_groups_of_fac_manager
           )
     ).annotate(
@@ -385,7 +386,7 @@ def manager_informations_list_request(request):
                 models.When(Q(
                     dissertations__active=True,
                     dissertations__status=dissertation_status.DIR_SUBMIT,
-                    dissertations_roles__status=dissertation_role_status.PROMOTEUR,
+                    dissertations_roles__status=DissertationRoleStatus.PROMOTEUR.name,
                     dissertations__education_group_year__education_group__in=educ_groups_of_fac_manager
                 ), then=1), default=0, output_field=models.IntegerField()
             )
@@ -407,32 +408,32 @@ def manager_informations_detail_list(request, pk):
 
     adv_list_disserts_pro = dissertation_role.search_by_adviser_and_role_and_education_groups(
         adv,
-        dissertation_role_status.PROMOTEUR,
+        DissertationRoleStatus.PROMOTEUR.name,
         education_groups
     )
     adv_list_disserts_copro = dissertation_role.search_by_adviser_and_role_and_education_groups(
         adv,
-        dissertation_role_status.CO_PROMOTEUR,
+        DissertationRoleStatus.CO_PROMOTEUR.name,
         education_groups
     )
     adv_list_disserts_reader = dissertation_role.search_by_adviser_and_role_and_education_groups(
         adv,
-        dissertation_role_status.READER,
+        DissertationRoleStatus.READER.name,
         education_groups
     )
     adv_list_disserts_accompanist = dissertation_role.search_by_adviser_and_role_and_education_groups(
         adv,
-        dissertation_role_status.ACCOMPANIST,
+        DissertationRoleStatus.ACCOMPANIST.name,
         education_groups
     )
     adv_list_disserts_internship = dissertation_role.search_by_adviser_and_role_and_education_groups(
         adv,
-        dissertation_role_status.INTERNSHIP,
+        DissertationRoleStatus.INTERNSHIP.name,
         education_groups
     )
     adv_list_disserts_president = dissertation_role.search_by_adviser_and_role_and_education_groups(
         adv,
-        dissertation_role_status.PRESIDENT,
+        DissertationRoleStatus.PRESIDENT.name,
         education_groups
     )
 
@@ -445,7 +446,7 @@ def manager_informations_detail_list_wait(request, pk):
     education_groups = request.user.person.adviser.education_groups.all()
     adv = get_object_or_404(Adviser, pk=pk)
     disserts_role = DissertationRole.objects.filter(
-        status=dissertation_role_status.PROMOTEUR,
+        status=DissertationRoleStatus.PROMOTEUR.name,
         dissertation__status=dissertation_status.DIR_SUBMIT,
         dissertation__education_group_year__education_group__in=education_groups,
         dissertation__active=True,

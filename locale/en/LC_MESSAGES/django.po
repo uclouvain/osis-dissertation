@@ -302,9 +302,6 @@ msgstr ""
 msgid "Dissertations waiting validation"
 msgstr ""
 
-msgid "Download"
-msgstr ""
-
 msgid "Draft"
 msgstr ""
 
@@ -852,6 +849,12 @@ msgstr ""
 msgid "Update date"
 msgstr ""
 
+msgid "Upload"
+msgstr ""
+
+msgid "Upload your file"
+msgstr ""
+
 msgid "Validation commission exists"
 msgstr ""
 
@@ -975,9 +978,6 @@ msgstr ""
 msgid "Your dissertations history"
 msgstr ""
 
-msgid "cancel"
-msgstr ""
-
 msgid "close"
 msgstr ""
 
@@ -985,9 +985,6 @@ msgid "datatable_infopostfix"
 msgstr ""
 
 msgid "email"
-msgstr ""
-
-msgid "file"
 msgstr ""
 
 msgid "filter by students"
@@ -1002,16 +999,22 @@ msgstr ""
 msgid "manager has edited the dissertation"
 msgstr ""
 
-msgid "no"
+msgid "new title"
 msgstr ""
 
-msgid "no file"
+msgid "no"
 msgstr ""
 
 msgid "of"
 msgstr ""
 
+msgid "original title"
+msgstr ""
+
 msgid "search_person_explanation"
+msgstr ""
+
+msgid "set to"
 msgstr ""
 
 msgid "to"

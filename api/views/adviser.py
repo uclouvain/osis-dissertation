@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2019 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,16 +23,17 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import factory
+from rest_framework import generics
 
-from dissertation.models.enums.dissertation_role_status import DissertationRoleStatus
-from dissertation.tests.factories.adviser import AdviserTeacherFactory
+from dissertation.api.serializers.adviser import AdvisersListSerializer
+from dissertation.models.adviser import Adviser
 
 
-class DissertationRoleFactory(factory.DjangoModelFactory):
-    class Meta:
-        model = 'dissertation.DissertationRole'
+class AdvisersListView(generics.ListAPIView):
+    name = 'advisers-list'
+    serializer_class = AdvisersListSerializer
+    search_fields = ('person__first_name', 'person__middle_name', 'person__last_name',)
 
-    status = factory.Iterator(DissertationRoleStatus.choices(), getter=lambda c: c[0])
-    adviser = factory.SubFactory(AdviserTeacherFactory)
-    dissertation = None
+    def get_queryset(self):
+        qs = Adviser.objects.all()
+        return qs.only('uuid', 'person',)

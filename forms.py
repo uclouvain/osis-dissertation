@@ -28,6 +28,8 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 from django.utils.translation import gettext_lazy as _
+from osis_document.contrib import FileUploadField, FileField
+from osis_document.utils import save_raw_content_remotely
 
 from backoffice.settings import base as settings_base
 from base import models as mdl
@@ -38,7 +40,7 @@ from dissertation.models.adviser import Adviser
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_role import DissertationRole
 from dissertation.models.dissertation_update import DissertationUpdate
-from dissertation.models.enums import dissertation_role_status
+from dissertation.models.enums.dissertation_role_status import DissertationRoleStatus
 from dissertation.models.faculty_adviser import FacultyAdviser
 from dissertation.models.offer_proposition import OfferProposition
 from dissertation.models.proposition_dissertation import PropositionDissertation
@@ -184,7 +186,7 @@ class ManagerDissertationRoleForm(ModelForm):
         diss = data['dissertation']
         justification = self._get_justification()
         dissertation_update.add(self.request, diss, status, justification=justification)
-        if status == dissertation_role_status.PROMOTEUR:
+        if status == DissertationRoleStatus.PROMOTEUR.name:
             instance, created = DissertationRole.objects.update_or_create(
                 dissertation=diss,
                 status=status,
@@ -256,7 +258,7 @@ class ManagerPropositionRoleForm(ModelForm):
         status = data['status']
         adv = data['adviser']
         prop = data['proposition_dissertation']
-        if status == dissertation_role_status.PROMOTEUR:
+        if status == DissertationRoleStatus.PROMOTEUR.name:
             instance, created = PropositionRole.objects.update_or_create(
                 proposition_dissertation=prop,
                 status=status,
@@ -270,3 +272,15 @@ class ManagerDissertationUpdateForm(ModelForm):
     class Meta:
         model = DissertationUpdate
         fields = ('justification',)
+
+
+class PropositionDissertationFileForm(ModelForm):
+    class Meta:
+        model = PropositionDissertation
+        fields = ('proposition_dissertation_file',)
+
+
+class DissertationFileForm(ModelForm):
+    class Meta:
+        model = Dissertation
+        fields = ('dissertation_file',)

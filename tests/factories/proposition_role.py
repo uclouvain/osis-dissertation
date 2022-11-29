@@ -25,7 +25,7 @@
 ##############################################################################
 import factory
 
-from dissertation.models.enums import dissertation_role_status
+from dissertation.models.enums.dissertation_role_status import DissertationRoleStatus
 from dissertation.tests.factories.adviser import AdviserTeacherFactory
 from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
 
@@ -34,6 +34,6 @@ class PropositionRoleFactory(factory.DjangoModelFactory):
     class Meta:
         model = 'dissertation.PropositionRole'
 
-    status = factory.Iterator(dissertation_role_status.STATUS_CHOICES, getter=lambda c: c[0])
+    status = factory.Iterator(DissertationRoleStatus.choices(), getter=lambda c: c[0])
     adviser = factory.SubFactory(AdviserTeacherFactory)
     proposition_dissertation = factory.SubFactory(PropositionDissertationFactory)

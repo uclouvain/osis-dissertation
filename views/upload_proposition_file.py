@@ -28,9 +28,11 @@ from django.http import *
 from django.shortcuts import redirect, get_object_or_404
 from django.views.decorators.http import require_http_methods
 from django.views.generic import DeleteView
+from rest_framework.mixins import UpdateModelMixin
 
 from base.views.mixins import AjaxTemplateMixin
 from dissertation import models as mdl
+from dissertation.api.serializers.proposition_dissertation import PropositionDissertationFileSerializer
 from dissertation.models.proposition_dissertation import PropositionDissertation
 from dissertation.models.proposition_document_file import PropositionDocumentFile
 from dissertation.perms import autorized_proposition_dissert_promotor_or_manager_or_author
@@ -107,3 +109,14 @@ def save_uploaded_file(request):
         proposition_file.document_file = new_document
         proposition_file.save()
     return HttpResponse('')
+
+
+class PropositionDissertationFileView(UpdateModelMixin):
+    serializer_class = PropositionDissertationFileSerializer
+
+    def get_object(self):
+        return get_object_or_404(PropositionDissertation, uuid=self.kwargs.get('uuid'))
+
+    def put(self, request, *args, **kwargs):
+        response = self.update(request, *args, **kwargs)
+        return response
