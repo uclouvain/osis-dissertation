@@ -489,7 +489,7 @@ msgid "Last name"
 msgstr "Nom de famille"
 
 msgid "Linked dissertations"
-msgstr "Mémoires reliés"
+msgstr "Mémoires liés"
 
 msgid "Links to offer_propositions"
 msgstr "Lien vers le programmes"
