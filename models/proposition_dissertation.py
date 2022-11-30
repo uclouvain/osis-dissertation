@@ -37,6 +37,7 @@ from osis_common.models.serializable_model import SerializableModel, Serializabl
 
 
 class PropositionDissertationAdmin(SerializableModelAdmin):
+    exclude = ('proposition_dissertation_file',)
     list_display = ('uuid', 'title', 'author', 'visibility', 'active', 'creator')
     raw_id_fields = ('creator', 'author')
     search_fields = ('uuid', 'title', 'author__person__last_name', 'author__person__first_name')
