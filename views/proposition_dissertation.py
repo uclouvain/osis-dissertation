@@ -23,8 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import re
 import time
 
+from bs4 import BeautifulSoup
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import UserPassesTestMixin
@@ -336,7 +338,7 @@ def _export_proposition_dissertation_xlsx(propositions_dissertations):
                            proposition.visibility,
                            proposition.active,
                            education_groups,
-                           proposition.description
+                           re.sub(r'[\000-\010]|[\013-\014]|[\016-\037]', '', proposition.description)
                            ])
     response = HttpResponse(
         save_virtual_workbook(workbook),
