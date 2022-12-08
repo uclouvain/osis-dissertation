@@ -23,8 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import re
 import time
 
+from bs4 import BeautifulSoup
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import UserPassesTestMixin
@@ -311,7 +313,7 @@ def manager_proposition_dissertations(request):
 
 def _export_proposition_dissertation_xlsx(propositions_dissertations):
     filename = "EXPORT_propositions_{}.xlsx".format(time.strftime("%Y-%m-%d_%H:%M"))
-    workbook = Workbook(encoding='utf-8')
+    workbook = Workbook()
     worksheet1 = workbook.active
     worksheet1.title = "proposition_dissertation"
     worksheet1.append(['Date_de_création', 'Teacher', 'Title',
@@ -336,7 +338,7 @@ def _export_proposition_dissertation_xlsx(propositions_dissertations):
                            proposition.visibility,
                            proposition.active,
                            education_groups,
-                           proposition.description
+                           re.sub(r'[\000-\010]|[\013-\014]|[\016-\037]', '', proposition.description)
                            ])
     response = HttpResponse(
         save_virtual_workbook(workbook),
