@@ -320,7 +320,7 @@ def manager_dissertations_list(request):
 
 
 def generate_xls(disserts):
-    workbook = Workbook(encoding='utf-8')
+    workbook = Workbook()
     worksheet1 = workbook.active
     worksheet1.title = "dissertations"
     worksheet1.append(['Creation_date',

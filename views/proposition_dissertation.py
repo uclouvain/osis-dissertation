@@ -311,7 +311,7 @@ def manager_proposition_dissertations(request):
 
 def _export_proposition_dissertation_xlsx(propositions_dissertations):
     filename = "EXPORT_propositions_{}.xlsx".format(time.strftime("%Y-%m-%d_%H:%M"))
-    workbook = Workbook(encoding='utf-8')
+    workbook = Workbook()
     worksheet1 = workbook.active
     worksheet1.title = "proposition_dissertation"
     worksheet1.append(['Date_de_création', 'Teacher', 'Title',
