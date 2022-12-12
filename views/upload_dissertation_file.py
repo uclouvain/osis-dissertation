@@ -37,10 +37,12 @@ from dissertation.models.dissertation import Dissertation
 from dissertation.models.dissertation_document_file import DissertationDocumentFile
 from dissertation.perms import autorized_dissert_promotor_or_manager
 from osis_common import models as mdl_osis_common
+from osis_common.decorators.download import set_download_cookie
 from osis_common.models.enum import storage_duration
 
 
 @login_required
+@set_download_cookie
 def download(request, dissertation_pk):
     dissertation = mdl.dissertation.find_by_id(dissertation_pk)
     dissertation_document = mdl.dissertation_document_file.find_by_dissertation(dissertation).first()
