@@ -1087,6 +1087,7 @@ components:
         defend_year:
           type: integer
           example: 2019
+          nullable: true
         jury:
           type: array
           items:
