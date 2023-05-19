@@ -27,10 +27,11 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-  <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
-  <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
-  <li><a href="{% url 'manager_proposition_dissertations' %}" id="lnk_propositions">{% trans 'Dissertation subjects' %}</a></li>
-  <li class="active">{% trans 'New dissertation subject' %}</li>
+    <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
+    <li id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
+    <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+    <li><a href="{% url 'manager_proposition_dissertations' %}" id="lnk_propositions">{% trans 'Dissertation subjects' %}</a></li>
+    <li class="active">{% trans 'New dissertation subject' %}</li>
 {% endblock %}
 {% block content %}
   <div class="page-header">
