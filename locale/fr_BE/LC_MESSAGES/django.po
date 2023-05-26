@@ -146,6 +146,9 @@ msgstr "Cochez les programmes de cours en relation avec ce sujet"
 msgid "Co-Promotor"
 msgstr "Co-Promoteur"
 
+msgid "Cohorts management"
+msgstr "Gestion des cohortes"
+
 msgid "Collaboration"
 msgstr "Collaboration"
 
