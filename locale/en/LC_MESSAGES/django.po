@@ -146,6 +146,9 @@ msgstr ""
 msgid "Co-Promotor"
 msgstr ""
 
+msgid "Cohorts management"
+msgstr ""
+
 msgid "Collaboration"
 msgstr ""
 
