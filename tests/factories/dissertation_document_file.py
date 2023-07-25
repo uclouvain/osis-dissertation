@@ -28,7 +28,7 @@ from dissertation.tests.factories.dissertation import DissertationFactory
 from osis_common.tests.factories.document_file import DocumentFileFactory
 
 
-class DissertationDocumentFileFactory(factory.DjangoModelFactory):
+class DissertationDocumentFileFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = 'dissertation.DissertationDocumentFile'
 

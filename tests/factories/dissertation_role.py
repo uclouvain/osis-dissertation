@@ -29,7 +29,7 @@ from dissertation.models.enums.dissertation_role_status import DissertationRoleS
 from dissertation.tests.factories.adviser import AdviserTeacherFactory
 
 
-class DissertationRoleFactory(factory.DjangoModelFactory):
+class DissertationRoleFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = 'dissertation.DissertationRole'
 
