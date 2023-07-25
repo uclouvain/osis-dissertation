@@ -26,7 +26,7 @@
 import factory
 
 
-class DissertationLocationFactory(factory.DjangoModelFactory):
+class DissertationLocationFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = 'dissertation.DissertationLocation'
 

@@ -35,7 +35,7 @@ from dissertation.tests.factories.dissertation_role import DissertationRoleFacto
 from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
 
 
-class DissertationFactory(factory.DjangoModelFactory):
+class DissertationFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = 'dissertation.Dissertation'
 

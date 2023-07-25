@@ -29,7 +29,7 @@ from dissertation.tests.factories.offer_proposition import OfferPropositionFacto
 from dissertation.tests.factories.proposition_dissertation import PropositionDissertationFactory
 
 
-class PropositionOfferFactory(factory.DjangoModelFactory):
+class PropositionOfferFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = 'dissertation.PropositionOffer'
 

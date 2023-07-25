@@ -28,7 +28,7 @@ from dissertation.tests.factories.proposition_dissertation import PropositionDis
 from osis_common.tests.factories.document_file import DocumentFileFactory
 
 
-class PropositionDocumentFileFactory(factory.DjangoModelFactory):
+class PropositionDocumentFileFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = 'dissertation.PropositionDocumentFile'
 
