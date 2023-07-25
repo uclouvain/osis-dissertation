@@ -40,7 +40,6 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic import CreateView
 from openpyxl import Workbook
 from openpyxl.utils.exceptions import IllegalCharacterError
-from openpyxl.writer.excel import save_virtual_workbook
 from rest_framework import status
 
 from base import models as mdl
@@ -66,6 +65,7 @@ from dissertation.models.enums.dissertation_status import DISSERTATION_STATUS
 from dissertation.models.offer_proposition import OfferProposition
 from dissertation.perms import adviser_can_manage, autorized_dissert_promotor_or_manager, check_for_dissert, \
     adviser_is_in_jury
+from osis_common.document.xls_build import save_virtual_workbook
 
 
 def _role_can_be_deleted(dissert, dissert_role):
