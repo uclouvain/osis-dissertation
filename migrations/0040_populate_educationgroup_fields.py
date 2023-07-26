@@ -73,5 +73,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(populate_educationgroup_fields, elidable=True),
+        migrations.RunPython(populate_educationgroup_fields, migrations.RunPython.noop, elidable=True),
     ]
