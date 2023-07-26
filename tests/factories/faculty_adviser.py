@@ -29,7 +29,7 @@ from base.tests.factories.education_group import EducationGroupFactory
 from dissertation.tests.factories.adviser import AdviserManagerFactory
 
 
-class FacultyAdviserFactory(factory.DjangoModelFactory):
+class FacultyAdviserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = 'dissertation.FacultyAdviser'
 

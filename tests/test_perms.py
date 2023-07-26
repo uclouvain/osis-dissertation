@@ -33,7 +33,7 @@ from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.person import PersonFactory, PersonWithoutUserFactory
 from base.tests.factories.student import StudentFactory
-from dissertation.models.enums import dissertation_role_status
+from dissertation.models.enums.dissertation_role_status import DissertationRoleStatus
 from dissertation.perms import adviser_can_manage, \
     autorized_dissert_promotor_or_manager, \
     adviser_can_manage_proposition_dissertation, \
@@ -92,11 +92,11 @@ class DecoratorsTestCase(TestCase):
             status='DIR_SUBMIT',
             active=True,
             dissertation_role__adviser=cls.teacher,
-            dissertation_role__status=dissertation_role_status.PROMOTEUR
+            dissertation_role__status=DissertationRoleStatus.PROMOTEUR.name
         )
         cls.dissertation_role = DissertationRoleFactory(
             adviser=cls.teacher3,
-            status=dissertation_role_status.READER,
+            status=DissertationRoleStatus.READER.name,
             dissertation=cls.dissertation1
         )
 

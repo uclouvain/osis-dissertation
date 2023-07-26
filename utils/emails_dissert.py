@@ -75,6 +75,7 @@ def get_commission_template(dissert):
     template_commission_data = {'author': dissert.author,
                                 'title': dissert.title,
                                 'promoteur': create_string_list_promotors(dissert),
+                                'programme': dissert.education_group_year.acronym,
                                 'description': dissert.description,
                                 'commission_string': create_string_list_commission_reading(dissert),
                                 'dissertation_proposition_titre': dissert.proposition_dissertation.title}

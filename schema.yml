@@ -1,0 +1,1303 @@
+openapi: 3.0.0
+servers:
+ - url: https://{environment}.osis.uclouvain.be/api/v1/dissertation/
+   variables:
+     environment:
+       default: dev
+       enum:
+         - dev # Development server
+         - qa # Staging server
+         - test # Test server
+ - url: https://osis.uclouvain.be/api/v1/dissertation/
+   description: 'Production server'
+info:
+  version: '1.01'
+  title: 'Dissertation Service'
+  description: |-
+    A set of API endpoints that allow you to get information about dissertation
+paths:
+  /propositions:
+    get:
+      description: "Return all dissertation's propositions available for the user currently connected"
+      operationId: propositions_list
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            description: Number of results to return per page.
+            type: integer
+        - in: query
+          name: offset
+          schema:
+            description: The initial index from which to return the results.
+            type: integer
+        - in: query
+          name: search
+          schema:
+            description: A search term which will look up at title
+            type: string
+        - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropositionDissertationPaginatedList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      tags:
+        - proposition_dissertation
+  /propositions/{uuid}/:
+    get:
+      description: "Return detail of a proposition dissertation available for the user currently connected"
+      operationId: proposition_detail
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            description: 'The uuid of the proposition dissertation'
+            type: string
+        - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropositionDissertationDetail'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - proposition_dissertation
+  /dissertations:
+    get:
+      description: 'Return all dissertations of connected user'
+      operationId: dissertation_list
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            description: Number of results to return per page.
+            type: integer
+        - in: query
+          name: offset
+          schema:
+            description: The initial index from which to return the results.
+            type: integer
+        - in: query
+          name: search
+          schema:
+            description: A search term which will look up at title
+            type: string
+        - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DissertationPaginatedList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      tags:
+        - dissertation
+    post:
+      description: "Create a dissertation"
+      operationId: dissertation_create
+      parameters:
+        - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DissertationCreateCommand'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DissertationCreatedResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - dissertation
+  /dissertations/{uuid}/file:
+    get:
+      operationId: retrieve_dissertation_file
+      description: ''
+      parameters:
+      - name: uuid
+        in: path
+        required: true
+        description: 'The uuid of the dissertation'
+        schema:
+          type: string
+      - $ref: '#/components/parameters/Accept-Language'
+      - $ref: '#/components/parameters/X-User-FirstName'
+      - $ref: '#/components/parameters/X-User-LastName'
+      - $ref: '#/components/parameters/X-User-Email'
+      - $ref: '#/components/parameters/X-User-GlobalID'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DissertationFile'
+          description: ''
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - dissertation
+    put:
+      operationId: update_dissertation_file
+      description: ''
+      parameters:
+      - name: uuid
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      - $ref: '#/components/parameters/Accept-Language'
+      - $ref: '#/components/parameters/X-User-FirstName'
+      - $ref: '#/components/parameters/X-User-LastName'
+      - $ref: '#/components/parameters/X-User-Email'
+      - $ref: '#/components/parameters/X-User-GlobalID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DissertationFile'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DissertationFile'
+          description: ''
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - dissertation
+  /propositions/{uuid}/file:
+    get:
+      operationId: retrieve_proposition_dissertation_file
+      description: ''
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          description: 'The uuid of the proposition dissertation'
+          schema:
+            type: string
+        - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropositionDissertationFile'
+          description: ''
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - proposition_dissertation
+    put:
+      operationId: update_proposition_dissertation_file
+      description: ''
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          description: ''
+          schema:
+            type: string
+        - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropositionDissertationFile'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropositionDissertationFile'
+          description: ''
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - proposition_dissertation
+  /dissertation_locations:
+    get:
+      description: "Return all dissertation locations available"
+      operationId: dissertation_locations_list
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            description: Number of results to return per page.
+            type: integer
+        - in: query
+          name: offset
+          schema:
+            description: The initial index from which to return the results.
+            type: integer
+        - in: query
+          name: search
+          schema:
+            description: A search term which will look up at title
+            type: string
+        - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DissertationLocationList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      tags:
+        - dissertation_location
+  /advisers:
+    get:
+      description: "Return advisers list"
+      operationId: advisers_list
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            description: Number of results to return per page.
+            type: integer
+        - in: query
+          name: offset
+          schema:
+            description: The initial index from which to return the results.
+            type: integer
+        - in: query
+          name: search
+          schema:
+            description: A search term which will look up at name
+            type: string
+        - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdviserList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      tags:
+        - adviser
+  /dissertations/{uuid}/:
+    get:
+      description: "Return dissertation's detail of the user currently connected"
+      operationId: dissertation_detail
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            description: 'The uuid of the dissertation'
+            type: string
+        - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DissertationDetail'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - dissertation
+    put:
+      description: "Update user's dissertation"
+      operationId: dissertation_update
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            description: 'The uuid of the dissertation'
+            type: string
+        - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DissertationUpdateCommand'
+      responses:
+        '204':
+          description: 'The resource was been updated successfully.'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - dissertation
+    delete:
+      description: 'Deactivate a dissertation of the current user'
+      operationId: dissertation_deactivate
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            description: 'The uuid of the dissertation'
+            type: string
+        - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
+      responses:
+        '204':
+          description: 'The resource was deleted successfully.'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - dissertation
+  /dissertations/{uuid}/submit:
+    post:
+      description: "Submit dissertation"
+      operationId: dissertation_submit
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            description: 'The uuid of the dissertation'
+            type: string
+        - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DissertationSubmitCommand'
+      responses:
+        '204':
+          description: 'The resource was updated successfully.'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - dissertation
+  /dissertations/{uuid}/back_to_draft:
+    post:
+      description: "Back to draft dissertation"
+      operationId: dissertation_back_to_draft
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            description: 'The uuid of the dissertation'
+            type: string
+        - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DissertationBackToDraftCommand'
+      responses:
+        '204':
+          description: 'The resource was updated successfully.'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - dissertation
+  /dissertations/{uuid}/can_manage_jury_member:
+    get:
+      description: "Can manage jury on this dissertation"
+      operationId: dissertation_can_manage_jury_member
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            description: 'The uuid of the dissertation'
+            type: string
+        - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DissertationCanManageJury'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - dissertation
+  /dissertations/{uuid}/can_edit_dissertation:
+    get:
+      description: "Can edit dissertation"
+      operationId: dissertation_can_edit_dissertation
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            description: 'The uuid of the dissertation'
+            type: string
+        - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DissertationCanEditDissertation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - dissertation
+  /dissertations/{uuid}/history:
+    get:
+      description: "Return dissertation's modification history"
+      operationId: dissertation_history
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            description: 'The uuid of the dissertation'
+            type: string
+        - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DissertationHistoryPaginatedList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - dissertation
+  /dissertations/{uuid}/jury:
+    post:
+      description: "Add a reader jury member on dissertation"
+      operationId: dissertation_addjurymember
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            description: 'The uuid of the dissertation'
+            type: string
+        - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DissertationJuryAddCommand'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DissertationJuryAddedResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - dissertation
+  /dissertations/{uuid}/jury/{uuid_jury_member}/:
+    delete:
+      description: "Delete a jury member of dissertation"
+      operationId: dissertation_deletejurymember
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            description: 'The uuid of the dissertation'
+            type: string
+        - in: path
+          name: uuid_jury_member
+          required: true
+          schema:
+            description: 'The uuid of the jury member'
+            type: string
+        - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
+      responses:
+        '204':
+          description: 'The resource was deleted successfully.'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - dissertation
+components:
+  securitySchemes:
+    Token:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Enter your token in the format **Token &lt;token>**
+  parameters:
+    X-User-FirstName:
+      in: header
+      name: X-User-FirstName
+      schema:
+        type: string
+      required: false
+    X-User-LastName:
+      in: header
+      name: X-User-LastName
+      schema:
+        type: string
+      required: false
+    X-User-Email:
+      in: header
+      name: X-User-Email
+      schema:
+        type: string
+      required: false
+    X-User-GlobalID:
+      in: header
+      name: X-User-GlobalID
+      schema:
+        type: string
+      required: false
+    Accept-Language:
+      in: header
+      name: Accept-Language
+      description: >
+        The header advertises which languages the client is able to understand, and which locale variant is preferred. (By languages, we mean natural languages, such as English, and not programming languages.)
+      schema:
+        $ref: '#/components/schemas/AcceptedLanguageEnum'
+      required: false
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    PropositionDissertationPaginatedList:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PropositionDissertationRow'
+    PropositionDissertationRow:
+      type: object
+      properties:
+        uuid:
+          type: string
+        title:
+          type: string
+        author:
+          type: string
+        offers:
+          type: array
+          items:
+            type: string
+        max_number_student:
+          type: integer
+        remaining_places:
+          type: integer
+      required:
+        - uuid
+        - title
+        - author
+        - offers
+        - max_number_student
+        - remaining_places
+    PropositionDissertationDetail:
+      type: object
+      properties:
+        uuid:
+          type: string
+          example: 'f8b61488-f32b-4382-8633-3bf81fcacatb'
+        title:
+          type: string
+          example: "Autres sujets - Sandrine Durant"
+        description:
+          type: string
+          example: "Liste de tous les autres sujets"
+        type:
+          $ref: '#/components/schemas/PropositionDissertationTypeEnum'
+        type_text:
+          type: string
+          example: "Revue de littérature"
+        level:
+          $ref: '#/components/schemas/PropositionDissertationLevelEnum'
+        level_text:
+          type: string
+          example: "Sujet précis"
+        collaboration:
+          $ref: '#/components/schemas/PropositionDissertationCollaborationEnum'
+        collaboration_text:
+          type: string
+          example: "Possible"
+        offers:
+          type: array
+          items:
+            type: string
+        max_number_student:
+          type: integer
+          example: 5
+        dissertations_count:
+          type: integer
+          example: 2
+        author:
+          $ref: '#/components/schemas/PropositionDissertationAuthor'
+        jury:
+          type: array
+          items:
+            $ref: '#/components/schemas/PropositionDissertationJury'
+        link:
+          $ref: '#/components/schemas/PropositionDissertationLink'
+      required:
+        - uuid
+        - title
+        - description
+        - offers
+        - max_number_student
+        - dissertations_count
+        - author
+        - jury
+        - link
+    PropositionDissertationAuthor:
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: "Sandrine"
+          nullable: true
+        last_name:
+          type: string
+          example: "Durant"
+          nullable: true
+        middle_name:
+          type: string
+          example: ""
+          nullable: true
+        available_by_email:
+          type: boolean
+          example: true
+        email:
+          type: string
+          example: "dummy@uclouvain.be"
+        available_by_phone:
+          type: boolean
+          example: true
+        phone:
+          type: string
+          example: "+3244477889"
+        mobile_phone:
+          type: string
+          example: "+32444778899"
+        comment:
+          type: string
+          example: "Business hours only"
+      required:
+        - first_name
+        - last_name
+        - middle_name
+        - available_by_email
+        - email
+        - available_by_phone
+        - phone
+        - mobile_phone
+        - comment
+    PropositionDissertationJury:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/DissertationRoleStatusEnum'
+        status_text:
+          type: string
+          example: "Promoteur"
+        adviser:
+          type: string
+          example: "Durant, Sandrine"
+      required:
+        - status
+        - status_text
+        - adviser
+    PropositionDissertationLink:
+      type: object
+      properties:
+        document_url:
+          type: string
+          format: uri
+      required:
+        - document_url
+    PropositionDissertationTypeEnum:
+      type: string
+      enum:
+        - 'RDL'
+        - 'EMP'
+        - 'THE'
+        - 'PRO'
+        - 'DEV'
+        - 'OTH'
+    PropositionDissertationLevelEnum:
+      type: string
+      enum:
+        - 'SPECIFIC'
+        - 'THEME'
+    PropositionDissertationCollaborationEnum:
+      type: string
+      enum:
+        - 'POSSIBLE'
+        - 'REQUIRED'
+        - 'FORBIDDEN'
+    DissertationRoleStatusEnum:
+      type: string
+      enum:
+        - 'PROMOTEUR'
+        - 'CO_PROMOTEUR'
+        - 'READER'
+        - 'ACCOMPANIST'
+        - 'INTERNSHIP'
+        - 'PRESIDENT'
+    DissertationPaginatedList:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DissertationRow'
+    DissertationRow:
+      type: object
+      properties:
+        uuid:
+          type: string
+          example: 'f8b61488-f32b-4382-8633-3bf81fcacatb'
+        title:
+          type: string
+          example: "Big data, l'or numérique"
+        author:
+          type: string
+          example: "DURANT Thomas"
+        status:
+          $ref: '#/components/schemas/DissertationStatusEnum'
+        status_text:
+          type: string
+        offer_acronym:
+          type: string
+        start_year:
+          type: integer
+          example: 2019
+        dissertation_subject:
+          type: string
+    DissertationStatusEnum:
+      type: string
+      enum:
+        - 'DRAFT'
+        - 'DIR_SUBMIT'
+        - 'DIR_OK'
+        - 'DIR_KO'
+        - 'COM_SUBMIT'
+        - 'COM_OK'
+        - 'COM_KO'
+        - 'EVA_SUBMIT'
+        - 'EVA_OK'
+        - 'EVA_KO'
+        - 'TO_RECEIVE'
+        - 'TO_DEFEND'
+        - 'DEFENDED'
+        - 'ENDED'
+        - 'ENDED_WIN'
+        - 'ENDED_LOS'
+    DissertationCreateCommand:
+      type: object
+      properties:
+        proposition_dissertation_uuid:
+          type: string
+          example: "f8b61488-f32b-4382-8633-3bf81fc5d6a5"
+        title:
+          type: string
+          example: "Big data, l'or numérique"
+        description:
+          type: string
+          example: "Mémoire portant sur le big data"
+        defend_year:
+          type: integer
+          example: 2019
+        defend_period:
+          $ref: '#/components/schemas/DefendPeriodEnum'
+        location_uuid:
+          type: string
+          example: "f8b61488-f32b-4382-8633-3bf81fc5d6a5"
+        acronym:
+          type: string
+          example: "PSY2MS/PS"
+        year:
+          type: integer
+          example: "2020"
+      required:
+        - proposition_dissertation_uuid
+        - title
+        - description
+        - defend_year
+        - defend_period
+        - location_uuid
+        - education_group_year_acronym
+        - education_group_year_year
+    DissertationUpdateCommand:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "Big data, l'or numérique"
+        description:
+          type: string
+          example: "Mémoire portant sur le big data"
+        defend_year:
+          type: integer
+          example: 2019
+        defend_period:
+          $ref: '#/components/schemas/DefendPeriodEnum'
+        location_uuid:
+          type: string
+          example: "f8b61488-f32b-4382-8633-3bf81fc5d6a5"
+      required:
+        - title
+        - description
+        - defend_year
+        - defend_period
+        - location_uuid
+    DissertationSubmitCommand:
+      type: object
+      properties:
+        justification:
+          type: string
+          example: "Raison de la soumission"
+    DissertationBackToDraftCommand:
+      type: object
+      properties:
+        justification:
+          type: string
+          example: "Raison du retour en brouillon"
+    DissertationDetail:
+      type: object
+      properties:
+        uuid:
+          type: string
+          example: 'f8b61488-f32b-4382-8633-3bf81fcacatb'
+        proposition_uuid:
+          type: string
+          example: 'f8b61488-f32b-4382-8633-3bf81fcacatb'
+        title:
+          type: string
+          example: "Autres sujets - Sandrine Durant"
+        description:
+          type: string
+          example: "Liste de tous les autres sujets"
+        author:
+          $ref: '#/components/schemas/DissertationAuthor'
+        status:
+          $ref: '#/components/schemas/DissertationStatusEnum'
+        status_text:
+          type: string
+        defend_period:
+          $ref: '#/components/schemas/DefendPeriodEnum'
+        defend_period_text:
+          type: string
+        defend_year:
+          type: integer
+          example: 2019
+          nullable: true
+        jury:
+          type: array
+          items:
+            $ref: '#/components/schemas/DissertationJury'
+        location:
+          $ref: '#/components/schemas/DissertationLocation'
+        link:
+          $ref: '#/components/schemas/DissertationLink'
+    DissertationAuthor:
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: "Sandrine"
+          nullable: true
+        last_name:
+          type: string
+          example: "Durant"
+          nullable: true
+        middle_name:
+          type: string
+          example: ""
+          nullable: true
+    DissertationJury:
+      type: object
+      properties:
+        uuid:
+          type: string
+          example: 'f8b61488-f32b-4382-8633-3bf81fcacatb'
+        status:
+          $ref: '#/components/schemas/DissertationRoleStatusEnum'
+        status_text:
+          type: string
+          example: "Promoteur"
+        adviser:
+          type: string
+          example: "Durant, Sandrine"
+      required:
+        - uuid
+        - status
+        - status_text
+        - adviser
+    DissertationLocation:
+      type: object
+      properties:
+        uuid:
+          type: string
+          example: "f8b61488-f32b-4382-8633-3bf81fcacatb"
+        name:
+          type: string
+          example: "Namur"
+    DissertationLink:
+      type: object
+      properties:
+        document_url:
+          type: string
+        delete_document_url:
+          type: string
+    DissertationHistoryPaginatedList:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DissertationHistoryRow'
+    DissertationHistoryRow:
+      type: object
+      properties:
+        status_from:
+          $ref: '#/components/schemas/DissertationStatusEnum'
+        status_from_text:
+          type: string
+        status_to:
+           $ref: '#/components/schemas/DissertationStatusEnum'
+        status_to_text:
+          type: string
+        author:
+          type: string
+          example: "DURANT Thomas"
+        created_at:
+          type: string
+          example: "03-12-2016 07:19:46"
+        justification:
+          type: string
+    DefendPeriodEnum:
+      type: string
+      enum:
+        - 'UNDEFINED'
+        - 'JANUARY'
+        - 'JUNE'
+        - 'SEPTEMBER'
+    DissertationCreatedResponse:
+      type: object
+      properties:
+        dissertation_uuid:
+          type: string
+          example: "f8b61488-f32b-4382-8633-3bf81fc5d6a5"
+      required:
+        - dissertation_uuid
+    DissertationJuryAddCommand:
+      type: object
+      properties:
+        adviser_uuid:
+          type: string
+          example: "f8b61488-f32b-4382-8633-3bf81fc5d6a5"
+      required:
+        - adviser_uuid
+    DissertationJuryAddedResponse:
+      type: object
+      properties:
+        dissertation_jury_uuid:
+          type: string
+          example: "f8b61488-f32b-4382-8633-3bf81fc5d6a5"
+      required:
+        - dissertation_jury_uuid
+    DissertationCanManageJury:
+      type: object
+      properties:
+        can_manage_jury_members:
+          type: boolean
+          example: 'True'
+    DissertationCanEditDissertation:
+      type: object
+      properties:
+        can_edit_dissertation:
+          type: boolean
+          example: 'True'
+    DissertationLocationList:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DissertationLocation'
+    AdviserList:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Adviser'
+    Adviser:
+      type: object
+      properties:
+        uuid:
+          type: string
+          example: "f8b61488-f32b-4382-8633-3bf81fcacatb"
+        name:
+          type: string
+          example: "Eric Judor"
+    DissertationFile:
+      type: object
+      properties:
+        dissertation_file:
+          type: array
+          items:
+            type: string
+          nullable: true
+    PropositionDissertationFile:
+      type: object
+      properties:
+        dissertation_file:
+          type: array
+          items:
+            type: string
+          nullable: true
+    AcceptedLanguageEnum:
+      type: string
+      enum:
+        - 'en'
+        - 'fr-be'
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
+security:
+  - Token: [ ]

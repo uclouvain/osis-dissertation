@@ -33,7 +33,8 @@ from base.tests.factories.student import StudentFactory
 from dissertation.forms import AdviserForm, ManagerAddAdviserPerson, ManagerAddAdviserForm, \
     AddAdviserForm
 from dissertation.models import dissertation_role
-from dissertation.models.enums import dissertation_role_status, dissertation_status
+from dissertation.models.enums import dissertation_status
+from dissertation.models.enums.dissertation_role_status import DissertationRoleStatus
 from dissertation.tests.factories.adviser import AdviserManagerFactory, AdviserTeacherFactory
 from dissertation.tests.factories.dissertation import DissertationFactory
 from dissertation.tests.factories.faculty_adviser import FacultyAdviserFactory
@@ -67,15 +68,15 @@ class InformationTeacherViewTestCase(TestCase):
     def test_informations_detail_stats(self):
         advisers_pro = dissertation_role.search_by_adviser_and_role_stats(
             self.teacher,
-            dissertation_role_status.PROMOTEUR
+            DissertationRoleStatus.PROMOTEUR.name
         )
         advisers_copro = dissertation_role.search_by_adviser_and_role_stats(
             self.teacher,
-            dissertation_role_status.CO_PROMOTEUR
+            DissertationRoleStatus.CO_PROMOTEUR.name
         )
         advisers_reader = dissertation_role.search_by_adviser_and_role_stats(
             self.teacher,
-            dissertation_role_status.READER
+            DissertationRoleStatus.READER.name
         )
         response = self.client.post(
             reverse('informations_detail_stats'),
@@ -84,21 +85,22 @@ class InformationTeacherViewTestCase(TestCase):
                 'count_advisers_copro':
                     dissertation_role.count_by_adviser_and_role_stats(
                         self.teacher,
-                        dissertation_role_status.CO_PROMOTEUR
+                        DissertationRoleStatus.CO_PROMOTEUR.name
                     ),
                 'count_advisers_pro':
                     dissertation_role.count_by_adviser_and_role_stats(
                         self.teacher,
-                        dissertation_role_status.PROMOTEUR
+                        DissertationRoleStatus.PROMOTEUR.name
                     ),
                 'count_advisers_reader':
                     dissertation_role.count_by_adviser_and_role_stats(
                         self.teacher,
-                        dissertation_role_status.READER),
+                        DissertationRoleStatus.READER.name
+                    ),
                 'count_advisers_pro_request':
                     dissertation_role.count_by_adviser(
                         self.teacher,
-                        dissertation_role_status.PROMOTEUR,
+                        DissertationRoleStatus.PROMOTEUR.name,
                         'DIR_SUBMIT'
                     ),
                 'tab_offer_count_pro':
@@ -231,11 +233,12 @@ class InformationManagerViewTestCase(TestCase):
         cls.education_group_year = EducationGroupYearFactory(education_group=offer_proposition.education_group)
         FacultyAdviserFactory(adviser=cls.manager,
                               education_group=cls.education_group_year.education_group)
-        roles = [dissertation_role_status.PROMOTEUR, dissertation_role_status.CO_PROMOTEUR,
-                 dissertation_role_status.READER, dissertation_role_status.PROMOTEUR,
-                 dissertation_role_status.ACCOMPANIST, dissertation_role_status.PRESIDENT]
+        roles = [DissertationRoleStatus.PROMOTEUR.name, DissertationRoleStatus.CO_PROMOTEUR.name,
+                 DissertationRoleStatus.READER.name, DissertationRoleStatus.PROMOTEUR.name,
+                 DissertationRoleStatus.ACCOMPANIST.name, DissertationRoleStatus.PRESIDENT.name]
         status = [dissertation_status.DRAFT, dissertation_status.COM_SUBMIT, dissertation_status.EVA_SUBMIT,
                   dissertation_status.TO_RECEIVE, dissertation_status.DIR_SUBMIT, dissertation_status.DIR_SUBMIT]
+        cls.fake_manager_id = cls.teacher.pk + 100
         for x in range(0, 6):
             proposition_dissertation = PropositionDissertationFactory(author=cls.teacher,
                                                                       creator=a_person_teacher,
@@ -373,11 +376,11 @@ class InformationManagerViewTestCase(TestCase):
     def test_manager_informations_detail(self):
         response = self.client.get(reverse("manager_informations_detail", args=[self.teacher.pk]))
         self.assertEqual(response.status_code, HttpResponse.status_code)
-        response = self.client.get(reverse("manager_informations_detail", args=[self.teacher.person.user.pk]))
+        response = self.client.get(reverse("manager_informations_detail", args=[self.fake_manager_id]))
         self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
 
     def test_manager_informations_edit(self):
-        response = self.client.get(reverse("manager_informations_edit", args=[self.teacher.person.user.pk]))
+        response = self.client.get(reverse("manager_informations_edit", args=[self.fake_manager_id]))
         self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
         form = AdviserForm(instance=self.teacher.person.user)
         response = self.client.post(reverse("manager_informations_edit", args=[self.teacher.pk]),
@@ -402,22 +405,22 @@ class InformationManagerViewTestCase(TestCase):
         self.assertEqual(response.context[-1].get('adv_list_disserts_reader').count(), 1)
         self.assertEqual(response.context[-1].get('adv_list_disserts_accompanist').count(), 1)
         self.assertEqual(response.context[-1].get('adv_list_disserts_president').count(), 1)
-        response = self.client.get(reverse("manager_informations_detail_list", args=[self.teacher.person.user.pk]))
+        response = self.client.get(reverse("manager_informations_detail_list", args=[self.fake_manager_id]))
         self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
 
     def test_manager_informations_detail_list_wait(self):
         response = self.client.get(reverse("manager_informations_detail_list_wait", args=[self.teacher.pk]))
         self.assertEqual(response.status_code, HttpResponse.status_code)
-        response = self.client.get(reverse("manager_informations_detail_list_wait", args=[self.teacher.person.user.pk]))
+        response = self.client.get(reverse("manager_informations_detail_list_wait", args=[self.fake_manager_id]))
         self.assertEqual(response.status_code, HttpResponseNotFound.status_code)
 
     def test_manager_informations_detail_stats(self):
         advisers_pro = dissertation_role.search_by_adviser_and_role_stats(self.teacher,
-                                                                          dissertation_role_status.PROMOTEUR)
+                                                                          DissertationRoleStatus.PROMOTEUR.name)
         advisers_copro = dissertation_role.search_by_adviser_and_role_stats(self.teacher,
-                                                                            dissertation_role_status.CO_PROMOTEUR)
+                                                                            DissertationRoleStatus.CO_PROMOTEUR.name)
         advisers_reader = dissertation_role.search_by_adviser_and_role_stats(self.teacher,
-                                                                             dissertation_role_status.READER)
+                                                                             DissertationRoleStatus.READER.name)
         response = self.client.post(
             reverse('manager_informations_detail_stats', args=[self.teacher.pk]),
             {
@@ -425,22 +428,22 @@ class InformationManagerViewTestCase(TestCase):
                 'count_advisers_copro':
                     dissertation_role.count_by_adviser_and_role_stats(
                         self.teacher,
-                        dissertation_role_status.CO_PROMOTEUR
+                        DissertationRoleStatus.CO_PROMOTEUR.name
                     ),
                 'count_advisers_pro':
                     dissertation_role.count_by_adviser_and_role_stats(
                         self.teacher,
-                        dissertation_role_status.PROMOTEUR
+                        DissertationRoleStatus.PROMOTEUR.name
                     ),
                 'count_advisers_reader':
                     dissertation_role.count_by_adviser_and_role_stats(
                         self.teacher,
-                        dissertation_role_status.READER
+                        DissertationRoleStatus.READER.name
                     ),
                 'count_advisers_pro_request':
                     dissertation_role.count_by_adviser(
                         self.teacher,
-                        dissertation_role_status.PROMOTEUR,
+                        DissertationRoleStatus.PROMOTEUR.name,
                         'DIR_SUBMIT'
                     ),
                 'tab_offer_count_pro':
@@ -462,39 +465,39 @@ class InformationManagerViewTestCase(TestCase):
     def test_manager_informations_detail_stats_without_teacher(self):
         advisers_pro = dissertation_role.search_by_adviser_and_role_stats(
             self.teacher,
-            dissertation_role_status.PROMOTEUR
+            DissertationRoleStatus.PROMOTEUR.name
         )
         advisers_copro = dissertation_role.search_by_adviser_and_role_stats(
             self.teacher,
-            dissertation_role_status.CO_PROMOTEUR
+            DissertationRoleStatus.CO_PROMOTEUR.name
         )
         advisers_reader = dissertation_role.search_by_adviser_and_role_stats(
             self.teacher,
-            dissertation_role_status.READER
+            DissertationRoleStatus.READER.name
         )
         response = self.client.post(
-            reverse('manager_informations_detail_stats', args=[self.manager.person.user.pk]),
+            reverse('manager_informations_detail_stats', args=[self.fake_manager_id]),
             {
                 'adviser': self.teacher,
                 'count_advisers_copro':
                     dissertation_role.count_by_adviser_and_role_stats(
                         self.teacher,
-                        dissertation_role_status.CO_PROMOTEUR
+                        DissertationRoleStatus.CO_PROMOTEUR.name
                     ),
                 'count_advisers_pro':
                     dissertation_role.count_by_adviser_and_role_stats(
                         self.teacher,
-                        dissertation_role_status.PROMOTEUR
+                        DissertationRoleStatus.PROMOTEUR.name
                     ),
                 'count_advisers_reader':
                     dissertation_role.count_by_adviser_and_role_stats(
                         self.teacher,
-                        dissertation_role_status.READER
+                        DissertationRoleStatus.READER.name
                     ),
                 'count_advisers_pro_request':
                     dissertation_role.count_by_adviser(
                         self.teacher,
-                        dissertation_role_status.PROMOTEUR,
+                        DissertationRoleStatus.PROMOTEUR.name,
                         'DIR_SUBMIT'
                     ),
                 'tab_offer_count_pro':

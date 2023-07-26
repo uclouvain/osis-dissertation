@@ -118,7 +118,7 @@ class PropositionDissertationViewTestCase(TestCase):
         url = reverse('proposition_dissertation_detail', args=[proposition_dissertation.id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        context = response.context[-1]
+        context = response.context[-3]
         self.assertEqual(context.get("proposition_dissertation"), proposition_dissertation)
 
     def test_get_edit_proposition_dissertation(self):
