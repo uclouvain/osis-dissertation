@@ -238,6 +238,7 @@ class InformationManagerViewTestCase(TestCase):
                  DissertationRoleStatus.ACCOMPANIST.name, DissertationRoleStatus.PRESIDENT.name]
         status = [dissertation_status.DRAFT, dissertation_status.COM_SUBMIT, dissertation_status.EVA_SUBMIT,
                   dissertation_status.TO_RECEIVE, dissertation_status.DIR_SUBMIT, dissertation_status.DIR_SUBMIT]
+        cls.fake_manager_id = cls.teacher.pk + 100
         for x in range(0, 6):
             proposition_dissertation = PropositionDissertationFactory(author=cls.teacher,
                                                                       creator=a_person_teacher,
@@ -375,11 +376,11 @@ class InformationManagerViewTestCase(TestCase):
     def test_manager_informations_detail(self):
         response = self.client.get(reverse("manager_informations_detail", args=[self.teacher.pk]))
         self.assertEqual(response.status_code, HttpResponse.status_code)
-        response = self.client.get(reverse("manager_informations_detail", args=[self.teacher.person.user.pk]))
+        response = self.client.get(reverse("manager_informations_detail", args=[self.fake_manager_id]))
         self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
 
     def test_manager_informations_edit(self):
-        response = self.client.get(reverse("manager_informations_edit", args=[self.teacher.person.user.pk]))
+        response = self.client.get(reverse("manager_informations_edit", args=[self.fake_manager_id]))
         self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
         form = AdviserForm(instance=self.teacher.person.user)
         response = self.client.post(reverse("manager_informations_edit", args=[self.teacher.pk]),
@@ -404,13 +405,13 @@ class InformationManagerViewTestCase(TestCase):
         self.assertEqual(response.context[-1].get('adv_list_disserts_reader').count(), 1)
         self.assertEqual(response.context[-1].get('adv_list_disserts_accompanist').count(), 1)
         self.assertEqual(response.context[-1].get('adv_list_disserts_president').count(), 1)
-        response = self.client.get(reverse("manager_informations_detail_list", args=[self.teacher.person.user.pk]))
+        response = self.client.get(reverse("manager_informations_detail_list", args=[self.fake_manager_id]))
         self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
 
     def test_manager_informations_detail_list_wait(self):
         response = self.client.get(reverse("manager_informations_detail_list_wait", args=[self.teacher.pk]))
         self.assertEqual(response.status_code, HttpResponse.status_code)
-        response = self.client.get(reverse("manager_informations_detail_list_wait", args=[self.teacher.person.user.pk]))
+        response = self.client.get(reverse("manager_informations_detail_list_wait", args=[self.fake_manager_id]))
         self.assertEqual(response.status_code, HttpResponseNotFound.status_code)
 
     def test_manager_informations_detail_stats(self):
@@ -475,7 +476,7 @@ class InformationManagerViewTestCase(TestCase):
             DissertationRoleStatus.READER.name
         )
         response = self.client.post(
-            reverse('manager_informations_detail_stats', args=[self.manager.person.user.pk]),
+            reverse('manager_informations_detail_stats', args=[self.fake_manager_id]),
             {
                 'adviser': self.teacher,
                 'count_advisers_copro':

@@ -28,7 +28,7 @@ import factory
 from base.tests.factories.person import PersonFactory
 
 
-class AdviserTeacherFactory(factory.DjangoModelFactory):
+class AdviserTeacherFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = 'dissertation.Adviser'
 

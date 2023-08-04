@@ -28,7 +28,7 @@ import factory
 from base.tests.factories.education_group import EducationGroupFactory
 
 
-class OfferPropositionFactory(factory.DjangoModelFactory):
+class OfferPropositionFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = 'dissertation.OfferProposition'
 

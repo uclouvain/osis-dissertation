@@ -31,7 +31,7 @@ from dissertation.models.proposition_dissertation import PropositionDissertation
 from dissertation.tests.factories.adviser import AdviserTeacherFactory
 
 
-class PropositionDissertationFactory(factory.DjangoModelFactory):
+class PropositionDissertationFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = 'dissertation.PropositionDissertation'
 
