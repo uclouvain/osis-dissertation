@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import re
 import time
 
 from django.contrib.auth.decorators import login_required
@@ -37,7 +38,6 @@ from django.shortcuts import redirect
 from django.utils.functional import cached_property
 from django.views.generic import CreateView
 from openpyxl import Workbook
-from openpyxl.writer.excel import save_virtual_workbook
 
 from base import models as mdl
 from base.models import academic_year
@@ -46,7 +46,7 @@ from base.views.mixins import AjaxTemplateMixin
 from dissertation.forms import PropositionDissertationForm, ManagerPropositionDissertationForm, \
     ManagerPropositionRoleForm, ManagerPropositionDissertationEditForm, PropositionDissertationFileForm
 from dissertation.models import adviser, offer_proposition, offer_proposition_group
-from dissertation.models import dissertation, proposition_dissertation, proposition_document_file, proposition_role, \
+from dissertation.models import dissertation, proposition_dissertation, proposition_role, \
     proposition_offer
 from dissertation.models.dissertation import Dissertation
 from dissertation.models.enums import dissertation_role_status
@@ -58,6 +58,7 @@ from dissertation.models.proposition_offer import PropositionOffer
 from dissertation.models.proposition_role import PropositionRole
 from dissertation.perms import user_is_proposition_promotor, \
     adviser_can_manage_proposition_dissertation, autorized_proposition_dissert_promotor_or_manager_or_author
+from osis_common.document.xls_build import save_virtual_workbook
 
 MAX_PROPOSITION_ROLE = 4
 
@@ -311,7 +312,7 @@ def manager_proposition_dissertations(request):
 
 def _export_proposition_dissertation_xlsx(propositions_dissertations):
     filename = "EXPORT_propositions_{}.xlsx".format(time.strftime("%Y-%m-%d_%H:%M"))
-    workbook = Workbook(encoding='utf-8')
+    workbook = Workbook()
     worksheet1 = workbook.active
     worksheet1.title = "proposition_dissertation"
     worksheet1.append(['Date_de_création', 'Teacher', 'Title',
@@ -336,7 +337,7 @@ def _export_proposition_dissertation_xlsx(propositions_dissertations):
                            proposition.visibility,
                            proposition.active,
                            education_groups,
-                           proposition.description
+                           re.sub(r'[\000-\010]|[\013-\014]|[\016-\037]', '', proposition.description)
                            ])
     response = HttpResponse(
         save_virtual_workbook(workbook),

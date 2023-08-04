@@ -184,7 +184,7 @@ class PropositionDissertationViewTestCase(TestCase):
         url = reverse('proposition_dissertations')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertFalse(self.proposition_dissertation_deactivated in response.context['propositions_dissertations'])
+        self.assertNotIn(self.proposition_dissertation_deactivated, response.context['propositions_dissertations'])
 
     def test_delete_jury_proposition_dissertations(self):
         proposition = self.teacher_propositon_dissertations[1]

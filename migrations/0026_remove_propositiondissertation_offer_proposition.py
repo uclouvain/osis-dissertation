@@ -36,7 +36,11 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(move_data_from_offer_proposition_to_proposition_offer,elidable=True),
+        migrations.RunPython(
+            move_data_from_offer_proposition_to_proposition_offer,
+            migrations.RunPython.noop,
+            elidable=True
+        ),
         migrations.RemoveField(
             model_name='propositiondissertation',
             name='offer_proposition',
