@@ -132,13 +132,13 @@ def search_by_education_group(education_groups):
 def show_validation_commission(offer_props):
     # True si validation_commission_exists est True pour au moins une offer_prop dans offer_props
     # False sinon
-    return any([offer_prop.validation_commission_exists for offer_prop in offer_props])
+    return any(offer_prop.validation_commission_exists for offer_prop in offer_props)
 
 
 def show_evaluation_first_year(offer_props):
     # True si evaluation_first_year est True pour au moins une offer_prop dans offer_props
     # False sinon
-    return any([offer_prop.evaluation_first_year for offer_prop in offer_props])
+    return any(offer_prop.evaluation_first_year for offer_prop in offer_props)
 
 
 def get_by_dissertation(dissert):

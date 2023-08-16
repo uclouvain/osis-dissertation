@@ -35,5 +35,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(clean_db_with_no_educationgroup_match, elidable=True),
+        migrations.RunPython(clean_db_with_no_educationgroup_match, migrations.RunPython.noop, elidable=True),
     ]

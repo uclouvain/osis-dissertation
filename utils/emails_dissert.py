@@ -87,7 +87,7 @@ def send_email(dissert, template_ref, receivers):
     html_template_ref = template_ref + '_html'
     txt_template_ref = template_ref + '_txt'
     suject_data = get_subject_template(dissert)
-    if template_ref is not 'dissertation_to_commission_list':
+    if template_ref != 'dissertation_to_commission_list':
         template_base_data = get_base_template(dissert)
     else:
         template_base_data = get_commission_template(dissert)
