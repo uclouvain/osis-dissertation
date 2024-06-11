@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "bootstrap5/layout.html" %}
 {% load static %}
 {% load i18n %}
 
@@ -27,51 +27,50 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
-    <li id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
-    <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
-    <li><a href="{% url 'manager_informations' %}" id="lnk_manager_informations">{% trans 'Teachers' %}</a></li>
-    <li class="active">{% trans 'Add teacher' %}</li>
+    <li class="breadcrumb-item"><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
+    <li class="breadcrumb-item" id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'manager_informations' %}" id="lnk_manager_informations">{% trans 'Teachers' %}</a></li>
+    <li class="breadcrumb-item active">{% trans 'Add teacher' %}</li>
 {% endblock %}
 {% block content %}
 <div class="page-header">
     <h2>{% trans 'Add teacher' %}</h2>
 </div>
-<div class="panel panel-default">
-    <div class="panel-body">
+<div class="card">
+    <div class="card-body">
         <form method="POST" class="post-form">
             {% csrf_token %}
             {% if message %}
+                <div class="alert alert-danger" role="alert">
+                  <div class="row">
+                    <div class="col-12 col-lg-2 text-end">{% trans 'Error' %}</div>
+                    <div class="col-12 col-lg-10">
+                      {% trans message %} {% if email %}: {{ email }}{% endif %}
+                      {% if message_add %}
+                        <ul>
+                            <li>
+                                {% trans 'If this person is a member of the University, you need to use the correct e-mail address.' %}
+                            </li>
+                            <li>
+                                {% trans 'If this person is not a member of the University, you can' %}
+                                <a href="{% url 'manager_informations_add_person' %}" id="lnk_manager_informations_add_person">
+                                  {% trans 'Add this person' %}</a>.
+                            </li>
+                        </ul>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
             <div class="row">
-              <div class="col-md-2" style="text-align: right; color: red;">
-                  <label>{% trans 'Error' %}</label>
-              </div>
-              <div class="col-md-10">
-                {% trans message %} {% if email %}: {{ email }}{% endif %}
-                {% if message_add %}
-                  <ul>
-                      <li>
-                          {% trans 'If this person is a member of the University, you need to use the correct e-mail address.' %}
-                      </li>
-                      <li>
-                          {% trans 'If this person is not a member of the University, you can' %}
-                          <a href="{% url 'manager_informations_add_person' %}" id="lnk_manager_informations_add_person">
-                            {% trans 'Add this person' %}</a>.
-                      </li>
-                  </ul>
-                {% endif %}
-              </div>
-            </div>
-            <br>
-            <div class="row">
-              <div class="col-md-6">
+              <div class="col-lg-6">
                   <h3>{% trans 'New search' %}</h3>
               </div>
             </div>
             <br>
             {% endif %}
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-12">
                     <p>
                         {% trans 'search_person_explanation' %}
                     </p>
@@ -79,16 +78,16 @@
             </div>
             <br>
             <div class="row">
-              <div class="col-md-2" style="text-align: right;">
+              <div class="col-lg-2 text-end">
                   <label>{% trans 'email' %}</label>
               </div>
-              <div class="col-md-4">
-                <input type="text" class="form-control" id="txt_email"  name="email" style="margin:-6px;">
+              <div class="col-lg-4">
+                <input type="text" class="form-control" id="txt_email"  name="email">
               </div>
             </div>
             <br>
             <div class="row">
-              <div class="col-md-2 col-lg-offset-2">
+              <div class="col-lg-2 offset-xl-2">
                   <button type="submit" name="search_form" class="save btn btn-default">{% trans 'Search' %}</button>
               </div>
             </div>

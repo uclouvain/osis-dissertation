@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "bootstrap5/layout.html" %}
 {% load static %}
 {% load i18n %}
 
@@ -27,20 +27,20 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
-    <li id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
-    <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
-    <li><a href="{% url 'dissertations_list' %}" id="lnk_dissertations_list">{% trans 'Dissertations' %}</a></li>
-    <li><a href="{% url 'dissertations_detail' pk=dissert.pk %}"
+    <li class="breadcrumb-item"><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
+    <li class="breadcrumb-item" id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'dissertations_list' %}" id="lnk_dissertations_list">{% trans 'Dissertations' %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'dissertations_detail' pk=dissert.pk %}"
          id="lnk_dissertations_detail">{{ dissert.title|truncatechars:24 }}</a></li>
-    <li class="active">{% trans 'Add justification' %}</li>
+    <li class="breadcrumb-item active">{% trans 'Add justification' %}</li>
 {% endblock %}
 {% block content %}
   <div class="page-header">
     <h2>{% trans 'Add justification' %}</h2>
   </div>
-  <div class="panel panel-default">
-    <div class="panel-body">
+  <div class="card">
+    <div class="card-body">
       <form method="POST" class="post-form">
         {% csrf_token %}
         <div>
@@ -48,30 +48,30 @@
         </div>
         <br>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-lg-4">
                 {% trans 'Dissertation' %} :
             </div>
-            <div class="col-md-8">
+            <div class="col-lg-8">
                 {{ dissert.title }}
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-lg-4">
                 {% trans 'Author' %} :
             </div>
-            <div class="col-md-8">
+            <div class="col-lg-8">
                 {{ dissert.author }}
             </div>
         </div>
         <br>
-        <div class="row" style="margin:10px;">
-            <div class="col-md-5 well">
+        <div class="row m-2">
+            <div class="col-lg-5 card-header border p-3">
                 {% trans 'Current status' %} : {{ dissert.get_status_display }}
             </div>
-            <div class="col-md-2" style="text-align: center; padding: 1em;">
-                <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+            <div class="col-lg-2 p-2 text-center">
+                <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
             </div>
-            <div class="col-md-5 well">
+            <div class="col-lg-5 card-header border p-3">
                 {% trans 'Next status' %} : {{ new_status_display }}
             </div>
         </div>
@@ -79,7 +79,7 @@
         <div>
             <div class="form-group">
                 <label>{% trans 'Add justification' %}</label>
-                <textarea class="form-control" id="txt_justification"  name="justification" style=""></textarea>
+                <textarea class="form-control" id="txt_justification"  name="justification"></textarea>
             </div>
             <button type="submit" class="save btn btn-primary">
                 {% trans 'Save' %}

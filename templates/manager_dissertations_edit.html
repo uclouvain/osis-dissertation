@@ -1,5 +1,5 @@
-{% extends "layout.html" %}
-{% load static bootstrap3 %}
+{% extends "bootstrap5/layout.html" %}
+{% load static django_bootstrap5 %}
 {% load i18n %}
 
 {% comment "License" %}
@@ -27,21 +27,21 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
-    <li id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
-    <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
-    <li><a href="{% url 'manager_dissertations_list' %}" id="lnk_dissertations_list">{% trans 'Dissertations' %}</a></li>
-    <li><a href="{% url 'manager_dissertations_detail' pk=dissert.pk %}" id="lnk_dissertations_detail">
+    <li class="breadcrumb-item"><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
+    <li class="breadcrumb-item" id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'manager_dissertations_list' %}" id="lnk_dissertations_list">{% trans 'Dissertations' %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'manager_dissertations_detail' pk=dissert.pk %}" id="lnk_dissertations_detail">
       {{ dissert.title|truncatechars:24 }}
     </a></li>
-    <li class="active">{% trans 'Edit' %}</li>
+    <li class="breadcrumb-item active">{% trans 'Edit' %}</li>
 {% endblock %}
 {% block content %}
   <div class="page-header">
     <h2>{% trans 'Edit' %}</h2>
   </div>
-  <div class="panel panel-default">
-    <div class="panel-body">
+  <div class="card border-top-0">
+    <div class="card-body">
       <form method="POST" class="post-form">
         {% csrf_token %}
         <div class="form-group">
@@ -51,21 +51,21 @@
             {% bootstrap_field form.title %}
         </div>
         <div class="row">
-            <div class="col-md-6 form-group" {% if form.education_group_year.errors %} style="color:red;" {% endif %}>
+            <div class="col-lg-6 form-group {% if form.education_group_year.errors %}text-danger {% endif %}" >
                 <div class="panel-group">
                         {% bootstrap_field form.education_group_year %}
                 </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-lg-6">
                 {% bootstrap_field  form.proposition_dissertation %}
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-lg-6">
                 {% bootstrap_field form.defend_periode %}
             </div>
-            <div class="col-md-6">
+            <div class="col-lg-6">
                 {% bootstrap_field form.defend_year %}
             </div>
         </div>
@@ -75,7 +75,7 @@
         <div class="form-group {% if field.errors %}error{% endif %}">
             {% bootstrap_field form.description %}
         </div>
-        <div style="text-align:right">
+        <div class="text-end">
             <button type="submit" class="save btn btn-primary" onclick="return confirm('{% trans 'You are ready to save this dissertation. Continue ?' %}')">
                 {% trans 'Save' %}
             </button>
