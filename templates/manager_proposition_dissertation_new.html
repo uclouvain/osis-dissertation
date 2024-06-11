@@ -1,5 +1,5 @@
-{% extends "layout.html" %}
-{% load static bootstrap3 %}
+{% extends "bootstrap5/layout.html" %}
+{% load static django_bootstrap5 %}
 {% load i18n %}
 
 {% comment "License" %}
@@ -27,18 +27,18 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
     <li id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
-    <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
-    <li><a href="{% url 'manager_proposition_dissertations' %}" id="lnk_propositions">{% trans 'Dissertation subjects' %}</a></li>
-    <li class="active">{% trans 'New dissertation subject' %}</li>
+    <li class="breadcrumb-item"><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'manager_proposition_dissertations' %}" id="lnk_propositions">{% trans 'Dissertation subjects' %}</a></li>
+    <li class="breadcrumb-item active">{% trans 'New dissertation subject' %}</li>
 {% endblock %}
 {% block content %}
   <div class="page-header">
     <h2>{% trans 'New dissertation subject' %}</h2>
   </div>
-  <div class="panel panel-default">
-    <div class="panel-body">
+  <div class="card">
+    <div class="card-body">
        <form method="POST" class="post-form">
         {% csrf_token %}
         {{ form.media }}
@@ -70,7 +70,7 @@
             {% bootstrap_field form.max_number_student %}
         </div>
         <div class="panel-group">
-            <label for="txt_level" {% if offer_propositions_error %} style="color:red;" {% endif %}>
+            <label for="txt_level" {% if offer_propositions_error %} class="text-danger" {% endif %}>
                 {% trans 'Check the programs related to this topic' %}
                 {% if offer_propositions_error %}
                     <br>{% trans offer_propositions_error %}
@@ -79,12 +79,12 @@
             <br>
             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                     {% for offer_proposition_g in offer_proposition_group %}
-                     <div class="panel panel-default">
+                     <div class="card border-bottom-0 mb-0 mt-2">
 
-                        <div class="panel-heading" role="tab" id="heading_{{ offer_proposition_g }}">
-                          <h4 class="panel-title">
+                        <div class="card-header" role="tab" id="heading_{{ offer_proposition_g }}">
+                          <h4 class="card-title  mb-0 fs-5">
                             <a id="test_{{ offer_proposition_g }}" class="collapse_{{ offer_proposition_g }}" role="button" onclick="display_hide_div_child('collapse_{{ offer_proposition_g }}','statut_bouton_{{ offer_proposition_g }}');">
-                            {{ offer_proposition_g }} <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span> </label>
+                            {{ offer_proposition_g }} <i class="fa-solid fa-chevron-left" aria-hidden="true"></i> </label>
                             </a>
                               <input type="hidden" id="statut_bouton_{{ offer_proposition_g }}" name="statut_bouton_{{ offer_proposition_g }}"  value="OK">
                           </h4>
@@ -94,7 +94,7 @@
                             {% for offer_proposition in offer_propositions %}
                                 {% if offer_proposition.offer_proposition_group == offer_proposition_g %}
 
-                                  <div class="list-group">
+                                  <div class="border-bottom pt-2">
                                       &nbsp;
                                     <input id="txt_checkbox_{{ offer_proposition.id }}" name="txt_checkbox_{{ offer_proposition.id }}"
                                     type="checkbox" onclick="block_div(this,'test_{{ offer_proposition_g }}','statut_bouton_{{ offer_proposition_g }}','collapse_{{ offer_proposition_g }}');" class="test_{{ offer_proposition_g }}">
@@ -107,7 +107,7 @@
 
                     {% endfor %}
             </div>
-        <div style="text-align: right;">
+        <div class="float-end mt-2">
             <button type="submit" class="save btn btn-primary">
                 {% trans 'Save' %}
             </button>

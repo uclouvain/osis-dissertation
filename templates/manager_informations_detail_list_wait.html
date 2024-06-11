@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "bootstrap5/layout.html" %}
 {% load static %}
 {% load i18n %}
 
@@ -27,97 +27,100 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
-    <li id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
-    <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
-    <li><a href="{% url 'manager_informations' %}" id="lnk_teachers">{% trans 'Teachers' %}</a></li>
-    <li class="active">{{ adviser.person.last_name }}, {{ adviser.person.first_name }}</li>
+    <li class="breadcrumb-item"><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
+    <li class="breadcrumb-item" id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'manager_informations' %}" id="lnk_teachers">{% trans 'Teachers' %}</a></li>
+    <li class="breadcrumb-item active">{{ adviser.person.last_name }}, {{ adviser.person.first_name }}</li>
 {% endblock %}
 {% block content %}
   <div class="page-header">
     <h2>{{ adviser.person.last_name }}, {{ adviser.person.first_name }}</h2>
   </div>
   <ul class="nav nav-tabs">
-    <li><a href="{% url 'manager_informations_detail' pk=adviser.pk %}">{% trans 'Teacher profile' %}</a></li>
-    <li><a href="{% url 'manager_informations_detail_list' pk=adviser.pk %}">{% trans 'Linked dissertations' %}</a>
+    <li class="nav-item"><a href="{% url 'manager_informations_detail' pk=adviser.pk %}" class="nav-link">{% trans 'Teacher profile' %}</a></li>
+    <li class="nav-item"><a href="{% url 'manager_informations_detail_list' pk=adviser.pk %}" class="nav-link">{% trans 'Linked dissertations' %}</a>
     </li>
-    <li class="active"><a href="#">{% trans 'Waiting dissertations' %}</a></li>
-    <li><a href="{% url 'manager_informations_detail_stats' pk=adviser.pk %}">{% trans 'Teacher stats' %}</a></li>
+    <li class="nav-item"><a href="#" class="nav-link active">{% trans 'Waiting dissertations' %}</a></li>
+    <li class="nav-item"><a href="{% url 'manager_informations_detail_stats' pk=adviser.pk %}" class="nav-link">{% trans 'Teacher stats' %}</a></li>
   </ul>
-  <div class="panel panel-default">
-    <div class="panel-body">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">{% trans 'Waiting promotor' %}</h3>
+  <div class="card border-top-0">
+    <div class="card-body">
+      <div class="card">
+        <div class="card-header">
+            <h3 class="card-title fs-5 m-0">{% trans 'Waiting promotor' %}</h3>
         </div>
             {% if disserts_role|length == 0 %}
             <br>
-            <label class="alert alert-info" style="margin-left:10%;width:80%;text-align:center;">{% trans 'No result'%}
-            </label>
+            <label class="alert alert-info col-9 mx-auto text-center d-block mt-2">{% trans 'No result' %}</label>
             {% else %}
-            <table class="table table-hover" id="tb_memoire">
-                <thead>
-                    <th>{% trans 'Title' context 'dissertation' %}</th>
-                    <th>{% trans 'Author'%}</th>
-                    <th>{% trans 'Status' context 'dissertation' %}</th>
-                    <th>{% trans 'Start Program/Year'%}</th>
-                    <th>{% trans 'Dissertation subject'%}</th>
-                </thead>
-                {% for dissert_role in disserts_role %}
-                <tr>
-                    <td><a href="{% url 'manager_dissertations_detail' pk=dissert_role.dissertation.pk %}">
-                        {{ dissert_role.dissertation.title }}</a></td>
-                    <td>{{ dissert_role.dissertation.author }}</td>
-                    <td>
-                        {% if dissert_role.dissertation.status == 'DRAFT' %}
-                        <span class="label label-default">
-                        {% elif dissert_role.dissertation.status == 'DIR_SUBMIT' %}
-                        <span class="label label-primary">
-                        {% elif dissert_role.dissertation.status == 'DIR_OK' %}
-                        <span class="label label-success">
-                        {% elif dissert_roledissertation.status == 'DIR_KO' %}
-                        <span class="label label-danger">
-                        {% elif dissert_role.dissertation.status == 'COM_SUBMIT' %}
-                        <span class="label label-primary">
-                        {% elif dissert_role.dissertation.status == 'COM_OK' %}
-                        <span class="label label-default">
-                        {% elif dissert_role.dissertation.status == 'COM_KO' %}
-                        <span class="label label-default">
-                        {% elif dissert_role.dissertation.status == 'EVA_SUBMIT' %}
-                        <span class="label label-primary">
-                        {% elif dissert_role.dissertation.status == 'EVA_OK' %}
-                        <span class="label label-default">
-                        {% elif dissert_role.dissertation.status == 'EVA_KO' %}
-                        <span class="label label-default">
-                        {% elif dissert_role.dissertation.status == 'TO_RECEIVE' %}
-                        <span class="label label-default">
-                        {% elif dissert_role.dissertation.status == 'TO_DEFEND' %}
-                        <span class="label label-default">
-                        {% elif dissert_role.dissertation.status == 'DEFENDED' %}
-                        <span class="label label-default">
-                        {% elif dissert_role.dissertation.status == 'ENDED' %}
-                        <span class="label label-default">
-                        {% elif dissert_role.dissertation.status == 'ENDED_WIN' %}
-                        <span class="label label-default">
-                        {% elif dissert_role.dissertation.status == 'ENDED_LOS' %}
-                    <span class="label label-default">
-                    {% endif %}
-                        {{ dissert_role.dissertation.get_status_display }}
-                    </span>
-                    </td>
-                    <td>{{ dissert_role.dissertation.education_group_year.academic_year }}</td>
-                    <td>{{ dissert_role.dissertation.proposition_dissertation }}</td>
-                </tr>
-                {% endfor %}
-            </table>
+            <div class="card-body">
+                <div class="row">
+                    <table class="table table-hover" id="tb_memoire">
+                        <thead>
+                            <th>{% trans 'Title' context 'dissertation' %}</th>
+                            <th>{% trans 'Author'%}</th>
+                            <th>{% trans 'Status' context 'dissertation' %}</th>
+                            <th>{% trans 'Start Program/Year'%}</th>
+                            <th>{% trans 'Dissertation subject'%}</th>
+                        </thead>
+                        {% for dissert_role in disserts_role %}
+                        <tr>
+                            <td><a href="{% url 'manager_dissertations_detail' pk=dissert_role.dissertation.pk %}">
+                                {{ dissert_role.dissertation.title }}</a></td>
+                            <td>{{ dissert_role.dissertation.author }}</td>
+                            <td>
+                                {% if dissert_role.dissertation.status == 'DRAFT' %}
+                                <span class="badge mb-1 lh-base bg-secondary">
+                                {% elif dissert_role.dissertation.status == 'DIR_SUBMIT' %}
+                                <span class="badge mb-1 lh-base bg-primary">
+                                {% elif dissert_role.dissertation.status == 'DIR_OK' %}
+                                <span class="badge mb-1 lh-base bg-success">
+                                {% elif dissert_roledissertation.status == 'DIR_KO' %}
+                                <span class="badge mb-1 lh-base bg-danger">
+                                {% elif dissert_role.dissertation.status == 'COM_SUBMIT' %}
+                                <span class="badge mb-1 lh-base bg-primary">
+                                {% elif dissert_role.dissertation.status == 'COM_OK' %}
+                                <span class="badge mb-1 lh-base bg-secondary">
+                                {% elif dissert_role.dissertation.status == 'COM_KO' %}
+                                <span class="badge mb-1 lh-base bg-secondary">
+                                {% elif dissert_role.dissertation.status == 'EVA_SUBMIT' %}
+                                <span class="badge mb-1 lh-base bg-primary">
+                                {% elif dissert_role.dissertation.status == 'EVA_OK' %}
+                                <span class="badge mb-1 lh-base bg-secondary">
+                                {% elif dissert_role.dissertation.status == 'EVA_KO' %}
+                                <span class="badge mb-1 lh-base bg-secondary">
+                                {% elif dissert_role.dissertation.status == 'TO_RECEIVE' %}
+                                <span class="badge mb-1 lh-base bg-secondary">
+                                {% elif dissert_role.dissertation.status == 'TO_DEFEND' %}
+                                <span class="badge mb-1 lh-base bg-secondary">
+                                {% elif dissert_role.dissertation.status == 'DEFENDED' %}
+                                <span class="badge mb-1 lh-base bg-secondary">
+                                {% elif dissert_role.dissertation.status == 'ENDED' %}
+                                <span class="badge mb-1 lh-base bg-secondary">
+                                {% elif dissert_role.dissertation.status == 'ENDED_WIN' %}
+                                <span class="badge mb-1 lh-base bg-secondary">
+                                {% elif dissert_role.dissertation.status == 'ENDED_LOS' %}
+                            <span class="badge mb-1 lh-base bg-secondary">
+                            {% endif %}
+                                {{ dissert_role.dissertation.get_status_display }}
+                            </span>
+                            </td>
+                            <td>{{ dissert_role.dissertation.education_group_year.academic_year }}</td>
+                            <td>{{ dissert_role.dissertation.proposition_dissertation }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
             {% endif %}
       </div>
     </div>
   </div>
 {% endblock %}
 {% block script %}
-<script type="text/javascript" src="{% static 'js/jquery.dataTables.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/dataTables.bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap5/jquery.dataTables.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap5/dataTables.bootstrap5.js' %}"></script>
 <script>
  $(document).ready(function()
     {
@@ -132,7 +135,7 @@
 
                     "sProcessing":     "{% trans 'Processing...'%}",
                     "sSearch":         "{% trans 'Search:'%}",
-                    "sLengthMenu":     "&nbsp;&nbsp;&nbsp;_MENU_ &eacute;l&eacute;ments",
+                    "sLengthMenu":     "_MENU_ &eacute;l&eacute;ments",
                     "sInfo":           "{% trans 'Showing _START_ to _END_ of _TOTAL_ entries'%}",
                     "sInfoEmpty":      "{% trans 'Showing 0 to 0 of 0 entries'%}",
                     "sInfoFiltered":   "{% trans '(filtered from _MAX_ total entries)'%}",

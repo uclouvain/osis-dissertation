@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "bootstrap5/layout.html" %}
 {% load static %}
 {% load i18n %}
 
@@ -27,16 +27,16 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
-    <li id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
-    <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
-    <li class="active">{% trans 'Settings' context 'dissertation' %}</li>
+    <li class="breadcrumb-item"><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
+    <li class="breadcrumb-item" id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+    <li class="breadcrumb-item active">{% trans 'Settings' context 'dissertation' %}</li>
 {% endblock %}
 {% block content %}
   <div class="page-header">
     <h2>{% trans 'Settings' context 'dissertation' %}</h2>
   </div>
-  <div class="panel panel-default">
+  <div class="card">
       <form method="GET" class="get-form" action="{% url 'manager_offer_parameters_edit' %}" name="form_education_group">
       <table class="table .table-hover">
         <thead>
@@ -60,16 +60,16 @@
                   <td>
                       <table>
                           <tr>
-                              <td style="padding-right: 1em">
+                              <td class="pe-3">
                                   {% trans 'Subjects currently visible' %}
                               </td>
-                              <td style="padding-right: 1em">
+                              <td class="pe-3">
                                   {% if offer_proposition.in_periode_visibility_proposition %}
-                                  <span class="glyphicon glyphicon-ok"
-                                        style="color: green" aria-hidden="true"></span>
+                                  <i class="fa-regular fa-check text-success"
+                                        aria-hidden="true"></i>
                                   {% else %}
-                                  <span class="glyphicon glyphicon-remove"
-                                        style="color: red" aria-hidden="true"></span>
+                                  <i class="fa-solid fa-xmark text-danger"
+                                        aria-hidden="true"></i>
                                   {% endif %}
                               </td>
                               <td>
@@ -80,16 +80,16 @@
                               </td>
                           </tr>
                           <tr>
-                              <td style="padding-right: 1em">
+                              <td class="pe-3">
                                   {% trans 'Currently possible to create dissertations' %}
                               </td>
-                              <td style="padding-right: 1em">
+                              <td class="pe-3">
                                   {% if offer_proposition.in_periode_visibility_dissertation %}
-                                  <span class="glyphicon glyphicon-ok"
-                                        style="color: green" aria-hidden="true"></span>
+                                  <i class="fa-regular fa-check text-success"
+                                        aria-hidden="true"></i>
                                   {% else %}
-                                  <span class="glyphicon glyphicon-remove"
-                                        style="color: red" aria-hidden="true"></span>
+                                  <i class="fa-solid fa-xmark text-danger"
+                                        aria-hidden="true"></i>
                                   {% endif %}
                               </td>
                               <td>
@@ -100,16 +100,16 @@
                               </td>
                           </tr>
                           <tr>
-                              <td style="padding-right: 1em">
+                              <td class="pe-3">
                                   {% trans 'Jury currently visible' %}
                               </td>
-                              <td style="padding-right: 1em">
+                              <td class="pe-3">
                                   {% if offer_proposition.in_periode_jury_visibility %}
-                                  <span class="glyphicon glyphicon-ok"
-                                        style="color: green" aria-hidden="true"></span>
+                                  <i class="fa-regular fa-check text-success"
+                                        aria-hidden="true"></i>
                                   {% else %}
-                                  <span class="glyphicon glyphicon-remove"
-                                        style="color: red" aria-hidden="true"></span>
+                                  <i class="fa-solid fa-xmark text-danger"
+                                        aria-hidden="true"></i>
                                   {% endif %}
                               </td>
                               <td>
@@ -120,16 +120,16 @@
                               </td>
                           </tr>
                           <tr>
-                              <td style="padding-right: 1em">
+                              <td class="pe-3">
                                   {% trans 'Title currently editable' %}
                               </td>
-                              <td style="padding-right: 1em">
+                              <td class="pe-3">
                                   {% if offer_proposition.in_periode_edit_title %}
-                                  <span class="glyphicon glyphicon-ok"
-                                        style="color: green" aria-hidden="true"></span>
+                                  <i class="fa-regular fa-check text-success"
+                                        aria-hidden="true"></i>
                                   {% else %}
-                                  <span class="glyphicon glyphicon-remove"
-                                        style="color: red" aria-hidden="true"></span>
+                                  <i class="fa-solid fa-xmark text-danger"
+                                        aria-hidden="true"></i>
                                   {% endif %}
                               </td>
                               <td>
@@ -145,72 +145,72 @@
                   <td>
                       <table>
                           <tr>
-                              <td style="padding-right: 1em">
+                              <td class="pe-3">
                                   {% trans 'Students can manage readers'%}
                               </td>
                               <td>
                                   {% if offer_proposition.student_can_manage_readers %}
-                                  <span class="glyphicon glyphicon-ok"
-                                        style="color: green" aria-hidden="true"></span>
+                                  <i class="fa-regular fa-check text-success"
+                                        aria-hidden="true"></i>
                                   {% else %}
-                                  <span class="glyphicon glyphicon-remove"
-                                        style="color: red" aria-hidden="true"></span>
+                                  <i class="fa-solid fa-xmark text-danger"
+                                        aria-hidden="true"></i>
                                   {% endif %}
                               </td>
                           </tr>
                           <tr>
-                              <td style="padding-right: 1em">
+                              <td class="pe-3">
                                   {% trans 'Adviser can manage jury members'%}
                               </td>
                               <td>
                                   {% if offer_proposition.adviser_can_suggest_reader %}
-                                  <span class="glyphicon glyphicon-ok"
-                                        style="color: green" aria-hidden="true"></span>
+                                  <i class="fa-regular fa-check text-success"
+                                        aria-hidden="true"></i>
                                   {% else %}
-                                  <span class="glyphicon glyphicon-remove"
-                                        style="color: red" aria-hidden="true"></span>
+                                  <i class="fa-solid fa-xmark text-danger"
+                                        aria-hidden="true"></i>
                                   {% endif %}
                               </td>
                           </tr>
                           <tr>
-                              <td style="padding-right: 1em">
+                              <td class="pe-3">
                                   {% trans 'First year evaluation'%}
                               </td>
                               <td>
                                   {% if offer_proposition.evaluation_first_year %}
-                                  <span class="glyphicon glyphicon-ok"
-                                        style="color: green" aria-hidden="true"></span>
+                                  <i class="fa-regular fa-check text-success"
+                                        aria-hidden="true"></i>
                                   {% else %}
-                                  <span class="glyphicon glyphicon-remove"
-                                        style="color: red" aria-hidden="true"></span>
+                                  <i class="fa-solid fa-xmark text-danger"
+                                        aria-hidden="true"></i>
                                   {% endif %}
                               </td>
                           </tr>
                           <tr>
-                              <td style="padding-right: 1em">
+                              <td class="pe-3">
                                   {% trans 'Validation commission exists'%}
                               </td>
                               <td>
                                   {% if offer_proposition.validation_commission_exists %}
-                                  <span class="glyphicon glyphicon-ok"
-                                        style="color: green" aria-hidden="true"></span>
+                                  <i class="fa-regular fa-check text-success"
+                                        aria-hidden="true"></i>
                                   {% else %}
-                                  <span class="glyphicon glyphicon-remove"
-                                        style="color: red" aria-hidden="true"></span>
+                                  <i class="fa-solid fa-xmark text-danger"
+                                        aria-hidden="true"></i>
                                   {% endif %}
                               </td>
                           </tr>
                           <tr>
-                              <td style="padding-right: 1em">
+                              <td class="pe-3">
                                   {% trans 'Send an email to reading commission when acceptation of evaluation commission'%}
                               </td>
                               <td>
                                   {% if offer_proposition.global_email_to_commission %}
-                                  <span class="glyphicon glyphicon-ok"
-                                        style="color: green" aria-hidden="true"></span>
+                                  <i class="fa-regular fa-check text-success"
+                                        aria-hidden="true"></i>
                                   {% else %}
-                                  <span class="glyphicon glyphicon-remove"
-                                        style="color: red" aria-hidden="true"></span>
+                                  <i class="fa-solid fa-xmark text-danger"
+                                        aria-hidden="true"></i>
                                   {% endif %}
                               </td>
                           </tr>
@@ -221,10 +221,10 @@
               </tbody>
       </table>
       <button type="submit"
-                     id="multiple_selection" class="btn btn-primary pull-left"
+                     id="multiple_selection" class="btn btn-primary flaot-start m-3 mt-0"
                      role="button" title="{% trans 'Multiple modification'%}" disabled>
-                     <span class="glyphicon glyphicon-wrench"
-                     aria-hidden="true"></span> {% trans 'Modify selected programs'%}</button>
+                     <i class="fa-solid fa-wrench"
+                     aria-hidden="true"></i> {% trans 'Modify selected programs'%}</button>
       </form>
     </div>
 {% endblock %}
