@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "bootstrap5/layout.html" %}
 {% load static %}
 {% load i18n %}
 
@@ -26,63 +26,66 @@
  * see http://www.gnu.org/licenses/.
 {% endcomment %}
 {% block style %}
-<link rel="stylesheet" href="{% static 'css/dataTables.bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/bootstrap5/dataTables.bootstrap5.min.css' %}">
 <link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}">
 <link rel="stylesheet" href="{% static 'css/dissertation_style.css' %}">
 {% endblock %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
-    <li id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
-    <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
-    <li class="active">{% trans 'Dissertations' %}</li>
+    <li class="breadcrumb-item"><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
+    <li class="breadcrumb-item" id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+    <li class="breadcrumb-item active">{% trans 'Dissertations' %}</li>
 {% endblock %}
 {% block content %}
   <div class="page-header">
     <h2>{% trans 'Dissertations' %}</h2>
   </div>
   <ul class="nav nav-tabs">
-    <li><a href="{% url 'manager_dissertations_list' %}">{% trans 'All dissertations' %}</a></li>
-    <li><a href="manager_dissertations_wait_list">{% trans 'Waiting promotor' %}</a></li>
+    <li class="nav-item"><a href="{% url 'manager_dissertations_list' %}" class="nav-link">{% trans 'All dissertations' %}</a></li>
+    <li class="nav-item"><a href="manager_dissertations_wait_list" class="nav-link">{% trans 'Waiting promotor' %}</a></li>
     {% if show_validation_commission %}
-      <li class="active"><a href="{% url 'manager_dissertations_wait_comm_list' %}">{% trans 'Waiting commission' %}</a></li>
+      <li class="nav-item"><a href="{% url 'manager_dissertations_wait_comm_list' %}" class="nav-link active">{% trans 'Waiting commission' %}</a></li>
     {% endif %}
     {% if show_evaluation_first_year %}
-      <li><a href="{% url 'manager_dissertations_wait_eval_list' %}">{% trans 'Waiting 1st year evaluation' %}</a></li>
+      <li class="nav-item"><a href="{% url 'manager_dissertations_wait_eval_list' %}" class="nav-link">{% trans 'Waiting 1st year evaluation' %}</a></li>
     {% endif %}
-    <li><a href="{% url 'manager_dissertations_wait_recep_list' %}">{% trans 'Waiting reception' %}</a></li>
+    <li class="nav-item"><a href="{% url 'manager_dissertations_wait_recep_list' %}" class="nav-link">{% trans 'Waiting reception' %}</a></li>
   </ul>
-  <div class="panel panel-default">
-          <br>
-          <table class="table table-hover" id="tb_memoire" cellpadding="10" cellspacing="5">
-            <thead>
-                <tr>
-                  <th></th>
-                  <th>{% trans 'Title' context 'dissertation' %}</th>
-                  <th>{% trans 'Author'%}</th>
-                  <th>{% trans 'Status' context 'dissertation' %}</th>
-                  <th>{% trans 'year beginning'%}</th>
-                  <th>{% trans 'Program'%}</th>
-                  <th>{% trans 'Dissertation subject'%}</th>
-                  <th>{% trans 'Action'%}</th>
-                </tr>
-            </thead>
-          </table>
+  <div class="card border-top-0">
+    <div class="card-body">
+        <div class="row mt-3">
+            <table class="table table-hover" id="tb_memoire" cellpadding="10" cellspacing="5">
+                <thead>
+                    <tr>
+                    <th></th>
+                    <th>{% trans 'Title' context 'dissertation' %}</th>
+                    <th>{% trans 'Author'%}</th>
+                    <th>{% trans 'Status' context 'dissertation' %}</th>
+                    <th>{% trans 'year beginning'%}</th>
+                    <th>{% trans 'Program'%}</th>
+                    <th>{% trans 'Dissertation subject'%}</th>
+                    <th>{% trans 'Action'%}</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
   </div>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h2 class="modal-title" id="myModalLabel"> {% trans 'Add jury member' %}</h2>
+        <h4 class="modal-title">{% trans 'Add jury member' %}</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Close' %}"></button>
       </div>
       <div class="modal-body">
         <form method="post" >
             {% csrf_token %}
             <input type="hidden" id="pk_dissertation" name="pk_dissertation" value="">
             <label for="txt_status">{% trans 'Status' context 'dissertation' %}</label>
-            <select id="txt_status" name="status_choice" class="form-control" required>
+            <select id="txt_status" name="status_choice" class="form-select mb-3" required>
                 <option value=""></option>
                     {% for choice in STATUS_CHOICES %}
                         <option value="{{choice.0}}"> {% trans choice.0 %}</option>
@@ -98,7 +101,7 @@
             </div>
             <br>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'close'%}</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">{% trans 'close'%}</button>
                 <button type="button" class="btn btn-primary submit_form">{% trans 'Save'%}</button>
 
             </div>
@@ -111,9 +114,9 @@
 </div>
 {% endblock %}
 {% block script %}
-<script type="text/javascript" src="{% static 'js/jquery.dataTables.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/dataTables.bootstrap.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/jquery-ui.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap5/jquery.dataTables.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap5/dataTables.bootstrap5.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery-ui.js' %}"></script>
 <script>
 
     function format_row_child(list_dissert_roles,dissert)
@@ -135,15 +138,15 @@
             tab_dissert_roles +='<td> &nbsp;'+
                     '<a href="#" class="btn btn-warning bt_warning_'+dissert.pk+'"'+
                     'id="dissert_roles_'+item.pk+'" role="button">'+
-                    '<span class="glyphicon glyphicon-remove span2"></span></a> </td>';
+                    '<i class="fa-solid fa-xmark text-white"></i></a> </td>';
             tab_dissert_roles =tab_dissert_roles+'<tr>';
         };
         if (list_dissert_roles.length < 4){
-            bt_add='<a href="#"lnk_add_dissertation_jury_member" class="add_jury btn btn-default btn-sm"'+
-            'role="button" title="{% trans 'Add a jury member'%}" data-toggle="modal" data-target="#myModal"'+
+            bt_add='<a href="#"lnk_add_dissertation_jury_member" class="add_jury btn btn-default btn-md text-nowrap"'+
+            'role="button" title="{% trans 'Add a jury member'%}" data-bs-toggle="modal" data-bs-target="#myModal"'+
             'data-id="'+dissert.pk+'">'+
-            '<span class="glyphicon glyphicon-plus" aria-hidden="true" >'+
-            '</span>'+
+            '<i class="fa-solid fa-plus pe-2" aria-hidden="true" >'+
+            '</i>'+
             '{% trans 'Add a jury member'%}</a>';
 
         }else
@@ -158,7 +161,7 @@
             '<td>'+bt_add+'</td>'+
         '</tr>'+
         tab_dissert_roles+
-        '<tr> <td><a  id="reset_bt_'+dissert.pk+'" role="button" class="glyphicon glyphicon-refresh" ></a>'+
+        '<tr> <td><a  id="reset_bt_'+dissert.pk+'" role="button" class="fa-solid fa-arrows-rotate" ></a>'+
         '</td></tr>'+
         '</table>';
     };
@@ -204,7 +207,7 @@
                     "orderable":false,
                     "data":null,
                     render: function ( data, type, full, meta ){
-                        htmlRendered  = '<a id="glyf_'+full.pk+'" role="button" class="glyphicon glyphicon-expand"></a>';
+                        htmlRendered  = '<a id="glyf_'+full.pk+'" role="button" class="fa-regular fa-square-caret-right"></a>';
                         return htmlRendered;
                     }
                 },
@@ -225,7 +228,7 @@
                     "data":'pk',
                     render: function ( data, type, full, meta ) {
                         htmlRendered  = '<b><a href="/dissertation/manager_dissertations_accept_comm_list/' +
-                        full.pk + '" class="btn btn-default" title="{% trans 'Commission accepts'%}">'+
+                        full.pk + '" class="btn btn-default text-nowrap" title="{% trans 'Commission accepts'%}">'+
                         '{% trans 'Commission accepts'%}</a></b>';
                         return htmlRendered;
                     }
@@ -238,7 +241,7 @@
                 {
                 "sProcessing":     "{% trans 'Processing...'%}",
                 "sSearch":         "{% trans 'Search:'%}",
-                "sLengthMenu":     "{% trans 'Show _MENU_ entries'%}",
+                "sLengthMenu":     "_MENU_ &eacute;l&eacute;ments",
                 "sInfo":           "{% trans 'Showing _START_ to _END_ of _TOTAL_ entries'%}",
                 "sInfoEmpty":      "{% trans 'Showing 0 to 0 of 0 entries'%}",
                 "sInfoFiltered":   "{% trans '(filtered from _MAX_ total entries)'%}",
@@ -269,7 +272,7 @@
                 {
                     row.child.hide();
                     tr.removeClass('shown');
-                    $('#glyf_'+row.data().pk).find('i').toggleClass('glyphicon-arrow-right').toggleClass('glyphicon-arrow-left');
+                    $('#glyf_'+row.data().pk).find('i').toggleClass('fa-arrow-right').toggleClass('fa-arrow-left');
                 }
                 else
                 {
@@ -282,7 +285,7 @@
     });
 
 
-    $(document).on('click', '.glyphicon-refresh', function (event) {
+    $(document).on('click', '.fa-arrows-rotate', function (event) {
         var bt_reset_id=event.target.id;
         bt_reset_id= bt_reset_id.replace(/reset_bt_/, "");
         var table_dissertations=$('#tb_memoire').DataTable();

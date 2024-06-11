@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "bootstrap5/layout.html" %}
 {% load static %}
 {% load i18n %}
 
@@ -26,98 +26,101 @@
  * see http://www.gnu.org/licenses/.
 {% endcomment %}
 {% block style %}
-<link rel="stylesheet" href="{% static 'css/dataTables.bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/bootstrap5/dataTables.bootstrap5.min.css' %}">
 {% endblock %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
-    <li id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
-    <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
-    <li class="active">{% trans 'Dissertations' %}</li>
+    <li class="breadcrumb-item"><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
+    <li class="breadcrumb-item" id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+    <li class="breadcrumb-item active">{% trans 'Dissertations' %}</li>
 {% endblock %}
 {% block content %}
   <div class="page-header">
     <h2>{% trans 'Dissertations' %}</h2>
   </div>
   <ul class="nav nav-tabs">
-    <li><a href="{% url 'manager_dissertations_list' %}">{% trans 'All dissertations' %}</a></li>
-    <li class="active"><a href="manager_dissertations_wait_list">{% trans 'Waiting promotor' %}</a></li>
+    <li class="nav-item"><a href="{% url 'manager_dissertations_list' %}" class="nav-link">{% trans 'All dissertations' %}</a></li>
+    <li class="nav-item"><a href="manager_dissertations_wait_list" class="nav-link active">{% trans 'Waiting promotor' %}</a></li>
     {% if show_validation_commission %}
-      <li><a href="{% url 'manager_dissertations_wait_comm_list' %}">{% trans 'Waiting commission' %}</a></li>
+      <li class="nav-item"><a href="{% url 'manager_dissertations_wait_comm_list' %}" class="nav-link">{% trans 'Waiting commission' %}</a></li>
     {% endif %}
     {% if show_evaluation_first_year %}
-      <li><a href="{% url 'manager_dissertations_wait_eval_list' %}">{% trans 'Waiting 1st year evaluation' %}</a></li>
+      <li class="nav-item"><a href="{% url 'manager_dissertations_wait_eval_list' %}" class="nav-link">{% trans 'Waiting 1st year evaluation' %}</a></li>
     {% endif %}
-    <li><a href="{% url 'manager_dissertations_wait_recep_list' %}">{% trans 'Waiting reception' %}</a></li>
+    <li class="nav-item"><a href="{% url 'manager_dissertations_wait_recep_list' %}" class="nav-link">{% trans 'Waiting reception' %}</a></li>
   </ul>
-  <div class="panel panel-default">
-    {% if dissertations|length == 0 %}
-      <br>
-      <label class="alert alert-info" style="margin-left:10%;width:80%;text-align:center;">{% trans 'No result' %}</label>
-    {% else %}
-      <br>
-      <table class="table table-hover" id="tb_memoire">
-        <thead>
-          <th>{% trans 'Title' context 'dissertation' %}</th>
-          <th>{% trans 'Author'%}</th>
-          <th>{% trans 'Status' context 'dissertation' %}</th>
-          <th>{% trans 'Program'%}</th>
-          <th>{% trans 'year beginning'%}</th>
-          <th>{% trans 'Dissertation subject'%}</th>
-        </thead>
-        {% for dissertation in dissertations %}
-          <tr>
-            <td><a href="{% url 'manager_dissertations_detail' pk=dissertation.pk %}">{{ dissertation.title }}</a></td>
-            <td>{{ dissertation.author }}</td>
-            <td>
-                {% if dissertation.status == 'DRAFT' %}
-                <span class="label label-default">
-                {% elif dissertation.status == 'DIR_SUBMIT' %}
-                <span class="label label-primary">
-                {% elif dissertation.status == 'DIR_OK' %}
-                <span class="label label-success">
-                {% elif dissertation.status == 'DIR_KO' %}
-                <span class="label label-danger">
-                {% elif dissertation.status == 'COM_SUBMIT' %}
-                <span class="label label-primary">
-                {% elif dissertation.status == 'COM_OK' %}
-                <span class="label label-default">
-                {% elif dissertation.status == 'COM_KO' %}
-                <span class="label label-default">
-                {% elif dissertation.status == 'EVA_SUBMIT' %}
-                <span class="label label-primary">
-                {% elif dissertation.status == 'EVA_OK' %}
-                <span class="label label-default">
-                {% elif dissertation.status == 'EVA_KO' %}
-                <span class="label label-default">
-                {% elif dissertation.status == 'TO_RECEIVE' %}
-                <span class="label label-default">
-                {% elif dissertation.status == 'TO_DEFEND' %}
-                <span class="label label-default">
-                {% elif dissertation.status == 'DEFENDED' %}
-                <span class="label label-default">
-                {% elif dissertation.status == 'ENDED' %}
-                <span class="label label-default">
-                {% elif dissertation.status == 'ENDED_WIN' %}
-                <span class="label label-default">
-                {% elif dissertation.status == 'ENDED_LOS' %}
-                <span class="label label-default">
-                {% endif %}
-                    {{ dissertation.get_status_display }}
-                </span>
-            </td>
-            <td>{{ dissertation.education_group_year.acronym }}</td>
-            <td>{{ dissertation.education_group_year.academic_year }}</td>
-            <td>{{ dissertation.proposition_dissertation }}</td>
-          </tr>
-        {% endfor %}
-      </table>
-    {% endif %}
+  <div class="card border-top-0 ">
+    <div class="card-body">
+      {% if dissertations|length == 0 %}
+        <br>
+        <label class="alert alert-info col-9 mx-auto text-center d-block mt-3">{% trans 'No result' %}</label>
+      {% else %}
+        <div class="row mt-3">
+          <table class="table table-hover" id="tb_memoire">
+            <thead>
+              <th>{% trans 'Title' context 'dissertation' %}</th>
+              <th>{% trans 'Author'%}</th>
+              <th>{% trans 'Status' context 'dissertation' %}</th>
+              <th>{% trans 'Program'%}</th>
+              <th>{% trans 'year beginning'%}</th>
+              <th>{% trans 'Dissertation subject'%}</th>
+            </thead>
+            {% for dissertation in dissertations %}
+              <tr>
+                <td><a href="{% url 'manager_dissertations_detail' pk=dissertation.pk %}">{{ dissertation.title }}</a></td>
+                <td>{{ dissertation.author }}</td>
+                <td>
+                    {% if dissertation.status == 'DRAFT' %}
+                    <span class="badge mb-1 lh-base bg-secondary">
+                    {% elif dissertation.status == 'DIR_SUBMIT' %}
+                    <span class="badge mb-1 lh-base bg-primary">
+                    {% elif dissertation.status == 'DIR_OK' %}
+                    <span class="badge mb-1 lh-base bg-success">
+                    {% elif dissertation.status == 'DIR_KO' %}
+                    <span class="badge mb-1 lh-base bg-danger">
+                    {% elif dissertation.status == 'COM_SUBMIT' %}
+                    <span class="badge mb-1 lh-base bg-primary">
+                    {% elif dissertation.status == 'COM_OK' %}
+                    <span class="badge mb-1 lh-base bg-secondary">
+                    {% elif dissertation.status == 'COM_KO' %}
+                    <span class="badge mb-1 lh-base bg-secondary">
+                    {% elif dissertation.status == 'EVA_SUBMIT' %}
+                    <span class="badge mb-1 lh-base bg-primary">
+                    {% elif dissertation.status == 'EVA_OK' %}
+                    <span class="badge mb-1 lh-base bg-secondary">
+                    {% elif dissertation.status == 'EVA_KO' %}
+                    <span class="badge mb-1 lh-base bg-secondary">
+                    {% elif dissertation.status == 'TO_RECEIVE' %}
+                    <span class="badge mb-1 lh-base bg-secondary">
+                    {% elif dissertation.status == 'TO_DEFEND' %}
+                    <span class="badge mb-1 lh-base bg-secondary">
+                    {% elif dissertation.status == 'DEFENDED' %}
+                    <span class="badge mb-1 lh-base bg-secondary">
+                    {% elif dissertation.status == 'ENDED' %}
+                    <span class="badge mb-1 lh-base bg-secondary">
+                    {% elif dissertation.status == 'ENDED_WIN' %}
+                    <span class="badge mb-1 lh-base bg-secondary">
+                    {% elif dissertation.status == 'ENDED_LOS' %}
+                    <span class="badge mb-1 lh-base bg-secondary">
+                    {% endif %}
+                        {{ dissertation.get_status_display }}
+                    </span>
+                </td>
+                <td>{{ dissertation.education_group_year.acronym }}</td>
+                <td>{{ dissertation.education_group_year.academic_year }}</td>
+                <td>{{ dissertation.proposition_dissertation }}</td>
+              </tr>
+            {% endfor %}
+          </table>
+        </div>
+      {% endif %}
+    </div>
   </div>
 {% endblock %}
 {% block script %}
-<script type="text/javascript" src="{% static 'js/jquery.dataTables.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/dataTables.bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap5/jquery.dataTables.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap5/dataTables.bootstrap5.js' %}"></script>
 <script>
     $(document).ready(function()
     {
@@ -132,7 +135,7 @@
 
                 "sProcessing":     "{% trans 'Processing...'%}",
                 "sSearch":         "{% trans 'Search:'%}",
-                "sLengthMenu":     "{% trans 'Show _MENU_ entries'%}",
+                "sLengthMenu":     "_MENU_ &eacute;l&eacute;ments",
                 "sInfo":           "{% trans 'Showing _START_ to _END_ of _TOTAL_ entries'%}",
                 "sInfoEmpty":      "{% trans 'Showing 0 to 0 of 0 entries'%}",
                 "sInfoFiltered":   "{% trans '(filtered from _MAX_ total entries)'%}",

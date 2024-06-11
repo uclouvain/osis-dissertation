@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "bootstrap5/layout.html" %}
 {% load static %}
 {% load i18n %}
 
@@ -27,9 +27,9 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
-    <li id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
-    <li class="active">{% trans 'Dissertations' %}</li>
+    <li class="breadcrumb-item"><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
+    <li class="breadcrumb-item" id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
+    <li class="breadcrumb-item active">{% trans 'Dissertations' %}</li>
 {% endblock %}
 {% block content %}
   <div class="page-header">
@@ -41,7 +41,7 @@
             <h2>{% trans 'Action needed' %}</h2>
                 <p>
                    {% trans 'You have' %}
-                   <span style="font-weight: bold">{{ count_advisers_pro_request }}</span>
+                   <span class="font-bold">{{ count_advisers_pro_request }}</span>
                    {% trans 'Dissertations waiting validation' %}
                 </p>
                 <p>
@@ -51,11 +51,11 @@
                 </p>
         </div>
         {% endif %}
-  <div class="panel panel-default">
-    <div class="panel-body">
+  <div class="card">
+    <div class="card-body">
         <div class="row">
-          <div class="col-md-1"><i class="far fa-lightbulb" style="font-size: 400%; color: #6699FF;"></i></div>
-          <div class="col-md-5">
+          <div class="col-lg-1"><i class="far fa-lightbulb dashboard-icon"></i></div>
+          <div class="col-lg-5">
             <h4 class="media-heading">
                 <a href="{% url 'my_dissertation_propositions' %}" id="lnk_my_dissertation_propositions" >
                     {% trans 'Dissertation subjects' %}
@@ -63,8 +63,8 @@
             </h4>
             <p>{% trans 'Dissertation subjects submitted by myself and others teachers' %}</p>
           </div>
-          <div class="col-md-1"><i class="fa fa-cogs" style="font-size: 400%; color: #6699FF;"></i></div>
-          <div class="col-md-5">
+          <div class="col-lg-1"><i class="fa fa-cogs dashboard-icon"></i></div>
+          <div class="col-lg-5">
             <h4 class="media-heading">
                 <a href="{% url 'informations' %}" id="lnk_informations" >
                     {% trans 'My informations' %}
@@ -75,8 +75,8 @@
         </div>
         <br>
         <div class="row">
-          <div class="col-md-1"><i class="far fa-edit" style="font-size: 400%; color: #6699FF;"></i></div>
-          <div class="col-md-5">
+          <div class="col-lg-1"><i class="far fa-edit dashboard-icon"></i></div>
+          <div class="col-lg-5">
             <h4 class="media-heading">
                 <a href="{% url 'dissertations_list' %}" id="lnk_dissertations" >
                     {% trans 'Dissertations' %}
@@ -86,11 +86,11 @@
           </div>
         </div>
       {% elif adviser.type == 'MGR' %}
-    <div class="panel panel-default">
-    <div class="panel-body">
+    <div class="card">
+    <div class="card-body">
         <div class="row">
-          <div class="col-md-1"><i class="far fa-lightbulb" style="font-size: 400%; color: #6699FF;"></i></div>
-          <div class="col-md-5">
+          <div class="col-lg-1"><i class="far fa-lightbulb dashboard-icon"></i></div>
+          <div class="col-lg-5">
             <h4 class="media-heading">
                 <a href="{% url 'manager_proposition_dissertations' %}" id="lnk_manager_proposition_dissertations" >
                     {% trans 'Dissertation subjects' %}
@@ -98,8 +98,8 @@
             </h4>
             <p>{% trans 'Dissertation subjects submitted by teachers' %}</p>
           </div>
-          <div class="col-md-1"><i class="fa fa-users" style="font-size: 400%; color: #6699FF;"></i></div>
-          <div class="col-md-5">
+          <div class="col-lg-1"><i class="fa fa-users dashboard-icon"></i></div>
+          <div class="col-lg-5">
             <h4 class="media-heading">
                 <a href="{% url 'manager_informations' %}" id="lnk_manager_informations" >
                     {% trans 'Teachers' %}
@@ -110,8 +110,8 @@
         </div>
         <br>
         <div class="row">
-          <div class="col-md-1"><i class="far fa-edit" style="font-size: 400%; color: #6699FF;"></i></div>
-          <div class="col-md-5">
+          <div class="col-lg-1"><i class="far fa-edit dashboard-icon"></i></div>
+          <div class="col-lg-5">
             <h4 class="media-heading">
                 <a href="{% url 'manager_dissertations_list' %}" id="lnk_manager_dissertations" >
                     {% trans 'Dissertations' %}
@@ -119,8 +119,8 @@
             </h4>
             <p>{% trans 'List of the dissertation subjects' %}</p>
           </div>
-          <div class="col-md-1"><i class="fa fa-cog" style="font-size: 400%; color: #6699FF;"></i></div>
-          <div class="col-md-5">
+          <div class="col-lg-1"><i class="fa fa-cog dashboard-icon"></i></div>
+          <div class="col-lg-5">
             <h4 class="media-heading">
                 <a href="{% url 'manager_offer_parameters' %}" id="lnk_manager_offer_parameters" >
                     {% trans 'Settings' context 'dissertation' %}
@@ -131,8 +131,8 @@
         </div>
         <br>
         <div class="row">
-            <div class="col-md-1"><i class="fa fa-graduation-cap" style="font-size: 400%; color: #6699FF;"></i></div>
-            <div class="col-md-5">
+            <div class="col-lg-1"><i class="fa fa-graduation-cap dashboard-icon"></i></div>
+            <div class="col-lg-5">
                 <h4 class="media-heading">
                     <a href="{% url 'manager_students_list' %}" id="lnk_manager_students_list" >
                         {% trans 'For students' %}
