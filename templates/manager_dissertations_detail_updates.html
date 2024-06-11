@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "bootstrap5/layout.html" %}
 {% load static %}
 {% load i18n %}
 
@@ -29,64 +29,64 @@
 {% load tz %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
-    <li id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
-    <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
-    <li><a href="{% url 'manager_dissertations_list' %}" id="lnk_propositions">{% trans 'Dissertations' %}</a></li>
-    <li class="active">{{ dissertation.title|truncatechars:24 }}</li>
+    <li class="breadcrumb-item"><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
+    <li class="breadcrumb-item" id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'manager_dissertations_list' %}" id="lnk_propositions">{% trans 'Dissertations' %}</a></li>
+    <li class="breadcrumb-item active">{{ dissertation.title|truncatechars:24 }}</li>
 {% endblock %}
 {% block content %}
 <div class="page-header">
     <h2>{{ dissertation.title }}</h2>
 </div>
 <ul class="nav nav-tabs">
-    <li><a href="{% url 'manager_dissertations_detail' pk=dissertation.pk %}">{% trans 'main' %}</a></li>
-    <li class="active"><a href="#">{% trans 'Dissertation updates' %}</a></li>
+    <li class="nav-item"><a href="{% url 'manager_dissertations_detail' pk=dissertation.pk %}" class="nav-link">{% trans 'main' %}</a></li>
+    <li class="nav-item"><a href="#" class="nav-link active">{% trans 'Dissertation updates' %}</a></li>
 </ul>
-<div class="panel panel-default">
-    <div class="panel-body">
+<div class="card border-top-0 border-bottom-0">
+    <div class="card-body">
         <h3>{% trans 'Current status' %}</h3>
         <p>
             {% if dissertation.status == 'DRAFT' %}
-            <span class="label label-default">
+            <span class="badge mb-1 lh-base bg-secondary">
             {% elif dissertation.status == 'DIR_SUBMIT' %}
-            <span class="label label-primary">
+            <span class="badge mb-1 lh-base bg-primary">
             {% elif dissertation.status == 'DIR_OK' %}
-            <span class="label label-success">
+            <span class="badge mb-1 lh-base bg-success">
             {% elif dissertation.status == 'DIR_KO' %}
-            <span class="label label-danger">
+            <span class="badge mb-1 lh-base bg-danger">
             {% elif dissertation.status == 'COM_SUBMIT' %}
-            <span class="label label-primary">
+            <span class="badge mb-1 lh-base bg-primary">
             {% elif dissertation.status == 'COM_OK' %}
-            <span class="label label-default">
+            <span class="badge mb-1 lh-base bg-secondary">
             {% elif dissertation.status == 'COM_KO' %}
-            <span class="label label-danger">
+            <span class="badge mb-1 lh-base bg-danger">
             {% elif dissertation.status == 'EVA_SUBMIT' %}
-            <span class="label label-primary">
+            <span class="badge mb-1 lh-base bg-primary">
             {% elif dissertation.status == 'EVA_OK' %}
-            <span class="label label-default">
+            <span class="badge mb-1 lh-base bg-secondary">
             {% elif dissertation.status == 'EVA_KO' %}
-            <span class="label label-danger">
+            <span class="badge mb-1 lh-base bg-danger">
             {% elif dissertation.status == 'TO_RECEIVE' %}
-            <span class="label label-default">
+            <span class="badge mb-1 lh-base bg-secondary">
             {% elif dissertation.status == 'TO_DEFEND' %}
-            <span class="label label-default">
+            <span class="badge mb-1 lh-base bg-secondary">
             {% elif dissertation.status == 'DEFENDED' %}
-            <span class="label label-default">
+            <span class="badge mb-1 lh-base bg-secondary">
             {% elif dissertation.status == 'ENDED' %}
-            <span class="label label-default">
+            <span class="badge mb-1 lh-base bg-secondary">
             {% elif dissertation.status == 'ENDED_WIN' %}
-            <span class="label label-default">
+            <span class="badge mb-1 lh-base bg-secondary">
             {% elif dissertation.status == 'ENDED_LOS' %}
-            <span class="label label-danger">
+            <span class="badge mb-1 lh-base bg-danger">
             {% else %}
-            <span class="label label-default">
+            <span class="badge mb-1 lh-base bg-secondary">
             {% endif %}
                 {{ dissertation.get_status_display }}
             </span>
         </p>
     </div>
-        <table class="table table-hover">
+        <table class="table table-hover mb-0">
             <tr>
               <th>{% trans 'Change'%}</th>
               <th>{% trans 'Person'%}</th>
@@ -98,77 +98,77 @@
                 <td>
                     {% if dissertation_update.status_from != dissertation_update.status_to %}
                         {% if dissertation_update.status_from == 'DRAFT' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif dissertation_update.status_from == 'DIR_SUBMIT' %}
-                        <span class="label label-primary">
+                        <span class="badge mb-1 lh-base bg-primary">
                         {% elif dissertation_update.status_from == 'DIR_OK' %}
-                        <span class="label label-success">
+                        <span class="badge mb-1 lh-base bg-success">
                         {% elif dissertation_update.status_from == 'DIR_KO' %}
-                        <span class="label label-danger">
+                        <span class="badge mb-1 lh-base bg-danger">
                         {% elif dissertation_update.status_from == 'COM_SUBMIT' %}
-                        <span class="label label-primary">
+                        <span class="badge mb-1 lh-base bg-primary">
                         {% elif dissertation_update.status_from == 'COM_OK' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif dissertation_update.status_from == 'COM_KO' %}
-                        <span class="label label-danger">
+                        <span class="badge mb-1 lh-base bg-danger">
                         {% elif dissertation_update.status_from == 'EVA_SUBMIT' %}
-                        <span class="label label-primary">
+                        <span class="badge mb-1 lh-base bg-primary">
                         {% elif dissertation_update.status_from == 'EVA_OK' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif dissertation_update.status_from == 'EVA_KO' %}
-                        <span class="label label-danger">
+                        <span class="badge mb-1 lh-base bg-danger">
                         {% elif dissertation_update.status_from == 'TO_RECEIVE' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif dissertation_update.status_from == 'TO_DEFEND' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif dissertation_update.status_from == 'DEFENDED' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif dissertation_update.status_from == 'ENDED' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif dissertation_update.status_from == 'ENDED_WIN' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif dissertation_update.status_from == 'ENDED_LOS' %}
-                        <span class="label label-danger">
+                        <span class="badge mb-1 lh-base bg-danger">
                         {% else %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% endif %}
                             {{ dissertation_update.get_status_from_display }}
                         </span><br>
-                        &nbsp; &nbsp;<span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span><br>
+                        &nbsp; &nbsp;<i class="fa-solid fa-arrow-down" aria-hidden="true"></i><br>
                         {% if dissertation_update.status_to == 'DRAFT' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif dissertation_update.status_to == 'DIR_SUBMIT' %}
-                        <span class="label label-primary">
+                        <span class="badge mb-1 lh-base bg-primary">
                         {% elif dissertation_update.status_to == 'DIR_OK' %}
-                        <span class="label label-success">
+                        <span class="badge mb-1 lh-base bg-success">
                         {% elif dissertation_update.status_to == 'DIR_KO' %}
-                        <span class="label label-danger">
+                        <span class="badge mb-1 lh-base bg-danger">
                         {% elif dissertation_update.status_to == 'COM_SUBMIT' %}
-                        <span class="label label-primary">
+                        <span class="badge mb-1 lh-base bg-primary">
                         {% elif dissertation_update.status_to == 'COM_OK' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif dissertation_update.status_to == 'COM_KO' %}
-                        <span class="label label-danger">
+                        <span class="badge mb-1 lh-base bg-danger">
                         {% elif dissertation_update.status_to == 'EVA_SUBMIT' %}
-                        <span class="label label-primary">
+                        <span class="badge mb-1 lh-base bg-primary">
                         {% elif dissertation_update.status_to == 'EVA_OK' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif dissertation_update.status_to == 'EVA_KO' %}
-                        <span class="label label-danger">
+                        <span class="badge mb-1 lh-base bg-danger">
                         {% elif dissertation_update.status_to == 'TO_RECEIVE' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif dissertation_update.status_to == 'TO_DEFEND' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif dissertation_update.status_to == 'DEFENDED' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif dissertation_update.status_to == 'ENDED' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif dissertation_update.status_to == 'ENDED_WIN' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif dissertation_update.status_to == 'ENDED_LOS' %}
-                        <span class="label label-danger">
+                        <span class="badge mb-1 lh-base bg-danger">
                         {% else %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% endif %}
                             {{ dissertation_update.get_status_to_display }}
                         </span>
@@ -176,7 +176,7 @@
                 </td>
                 <td>{{ dissertation_update.person }}</td>
                 <td>{{ dissertation_update.created|localtime }}</td>
-                <td style="text-align: justify;">{{ dissertation_update.justification|linebreaks }}</td>
+                <td class="text-start">{{ dissertation_update.justification|linebreaks }}</td>
             </tr>
         {% endfor %}
         </table>
