@@ -58,9 +58,9 @@
             <thead>
                 <tr>
                   <th></th>
-                  <th>{% trans 'Title'%}</th>
+                  <th>{% trans 'Title' context 'dissertation' %}</th>
                   <th>{% trans 'Author'%}</th>
-                  <th>{% trans 'Status'%}</th>
+                  <th>{% trans 'Status' context 'dissertation' %}</th>
                   <th>{% trans 'year beginning'%}</th>
                   <th>{% trans 'Program'%}</th>
                   <th>{% trans 'Dissertation subject'%}</th>
@@ -81,7 +81,7 @@
         <form method="post" >
             {% csrf_token %}
             <input type="hidden" id="pk_dissertation" name="pk_dissertation" value="">
-            <label for="txt_status">{% trans 'Status' %}</label>
+            <label for="txt_status">{% trans 'Status' context 'dissertation' %}</label>
             <select id="txt_status" name="status_choice" class="form-control" required>
                 <option value=""></option>
                     {% for choice in STATUS_CHOICES %}

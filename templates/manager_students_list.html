@@ -50,7 +50,7 @@
                     <tr>
                         <th>{% trans 'Student' %}</th>
                         <th>{% trans 'Programs and enrollements status'%}</th>
-                        <th>{% trans 'Status' %}</th>
+                        <th>{% trans 'Status' context 'dissertation' %}</th>
                         <th>{% trans 'Dissertation' %}</th>
                 </thead>
                 <tbody>
@@ -117,7 +117,7 @@
                     <tr>
                         <th>{{ students_title|title }}</th>
                         <th>{% trans 'Programs' %}</th>
-                        <th>{% trans 'Status' %}</th>
+                        <th>{% trans 'Status' context 'dissertation' %}</th>
                         <th>{% trans 'Dissertation' %}</th>
                     </tr>
                 </tfoot>
