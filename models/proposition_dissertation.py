@@ -27,7 +27,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from osis_document.contrib import FileUploadField, FileField
 
 from dissertation.models import proposition_offer
@@ -77,7 +77,7 @@ class PropositionDissertation(SerializableModel):
     level = models.CharField(max_length=12, choices=LEVELS_CHOICES, default='DOMAIN',
                              verbose_name=_('Subject developement level'))
     max_number_student = models.IntegerField(verbose_name=_('Indicative number of places for this subject'))
-    title = models.CharField(max_length=200, verbose_name=_('Title'))
+    title = models.CharField(max_length=200, verbose_name=pgettext_lazy('dissertation', 'Title'))
     type = models.CharField(max_length=12, choices=TYPES_CHOICES, default='OTH', verbose_name=_('Subject type'))
     visibility = models.BooleanField(default=True, verbose_name=_('Visibility'))
     active = models.BooleanField(default=True)

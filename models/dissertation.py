@@ -29,7 +29,7 @@ from osis_document.contrib import FileField
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import Q
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
 from base.models import academic_year
 from base.models import student
@@ -87,7 +87,7 @@ def dissertation_directory_path(dissertation: 'Dissertation', filename: str):
 class Dissertation(SerializableModel):
     title = models.CharField(
         max_length=500,
-        verbose_name=_('Title')
+        verbose_name=pgettext_lazy('dissertation', 'Title'),
     )
     author = models.ForeignKey(
         student.Student,

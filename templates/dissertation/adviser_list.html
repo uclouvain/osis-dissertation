@@ -1,7 +1,7 @@
 {% load i18n %}	
 <table class="table table-striped table-hover">	
    <tr>	
-       <th>{% trans 'Manager'%}</th>	
+       <th>{% trans 'Manager' context 'dissertation' %}</th>	
        <th><a class="btn btn-primary pull-right trigger_modal" data-url="{% url 'faculty_adviser_add' %}?offer_proposition={{offer_propositions|join:','}}">	
            <span class="fa fa-plus"></span>	
            </a>	

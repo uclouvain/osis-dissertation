@@ -27,7 +27,7 @@ from dal import autocomplete
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from osis_document.contrib import FileUploadField, FileField
 from osis_document.utils import save_raw_content_remotely
 
@@ -101,7 +101,7 @@ class ManagerAddAdviserPerson(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['last_name'].required = True
-        self.fields['last_name'].label = _("Last name")
+        self.fields['last_name'].label = pgettext_lazy("dissertation", "Last name")
         self.fields['first_name'].required = True
         self.fields['first_name'].label = _("First name")
         self.fields['phone'].label = _("Phone")
