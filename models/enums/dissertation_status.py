@@ -24,7 +24,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
 from osis_common.utils.enumerations import ChoiceEnum
 
@@ -59,7 +59,7 @@ DISSERTATION_STATUS = (
     (TO_RECEIVE, _('To be received')),
     (TO_DEFEND, _('To be received defended')),
     (DEFENDED, _('Defended')),
-    (ENDED, _('End')),
+    (ENDED, pgettext_lazy('continuing_education', 'End')),
     (ENDED_WIN, _('Win')),
     (ENDED_LOS, _('Reported')),
 )

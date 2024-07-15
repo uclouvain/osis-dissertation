@@ -30,11 +30,11 @@
     <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
     <li id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
     <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
-    <li class="active">{% trans 'Settings' %}</li>
+    <li class="active">{% trans 'Settings' context 'dissertation' %}</li>
 {% endblock %}
 {% block content %}
   <div class="page-header">
-    <h2>{% trans 'Settings' %}</h2>
+    <h2>{% trans 'Settings' context 'dissertation' %}</h2>
   </div>
   <div class="panel panel-default">
       <form method="GET" class="get-form" action="{% url 'manager_offer_parameters_edit' %}" name="form_education_group">
@@ -75,7 +75,7 @@
                               <td>
                                   ({% trans 'from' %}
                                   {{ offer_proposition.start_visibility_proposition|date:"d/m/Y" }}
-                                  {% trans 'to' %}
+                                  {% trans 'to' context 'dissertation' %}
                                   {{ offer_proposition.end_visibility_proposition|date:"d/m/Y" }})
                               </td>
                           </tr>
@@ -95,7 +95,7 @@
                               <td>
                                   ({% trans 'from' %}
                                   {{ offer_proposition.start_visibility_dissertation|date:"d/m/Y" }}
-                                  {% trans 'to' %}
+                                  {% trans 'to' context 'dissertation' %}
                                   {{ offer_proposition.end_visibility_dissertation|date:"d/m/Y" }})
                               </td>
                           </tr>
@@ -115,7 +115,7 @@
                               <td>
                                   ({% trans 'from' %}
                                   {{ offer_proposition.start_jury_visibility|date:"d/m/Y" }}
-                                  {% trans 'to' %}
+                                  {% trans 'to' context 'dissertation' %}
                                   {{ offer_proposition.end_jury_visibility|date:"d/m/Y" }})
                               </td>
                           </tr>
@@ -135,7 +135,7 @@
                               <td>
                                   ({% trans 'from' %}
                                   {{ offer_proposition.start_edit_title|date:"d/m/Y" }}
-                                  {% trans 'to' %}
+                                  {% trans 'to' context 'dissertation' %}
                                   {{ offer_proposition.end_edit_title|date:"d/m/Y" }})
                               </td>
                           </tr>
