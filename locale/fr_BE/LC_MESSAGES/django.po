@@ -323,6 +323,7 @@ msgstr "Modifiable"
 msgid "Empirical research"
 msgstr "Recherche empirique"
 
+msgctxt "continuing_education"
 msgid "End"
 msgstr "Terminé"
 
@@ -488,6 +489,7 @@ msgstr "Thématique large"
 msgid "Last"
 msgstr "Dernier"
 
+msgctxt "dissertation"
 msgid "Last name"
 msgstr "Nom de famille"
 
@@ -515,6 +517,7 @@ msgstr "Revue de littérature"
 msgid "Loading..."
 msgstr "Chargement en cours..."
 
+msgctxt "dissertation"
 msgid "Manager"
 msgstr "Gestionnaires"
 
@@ -534,7 +537,7 @@ msgid "Maximum number of student"
 msgstr "Nombre maximum d'étudiants"
 
 msgid "Mobile phone"
-msgstr "Téléphone mobile"
+msgstr "Téléphone mobile (GSM)"
 
 msgid "Modify selected programs"
 msgstr "Modifier les programmes sélectionnés"
@@ -630,7 +633,7 @@ msgid "President"
 msgstr "Président"
 
 msgid "Previous"
-msgstr "Pr&eacute;c&eacute;dent"
+msgstr "Précédent"
 
 msgid "Processing..."
 msgstr "Traitement en cours..."
@@ -684,7 +687,7 @@ msgid "Required"
 msgstr "Requis"
 
 msgid "Save"
-msgstr "Sauvegarder"
+msgstr "Enregistrer"
 
 msgid "Search"
 msgstr "Rechercher"
@@ -707,6 +710,7 @@ msgstr ""
 msgid "September"
 msgstr "Septembre"
 
+msgctxt "dissertation"
 msgid "Settings"
 msgstr "Paramètres"
 
@@ -737,6 +741,7 @@ msgstr "Programme/Année de début"
 msgid "Stats"
 msgstr "Statistiques"
 
+msgctxt "dissertation"
 msgid "Status"
 msgstr "État"
 
@@ -861,6 +866,7 @@ msgstr ""
 "qu'enseignant, un membre du personnel qui ne s'est pas encore connecté à "
 "l'application Mémoires. Veuillez rechercher la personne via son e-mail."
 
+msgctxt "dissertation"
 msgid "Title"
 msgstr "Titre"
 
@@ -880,8 +886,9 @@ msgid "Undefined"
 msgstr "Indéfini"
 
 msgid "Update date"
-msgstr "Date de mise-à-jour"
+msgstr "Date de mise à jour"
 
+msgctxt "dissertation"
 msgid "Upload"
 msgstr "Upload"
 
@@ -912,6 +919,7 @@ msgstr "En attente du promoteur"
 msgid "Waiting reception"
 msgstr "En attente de réception"
 
+msgctxt "dissertation"
 msgid "Warning"
 msgstr "Attention"
 
@@ -1084,6 +1092,7 @@ msgstr "Recherche d'une personne"
 msgid "set to"
 msgstr "mise à"
 
+msgctxt "dissertation"
 msgid "to"
 msgstr "au"
 

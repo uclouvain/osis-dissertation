@@ -70,7 +70,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-3" style="text-align: right">
-                        <label>{% trans 'Title' %}</label>
+                        <label>{% trans 'Title' context 'dissertation' %}</label>
                     </div>
                     <div class="col-md-9">
                         {{ dissertation.title }}
@@ -99,7 +99,7 @@
                 {% endif %}
                 <div class="row">
                     <div class="col-md-3" style="text-align: right">
-                        <label>{% trans 'Status' %}</label>
+                        <label>{% trans 'Status' context 'dissertation' %}</label>
                     </div>
                     <div class="col-md-9">
                         {% with st=dissertation.status %}
@@ -272,7 +272,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-3" style="text-align: right">
-                        <label>{% trans 'Title' %}</label>
+                        <label>{% trans 'Title' context 'dissertation' %}</label>
                     </div>
                     <div class="col-md-9">
                         <a href="{% url 'manager_proposition_dissertation_detail' pk=dissertation.proposition_dissertation.pk %}">

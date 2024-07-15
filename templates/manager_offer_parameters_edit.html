@@ -33,7 +33,7 @@
     <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
     <li id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
     <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
-    <li><a href="{% url 'manager_offer_parameters' %}" id="lnk_parameters">{% trans 'Settings' %}</a></li>
+    <li><a href="{% url 'manager_offer_parameters' %}" id="lnk_parameters">{% trans 'Settings' context 'dissertation' %}</a></li>
     <li class="active">{{ offer_proposition.acronym }}</li>
 {% endblock %}
 {% block content %}
@@ -71,7 +71,7 @@
                         <div class="input-group-addon">
                             <label for="txt_end_visibility_proposition"
                                     {% if form.end_visibility_proposition.errors %} style="color:red;"{% endif %}>
-                                {% trans 'to' %}
+                                {% trans 'to' context 'dissertation' %}
                             </label>
                         </div>
                         <input type="text" class="form-control datepicker"
@@ -104,7 +104,7 @@
                         <div class="input-group-addon">
                             <label for="txt_end_visibility_dissertation"
                                     {% if form.end_visibility_dissertation.errors %} style="color:red;" {% endif %}>
-                                {% trans 'to' %}
+                                {% trans 'to' context 'dissertation' %}
                             </label>
                         </div>
                         <input type="text" class="form-control datepicker"
@@ -137,7 +137,7 @@
                         <div class="input-group-addon">
                             <label for="txt_end_jury_visibility"
                                     {% if form.end_jury_visibility.errors %} style="color:red;" {% endif %}>
-                                {% trans 'to' %}
+                                {% trans 'to' context 'dissertation' %}
                             </label>
                         </div>
                         <input type="text" class="form-control datepicker"
@@ -170,7 +170,7 @@
                         <div class="input-group-addon">
                             <label for="txt_end_edit_title"
                                     {% if form.end_edit_title.errors %} style="color:red;" {% endif %}>
-                                {% trans 'to' %}
+                                {% trans 'to' context 'dissertation' %}
                             </label>
                         </div>
                         <input type="text" class="form-control datepicker"
