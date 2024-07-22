@@ -320,6 +320,7 @@ msgstr ""
 msgid "Empirical research"
 msgstr ""
 
+msgctxt "continuing_education"
 msgid "End"
 msgstr ""
 
@@ -477,6 +478,7 @@ msgstr ""
 msgid "Last"
 msgstr ""
 
+msgctxt "dissertation"
 msgid "Last name"
 msgstr ""
 
@@ -504,6 +506,7 @@ msgstr ""
 msgid "Loading..."
 msgstr ""
 
+msgctxt "dissertation"
 msgid "Manager"
 msgstr ""
 
@@ -694,6 +697,7 @@ msgstr ""
 msgid "September"
 msgstr ""
 
+msgctxt "dissertation"
 msgid "Settings"
 msgstr ""
 
@@ -721,6 +725,7 @@ msgstr ""
 msgid "Stats"
 msgstr ""
 
+msgctxt "dissertation"
 msgid "Status"
 msgstr ""
 
@@ -831,6 +836,7 @@ msgid ""
 "person with her/his e-mail address"
 msgstr ""
 
+msgctxt "dissertation"
 msgid "Title"
 msgstr ""
 
@@ -852,6 +858,7 @@ msgstr ""
 msgid "Update date"
 msgstr ""
 
+msgctxt "dissertation"
 msgid "Upload"
 msgstr ""
 
@@ -882,6 +889,7 @@ msgstr ""
 msgid "Waiting reception"
 msgstr ""
 
+msgctxt "dissertation"
 msgid "Warning"
 msgstr ""
 
@@ -1020,6 +1028,7 @@ msgstr ""
 msgid "set to"
 msgstr ""
 
+msgctxt "dissertation"
 msgid "to"
 msgstr ""
 

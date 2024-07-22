@@ -48,7 +48,7 @@
         </div>
         <div class="panel-group">
             <label for="txt_title" {% if form.title.errors %} style="color:red;" {% endif %}>
-                {% trans 'Title' %}
+                {% trans 'Title' context 'dissertation' %}
                 {% for error in form.title.errors %}
                     <br>{{ error|escape }}
                 {% endfor %}

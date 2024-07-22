@@ -88,7 +88,7 @@
                   {{ academic_year }}
               </div>
               <div class="col-md-4">
-                  <label for="status_search">{% trans 'Status' %}</label>
+                  <label for="status_search">{% trans 'Status' context 'dissertation' %}</label>
                   <select name="status_search" id="status_search" class="form-control">
                     <option value=""></option>
                     <option value="DRAFT"{% if status_search  ==  "DARFT" %} selected {% endif %}>{% trans 'Draft'%}</option>
@@ -133,9 +133,9 @@
         <br>
           <table class="table table-hover" id="tb_memoire">
             <thead>
-              <th>{% trans 'Title'%}</th>
+              <th>{% trans 'Title' context 'dissertation' %}</th>
               <th>{% trans 'Author'%}</th>
-              <th>{% trans 'Status'%}</th>
+              <th>{% trans 'Status' context 'dissertation' %}</th>
               <th>{% trans 'Program'%}</th>
               <th>{% trans 'year beginning'%}</th>
               <th>{% trans 'Dissertation subject'%}</th>
