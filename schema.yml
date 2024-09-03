@@ -11,7 +11,7 @@ servers:
  - url: https://osis.uclouvain.be/api/v1/dissertation/
    description: 'Production server'
 info:
-  version: '1.01'
+  version: '1.02'
   title: 'Dissertation Service'
   description: |-
     A set of API endpoints that allow you to get information about dissertation
@@ -58,6 +58,37 @@ paths:
     get:
       description: "Return detail of a proposition dissertation available for the user currently connected"
       operationId: proposition_detail
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            description: 'The uuid of the proposition dissertation'
+            type: string
+        - $ref: '#/components/parameters/Accept-Language'
+        - $ref: '#/components/parameters/X-User-FirstName'
+        - $ref: '#/components/parameters/X-User-LastName'
+        - $ref: '#/components/parameters/X-User-Email'
+        - $ref: '#/components/parameters/X-User-GlobalID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropositionDissertationDetail'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - proposition_dissertation
+  /propositions/{uuid}/infos:
+    get:
+      description: "Return info of a proposition dissertation available for the user currently connected"
+      operationId: proposition_infos
       parameters:
         - in: path
           name: uuid
