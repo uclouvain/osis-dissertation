@@ -67,9 +67,10 @@ class DeletePropositionFileView(AjaxTemplateMixin, DeleteView):
     def get_object(self, queryset=None):
         return PropositionDocumentFile.objects.filter(proposition=self.proposition)
 
-    def delete(self, request, *args, **kwargs):
+    def form_valid(self, form):
+        super().form_valid(form)
         self.proposition_documents = self.get_object()
-        if self.proposition_documents and autorized_proposition_dissert_promotor_or_manager_or_author(request.user,
+        if self.proposition_documents and autorized_proposition_dissert_promotor_or_manager_or_author(self.request.user,
                                                                                                       self.proposition):
             for proposition_document in self.proposition_documents:
                 proposition_document.delete()

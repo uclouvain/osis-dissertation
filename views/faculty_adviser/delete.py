@@ -53,7 +53,8 @@ class FacultyAdviserDeleteView(AjaxTemplateMixin, DeleteView):
             education_group__offer_proposition__pk__in=self.offer_propositions
         )
 
-    def delete(self, request, *args, **kwargs):
+    def form_valid(self, form):
+        super().form_valid(form)
         self.object = self.get_object()
         for obj in self.object.all():
             obj.delete()

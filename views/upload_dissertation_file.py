@@ -67,12 +67,16 @@ class DeleteDissertationFileView(AjaxTemplateMixin, DeleteView):
     def get_object(self, queryset=None):
         return DissertationDocumentFile.objects.filter(dissertation=self.dissertation)
 
-    def delete(self, request, *args, **kwargs):
+    def form_valid(self, form):
+        super().form_valid(form)
         self.dissertation_documents = self.get_object()
-        if self.dissertation_documents and autorized_dissert_promotor_or_manager(request.user, self.dissertation.pk):
+        if self.dissertation_documents and autorized_dissert_promotor_or_manager(
+            self.request.user,
+            self.dissertation.pk
+        ):
             for dissertation_document in self.dissertation_documents:
                 justification = "{} {} ".format(_("Delete file"), dissertation_document.document_file.file_name)
-                dissertation_update.add(request,
+                dissertation_update.add(self.request,
                                         self.dissertation,
                                         self.dissertation.status,
                                         justification=justification)
