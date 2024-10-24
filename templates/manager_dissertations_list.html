@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "bootstrap5/layout.html" %}
 {% load static %}
 {% load i18n %}
 
@@ -26,288 +26,295 @@
  * see http://www.gnu.org/licenses/.
 {% endcomment %}
 {% block style %}
-<link rel="stylesheet" href="{% static 'css/dataTables.bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/bootstrap5/dataTables.bootstrap5.min.css' %}">
 {% endblock %}
 {% block breadcrumb %}
-    <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
-    <li id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
-    <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
-    <li class="active">{% trans 'Dissertations' %}</li>
+    <li class="breadcrumb-item"><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
+    <li class="breadcrumb-item" id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+    <li class="breadcrumb-item active">{% trans 'Dissertations' %}</li>
 {% endblock %}
 {% block content %}
   <div class="page-header">
     <h2>{% trans 'Dissertations' %}</h2>
   </div>
   <ul class="nav nav-tabs">
-    <li class="active"><a href="{% url 'manager_dissertations_list' %}">{% trans 'All dissertations' %}</a></li>
-    <li><a href="{% url 'manager_dissertations_wait_list' %}">{% trans 'Waiting promotor' %}</a></li>
+    <li class="nav-item"><a href="{% url 'manager_dissertations_list' %}" class="nav-link active">{% trans 'All dissertations' %}</a></li>
+    <li class="nav-item"><a href="{% url 'manager_dissertations_wait_list' %}" class="nav-link">{% trans 'Waiting promotor' %}</a></li>
     {% if show_validation_commission %}
-      <li><a href="{% url 'manager_dissertations_wait_comm_list' %}">{% trans 'Waiting commission' %}</a></li>
+      <li class="nav-item"><a href="{% url 'manager_dissertations_wait_comm_list' %}" class="nav-link">{% trans 'Waiting commission' %}</a></li>
     {% endif %}
     {% if show_evaluation_first_year %}
-      <li><a href="{% url 'manager_dissertations_wait_eval_list' %}">{% trans 'Waiting 1st year evaluation' %}</a></li>
+      <li class="nav-item"><a href="{% url 'manager_dissertations_wait_eval_list' %}" class="nav-link">{% trans 'Waiting 1st year evaluation' %}</a></li>
     {% endif %}
-    <li><a href="{% url 'manager_dissertations_wait_recep_list' %}">{% trans 'Waiting reception' %}</a></li>
+    <li class="nav-item"><a href="{% url 'manager_dissertations_wait_recep_list' %}" class="nav-link">{% trans 'Waiting reception' %}</a></li>
   </ul>
-  <div class="panel panel-default">
-    <div class="panel-body">
+  <div class="card border-top-0">
+    <div class="card-body">
       <form method="get" action="{% url 'manager_dissertations_search'%}">
         <div class="row">
-          <div class="col-md-10">
+          <div class="col-lg-10 mb-2">
+            <div class="row">
+              <div class="col-12">
               <input class="form-control" id="txt_search" placeholder="{% trans 'Search' %}" name="search"
                      value="{{ request.GET.search }}">
-          </div>
-          <div id="to_hide">
-              <div class="col-md-3" >
-                  <label for="academic_year">{% trans 'Academic year' %}</label>
-                      <select name="academic_year" id="academic_year" class="form-control">
+              </div>
+              <div class="col-12 mt-2">
+                <div id="to_hide" class="row">
+                  <div class="col-lg-4" >
+                      <label for="academic_year">{% trans 'Academic year' %}</label>
+                          <select name="academic_year" id="academic_year" class="form-select">
+                            <option value=""></option>
+                          {% for academic_year in academic_year_10y %}
+                            <option value="{{ academic_year.id }}"
+                                    {% if academic_year_search  == academic_year.id %}
+                                    selected
+                                    {% endif %} >
+                                {{ academic_year }}</option>
+                          {% endfor %}
+                          </select>
+                      {{ academic_year }}
+                  </div>
+                  <div class="col-lg-4">
+                      <label for="offer_prop_search">{% trans 'Program' %}</label>
+                          <select name="offer_prop_search" id="offer_prop_search" class="form-select">
+                            <option value=""></option>
+                          {% for offer_prop in offer_props %}
+                            <option value='{{ offer_prop.id }}'
+                                    {% if offer_prop_search  == offer_prop.id %}
+                                    selected
+                                    {% endif %} >
+                                {{ offer_prop.acronym }}
+                            </option>
+                          {% endfor %}
+                          </select>
+                      {{ academic_year }}
+                  </div>
+                  <div class="col-lg-4">
+                      <label for="status_search">{% trans 'Status' context 'dissertation' %}</label>
+                      <select name="status_search" id="status_search" class="form-select">
                         <option value=""></option>
-                      {% for academic_year in academic_year_10y %}
-                        <option value="{{ academic_year.id }}"
-                                {% if academic_year_search  == academic_year.id %}
-                                selected
-                                {% endif %} >
-                            {{ academic_year }}</option>
-                      {% endfor %}
+                        <option value="DRAFT"{% if status_search  ==  "DARFT" %} selected {% endif %}>{% trans 'Draft'%}</option>
+                        <option value="DIR_SUBMIT"{% if status_search  ==  "DIR_SUBMIT" %} selected {% endif %}>{% trans 'Submitted to promoter'%}</option>
+                        <option value="DIR_KO"{% if status_search  ==  "DIR_KO" %} selected {% endif %}>{% trans 'Refused by promoter'%}</option>
+                        <option value="COM_SUBMIT"{% if status_search  ==  "COM_SUBMIT" %} selected {% endif %}>{% trans 'Submitted to commission'%}</option>
+                        <option value="COM_KO"{% if status_search  ==  "COM_KO" %} selected {% endif %}>{% trans 'Refused by commission'%}</option>
+                        <option value="EVA_SUBMIT"{% if status_search  ==  "EVA_SUBMIT" %} selected {% endif %}>{% trans 'Submitted to 1st year evaluation'%}</option>
+                        <option value="EVA_KO"{% if status_search  ==  "EVA_KO" %} selected {% endif %}>{% trans '1st year evaluation failed'%}</option>
+                        <option value="TO_RECEIVE"{% if status_search  ==  "TO_RECEIVE" %} selected {% endif %}>{% trans 'To be received'%}</option>
+                        <option value="TO_DEFEND"{% if status_search  ==  "TO_DEFEND" %} selected {% endif %}>{% trans 'To be defended'%}</option>
+                        <option value="DEFENDED"{% if status_search  ==  "DEFENDED" %} selected {% endif %}>{% trans 'Defended'%}</option>
+                        <option value="ENDED"{% if status_search  ==  "ENDED" %} selected {% endif %}>{% trans 'Ended'%}</option>
+                        <option value="ENDED_WIN"{% if status_search  ==  "ENDED_WIN" %} selected {% endif %}>{% trans 'Ended with success'%}</option>
+                        <option value="ENDED_LOS"{% if status_search  ==  "ENDED_LOS" %} selected {% endif %}>{% trans 'Reported'%}</option>
                       </select>
-                  {{ academic_year }}
+                    </div>
+                </div>
               </div>
-              <div class="col-md-3">
-                  <label for="offer_prop_search">{% trans 'Program' %}</label>
-                      <select name="offer_prop_search" id="offer_prop_search" class="form-control">
-                        <option value=""></option>
-                      {% for offer_prop in offer_props %}
-                        <option value='{{ offer_prop.id }}'
-                                {% if offer_prop_search  == offer_prop.id %}
-                                selected
-                                {% endif %} >
-                            {{ offer_prop.acronym }}
-                        </option>
-                      {% endfor %}
-                      </select>
-                  {{ academic_year }}
-              </div>
-              <div class="col-md-4">
-                  <label for="status_search">{% trans 'Status' context 'dissertation' %}</label>
-                  <select name="status_search" id="status_search" class="form-control">
-                    <option value=""></option>
-                    <option value="DRAFT"{% if status_search  ==  "DARFT" %} selected {% endif %}>{% trans 'Draft'%}</option>
-                    <option value="DIR_SUBMIT"{% if status_search  ==  "DIR_SUBMIT" %} selected {% endif %}>{% trans 'Submitted to promoter'%}</option>
-                    <option value="DIR_KO"{% if status_search  ==  "DIR_KO" %} selected {% endif %}>{% trans 'Refused by promoter'%}</option>
-                    <option value="COM_SUBMIT"{% if status_search  ==  "COM_SUBMIT" %} selected {% endif %}>{% trans 'Submitted to commission'%}</option>
-                    <option value="COM_KO"{% if status_search  ==  "COM_KO" %} selected {% endif %}>{% trans 'Refused by commission'%}</option>
-                    <option value="EVA_SUBMIT"{% if status_search  ==  "EVA_SUBMIT" %} selected {% endif %}>{% trans 'Submitted to 1st year evaluation'%}</option>
-                    <option value="EVA_KO"{% if status_search  ==  "EVA_KO" %} selected {% endif %}>{% trans '1st year evaluation failed'%}</option>
-                    <option value="TO_RECEIVE"{% if status_search  ==  "TO_RECEIVE" %} selected {% endif %}>{% trans 'To be received'%}</option>
-                    <option value="TO_DEFEND"{% if status_search  ==  "TO_DEFEND" %} selected {% endif %}>{% trans 'To be defended'%}</option>
-                    <option value="DEFENDED"{% if status_search  ==  "DEFENDED" %} selected {% endif %}>{% trans 'Defended'%}</option>
-                    <option value="ENDED"{% if status_search  ==  "ENDED" %} selected {% endif %}>{% trans 'Ended'%}</option>
-                    <option value="ENDED_WIN"{% if status_search  ==  "ENDED_WIN" %} selected {% endif %}>{% trans 'Ended with success'%}</option>
-                    <option value="ENDED_LOS"{% if status_search  ==  "ENDED_LOS" %} selected {% endif %}>{% trans 'Reported'%}</option>
-                  </select>
-              </div>
+            </div>
           </div>
-          <div class="pull-right col-md-2">
-            <button type="submit" id="bt_submit_manager_information_search" class="btn btn-primary" role="button"
-            title="{% trans 'Search' %}"><span class="glyphicon glyphicon-search"
-            aria-hidden="true"></span></button>
+
+          <div class="col-lg-2 d-flex align-items-center">
+            <button type="submit" id="bt_submit_manager_information_search" class="btn btn-primary me-2" role="button"
+            title="{% trans 'Search' %}"><i class="fas fa-search"
+            aria-hidden="true"></i></button>
             <button type="submit" id="bt_submit_manager_information_xlsx" class="btn btn-default no_spinner" role="button"
-            title="{% trans 'Export search as XLS' %}" name="bt_xlsx" value="bt_xlsx"><span class="glyphicon glyphicon-download-alt"
-            aria-hidden="true" ></span></button>
+            title="{% trans 'Export search as XLS' %}" name="bt_xlsx" value="bt_xlsx"><i class="fa-solid fa-download"
+            aria-hidden="true" ></i></button>
 
           </div>
 
         </div>
-            <div id="hideshow">
+            <div id="hideshow" class="mb-3">
                 <a id="" role="button">
-                <h5>{% trans 'Advanced search' %}
-                <i class="glyphicon glyphicon-collapse-down"></i></h5>
+                <h5 class="fs-6 text-primary">{% trans 'Advanced search' %}
+                <i class="fa-regular fa-square-caret-down"></i></h5>
                 </a>
             </div>
       </form>
-
         {% if dissertations|length == 0 %}
           <br>
-          <label class="alert alert-info" style="margin-left:10%;width:80%;text-align:center;">{% trans 'No result' %}</label>
+          <label class="alert alert-info col-9 mx-auto text-center d-block">{% trans 'No result' %}</label>
         {% else %}
-        <br>
-          <table class="table table-hover" id="tb_memoire">
-            <thead>
-              <th>{% trans 'Title' context 'dissertation' %}</th>
-              <th>{% trans 'Author'%}</th>
-              <th>{% trans 'Status' context 'dissertation' %}</th>
-              <th>{% trans 'Program'%}</th>
-              <th>{% trans 'year beginning'%}</th>
-              <th>{% trans 'Dissertation subject'%}</th>
-              <th>{% trans 'Action' %}</th>
-            </thead>
-            {% for dissertation in dissertations %}
-            <tr class="visible" style="display: table-row;">
-                <td>
-                    <a href="{% url 'manager_dissertations_detail' pk=dissertation.pk %}">
-                        {{ dissertation.title }}
-                    </a>
-                </td>
-                <td>{{ dissertation.author }}</td>
-                <td>
-                    {% if dissertation.status == 'DRAFT' %}
-                    <span class="label label-default">
-                    {% elif dissertation.status == 'DIR_SUBMIT' %}
-                    <span class="label label-primary">
-                    {% elif dissertation.status == 'DIR_OK' %}
-                    <span class="label label-success">
-                    {% elif dissertation.status == 'DIR_KO' %}
-                    <span class="label label-danger">
-                    {% elif dissertation.status == 'COM_SUBMIT' %}
-                    <span class="label label-primary">
-                    {% elif dissertation.status == 'COM_OK' %}
-                    <span class="label label-default">
-                    {% elif dissertation.status == 'COM_KO' %}
-                    <span class="label label-danger">
-                    {% elif dissertation.status == 'EVA_SUBMIT' %}
-                    <span class="label label-primary">
-                    {% elif dissertation.status == 'EVA_OK' %}
-                    <span class="label label-default">
-                    {% elif dissertation.status == 'EVA_KO' %}
-                    <span class="label label-danger">
-                    {% elif dissertation.status == 'TO_RECEIVE' %}
-                    <span class="label label-default">
-                    {% elif dissertation.status == 'TO_DEFEND' %}
-                    <span class="label label-default">
-                    {% elif dissertation.status == 'DEFENDED' %}
-                    <span class="label label-default">
-                    {% elif dissertation.status == 'ENDED' %}
-                    <span class="label label-default">
-                    {% elif dissertation.status == 'ENDED_WIN' %}
-                    <span class="label label-default">
-                    {% elif dissertation.status == 'ENDED_LOS' %}
-                    <span class="label label-danger">
-                    {% endif %}
-                        {{ dissertation.get_status_display }}
-                    </span>
-                </td>
-                <td>{{ dissertation.education_group_year.acronym }}</td>
-                <td>{{ dissertation.education_group_year.academic_year }}</td>
-                <td>{{ dissertation.proposition_dissertation }}</td>
-                <td>
-                    <div style="text-align: right;">
-                    {% if dissertation.status == 'DRAFT' or dissertation.status == 'DIR_KO' %}
-                        <a href="{% url 'manager_dissertations_go_forward_from_list' pk=dissertation.pk choice='submit' %}"
-                           id="lnk_manager_dissertations_to_dir_submit" class="btn btn-default pull-right refresh"
-                           role="button" title="{% trans 'Submit to promotor'%}"
-                           onclick="return confirm('{% trans 'You are ready to submit this dissertation to the promotor. Are you sure you want to continue ?' %}')"><span
-                                class="glyphicon glyphicon-circle-arrow-right"
-                                aria-hidden="true"></span> {% trans 'Submit to promotor'%}</a>
-                    {% endif %}
-                    {% if dissertation.status == 'DIR_SUBMIT' %}
-                        <a href="{% url 'manager_dissertations_go_forward_from_list' pk=dissertation.pk choice='ok' %}"
-                           id="lnk_manager_promotor_accept" class="btn btn-default refresh"
-                           role="button" title="{% trans 'Promotor accepts'%}"
-                           onclick="return confirm('{% trans 'You are ready to set this dissertation as accepted by the promotor. Are you sure you want to continue ?' %}')"><span
-                                class="glyphicon glyphicon-ok-circle"
-                                aria-hidden="true"></span> {% trans 'Promotor accepts'%}</a>
-                        <a href="{% url 'manager_dissertations_go_forward_from_list' pk=dissertation.pk choice='ko' %}"
-                           id="lnk_manager_promotor_refuse" class="btn btn-default refresh"
-                           role="button" title="{% trans 'Promotor refuses'%}"
-                           onclick="return confirm('{% trans 'You are ready to set this dissertation as refused by the promotor. Are you sure you want to continue ?' %}')"><span
-                                class="glyphicon glyphicon-remove-circle"
-                                aria-hidden="true"></span> {% trans 'Promotor refuses'%}</a>
-                    {% endif %}
-                    {% if dissertation.status == 'COM_SUBMIT' %}
-                        <a href="{% url 'manager_dissertations_go_forward_from_list' pk=dissertation.pk choice='ok' %}"
-                           id="lnk_manager_commission_accept" class="btn btn-default refresh"
-                           role="button" title="{% trans 'Commission accepts'%}"
-                           onclick="return confirm('{% trans 'You are ready to set this dissertation as accepted by the commission. Are you sure you want to continue ?' %}')"><span
-                                class="glyphicon glyphicon-ok-circle"
-                                aria-hidden="true"></span> {% trans 'Commission accepts'%}</a>
-                        <a href="{% url 'manager_dissertations_go_forward_from_list' pk=dissertation.pk choice='ko' %}"
-                           id="lnk_manager_commission_refuse" class="btn btn-default refresh"
-                           role="button" title="{% trans 'Commission refuses'%}"
-                           onclick="return confirm('{% trans 'You are ready to set this dissertation as refused by the commission. Are you sure you want to continue ?' %}')"><span
-                                class="glyphicon glyphicon-remove-circle"
-                                aria-hidden="true"></span> {% trans 'Commission refuses'%}</a>
-                    {% endif %}
-                    {% if dissertation.status == 'COM_KO' %}
-                        <a href="{% url 'manager_dissertations_go_forward_from_list' pk=dissertation.pk choice='ok'%}"
-                           id="lnk_manager_commission_reaccept" class="btn btn-default refresh"
-                           role="button" title="{% trans 'Commission accepts'%}"
-                           onclick="return confirm('{% trans 'You are ready to set this dissertation as accepted by the commission. Are you sure you want to continue ?' %}')"><span
-                                class="glyphicon glyphicon-ok-circle"
-                                aria-hidden="true"></span> {% trans 'Commission accepts'%}</a>
-                    {% endif %}
-                    {% if dissertation.status == 'EVA_SUBMIT' %}
-                        <a href="{% url 'manager_dissertations_go_forward_from_list' pk=dissertation.pk choice='ok' %}"
-                           id="lnk_manager_evaluation_accept" class="btn btn-default refresh"
-                           role="button" title="{% trans 'First year evaluation success'%}"
-                           onclick="return confirm('{% trans 'You are ready to set the first year evaluation succeeded for this dissertation. Are you sure you want to continue ?' %}')"><span
-                                class="glyphicon glyphicon-ok-circle"
-                                aria-hidden="true"></span> {% trans 'First year evaluation success'%}</a>
-                        <a href="{% url 'manager_dissertations_go_forward_from_list' pk=dissertation.pk choice='ko' %}"
-                           id="lnk_manager_evaluation_refuse" class="btn btn-default refresh"
-                           role="button" title="{% trans 'First year evaluation failed'%}"
-                           onclick="return confirm('{% trans 'You are ready to set the first year evaluation failed for this dissertation. Are you sure you want to continue ?' %}')"><span
-                                class="glyphicon glyphicon-remove-circle"
-                                aria-hidden="true"></span> {% trans 'First year evaluation failed'%}</a>
-                    {% endif %}
-                    {% if dissertation.status == 'EVA_KO' %}
-                        <a href="{% url 'manager_dissertations_go_forward_from_list' pk=dissertation.pk choice='ok' %}"
-                           id="lnk_manager_evaluation_reaccept" class="btn btn-default refresh"
-                           role="button" title="{% trans 'First year evaluation success'%}"
-                           onclick="return confirm('{% trans 'You are ready to set the first year evaluation succeeded for this dissertation. Are you sure you want to continue ?' %}')"><span
-                                class="glyphicon glyphicon-ok-circle"
-                                aria-hidden="true"></span> {% trans 'First year evaluation success'%}</a>
-                    {% endif %}
-                    {% if dissertation.status == 'TO_RECEIVE' %}
-                        <a href="{% url 'manager_dissertations_go_forward_from_list' pk=dissertation.pk choice='submit' %}"
-                           id="lnk_manager_dissertations_receive" class="btn btn-default refresh"
-                           role="button" title="{% trans 'Submit to promotor'%}"
-                           onclick="return confirm('{% trans 'You are ready to set this dissertation as received. Are you sure you want to continue ?' %}')"><span
-                                class="glyphicon glyphicon-circle-arrow-right"
-                                aria-hidden="true"></span> {% trans 'Dissertation received'%}</a>
-                    {% endif %}
-                    {% if dissertation.status == 'TO_DEFEND' %}
-                        <a href="{% url 'manager_dissertations_go_forward_from_list' pk=dissertation.pk choice='submit' %}"
-                           id="lnk_manager_dissertations_defended" class="btn btn-default refresh"
-                           role="button" title="{% trans 'Submit to promotor'%}"
-                           onclick="return confirm('{% trans 'You are ready to set this dissertation as defended. Are you sure you want to continue ?' %}')"><span
-                                class="glyphicon glyphicon-circle-arrow-right"
-                                aria-hidden="true"></span> {% trans 'Dissertation defended'%}</a>
-                    {% endif %}
-                    {% if dissertation.status == 'DEFENDED' %}
-                        <a href="{% url 'manager_dissertations_go_forward_from_list' pk=dissertation.pk choice='ok' %}"
-                           id="lnk_manager_dissertations_success" class="btn btn-default refresh"
-                           role="button" title="{% trans 'Promotor accepts'%}"
-                           onclick="return confirm('{% trans 'You are ready to set this dissertation as succeeded. Are you sure you want to continue ?' %}')"><span
-                                class="glyphicon glyphicon-ok-circle"
-                                aria-hidden="true"></span> {% trans 'Dissertation succeeded'%}</a>
-                        <a href="{% url 'manager_dissertations_go_forward_from_list' pk=dissertation.pk choice='ko' %}"
-                           id="lnk_manager_dissertations_reported" class="btn btn-default refresh"
-                           role="button" title="{% trans 'Promotor refuses'%}"
-                           onclick="return confirm('{% trans 'You are ready to set this dissertation as failed. Are you sure you want to continue ?' %}')"><span
-                                class="glyphicon glyphicon-remove-circle"
-                                aria-hidden="true"></span> {% trans 'Dissertation delayed'%}</a>
-                    {% endif %}
-                    {% if dissertation.status == 'ENDED_LOS' %}
-                        <a href="{% url 'manager_dissertations_go_forward_from_list' pk=dissertation.pk choice='ok' %}"
-                          id="lnk_manager_back_to_receive" class="btn btn-default"
-                          role="button" title="{% trans 'To be received'%}"
-                          onclick="return confirm('{% trans 'You are ready to set this dissertation as To Receive. Are you sure you want to continue ?' %}')"><span
-                          class="glyphicon glyphicon-circle-arrow-right"
-                          aria-hidden="true"></span> {% trans 'To be received'%}</a>
-                    {% endif %}
-                    </div>
-                </td>
-              </tr>
-            {% endfor %}
-          </table>
+          <div class="row mt-2">
+            <table class="table table-hover" id="tb_memoire">
+              <thead>
+                <th>{% trans 'Title' context 'dissertation' %}</th>
+                <th>{% trans 'Author'%}</th>
+                <th>{% trans 'Status' context 'dissertation' %}</th>
+                <th>{% trans 'Program'%}</th>
+                <th>{% trans 'year beginning'%}</th>
+                <th>{% trans 'Dissertation subject'%}</th>
+                <th>{% trans 'Action' %}</th>
+              </thead>
+              {% for dissertation in dissertations %}
+              <tr class="visible table-row">
+                  <td>
+                      <a href="{% url 'manager_dissertations_detail' pk=dissertation.pk %}">
+                          {{ dissertation.title }}
+                      </a>
+                  </td>
+                  <td>{{ dissertation.author }}</td>
+                  <td>
+                      {% if dissertation.status == 'DRAFT' %}
+                      <span class="badge mb-1 lh-base bg-secondary">
+                      {% elif dissertation.status == 'DIR_SUBMIT' %}
+                      <span class="badge mb-1 lh-base bg-primary">
+                      {% elif dissertation.status == 'DIR_OK' %}
+                      <span class="badge mb-1 lh-base bg-success">
+                      {% elif dissertation.status == 'DIR_KO' %}
+                      <span class="badge mb-1 lh-base bg-danger">
+                      {% elif dissertation.status == 'COM_SUBMIT' %}
+                      <span class="badge mb-1 lh-base bg-primary">
+                      {% elif dissertation.status == 'COM_OK' %}
+                      <span class="badge mb-1 lh-base bg-secondary">
+                      {% elif dissertation.status == 'COM_KO' %}
+                      <span class="badge mb-1 lh-base bg-danger">
+                      {% elif dissertation.status == 'EVA_SUBMIT' %}
+                      <span class="badge mb-1 lh-base bg-primary">
+                      {% elif dissertation.status == 'EVA_OK' %}
+                      <span class="badge mb-1 lh-base bg-secondary">
+                      {% elif dissertation.status == 'EVA_KO' %}
+                      <span class="badge mb-1 lh-base bg-danger">
+                      {% elif dissertation.status == 'TO_RECEIVE' %}
+                      <span class="badge mb-1 lh-base bg-secondary">
+                      {% elif dissertation.status == 'TO_DEFEND' %}
+                      <span class="badge mb-1 lh-base bg-secondary">
+                      {% elif dissertation.status == 'DEFENDED' %}
+                      <span class="badge mb-1 lh-base bg-secondary">
+                      {% elif dissertation.status == 'ENDED' %}
+                      <span class="badge mb-1 lh-base bg-secondary">
+                      {% elif dissertation.status == 'ENDED_WIN' %}
+                      <span class="badge mb-1 lh-base bg-secondary">
+                      {% elif dissertation.status == 'ENDED_LOS' %}
+                      <span class="badge mb-1 lh-base bg-danger">
+                      {% endif %}
+                          {{ dissertation.get_status_display }}
+                      </span>
+                  </td>
+                  <td>{{ dissertation.education_group_year.acronym }}</td>
+                  <td>{{ dissertation.education_group_year.academic_year }}</td>
+                  <td>{{ dissertation.proposition_dissertation }}</td>
+                  <td>
+                      <div class="text-end">
+                      {% if dissertation.status == 'DRAFT' or dissertation.status == 'DIR_KO' %}
+                          <a href="{% url 'manager_dissertations_go_forward_from_list' pk=dissertation.pk choice='submit' %}"
+                            id="lnk_manager_dissertations_to_dir_submit" class="btn btn-default float-end refresh text-nowrap mb-2"
+                            role="button" title="{% trans 'Submit to promotor'%}"
+                            onclick="return confirm('{% trans 'You are ready to submit this dissertation to the promotor. Are you sure you want to continue ?' %}')"><i
+                                  class="fa-solid fa-circle-right"
+                                  aria-hidden="true"></i> {% trans 'Submit to promotor'%}</a>
+                      {% endif %}
+                      {% if dissertation.status == 'DIR_SUBMIT' %}
+                          <a href="{% url 'manager_dissertations_go_forward_from_list' pk=dissertation.pk choice='ok' %}"
+                            id="lnk_manager_promotor_accept" class="btn btn-default refresh text-nowrap mb-2"
+                            role="button" title="{% trans 'Promotor accepts'%}"
+                            onclick="return confirm('{% trans 'You are ready to set this dissertation as accepted by the promotor. Are you sure you want to continue ?' %}')"><i
+                                  class="fa-regular fa-circle-check"
+                                  aria-hidden="true"></i> {% trans 'Promotor accepts'%}</a>
+                          <a href="{% url 'manager_dissertations_go_forward_from_list' pk=dissertation.pk choice='ko' %}"
+                            id="lnk_manager_promotor_refuse" class="btn btn-default refresh text-nowrap mb-2"
+                            role="button" title="{% trans 'Promotor refuses'%}"
+                            onclick="return confirm('{% trans 'You are ready to set this dissertation as refused by the promotor. Are you sure you want to continue ?' %}')"><i
+                                  class="fa-regular fa-circle-xmark"
+                                  aria-hidden="true"></i> {% trans 'Promotor refuses'%}</a>
+                      {% endif %}
+                      {% if dissertation.status == 'COM_SUBMIT' %}
+                          <a href="{% url 'manager_dissertations_go_forward_from_list' pk=dissertation.pk choice='ok' %}"
+                            id="lnk_manager_commission_accept" class="btn btn-default refresh text-nowrap mb-2"
+                            role="button" title="{% trans 'Commission accepts'%}"
+                            onclick="return confirm('{% trans 'You are ready to set this dissertation as accepted by the commission. Are you sure you want to continue ?' %}')"><i
+                                  class="fa-regular fa-circle-check"
+                                  aria-hidden="true"></i> {% trans 'Commission accepts'%}</a>
+                          <a href="{% url 'manager_dissertations_go_forward_from_list' pk=dissertation.pk choice='ko' %}"
+                            id="lnk_manager_commission_refuse" class="btn btn-default refresh text-nowrap mb-2"
+                            role="button" title="{% trans 'Commission refuses'%}"
+                            onclick="return confirm('{% trans 'You are ready to set this dissertation as refused by the commission. Are you sure you want to continue ?' %}')"><i
+                                  class="fa-regular fa-circle-xmark"
+                                  aria-hidden="true"></i> {% trans 'Commission refuses'%}</a>
+                      {% endif %}
+                      {% if dissertation.status == 'COM_KO' %}
+                          <a href="{% url 'manager_dissertations_go_forward_from_list' pk=dissertation.pk choice='ok'%}"
+                            id="lnk_manager_commission_reaccept" class="btn btn-default refresh text-nowrap mb-2"
+                            role="button" title="{% trans 'Commission accepts'%}"
+                            onclick="return confirm('{% trans 'You are ready to set this dissertation as accepted by the commission. Are you sure you want to continue ?' %}')"><i
+                                  class="fa-regular fa-circle-check"
+                                  aria-hidden="true"></i> {% trans 'Commission accepts'%}</a>
+                      {% endif %}
+                      {% if dissertation.status == 'EVA_SUBMIT' %}
+                          <a href="{% url 'manager_dissertations_go_forward_from_list' pk=dissertation.pk choice='ok' %}"
+                            id="lnk_manager_evaluation_accept" class="btn btn-default refresh text-nowrap mb-2"
+                            role="button" title="{% trans 'First year evaluation success'%}"
+                            onclick="return confirm('{% trans 'You are ready to set the first year evaluation succeeded for this dissertation. Are you sure you want to continue ?' %}')"><i
+                                  class="fa-regular fa-circle-check"
+                                  aria-hidden="true"></i> {% trans 'First year evaluation success'%}</a>
+                          <a href="{% url 'manager_dissertations_go_forward_from_list' pk=dissertation.pk choice='ko' %}"
+                            id="lnk_manager_evaluation_refuse" class="btn btn-default refresh text-nowrap mb-2"
+                            role="button" title="{% trans 'First year evaluation failed'%}"
+                            onclick="return confirm('{% trans 'You are ready to set the first year evaluation failed for this dissertation. Are you sure you want to continue ?' %}')"><i
+                                  class="fa-regular fa-circle-xmark"
+                                  aria-hidden="true"></i> {% trans 'First year evaluation failed'%}</a>
+                      {% endif %}
+                      {% if dissertation.status == 'EVA_KO' %}
+                          <a href="{% url 'manager_dissertations_go_forward_from_list' pk=dissertation.pk choice='ok' %}"
+                            id="lnk_manager_evaluation_reaccept" class="btn btn-default refresh text-nowrap mb-2"
+                            role="button" title="{% trans 'First year evaluation success'%}"
+                            onclick="return confirm('{% trans 'You are ready to set the first year evaluation succeeded for this dissertation. Are you sure you want to continue ?' %}')"><i
+                                  class="fa-regular fa-circle-check"
+                                  aria-hidden="true"></i> {% trans 'First year evaluation success'%}</a>
+                      {% endif %}
+                      {% if dissertation.status == 'TO_RECEIVE' %}
+                          <a href="{% url 'manager_dissertations_go_forward_from_list' pk=dissertation.pk choice='submit' %}"
+                            id="lnk_manager_dissertations_receive" class="btn btn-default  text-nowrap mb-2"
+                            role="button" title="{% trans 'Submit to promotor'%}"
+                            onclick="return confirm('{% trans 'You are ready to set this dissertation as received. Are you sure you want to continue ?' %}')"><i
+                                  class="fa-solid fa-circle-right"
+                                  aria-hidden="true"></i> {% trans 'Dissertation received'%}</a>
+                      {% endif %}
+                      {% if dissertation.status == 'TO_DEFEND' %}
+                          <a href="{% url 'manager_dissertations_go_forward_from_list' pk=dissertation.pk choice='submit' %}"
+                            id="lnk_manager_dissertations_defended" class="btn btn-default  text-nowrap mb-2"
+                            role="button" title="{% trans 'Submit to promotor'%}"
+                            onclick="return confirm('{% trans 'You are ready to set this dissertation as defended. Are you sure you want to continue ?' %}')"><i
+                                  class="fa-solid fa-circle-right"
+                                  aria-hidden="true"></i> {% trans 'Dissertation defended'%}</a>
+                      {% endif %}
+                      {% if dissertation.status == 'DEFENDED' %}
+                          <a href="{% url 'manager_dissertations_go_forward_from_list' pk=dissertation.pk choice='ok' %}"
+                            id="lnk_manager_dissertations_success" class="btn btn-default  text-nowrap mb-2"
+                            role="button" title="{% trans 'Promotor accepts'%}"
+                            onclick="return confirm('{% trans 'You are ready to set this dissertation as succeeded. Are you sure you want to continue ?' %}')"><i
+                                  class="fa-regular fa-circle-check"
+                                  aria-hidden="true"></i> {% trans 'Dissertation succeeded'%}</a>
+                          <a href="{% url 'manager_dissertations_go_forward_from_list' pk=dissertation.pk choice='ko' %}"
+                            id="lnk_manager_dissertations_reported" class="btn btn-default  text-nowrap mb-2"
+                            role="button" title="{% trans 'Promotor refuses'%}"
+                            onclick="return confirm('{% trans 'You are ready to set this dissertation as failed. Are you sure you want to continue ?' %}')"><i
+                                  class="fa-regular fa-circle-xmark"
+                                  aria-hidden="true"></i> {% trans 'Dissertation delayed'%}</a>
+                      {% endif %}
+                      {% if dissertation.status == 'ENDED_LOS' %}
+                          <a href="{% url 'manager_dissertations_go_forward_from_list' pk=dissertation.pk choice='ok' %}"
+                            id="lnk_manager_back_to_receive" class="btn btn-default"
+                            role="button" title="{% trans 'To be received'%}"
+                            onclick="return confirm('{% trans 'You are ready to set this dissertation as To Receive. Are you sure you want to continue ?' %}')"><i
+                            class="fa-solid fa-arrow-right"
+                            aria-hidden="true"></i> {% trans 'To be received'%}</a>
+                      {% endif %}
+                      </div>
+                  </td>
+                </tr>
+              {% endfor %}
+            </table>
+          </div>
         {% endif %}
     </div>
   </div>
 
 {% endblock %}
 {% block script %}
-<script type="text/javascript" src="{% static 'js/jquery.dataTables.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/dataTables.bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap5/jquery.dataTables.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap5/dataTables.bootstrap5.min.js' %}"></script>
 <script>
     $(document).ready(function()
     {
@@ -323,7 +330,7 @@
 
                     "sProcessing":     "{% trans 'Processing...'%}",
                     "sSearch":         "{% trans 'Search:'%}",
-                    "sLengthMenu":     "&nbsp;&nbsp;&nbsp;_MENU_ &eacute;l&eacute;ments",
+                    "sLengthMenu":     "_MENU_ &eacute;l&eacute;ments",
                     "sInfo":           "{% trans 'Showing _START_ to _END_ of _TOTAL_ entries'%}",
                     "sInfoEmpty":      "{% trans 'Showing 0 to 0 of 0 entries'%}",
                     "sInfoFiltered":   "{% trans '(filtered from _MAX_ total entries)'%}",
@@ -348,7 +355,7 @@
       jQuery('#hideshow').on('click', function(event) {
              jQuery('#to_hide').toggle('show');
              jQuery('#BR_DIV').toggle('show');
-             $("i", this).toggleClass("glyphicon glyphicon-collapse-down glyphicon glyphicon-expand");
+             $("i", this).toggleClass("fa-regular fa-square-caret-down fa-regular fa-square-caret-down");
         });
     });
 

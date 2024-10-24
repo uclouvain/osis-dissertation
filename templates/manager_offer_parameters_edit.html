@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "bootstrap5/layout.html" %}
 {% load static %}
 {% load i18n %}
 {% load format %}
@@ -30,11 +30,11 @@
 <link rel="stylesheet" href="{% static 'css/bootstrap-datepicker3.min.css' %}" type='text/css'>
 {% endblock %}
 {% block breadcrumb %}
-    <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
-    <li id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
-    <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
-    <li><a href="{% url 'manager_offer_parameters' %}" id="lnk_parameters">{% trans 'Settings' context 'dissertation' %}</a></li>
-    <li class="active">{{ offer_proposition.acronym }}</li>
+    <li class="breadcrumb-item"><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
+    <li id="lnk_cohorts_management" class="breadcrumb-item"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'manager_offer_parameters' %}" id="lnk_parameters">{% trans 'Settings' context 'dissertation' %}</a></li>
+    <li class="breadcrumb-item active">{{ offer_proposition.acronym }}</li>
 {% endblock %}
 {% block content %}
   <div class="page-header">
@@ -44,20 +44,20 @@
             {% if not forloop.last %} - {% endif %}
         {% endfor %}</h2>
   </div>
-  <div class="panel panel-default">
-    <div class="panel-body">
+  <div class="card">
+    <div class="card-body">
         <form method="POST" class="post-form" action="{{ request.get_full_path }}" name="form_education_group">
             {% csrf_token %}
 
-            <div class="row">
-                <div class="col-md-4">
+            <div class="row mb-2">
+                <div class="col-lg-4">
                     {% trans 'Period of visibility for dissertation subjects'%}
                 </div>
-                <div class="col-md-2">
+                <div class="col-lg-2">
                     <div class="input-group">
                         <div class="input-group-addon">
                             <label for="txt_start_visibility_proposition"
-                                    {% if form.start_visibility_proposition.errors %} style="color:red;" {% endif %}>
+                                    {% if form.start_visibility_proposition.errors %} class="text-danger" {% endif %}>
                                 {% trans 'from'%}
                             </label>
                         </div>
@@ -66,11 +66,11 @@
                            name="start_visibility_proposition" id="txt_start_visibility_proposition">
                     </div>
                 </div>
-                <div class="col-md-2">
+                <div class="col-lg-2">
                     <div class="input-group">
                         <div class="input-group-addon">
                             <label for="txt_end_visibility_proposition"
-                                    {% if form.end_visibility_proposition.errors %} style="color:red;"{% endif %}>
+                                    {% if form.end_visibility_proposition.errors %} class="text-danger"{% endif %}>
                                 {% trans 'to' context 'dissertation' %}
                             </label>
                         </div>
@@ -79,18 +79,18 @@
                            name="end_visibility_proposition" id="txt_end_visibility_proposition">
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-lg-4">
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-4">
+            <div class="row mb-2">
+                <div class="col-lg-4">
                     {% trans 'Period of possibility to create dissertations projects'%}
                 </div>
-                <div class="col-md-2">
+                <div class="col-lg-2">
                     <div class="input-group">
                         <div class="input-group-addon">
                             <label for="txt_start_visibility_dissertation"
-                                    {% if form.start_visibility_dissertation.errors %}style="color:red;" {% endif %}>
+                                    {% if form.start_visibility_dissertation.errors %}class="text-danger" {% endif %}>
                                 {% trans 'from'%}
                             </label>
                         </div>
@@ -99,11 +99,11 @@
                            name="start_visibility_dissertation" id="txt_start_visibility_dissertation">
                     </div>
                 </div>
-                <div class="col-md-2">
+                <div class="col-lg-2">
                     <div class="input-group">
                         <div class="input-group-addon">
                             <label for="txt_end_visibility_dissertation"
-                                    {% if form.end_visibility_dissertation.errors %} style="color:red;" {% endif %}>
+                                    {% if form.end_visibility_dissertation.errors %} class="text-danger" {% endif %}>
                                 {% trans 'to' context 'dissertation' %}
                             </label>
                         </div>
@@ -112,18 +112,18 @@
                            name="end_visibility_dissertation" id="txt_end_visibility_dissertation">
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-lg-4">
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-4">
+            <div class="row mb-2">
+                <div class="col-lg-4">
                     {% trans 'Period of visibility for dissertation jurys'%}
                 </div>
-                <div class="col-md-2">
+                <div class="col-lg-2">
                     <div class="input-group">
                         <div class="input-group-addon">
                             <label for="txt_start_jury_visibility"
-                                    {% if form.start_jury_visibility.errors %} style="color:red;" {% endif %}>
+                                    {% if form.start_jury_visibility.errors %} class="text-danger" {% endif %}>
                                 {% trans 'from'%}
                             </label>
                         </div>
@@ -132,11 +132,11 @@
                            name="start_jury_visibility" id="txt_start_jury_visibility">
                     </div>
                 </div>
-                <div class="col-md-2">
+                <div class="col-lg-2">
                     <div class="input-group">
                         <div class="input-group-addon">
                             <label for="txt_end_jury_visibility"
-                                    {% if form.end_jury_visibility.errors %} style="color:red;" {% endif %}>
+                                    {% if form.end_jury_visibility.errors %} class="text-danger" {% endif %}>
                                 {% trans 'to' context 'dissertation' %}
                             </label>
                         </div>
@@ -145,18 +145,18 @@
                            name="end_jury_visibility" id="txt_end_jury_visibility">
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-lg-4">
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-4">
+            <div class="row mb-2">
+                <div class="col-lg-4">
                     {% trans 'Period of possibility to edit dissertations titles'%}
                 </div>
-                <div class="col-md-2">
+                <div class="col-lg-2">
                     <div class="input-group">
                         <div class="input-group-addon">
                             <label for="txt_start_edit_title"
-                                    {% if form.start_edit_title.errors %} style="color:red;" {% endif %}>
+                                    {% if form.start_edit_title.errors %} class="text-danger" {% endif %}>
                                 {% trans 'from'%}
                             </label>
                         </div>
@@ -165,11 +165,11 @@
                            name="start_edit_title" id="txt_start_edit_title">
                     </div>
                 </div>
-                <div class="col-md-2">
+                <div class="col-lg-2">
                     <div class="input-group">
                         <div class="input-group-addon">
                             <label for="txt_end_edit_title"
-                                    {% if form.end_edit_title.errors %} style="color:red;" {% endif %}>
+                                    {% if form.end_edit_title.errors %} class="text-danger" {% endif %}>
                                 {% trans 'to' context 'dissertation' %}
                             </label>
                         </div>
@@ -180,35 +180,35 @@
                 </div>
             </div>
             <h3>{% trans 'Other settings'%}</h3>
-            <div class="checkbox">
+            <div class="checkbox mb-2">
                 <label>
                     <input id="txt_student_can_manage_readers"  name="student_can_manage_readers"
                            type="checkbox" {% if form.student_can_manage_readers.value %} checked {% endif %}>
                     {% trans 'Students can manage readers' %}
                 </label>
             </div>
-            <div class="checkbox">
+            <div class="checkbox mb-2">
                 <label>
                     <input id="txt_adviser_can_suggest_reader"  name="adviser_can_suggest_reader"
                            type="checkbox" {% if form.adviser_can_suggest_reader.value %} checked {% endif %}>
                     {% trans 'Adviser can manage jury members' %}
                 </label>
             </div>
-            <div class="checkbox">
+            <div class="checkbox mb-2">
                 <label>
                     <input id="txt_evaluation_first_year"  name="evaluation_first_year"
                            type="checkbox" {% if form.evaluation_first_year.value %} checked {% endif %}>
                     {% trans 'First year evaluation' %}
                 </label>
             </div>
-            <div class="checkbox">
+            <div class="checkbox mb-2">
                 <label>
                     <input id="txt_validation_commission_exists"  name="validation_commission_exists"
                            type="checkbox" {% if form.validation_commission_exists.value %} checked {% endif %}>
                     {% trans 'Validation commission exists' %}
                 </label>
             </div>
-            <div class="checkbox">
+            <div class="checkbox mb-2">
                 <label>
                     <input id="txt_global_email_to_commission"  name="global_email_to_commission"
                            type="checkbox" {% if form.global_email_to_commission.value %} checked {% endif %}>

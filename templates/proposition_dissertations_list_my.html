@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "bootstrap5/layout.html" %}
 {% load static %}
 {% load i18n %}
 
@@ -27,43 +27,42 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
-    <li id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
-    <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
-    <li class="active">{% trans 'Dissertation subjects' %}</li>
+    <li class="breadcrumb-item"><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
+    <li class="breadcrumb-item" id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+    <li class="breadcrumb-item active">{% trans 'Dissertation subjects' %}</li>
 {% endblock %}
 {% block content %}
   <div class="page-header">
     <h2>{% trans 'Dissertation subjects' %}</h2>
   </div>
   <ul class="nav nav-tabs">
-    <li class="active"><a href="#">{% trans 'My subjects' %}</a></li>
-    <li><a href="{% url 'proposition_dissertations_created'%}">{% trans 'Subjects created' %}</a></li>
-    <li><a href="{% url 'proposition_dissertations'%}">{% trans 'All subjects' %}</a></li>
+    <li class="nav-item"><a href="#" class="nav-link active">{% trans 'My subjects' %}</a></li>
+    <li class="nav-item"><a href="{% url 'proposition_dissertations_created'%}" class="nav-link">{% trans 'Subjects created' %}</a></li>
+    <li class="nav-item"><a href="{% url 'proposition_dissertations'%}" class="nav-link">{% trans 'All subjects' %}</a></li>
   </ul>
-  <div class="panel panel-default">
-    <div class="panel-body">
+  <div class="card border-top-0 border-bottom-0">
+    <div class="card-body ">
       <form method="get" action="{% url 'proposition_dissertations_search'%}">
         <div class="row">
-          <div class="col-md-1 pull-right">
+          <div class="col-12 float-end text-end">
             <a href="{% url 'proposition_dissertation_new' %}" id="lnk_proposition_dissertation_new" class="btn btn-default"
-            role="button" title="{% trans 'Add dissertation subject'%}"><span class="glyphicon glyphicon-plus"
-            aria-hidden="true"></span></a>
+            role="button" title="{% trans 'Add dissertation subject'%}"><i class="fa-solid fa-plus"
+            aria-hidden="true"></i></a>
           </div>
         </div>
       </form>
     </div>
         {% if message %}
           <div>
-              <label class="alert alert-warning" style="margin:5px">{{message}}</label>
+              <label class="alert alert-warning m-2">{{message}}</label>
           </div>
         {% else %}
           <div>
             {% if propositions_dissertations|length == 0 %}
-              <br>
-              <label class="alert alert-info" style="margin-left:10%;width:80%;text-align:center;">{% trans 'No result' %}</label>
+            <label class="alert alert-info col-9 mx-auto text-center d-block mt-2">{% trans 'No result' %}</label>
             {% else %}
-              <table class="table table-hover">
+              <table class="table table-hover mb-0">
                 <tr>
                   <th>{% trans 'Title' context 'dissertation' %}</th>
                   <th>{% trans 'Promotor'%}</th>
@@ -80,9 +79,9 @@
                     <td>{{ proposition_dissertation.creator|default_if_none:"" }}</td>
                     <td>
                       {% if proposition_dissertation.visibility == True %}
-                        <span class="label label-success">{% trans 'Visible' %}</span>
+                        <span class="badge mb-1 lh-base bg-success">{% trans 'Visible' %}</span>
                       {% else %}
-                        <span class="label label-warning">{% trans 'Invisible' %}</span>
+                        <span class="badge mb-1 lh-base bg-warning">{% trans 'Invisible' %}</span>
                       {% endif %}
                     </td>
                     <td>{{ proposition_dissertation.max_number_student }}</td>
@@ -93,7 +92,7 @@
                     {% endif %}
                     <td>
                         {% for offer_proposition in proposition_dissertation.offer_propositions.all %}
-                        <span class="label label-default" >
+                        <span class="badge mb-1 lh-base bg-secondary" >
                           {{ offer_proposition.last_acronym }}
                         </span>
                         &nbsp;
