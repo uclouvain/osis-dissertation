@@ -57,6 +57,9 @@ class DeletePropositionFileView(AjaxTemplateMixin, DeleteView):
     model = PropositionDocumentFile
     template_name = 'propositiondocumentfile_confirm_delete_inner.html'
 
+    def get_error_url(self):
+        return None
+
     def get_success_url(self):
         return None
 

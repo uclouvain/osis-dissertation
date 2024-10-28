@@ -60,6 +60,9 @@ class DeleteDissertationFileView(AjaxTemplateMixin, DeleteView):
     def get_success_url(self):
         return None
 
+    def get_error_url(self):
+        return None
+
     @property
     def dissertation(self):
         return get_object_or_404(Dissertation, pk=self.kwargs['dissertation_pk'])
