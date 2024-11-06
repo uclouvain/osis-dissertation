@@ -325,6 +325,7 @@ class DissertationSubmitView(generics.ListCreateAPIView):
     def create(self, request, *args, **kwargs):
         self.dissertation.status = DissertationStatus.DIR_SUBMIT.name
         self.dissertation.save()
+        self.dissertation.go_forward()
 
         dissertation_update.add(
             self.request,
