@@ -64,7 +64,8 @@ class DissertationListCreateView(generics.ListCreateAPIView):
     # TODO: Implement filter on active tag !
     def get_queryset(self):
         return Dissertation.objects.filter(
-            author__person__user=self.request.user
+            author__person__user=self.request.user,
+            active=True
         ).select_related(
             'author__person',
             'proposition_dissertation__author__person',
