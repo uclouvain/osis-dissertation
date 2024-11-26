@@ -1,4 +1,4 @@
-{% load bootstrap3 %}
+{% load django_bootstrap5 %}
 
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
@@ -26,12 +26,12 @@
 
 <div class="modal fade" id="{% block modal_id %}modal{% endblock %}" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog {% block modal_class %}{% endblock %}" tabindex="-1" role="document">
-        <div class="modal-content" style="max-height: 90vh; display: flex; flex-direction: column;">
+        <div class="modal-content d-flex flex-column" style="max-height: 90vh;">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title" id="myModalLabel">{% block modal_title %}{% endblock %}</h3>
+                <h4 class="modal-title">{% block modal_title %}{% endblock %}</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" style="overflow:auto;">
+            <div class="modal-body overflow-auto">
                 {% block modal_body %}
                 {% endblock %}
             </div>

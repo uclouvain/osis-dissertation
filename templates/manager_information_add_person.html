@@ -1,5 +1,5 @@
-{% extends "layout.html" %}
-{% load i18n bootstrap3 static %}
+{% extends "bootstrap5/layout.html" %}
+{% load i18n django_bootstrap5 static %}
 
 {% comment "License" %}
  * OSIS stands for Open Student Information System. It's an application
@@ -26,22 +26,22 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
-    <li id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
-    <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
-    <li><a href="{% url 'manager_informations' %}" id="lnk_manager_informations">{% trans 'Teachers' %}</a></li>
-    <li class="active">{% trans 'Add person' %}</li>
+    <li class="breadcrumb-item"><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
+    <li class="breadcrumb-item" id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'manager_informations' %}" id="lnk_manager_informations">{% trans 'Teachers' %}</a></li>
+    <li class="breadcrumb-item active">{% trans 'Add person' %}</li>
 {% endblock %}
 {% block content %}
 <div class="page-header">
     <h2>{% trans 'Add person' %}</h2>
 </div>
-<div class="panel panel-default">
-    <div class="panel-body">
+<div class="card">
+    <div class="card-body">
         <div class="row">
-            <div class="col-md-10 col-lg-offset-1">
+            <div class="col-lg-10 offset-lg-1">
                 <div class="alert alert-warning alert-dismissible" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
                     <strong>{% trans 'Warning' context 'dissertation' %} :</strong> {% trans 'This form is used to add a person to OSIS. Complete carefully the form, you will not be able to edit this person after adding.' %}
                 </div>
@@ -50,13 +50,13 @@
         </div>
         <form method="POST" class="post-form">
             {% csrf_token %}
-            {% bootstrap_field form.email form_group_class="col-md-8 col-lg-offset-2 form-group" %}
-            {% bootstrap_field form.last_name form_group_class="col-md-8 col-lg-offset-2 form-group" %}
-            {% bootstrap_field form.first_name form_group_class="col-md-8 col-lg-offset-2 form-group" %}
-            {% bootstrap_field form.phone form_group_class="col-md-8 col-lg-offset-2 form-group" %}
-            {% bootstrap_field form.phone_mobile form_group_class="col-md-8 col-lg-offset-2 form-group" %}
+            {% bootstrap_field form.email wrapper_class="col-lg-8 offset-lg-2 form-group" %}
+            {% bootstrap_field form.last_name wrapper_class="col-lg-8 offset-lg-2 form-group" %}
+            {% bootstrap_field form.first_name wrapper_class="col-lg-8 offset-lg-2 form-group" %}
+            {% bootstrap_field form.phone wrapper_class="col-lg-8 offset-lg-2 form-group" %}
+            {% bootstrap_field form.phone_mobile wrapper_class="col-lg-8 offset-lg-2 form-group" %}
             <div class="row">
-                <div class="col-md-12" style="text-align: right;">
+                <div class="col-12 text-end">
                     <button type="submit" class="save btn btn-primary"
                     onclick="return confirm('{% trans 'This person will be added to OSIS and you will not be able to edit it. Are you sure you want to continue ?' %}')">
                         {% trans 'Save' %}

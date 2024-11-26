@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "bootstrap5/layout.html" %}
 {% load static %}
 {% load i18n %}
 
@@ -27,107 +27,106 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
-    <li id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
-    <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
-    <li><a href="{% url 'my_dissertation_propositions' %}" id="lnk_propositions">{% trans 'Dissertation subjects' %}</a></li>
-    <li class="active">{% trans 'New dissertation subject' %}</li>
+    <li class="breadcrumb-item"><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
+    <li class="breadcrumb-item" id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'my_dissertation_propositions' %}" id="lnk_propositions">{% trans 'Dissertation subjects' %}</a></li>
+    <li class="breadcrumb-item active">{% trans 'New dissertation subject' %}</li>
 {% endblock %}
 {% block content %}
   <div class="page-header">
     <h2>{% trans 'New dissertation subject' %}</h2>
   </div>
-  <div class="panel panel-default">
-    <div class="panel-body">
+  <div class="card">
+    <div class="card-body">
       <form method="POST" class="post-form">
         {% csrf_token %}
         <div class="row">
-            <div class="col-md-3 col-lg-offset-3">
+            <div class="col-lg-3 offset-lg-3">
               {{  form.author }}
             </div>
         </div>
-        <div class="panel-group">
-            <label for="txt_title" {% if form.title.errors %} style="color:red;" {% endif %}>
+        <div class="panel-group mb-3">
+            <label for="txt_title" class="{% if form.title.errors %}text-danger {% endif %}" >
                 {% trans 'Title' context 'dissertation' %}
                 {% for error in form.title.errors %}
                     <br>{{ error|escape }}
                 {% endfor %}
             </label>
-            <input class="form-control" id="txt_title"  name="title"
-                style="margin:-6px;" value="{{ form.title.value|default_if_none:'' }}">
+            <input class="form-control" id="txt_title" name="title"
+                 value="{{ form.title.value|default_if_none:'' }}">
         </div>
-        <div class="panel-group">
+        <div class="panel-group mb-3">
             <label for="txt_visibility">{% trans 'Visibility' %}</label>
             <input id="txt_visibility"  name="visibility"
-                   style="margin-left:6px;" type="checkbox" {% if form.visibility.value %} checked {% endif %}>
+                    type="checkbox" {% if form.visibility.value %} checked {% endif %}>
         </div>
-        <div class="panel-group">
+        <div class="panel-group mb-3">
             <label for="txt_description">{% trans 'Description' %}</label>
-            <textarea class="form-control" id="txt_description"  name="description" rows="10" style="margin:-6px;">{{ form.description.value|default_if_none:'' }}</textarea>
+            <textarea class="form-control" id="txt_description"  name="description" rows="10" >{{ form.description.value|default_if_none:'' }}</textarea>
         </div>
-        <div class="panel-group">
+        <div class="panel-group mb-3">
             <label for="txt_type">{% trans 'Subject type' %}</label>
-            <select class="form-control" id="txt_type"  name="type" style="margin:-6px;">
+            <select class="form-select" id="txt_type"  name="type" >
                 {% for type in types_choices %}
                     <option value="{{ type.0 }}" {% if form.type.value == type.0 %}selected{% endif %}>{{ type.1}}</option>
                 {% endfor %}
             </select>
         </div>
-        <div class="panel-group">
+        <div class="panel-group mb-3">
             <label for="txt_level">{% trans 'Subject developement level' %}</label>
-            <select class="form-control" id="txt_level"  name="level" style="margin:-6px;">
+            <select class="form-select" id="txt_level"  name="level" >
                 {% for level in levels_choices %}
                     <option value="{{ level.0 }}" {% if form.level.value == level.0 %}selected{% endif %}>{{ level.1}}</option>
                 {% endfor %}
             </select>
         </div>
-        <div class="panel-group">
+        <div class="panel-group mb-3">
             <label for="txt_collaboration">{% trans 'Collaboration' %}</label>
-            <select class="form-control" id="txt_collaboration"  name="collaboration" style="margin:-6px;">
+            <select class="form-select" id="txt_collaboration"  name="collaboration" >
                 {% for collaboration in collaborations_choices %}
                     <option value="{{ collaboration.0 }}" {% if form.collaboration.value == collaboration.0 %}selected{% endif %}>{{ collaboration.1}}</option>
                 {% endfor %}
             </select>
         </div>
-        <div class="panel-group">
-            <label for="txt_max_number_student" {% if form.max_number_student.errors %} style="color:red;" {% endif %}>
+        <div class="panel-group mb-3">
+            <label for="txt_max_number_student" class="{% if form.max_number_student.errors %}text-danger {% endif %}" >
                 {% trans 'Indicative number of places for this subject' %}
                 {% for error in form.max_number_student.errors %}
                     <br>{{ error|escape }}
                 {% endfor %}
             </label>
             <input class="form-control" id="txt_max_number_student"  name="max_number_student" value="{{ form.max_number_student.value|default_if_none:'' }}"
-                style="margin:-6px;">
+                >
         </div>
-        <div class="panel-group">
-            <label for="txt_level" {% if offer_propositions_error %} style="color:red;" {% endif %}>
+        <div class="panel-group mb-3">
+            <label for="txt_level" class="{% if offer_propositions_error %}text-danger {% endif %}" >
                 {% trans 'Check the programs related to this topic' %}
                 {% if offer_propositions_error %}
                     <br>{% trans offer_propositions_error %}
                 {% endif %}
             </label>
-            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel-group mb-3" id="accordion" role="tablist" aria-multiselectable="true">
                     {% for offer_proposition_g in offer_proposition_group %}
-                     <div class="panel panel-default">
-
-                        <div class="panel-heading" role="tab" id="heading_{{ offer_proposition_g }}">
-                          <h4 class="panel-title">
-                            <a id="test_{{ offer_proposition_g }}" class="collapse_{{ offer_proposition_g }}" role="button" onclick="display_hide_div_child('collapse_{{ offer_proposition_g }}','statut_bouton_{{ offer_proposition_g }}');">
-                            {{ offer_proposition_g }} <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span> </label>
+                     <div class="card mb-2 border-bottom-0">
+                        <div class="card-header" role="tab" id="heading_{{ offer_proposition_g }}">
+                          <h4 class="card-title m-0 ">
+                            <a id="test_{{ offer_proposition_g }}" class="fs-5 text-dark m-0 collapse_{{ offer_proposition_g }}" role="button" onclick="display_hide_div_child('collapse_{{ offer_proposition_g }}','statut_bouton_{{ offer_proposition_g }}');">
+                            {{ offer_proposition_g }} <i class="fa-solid fa-chevron-left" aria-hidden="true"></i> </label>
                             </a>
                               <input type="hidden" id="statut_bouton_{{ offer_proposition_g }}" name="statut_bouton_{{ offer_proposition_g }}"  value="OK">
                           </h4>
                         </div>
 
-                        <div id="collapse_{{ offer_proposition_g}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_{{ offer_proposition_g }}" style="display:none;">
+                        <div id="collapse_{{ offer_proposition_g}}" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="heading_{{ offer_proposition_g }}" style="display:none;">
                             {% for offer_proposition in offer_propositions %}
                                 {% if offer_proposition.offer_proposition_group == offer_proposition_g %}
 
-                                  <div class="list-group">
+                                  <div class="p-2 border-bottom">
                                       &nbsp;
                                     <input id="txt_checkbox_{{ offer_proposition.id }}" name="txt_checkbox_{{ offer_proposition.id }}"
                                     type="checkbox" onclick="block_div(this,'test_{{ offer_proposition_g }}','statut_bouton_{{ offer_proposition_g }}','collapse_{{ offer_proposition_g }}');" class="test_{{ offer_proposition_g }}">
-                                    <label for="txt_checkbox_{{ offer_proposition.id }}">&nbsp; {{ offer_proposition.last_acronym }}</label>
+                                    <label for="txt_checkbox_{{ offer_proposition.id }}" class="mb-0">&nbsp; {{ offer_proposition.last_acronym }}</label>
                                   </div>
                                 {% endif %}
                             {% endfor %}
@@ -137,7 +136,7 @@
                     {% endfor %}
             </div>
         </div>
-        <div style="text-align: right;">
+        <div class="text-end">
             <button type="submit" class="save btn btn-primary">
                 {% trans 'Save' %}
             </button>

@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "bootstrap5/layout.html" %}
 {% load static %}
 {% load i18n %}
 
@@ -27,11 +27,11 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
-    <li id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
-    <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
-    <li><a href="{% url 'manager_informations' %}" id="lnk_teachers">{% trans 'Teachers' %}</a></li>
-    <li class="active">{{ adviser.person.last_name }}, {{ adviser.person.first_name }}</li>
+    <li class="breadcrumb-item"><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
+    <li class="breadcrumb-item" id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'manager_informations' %}" id="lnk_teachers">{% trans 'Teachers' %}</a></li>
+    <li class="breadcrumb-item active">{{ adviser.person.last_name }}, {{ adviser.person.first_name }}</li>
 {% endblock %}
 
 {% block content %}
@@ -39,142 +39,140 @@
     <h2>{{ adviser.person.last_name }}, {{ adviser.person.first_name }}</h2>
   </div>
   <ul class="nav nav-tabs">
-    <li class="active"><a href="#">{% trans 'Teacher profile' %}</a></li>
-    <li><a href="{% url 'manager_informations_detail_list' pk=adviser.pk %}">{% trans 'Linked dissertations' %}</a></li>
-    <li><a href="{% url 'manager_informations_detail_list_wait' pk=adviser.pk %}">{% trans 'Waiting dissertations' %}</a></li>
-    <li><a href="{% url 'manager_informations_detail_stats' pk=adviser.pk %}">{% trans 'Teacher stats' %}</a></li>
+    <li class="nav-item"><a href="#" class="nav-link active">{% trans 'Teacher profile' %}</a></li>
+    <li class="nav-item"><a href="{% url 'manager_informations_detail_list' pk=adviser.pk %}" class="nav-link">{% trans 'Linked dissertations' %}</a></li>
+    <li class="nav-item"><a href="{% url 'manager_informations_detail_list_wait' pk=adviser.pk %}" class="nav-link">{% trans 'Waiting dissertations' %}</a></li>
+    <li class="nav-item"><a href="{% url 'manager_informations_detail_stats' pk=adviser.pk %}" class="nav-link">{% trans 'Teacher stats' %}</a></li>
   </ul>
-  <div class="panel panel-default">
-    <div class="panel-body">
+  <div class="card border-top-0">
+    <div class="card-body">
         <div class="row">
-            <div class="col-md-9">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Informations</h3>
+            <div class="col-lg-9">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title fs-5 m-0">Informations</h3>
                     </div>
-                    <div class="panel-body">
+                    <div class="card-body">
                         <div class="row">
-                            <div class="col-md-3" style="text-align: right">
+                            <div class="col-lg-3 text-end">
                                 <label>{% trans 'Name' %}</label>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-lg-4">
                                 <span>{{  first_name }} {{ last_name }}</span>
                             </div>
                         </div>
                         {% if adviser.person.email %}
                         <div class="row">
-                            <div class="col-md-3" style="text-align: right">
+                            <div class="col-lg-3 text-end">
                                 <label>{% trans 'email' %}</label>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-lg-4">
                                 {% if adviser.available_by_email %}
-                                    <span style="color:green">{{ adviser.person.email }}</span>
+                                    <span class="text-success">{{ adviser.person.email }}</span>
                                 {% else %}
-                                    <span style="color:#C0C0C0">({{ adviser.person.email }})</span>
+                                    <span class="text-muted">({{ adviser.person.email }})</span>
                                 {% endif %}
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-lg-1">
                                 {% if adviser.available_by_email %}
-                                    <span class="glyphicon glyphicon-ok" style="color:green"></span>
+                                    <span class="fa-regular fa-circle text-success"></span>
                                 {% else %}
-                                    <span class="glyphicon glyphicon-remove" style="color:red"></span>
+                                    <span class="fa-solid fa-xmark text-danger"></span>
                                 {% endif %}
                             </div>
                         </div>
                         {% endif %}
                         {% if adviser.person.phone %}
                         <div class="row">
-                            <div class="col-md-3" style="text-align: right">
+                            <div class="col-lg-3 text-end">
                                 <label>{% trans 'Phone' %}</label>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-lg-4">
                                 {% if adviser.available_by_phone %}
-                                    <span style="color:green">{{ adviser.person.phone }}</span>
+                                    <span class="text-success">{{ adviser.person.phone }}</span>
                                 {% else %}
-                                    <span style="color:#C0C0C0">({{ adviser.person.phone }})</span>
+                                    <span class="text-muted">({{ adviser.person.phone }})</span>
                                 {% endif %}
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-lg-1">
                                 {% if adviser.available_by_phone %}
-                                    <span class="glyphicon glyphicon-ok" style="color:green"></span>
+                                    <i class="fa-regular fa-circle text-success"></i>
                                 {% else %}
-                                    <span class="glyphicon glyphicon-remove" style="color:red"></span>
+                                    <i class="fa-solid fa-xmark text-danger"></i>
                                 {% endif %}
                             </div>
                         </div>
                         {% endif %}
                         {% if adviser.person.phone_mobile %}
                         <div class="row">
-                            <div class="col-md-3" style="text-align: right">
+                            <div class="col-lg-3 text-end">
                                 <label>{% trans 'Mobile phone' %}</label>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-lg-4">
                                 {% if adviser.available_by_phone %}
-                                    <span style="color:green">{{ adviser.person.phone_mobile }}</span>
+                                    <span class="text-success">{{ adviser.person.phone_mobile }}</span>
                                 {% else %}
-                                    <span style="color:#C0C0C0">({{ adviser.person.phone_mobile }})</span>
+                                    <span class="text-muted">({{ adviser.person.phone_mobile }})</span>
                                 {% endif %}
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-lg-1">
                                 {% if adviser.available_by_phone %}
-                                    <span class="glyphicon glyphicon-ok" style="color:green"></span>
+                                    <i class="fa-regular fa-circle text-success"></i>
                                 {% else %}
-                                    <span class="glyphicon glyphicon-remove" style="color:red"></span>
+                                    <i class="fa-solid fa-xmark text-danger"></i>
                                 {% endif %}
                             </div>
                         </div>
                         {% endif %}
                         <div class="row">
-                            <div class="col-md-3" style="text-align: right">
+                            <div class="col-lg-3 text-end">
                                 <label>{% trans 'Available at office' %}</label>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-lg-4">
                                 {% if adviser.available_at_office %}
-                                    <span style="color:green">{% trans 'yes' %}</span>
+                                    <span class="text-success">{% trans 'yes' %}</span>
                                 {% else %}
-                                    <span style="color:red">{% trans 'no' %}</span>
+                                    <span class="text-danger">{% trans 'no' %}</span>
                                 {% endif %}
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-lg-1">
                                 {% if adviser.available_at_office %}
-                                    <span class="glyphicon glyphicon-ok" style="color:green"></span>
+                                    <i class="fa-regular fa-circle text-success"></i>
                                 {% else %}
-                                    <span class="glyphicon glyphicon-remove" style="color:red"></span>
+                                    <i class="fa-solid fa-xmark text-danger"></i>
                                 {% endif %}
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-3" style="text-align: right">
+                            <div class="col-lg-3 text-end">
                                 <label>{% trans 'Comment' %}</label>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-10 col-lg-offset-1">
+                            <div class="col-lg-10 offset-lg-1">
                                 {{ adviser.comment|linebreaks }}
                             </div>
                         </div>
                     </div>
                   </div>
             </div>
-            <div class="col-md-3">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">{% trans 'Photo' %}</h3>
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title fs-5 m-0">{% trans 'Photo' %}</h3>
                     </div>
-                    <div class="panel-body" style="text-align: center">
+                    <div class="card-body text-center">
                         <img src="/my_osis/profile/{{ adviser.person.id }}" class="avatar img-responsive"
                         height="50%" width="50%"/>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="panel-body">
-            <a href="{% url 'manager_informations_edit' pk=adviser.pk %}" id="lnk_manager_informations_edit"
-               class="btn btn-default btn-primary" role="button" title="{% trans 'Edit teacher'%}">
-                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                {% trans 'Edit teacher' %}
-            </a>
-        </div>
+        <a href="{% url 'manager_informations_edit' pk=adviser.pk %}" id="lnk_manager_informations_edit"
+            class="btn btn-primary" role="button" title="{% trans 'Edit teacher'%}">
+            <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
+            {% trans 'Edit teacher' %}
+        </a>
     </div>
   </div>
 {% endblock %}
