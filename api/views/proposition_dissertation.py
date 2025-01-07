@@ -145,6 +145,34 @@ class PropositionDissertationDetailView(PropositionDissertationViewMixin, generi
         return qs.get(uuid=self.kwargs['uuid'])
 
 
+class PropositionDissertationInfosView(PropositionDissertationViewMixin, generics.RetrieveAPIView):
+    """
+        Return infos of a proposition dissertation available for the user currently connected
+    """
+    name = 'proposition_infos'
+    serializer_class = PropositionDissertationDetailSerializer
+
+    def get_object(self):
+        prefetch_propositions = Prefetch(
+            "offer_propositions",
+            queryset=OfferProposition.objects.filter(
+                education_group__educationgroupyear__offerenrollment__in=self.offer_enrollments_ids
+            ).annotate(last_acronym=Subquery(
+                EducationGroupYear.objects.filter(
+                    education_group__offer_proposition=OuterRef('pk'),
+                    academic_year=self.academic_year
+                ).values('acronym')[:1]
+            )).distinct()
+        )
+
+        qs = PropositionDissertation.objects.select_related('author__person').prefetch_related(prefetch_propositions). \
+            prefetch_related(
+            'propositionrole_set__adviser__person',
+            'propositiondocumentfile_set__document_file'
+        )
+        return qs.get(uuid=self.kwargs['uuid'])
+
+
 class PropositionDissertationFileView(UpdateModelMixin, RetrieveAPIView):
     name = "proposition_dissertation_file"
     pagination_class = None
