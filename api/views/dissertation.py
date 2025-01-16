@@ -64,7 +64,8 @@ class DissertationListCreateView(generics.ListCreateAPIView):
     # TODO: Implement filter on active tag !
     def get_queryset(self):
         return Dissertation.objects.filter(
-            author__person__user=self.request.user
+            author__person__user=self.request.user,
+            active=True
         ).select_related(
             'author__person',
             'proposition_dissertation__author__person',
@@ -323,6 +324,7 @@ class DissertationSubmitView(generics.ListCreateAPIView):
         )
 
     def create(self, request, *args, **kwargs):
+        self.dissertation.go_forward()
         self.dissertation.status = DissertationStatus.DIR_SUBMIT.name
         self.dissertation.save()
 
