@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "bootstrap5/layout.html" %}
 {% load static %}
 {% load i18n %}
 
@@ -27,30 +27,30 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
-    <li id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
-    <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
-    <li><a href="{% url 'manager_informations' %}" id="lnk_teachers">{% trans 'Teachers' %}</a></li>
-    <li class="active">{{ adv.person.last_name }}, {{ adv.person.first_name }}</li>
+    <li class="breadcrumb-item"><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
+    <li class="breadcrumb-item" id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'manager_informations' %}" id="lnk_teachers">{% trans 'Teachers' %}</a></li>
+    <li class="breadcrumb-item active">{{ adv.person.last_name }}, {{ adv.person.first_name }}</li>
 {% endblock %}
 {% block content %}
   <div class="page-header">
     <h2>{{ adv.person.last_name }}, {{ adv.person.first_name }}</h2>
   </div>
   <ul class="nav nav-tabs">
-    <li><a href="{% url 'manager_informations_detail' pk=adv.pk %}">{% trans 'Teacher profile' %}</a></li>
-    <li class="active"><a href="{% url 'manager_informations_detail' pk=adv.pk %}">{% trans 'Linked dissertations' %}</a></li>
-    <li><a href="{% url 'manager_informations_detail_list_wait' pk=adv.pk %}">{% trans 'Waiting dissertations' %}</a></li>
-    <li><a href="{% url 'manager_informations_detail_stats' pk=adv.pk %}">{% trans 'Teacher stats' %}</a></li>
+    <li class="nav-item"><a href="{% url 'manager_informations_detail' pk=adv.pk %}" class="nav-link">{% trans 'Teacher profile' %}</a></li>
+    <li class="nav-item"><a href="{% url 'manager_informations_detail' pk=adv.pk %}" class="nav-link active">{% trans 'Linked dissertations' %}</a></li>
+    <li class="nav-item"><a href="{% url 'manager_informations_detail_list_wait' pk=adv.pk %}" class="nav-link">{% trans 'Waiting dissertations' %}</a></li>
+    <li class="nav-item"><a href="{% url 'manager_informations_detail_stats' pk=adv.pk %}" class="nav-link">{% trans 'Teacher stats' %}</a></li>
   </ul>
-  <div class="panel panel-default">
-    <div class="panel-body">
+  <div class="card border-top-0">
+    <div class="card-body">
       {% if adv_list_disserts_pro %}
-          <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">{% trans 'Dissertations as promotor' %}</h3>
+          <div class="card border-bottom-0 mb-0">
+            <div class="card-header">
+                <h3 class="card-title fs-5 m-0">{% trans 'Dissertations as promotor' %}</h3>
             </div>
-              <table class="table table-hover">
+              <table class="table table-hover mb-0">
                 <tr>
                   <th>{% trans 'Title' context 'dissertation' %}</th>
                   <th>{% trans 'Author'%}</th>
@@ -62,37 +62,37 @@
                     <td><a href="{% url 'manager_dissertations_detail' pk=adviser_list_dissertation.dissertation.pk %}">{{ adviser_list_dissertation.dissertation.title }}</a></td>
                     <td>{{ adviser_list_dissertation.dissertation.author }}</td>
                     <td>{% if adviser_list_dissertation.dissertation.status == 'DRAFT' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'DIR_SUBMIT' %}
-                        <span class="label label-primary">
+                        <span class="badge mb-1 lh-base bg-primary">
                         {% elif adviser_list_dissertation.dissertation.status == 'DIR_OK' %}
-                        <span class="label label-success">
+                        <span class="badge mb-1 lh-base bg-success">
                         {% elif adviser_list_dissertation.dissertation.status == 'DIR_KO' %}
-                        <span class="label label-danger">
+                        <span class="badge mb-1 lh-base bg-danger">
                         {% elif adviser_list_dissertation.dissertation.status == 'COM_SUBMIT' %}
-                        <span class="label label-primary">
+                        <span class="badge mb-1 lh-base bg-primary">
                         {% elif adviser_list_dissertation.dissertation.status == 'COM_OK' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'COM_KO' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'EVA_SUBMIT' %}
-                        <span class="label label-primary">
+                        <span class="badge mb-1 lh-base bg-primary">
                         {% elif adviser_list_dissertation.dissertation.status == 'EVA_OK' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'EVA_KO' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'TO_RECEIVE' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'TO_DEFEND' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'DEFENDED' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'ENDED' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'ENDED_WIN' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'ENDED_LOS' %}
-                    <span class="label label-default">
+                    <span class="badge mb-1 lh-base bg-secondary">
                     {% endif %}
                         {{ adviser_list_dissertation.dissertation.get_status_display }}
                     </span>
@@ -104,11 +104,11 @@
           </div>
       {% endif %}
       {% if adv_list_disserts_copro %}
-          <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">{% trans 'Dissertations as co-promotor' %}</h3>
+          <div class="card border-bottom-0 mb-0 mt-3">
+            <div class="card-header">
+                <h3 class="card-title fs-5 m-0">{% trans 'Dissertations as co-promotor' %}</h3>
             </div>
-              <table class="table table-hover">
+              <table class="table table-hover mb-0">
                 <tr>
                   <th>{% trans 'Title' context 'dissertation' %}</th>
                   <th>{% trans 'Author'%}</th>
@@ -120,37 +120,37 @@
                     <td><a href="{% url 'manager_dissertations_detail' pk=adviser_list_dissertation.dissertation.pk %}">{{ adviser_list_dissertation.dissertation.title }}</a></td>
                     <td>{{ adviser_list_dissertation.dissertation.author }}</td>
                     <td>{% if adviser_list_dissertation.dissertation.status == 'DRAFT' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'DIR_SUBMIT' %}
-                        <span class="label label-primary">
+                        <span class="badge mb-1 lh-base bg-primary">
                         {% elif adviser_list_dissertation.dissertation.status == 'DIR_OK' %}
-                        <span class="label label-success">
+                        <span class="badge mb-1 lh-base bg-success">
                         {% elif adviser_list_dissertation.dissertation.status == 'DIR_KO' %}
-                        <span class="label label-danger">
+                        <span class="badge mb-1 lh-base bg-danger">
                         {% elif adviser_list_dissertation.dissertation.status == 'COM_SUBMIT' %}
-                        <span class="label label-primary">
+                        <span class="badge mb-1 lh-base bg-primary">
                         {% elif adviser_list_dissertation.dissertation.status == 'COM_OK' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'COM_KO' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'EVA_SUBMIT' %}
-                        <span class="label label-primary">
+                        <span class="badge mb-1 lh-base bg-primary">
                         {% elif adviser_list_dissertation.dissertation.status == 'EVA_OK' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'EVA_KO' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'TO_RECEIVE' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'TO_DEFEND' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'DEFENDED' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'ENDED' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'ENDED_WIN' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'ENDED_LOS' %}
-                    <span class="label label-default">
+                    <span class="badge mb-1 lh-base bg-secondary">
                     {% endif %}
                         {{ adviser_list_dissertation.dissertation.get_status_display }}
                     </span>
@@ -162,11 +162,11 @@
           </div>
       {% endif %}
       {% if adv_list_disserts_reader %}
-          <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">{% trans 'Dissertations as reader' %}</h3>
+          <div class="card border-bottom-0 mb-0 mt-3">
+            <div class="card-header">
+                <h3 class="card-title fs-5 m-0">{% trans 'Dissertations as reader' %}</h3>
             </div>
-              <table class="table table-hover">
+              <table class="table table-hover mb-0">
                 <tr>
                   <th>{% trans 'Title' context 'dissertation' %}</th>
                   <th>{% trans 'Author'%}</th>
@@ -178,37 +178,37 @@
                     <td><a href="{% url 'manager_dissertations_detail' pk=adviser_list_dissertation.dissertation.pk %}">{{ adviser_list_dissertation.dissertation.title }}</a></td>
                     <td>{{ adviser_list_dissertation.dissertation.author }}</td>
                     <td>{% if adviser_list_dissertation.dissertation.status == 'DRAFT' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'DIR_SUBMIT' %}
-                        <span class="label label-primary">
+                        <span class="badge mb-1 lh-base bg-primary">
                         {% elif adviser_list_dissertation.dissertation.status == 'DIR_OK' %}
-                        <span class="label label-success">
+                        <span class="badge mb-1 lh-base bg-success">
                         {% elif adviser_list_dissertation.dissertation.status == 'DIR_KO' %}
-                        <span class="label label-danger">
+                        <span class="badge mb-1 lh-base bg-danger">
                         {% elif adviser_list_dissertation.dissertation.status == 'COM_SUBMIT' %}
-                        <span class="label label-primary">
+                        <span class="badge mb-1 lh-base bg-primary">
                         {% elif adviser_list_dissertation.dissertation.status == 'COM_OK' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'COM_KO' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'EVA_SUBMIT' %}
-                        <span class="label label-primary">
+                        <span class="badge mb-1 lh-base bg-primary">
                         {% elif adviser_list_dissertation.dissertation.status == 'EVA_OK' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'EVA_KO' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'TO_RECEIVE' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'TO_DEFEND' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'DEFENDED' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'ENDED' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'ENDED_WIN' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'ENDED_LOS' %}
-                    <span class="label label-default">
+                    <span class="badge mb-1 lh-base bg-secondary">
                     {% endif %}
                         {{ adviser_list_dissertation.dissertation.get_status_display }}
                     </span>
@@ -220,11 +220,11 @@
           </div>
       {% endif %}
       {% if adv_list_disserts_accompanist %}
-          <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">{% trans 'Dissertations as accompanist' %}</h3>
+          <div class="card border-bottom-0 mb-0 mt-3">
+            <div class="card-header">
+                <h3 class="card-title fs-5 m-0">{% trans 'Dissertations as accompanist' %}</h3>
             </div>
-              <table class="table table-hover">
+              <table class="table table-hover mb-0">
                 <tr>
                   <th>{% trans 'Title' context 'dissertation' %}</th>
                   <th>{% trans 'Author'%}</th>
@@ -236,37 +236,37 @@
                     <td><a href="{% url 'manager_dissertations_detail' pk=adviser_list_dissertation.dissertation.pk %}">{{ adviser_list_dissertation.dissertation.title }}</a></td>
                     <td>{{ adviser_list_dissertation.dissertation.author }}</td>
                     <td>{% if adviser_list_dissertation.dissertation.status == 'DRAFT' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'DIR_SUBMIT' %}
-                        <span class="label label-primary">
+                        <span class="badge mb-1 lh-base bg-primary">
                         {% elif adviser_list_dissertation.dissertation.status == 'DIR_OK' %}
-                        <span class="label label-success">
+                        <span class="badge mb-1 lh-base bg-success">
                         {% elif adviser_list_dissertation.dissertation.status == 'DIR_KO' %}
-                        <span class="label label-danger">
+                        <span class="badge mb-1 lh-base bg-danger">
                         {% elif adviser_list_dissertation.dissertation.status == 'COM_SUBMIT' %}
-                        <span class="label label-primary">
+                        <span class="badge mb-1 lh-base bg-primary">
                         {% elif adviser_list_dissertation.dissertation.status == 'COM_OK' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'COM_KO' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'EVA_SUBMIT' %}
-                        <span class="label label-primary">
+                        <span class="badge mb-1 lh-base bg-primary">
                         {% elif adviser_list_dissertation.dissertation.status == 'EVA_OK' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'EVA_KO' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'TO_RECEIVE' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'TO_DEFEND' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'DEFENDED' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'ENDED' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'ENDED_WIN' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'ENDED_LOS' %}
-                    <span class="label label-default">
+                    <span class="badge mb-1 lh-base bg-secondary">
                     {% endif %}
                         {{ adviser_list_dissertation.dissertation.get_status_display }}
                     </span>
@@ -278,11 +278,11 @@
           </div>
       {% endif %}
       {% if adv_list_disserts_internship %}
-          <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">{% trans 'Dissertations as internship master' %}</h3>
+          <div class="card border-bottom-0 mb-0">
+            <div class="card-header">
+                <h3 class="card-title fs-5 m-0">{% trans 'Dissertations as internship master' %}</h3>
             </div>
-              <table class="table table-hover">
+              <table class="table table-hover mb-0">
                 <tr>
                   <th>{% trans 'Title' context 'dissertation' %}</th>
                   <th>{% trans 'Author'%}</th>
@@ -294,37 +294,37 @@
                     <td><a href="{% url 'manager_dissertations_detail' pk=adviser_list_dissertation.dissertation.pk %}">{{ adviser_list_dissertation.dissertation.title }}</a></td>
                     <td>{{ adviser_list_dissertation.dissertation.author }}</td>
                     <td>{% if adviser_list_dissertation.dissertation.status == 'DRAFT' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'DIR_SUBMIT' %}
-                        <span class="label label-primary">
+                        <span class="badge mb-1 lh-base bg-primary">
                         {% elif adviser_list_dissertation.dissertation.status == 'DIR_OK' %}
-                        <span class="label label-success">
+                        <span class="badge mb-1 lh-base bg-success">
                         {% elif adviser_list_dissertation.dissertation.status == 'DIR_KO' %}
-                        <span class="label label-danger">
+                        <span class="badge mb-1 lh-base bg-danger">
                         {% elif adviser_list_dissertation.dissertation.status == 'COM_SUBMIT' %}
-                        <span class="label label-primary">
+                        <span class="badge mb-1 lh-base bg-primary">
                         {% elif adviser_list_dissertation.dissertation.status == 'COM_OK' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'COM_KO' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'EVA_SUBMIT' %}
-                        <span class="label label-primary">
+                        <span class="badge mb-1 lh-base bg-primary">
                         {% elif adviser_list_dissertation.dissertation.status == 'EVA_OK' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'EVA_KO' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'TO_RECEIVE' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'TO_DEFEND' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'DEFENDED' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'ENDED' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'ENDED_WIN' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'ENDED_LOS' %}
-                    <span class="label label-default">
+                    <span class="badge mb-1 lh-base bg-secondary">
                     {% endif %}
                         {{ adviser_list_dissertation.dissertation.get_status_display }}
                     </span>
@@ -336,11 +336,11 @@
           </div>
       {% endif %}
       {% if adv_list_disserts_president %}
-          <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">{% trans 'Dissertations as president' %}</h3>
+          <div class="card border-bottom-0 mb-0 mt-3">
+            <div class="card-header">
+                <h3 class="card-title fs-5 m-0">{% trans 'Dissertations as president' %}</h3>
             </div>
-              <table class="table table-hover">
+              <table class="table table-hover mb-0">
                 <tr>
                   <th>{% trans 'Title' context 'dissertation' %}</th>
                   <th>{% trans 'Author'%}</th>
@@ -352,37 +352,37 @@
                     <td><a href="{% url 'manager_dissertations_detail' pk=adviser_list_dissertation.dissertation.pk %}">{{ adviser_list_dissertation.dissertation.title }}</a></td>
                     <td>{{ adviser_list_dissertation.dissertation.author }}</td>
                     <td>{% if adviser_list_dissertation.dissertation.status == 'DRAFT' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'DIR_SUBMIT' %}
-                        <span class="label label-primary">
+                        <span class="badge mb-1 lh-base bg-primary">
                         {% elif adviser_list_dissertation.dissertation.status == 'DIR_OK' %}
-                        <span class="label label-success">
+                        <span class="badge mb-1 lh-base bg-success">
                         {% elif adviser_list_dissertation.dissertation.status == 'DIR_KO' %}
-                        <span class="label label-danger">
+                        <span class="badge mb-1 lh-base bg-danger">
                         {% elif adviser_list_dissertation.dissertation.status == 'COM_SUBMIT' %}
-                        <span class="label label-primary">
+                        <span class="badge mb-1 lh-base bg-primary">
                         {% elif adviser_list_dissertation.dissertation.status == 'COM_OK' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'COM_KO' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'EVA_SUBMIT' %}
-                        <span class="label label-primary">
+                        <span class="badge mb-1 lh-base bg-primary">
                         {% elif adviser_list_dissertation.dissertation.status == 'EVA_OK' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'EVA_KO' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'TO_RECEIVE' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'TO_DEFEND' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'DEFENDED' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'ENDED' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'ENDED_WIN' %}
-                        <span class="label label-default">
+                        <span class="badge mb-1 lh-base bg-secondary">
                         {% elif adviser_list_dissertation.dissertation.status == 'ENDED_LOS' %}
-                    <span class="label label-default">
+                    <span class="badge mb-1 lh-base bg-secondary">
                     {% endif %}
                         {{ adviser_list_dissertation.dissertation.get_status_display }}
                     </span>

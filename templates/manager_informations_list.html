@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "bootstrap5/layout.html" %}
 {% load static %}
 {% load i18n %}
 
@@ -26,77 +26,75 @@
  * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-{% block style %}
-    <link rel="stylesheet" href="{% static 'css/dataTables.bootstrap.min.css' %}">
-{% endblock %}
-
 {% block breadcrumb %}
-    <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
-    <li id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
-    <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
-    <li class="active">{% trans 'Teachers' %}</li>
+    <li class="breadcrumb-item"><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
+    <li class="breadcrumb-item" id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+    <li class="breadcrumb-item active">{% trans 'Teachers' %}</li>
 {% endblock %}
 {% block content %}
   <div class="page-header">
     <h2>{% trans 'Teachers' %}</h2>
   </div>
   <ul class="nav nav-tabs">
-    <li class="active"><a href={% url 'manager_informations' %}>{% trans 'All teachers' %}</a></li>
-    <li><a href="{% url 'manager_informations_list_request' %}">{% trans 'Teachers having to answer request' %}</a></li>
+    <li class="nav-item"><a href="{% url 'manager_informations' %}" class="nav-link active">{% trans 'All teachers' %}</a></li>
+    <li class="nav-item"><a href="{% url 'manager_informations_list_request' %}" class="nav-link">{% trans 'Teachers having to answer request' %}</a></li>
   </ul>
-  <div class="panel panel-default">
-    <div class="panel-body">
+  <div class="card border-top-0">
+    <div class="card-body">
         <div class="row">
-             <div class="col-md-12">
+             <div class="col-12">
                   <a href="{% url 'manager_informations_add' %}" id="lnk_manager_informations_add" class="btn btn-default"
-                    role="button" title="{% trans 'Add teacher'%}"><span class="glyphicon glyphicon-plus"
-                    aria-hidden="true"></span> {% trans 'Add teacher' %}</a>
+                    role="button" title="{% trans 'Add teacher'%}"><i class="fa-solid fa-plus"
+                    aria-hidden="true"></i> {% trans 'Add teacher' %}</a>
              </div>
         </div>
         <br>
-        <div class="table-responsive">
-            <table class="table table-hover display responsive no-wrap" width="100%" id="table-advisers">
-                <thead>
-                    <tr>
-                        <th>{% trans 'Teachers' %}</th>
-                        <th>{% trans 'How many active dissertations for this current academic year (all programs)' %}</th>
-                        <th>{% trans 'How many active dissertations (all programs)' %}</th>
-                        <th>{% trans 'How many active dissertations (your programs)' %}</th>
-                        <th>{% trans 'How many dissertations as promotor' %}</th>
-                        <th>{% trans 'How many dissertations as copromotor' %}</th>
-                        <th>{% trans 'How many dissertations as reader' %}</th>
-                        <th>{% trans 'How many active dissertations as accompanist' %}</th>
-                        <th>{% trans 'How many dissertations as internship' %}</th>
-                        <th>{% trans 'How many dissertations as president' %}</th>
-                        <th>{% trans 'How many dissertations need answer' %}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for adviser in advisers %}
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-hover display responsive no-wrap w-100" id="table-advisers">
+                    <thead>
                         <tr>
-                            <td><a href="{% url 'manager_informations_detail' pk=adviser.pk %}">{{ adviser }}</a></td>
-                            <td>{{adviser.dissertations_count_actif_this_academic_year}}</td>
-                            <td>{{adviser.dissertations_count_all_actif}}</td>
-                            <td>{{adviser.dissertations_count_all_actif_in_your_education_groups}}</td>
-                            <td>{{adviser.dissertations_count_promotor_actif}}</td>
-                            <td>{{adviser.dissertations_count_copromoteur_actif}}</td>
-                            <td>{{adviser.dissertations_count_reader_actif}}</td>
-                            <td>{{adviser.dissertations_count_accompanist_actif}}</td>
-                            <td>{{adviser.dissertations_count_internship_actif}}</td>
-                            <td>{{adviser.dissertations_count_president_actif}}</td>
-                            <td>{{adviser.dissertations_count_need_to_respond_actif}}</td>
+                            <th>{% trans 'Teachers' %}</th>
+                            <th>{% trans 'How many active dissertations for this current academic year (all programs)' %}</th>
+                            <th>{% trans 'How many active dissertations (all programs)' %}</th>
+                            <th>{% trans 'How many active dissertations (your programs)' %}</th>
+                            <th>{% trans 'How many dissertations as promotor' %}</th>
+                            <th>{% trans 'How many dissertations as copromotor' %}</th>
+                            <th>{% trans 'How many dissertations as reader' %}</th>
+                            <th>{% trans 'How many active dissertations as accompanist' %}</th>
+                            <th>{% trans 'How many dissertations as internship' %}</th>
+                            <th>{% trans 'How many dissertations as president' %}</th>
+                            <th>{% trans 'How many dissertations need answer' %}</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {% for adviser in advisers %}
+                            <tr>
+                                <td><a href="{% url 'manager_informations_detail' pk=adviser.pk %}">{{ adviser }}</a></td>
+                                <td>{{adviser.dissertations_count_actif_this_academic_year}}</td>
+                                <td>{{adviser.dissertations_count_all_actif}}</td>
+                                <td>{{adviser.dissertations_count_all_actif_in_your_education_groups}}</td>
+                                <td>{{adviser.dissertations_count_promotor_actif}}</td>
+                                <td>{{adviser.dissertations_count_copromoteur_actif}}</td>
+                                <td>{{adviser.dissertations_count_reader_actif}}</td>
+                                <td>{{adviser.dissertations_count_accompanist_actif}}</td>
+                                <td>{{adviser.dissertations_count_internship_actif}}</td>
+                                <td>{{adviser.dissertations_count_president_actif}}</td>
+                                <td>{{adviser.dissertations_count_need_to_respond_actif}}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-    </div>
+</div>
 {% endblock %}
 
 {% block script %}
-    <script type="text/javascript" src="{% static 'js/jquery.dataTables.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/dataTables.bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap5/jquery.dataTables.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap5/dataTables.bootstrap5.min.js' %}"></script>
     <script>
         $(document).ready(function()
         {
@@ -111,7 +109,7 @@
                 {
                     "sProcessing":     "{% trans 'Processing...'%}",
                     "sSearch":         "{% trans 'Search:'%}",
-                    "sLengthMenu":     "&nbsp;&nbsp;&nbsp;_MENU_ &eacute;l&eacute;ments",
+                    "sLengthMenu":     "_MENU_ &eacute;l&eacute;ments",
                     "sInfo":           "{% trans 'Showing _START_ to _END_ of _TOTAL_ entries'%}",
                     "sInfoEmpty":      "{% trans 'Showing 0 to 0 of 0 entries'%}",
                     "sInfoFiltered":   "{% trans '(filtered from _MAX_ total entries)'%}",

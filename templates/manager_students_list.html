@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "bootstrap5/layout.html" %}
 {% load static %}
 {% load i18n %}
 
@@ -27,101 +27,103 @@
 {% endcomment %}
 
 {% block style %}
-    <link rel="stylesheet" href="{% static 'css/dataTables.bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/dissertation_style.css' %}">
+<link rel="stylesheet" href="{% static 'css/bootstrap5/dataTables.bootstrap5.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/dissertation_style.css' %}">
 
 {% endblock %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
-    <li id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
-    <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
-    <li class="active">{% trans 'For students' %}{{ students_title|title }}</li>
+    <li class="breadcrumb-item"><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
+    <li class="breadcrumb-item" id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+    <li class="breadcrumb-item active">{% trans 'For students' %}{{ students_title|title }}</li>
 {% endblock %}
 
 {% block content %}
     <div class="page-header">
         <h2>{% trans 'For students' %}{{ students_title|title }}</h2>
     </div>
-    <div class="panel panel-default">
-        <div class="panel-body table-responsive">
-            <table class="table table-hover" id="students-list">
-                <thead>
-                    <tr>
-                        <th>{% trans 'Student' %}</th>
-                        <th>{% trans 'Programs and enrollements status'%}</th>
-                        <th>{% trans 'Status' context 'dissertation' %}</th>
-                        <th>{% trans 'Dissertation' %}</th>
-                </thead>
-                <tbody>
-                    {% for student in students %}
+    <div class="card">
+        <div class="card-body table-responsive">
+            <div class="row">
+                <table class="table table-hover" id="students-list">
+                    <thead>
                         <tr>
-                            <td>{{ student }}</td>
-                            <td>
-                                {% for offerenrollment in student.offerenrollment_set.all %}
-                                    {% if offerenrollment.enrollment_state %}
-                                        <div class="div_in_datatable">
-                                            <span class="label label-default">
-                                                {{ offerenrollment.education_group_year.acronym}}.
-                                                {{ offerenrollment.education_group_year.academic_year }}.
-                                                {{ offerenrollment.enrollment_state }}
-                                            </span>
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                            <td>
-                            {% for dissertation in  student.dissertation_set.all %}
-                                {% if forloop.first %}
-                                    <dl class="dl-horizontal">
-                                {% endif %}
-                                <div class="div_in_datatable">
-                                    <dt style="text-align: left;">
-                                        {% if dissertation.status == 'DIR_SUBMIT' %}
-                                        <span class="label label-warning">
-                                        {% elif dissertation.status == 'COM_SUBMIT' or dissertation.status == 'EVA_SUBMIT' %}
-                                        <span class="label label-primary">
-                                        {% elif dissertation.status == 'DIR_KO' or dissertation.status == 'DRAFT' or dissertation.status == 'COM_KO' or dissertation.status == 'EVA_KO' %}
-                                        <span class="label label-danger">
-                                        {% elif dissertation.status == 'COM_OK' or dissertation.status == 'EVA_OK' or dissertation.status == 'TO_RECEIVE' or dissertation.status == 'TO_DEFEND' %}
-                                        <span class="label label-default">
-                                        {% else  %}
-                                        <span class="label label-success">
+                            <th>{% trans 'Student' %}</th>
+                            <th>{% trans 'Programs and enrollements status'%}</th>
+                            <th>{% trans 'Status' context 'dissertation' %}</th>
+                            <th>{% trans 'Dissertation' %}</th>
+                    </thead>
+                    <tbody>
+                        {% for student in students %}
+                            <tr>
+                                <td>{{ student }}</td>
+                                <td>
+                                    {% for offerenrollment in student.offerenrollment_set.all %}
+                                        {% if offerenrollment.enrollment_state %}
+                                            <div class="div_in_datatable">
+                                                <span class="badge mb-1 lh-base bg-secondary">
+                                                    {{ offerenrollment.education_group_year.acronym}}.
+                                                    {{ offerenrollment.education_group_year.academic_year }}.
+                                                    {{ offerenrollment.enrollment_state }}
+                                                </span>
+                                            </div>
                                         {% endif %}
-                                            {{ dissertation.get_status_display }}
-                                        </span>
-                                    </dt>
-                                </div>
-                                {% empty %}
-                                    <span class="label label-danger">Pas de mémoire</span>
-                                {% if forloop.last %}
-                                    </dl>
-                                {% endif %}
-                                    <br>
-                            {% endfor %}
-                            </td>
-                            <td>
-                            {% for dissertation in student.dissertation_set.all %}
-                                <div class="div_in_datatable">
-                                    <a href="{% url 'manager_dissertations_detail' pk=dissertation.pk %}"  title="{{ dissertation }}" target="_blank">
-                                        {{ dissertation|truncatechars:60 }}</a>
-                                        <span class="label label-default pull-right">[{{ dissertation.education_group_year}}]</span>
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                {% for dissertation in  student.dissertation_set.all %}
+                                    {% if forloop.first %}
+                                        <dl class="dl-horizontal">
+                                    {% endif %}
+                                    <div class="div_in_datatable">
+                                        <dt class="text-start">
+                                            {% if dissertation.status == 'DIR_SUBMIT' %}
+                                            <span class="badge mb-1 lh-base bg-warning">
+                                            {% elif dissertation.status == 'COM_SUBMIT' or dissertation.status == 'EVA_SUBMIT' %}
+                                            <span class="badge mb-1 lh-base bg-primary">
+                                            {% elif dissertation.status == 'DIR_KO' or dissertation.status == 'DRAFT' or dissertation.status == 'COM_KO' or dissertation.status == 'EVA_KO' %}
+                                            <span class="badge mb-1 lh-base bg-danger">
+                                            {% elif dissertation.status == 'COM_OK' or dissertation.status == 'EVA_OK' or dissertation.status == 'TO_RECEIVE' or dissertation.status == 'TO_DEFEND' %}
+                                            <span class="badge mb-1 lh-base bg-secondary">
+                                            {% else  %}
+                                            <span class="badge mb-1 lh-base bg-success">
+                                            {% endif %}
+                                                {{ dissertation.get_status_display }}
+                                            </span>
+                                        </dt>
+                                    </div>
+                                    {% empty %}
+                                        <span class="badge mb-1 lh-base bg-danger">Pas de mémoire</span>
+                                    {% if forloop.last %}
+                                        </dl>
+                                    {% endif %}
                                         <br>
-                                </div>
-                            {% endfor %}
-                            </td>
+                                {% endfor %}
+                                </td>
+                                <td>
+                                {% for dissertation in student.dissertation_set.all %}
+                                    <div class="div_in_datatable">
+                                        <a href="{% url 'manager_dissertations_detail' pk=dissertation.pk %}"  title="{{ dissertation }}" target="_blank">
+                                            {{ dissertation|truncatechars:60 }}</a>
+                                            <span class="badge mb-1 lh-base bg-secondary float-end">[{{ dissertation.education_group_year}}]</span>
+                                            <br>
+                                    </div>
+                                {% endfor %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot id="foot-list">
+                        <tr>
+                            <th>{{ students_title|title }}</th>
+                            <th>{% trans 'Programs' %}</th>
+                            <th>{% trans 'Status' %}</th>
+                            <th>{% trans 'Dissertation' %}</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-                <tfoot id="foot-list">
-                    <tr>
-                        <th>{{ students_title|title }}</th>
-                        <th>{% trans 'Programs' %}</th>
-                        <th>{% trans 'Status' context 'dissertation' %}</th>
-                        <th>{% trans 'Dissertation' %}</th>
-                    </tr>
-                </tfoot>
-            </table>
+                    </tfoot>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -130,9 +132,8 @@
 
 {% block script %}
     <script type="text/javascript" src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/jquery.dataTables.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/bootstrap.min.js'%}"></script>
-    <script type="text/javascript" src="{% static 'js/dataTables.bootstrap.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap5/jquery.dataTables.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap5/dataTables.bootstrap5.min.js' %}"></script>
 
     <script>
         $(document).ready(function()
@@ -147,7 +148,7 @@
                 "language": {
                     "sProcessing":     "{% trans 'Processing...'%}",
                     "sSearch":         "{% trans 'Search:'%}",
-                    "sLengthMenu":     "&nbsp;&nbsp;&nbsp;_MENU_ &eacute;l&eacute;ments",
+                    "sLengthMenu":     "_MENU_ &eacute;l&eacute;ments",
                     "sInfo":           "{% trans 'Showing _START_ to _END_ of _TOTAL_ entries'%}",
                     "sInfoEmpty":      "{% trans 'Showing 0 to 0 of 0 entries'%}",
                     "sInfoFiltered":   "{% trans '(filtered from _MAX_ total entries)'%}",
@@ -175,7 +176,7 @@
                 initComplete: function () {
                     this.api().columns([0]).every( function () {
                         var column = this;
-                        var select = $('<select class="search_select_filter form-control input-sm"><option value="" selected>{% trans 'filter by students'%}</option></select>')
+                        var select = $('<select class="search_select_filter form-select input-md w-auto"><option value="" selected>{% trans 'filter by students'%}</option></select>')
                             .appendTo( $('#students-list_filter'))
                             .on( 'change', function () {
                                 var val = $.fn.dataTable.util.escapeRegex(
