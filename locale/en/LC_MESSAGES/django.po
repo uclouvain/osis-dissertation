@@ -732,6 +732,7 @@ msgctxt "dissertation"
 msgid "Status"
 msgstr ""
 
+msgctxt "dissertation"
 msgid "Student"
 msgstr ""
 
