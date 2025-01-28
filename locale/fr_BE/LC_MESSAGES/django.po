@@ -741,9 +741,6 @@ msgstr "Programme/Année de début"
 msgid "Stats"
 msgstr "Statistiques"
 
-msgid "Status"
-msgstr "État"
-
 msgctxt "dissertation"
 msgid "Status"
 msgstr "État"

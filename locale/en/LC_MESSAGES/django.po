@@ -725,9 +725,6 @@ msgstr ""
 msgid "Stats"
 msgstr ""
 
-msgid "Status"
-msgstr ""
-
 msgctxt "dissertation"
 msgid "Status"
 msgstr ""
