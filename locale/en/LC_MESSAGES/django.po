@@ -143,6 +143,9 @@ msgstr ""
 msgid "Check the programs related to this topic"
 msgstr ""
 
+msgid "Close"
+msgstr ""
+
 msgid "Co-Promotor"
 msgstr ""
 
@@ -707,9 +710,6 @@ msgstr ""
 msgid "Settings of the Dissertation application"
 msgstr ""
 
-msgid "Show _MENU_ entries"
-msgstr ""
-
 msgid "Showing 0 to 0 of 0 entries"
 msgstr ""
 
@@ -729,6 +729,7 @@ msgctxt "dissertation"
 msgid "Status"
 msgstr ""
 
+msgctxt "dissertation"
 msgid "Student"
 msgstr ""
 
