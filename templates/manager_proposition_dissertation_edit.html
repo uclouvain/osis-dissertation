@@ -1,5 +1,5 @@
-{% extends "layout.html" %}
-{% load static bootstrap3 %}
+{% extends "bootstrap5/layout.html" %}
+{% load static django_bootstrap5 %}
 {% load i18n %}
 
 {% comment "License" %}
@@ -27,21 +27,21 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
-    <li id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
-    <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
-    <li><a href="{% url 'manager_proposition_dissertations' %}"
+    <li class="breadcrumb-item"><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
+    <li class="breadcrumb-item" id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'manager_proposition_dissertations' %}"
            id="lnk_propositions">{% trans 'Dissertation subjects' %}</a></li>
-    <li><a href="{% url 'manager_proposition_dissertation_detail' pk=prop_dissert.pk %}">{{ prop_dissert.title }}</a>
+    <li class="breadcrumb-item"><a href="{% url 'manager_proposition_dissertation_detail' pk=prop_dissert.pk %}">{{ prop_dissert.title }}</a>
     </li>
-    <li class="active">{% trans 'Edit' %}</li>
+    <li class="breadcrumb-item active">{% trans 'Edit' %}</li>
 {% endblock %}
 {% block content %}
     <div class="page-header">
         <h2>{% trans 'Edit' %} : {{ prop_dissert.title }}</h2>
     </div>
-    <div class="panel panel-default">
-        <div class="panel-body">
+    <div class="card">
+        <div class="card-body">
             <form method="POST" class="post-form">
                 {% csrf_token %}
                 <label for="txt_type">{% trans 'Author' %}</label>
@@ -68,7 +68,7 @@
                     {% bootstrap_field form.max_number_student %}
                 </div>
                 <div class="panel-group">
-                    <label for="txt_level" {% if offer_propositions_error %} style="color:red;" {% endif %}>
+                    <label for="txt_level {% if offer_propositions_error %}text-danger{% endif %}" >
                         {% trans 'Check the programs related to this topic' %}
                         {% if offer_propositions_error %}
                             <br>{% trans offer_propositions_error %}
@@ -77,28 +77,29 @@
                     <br>
                     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                         {% for offer_proposition_g in offer_proposition_group %}
-                            <div class="panel panel-default">
+                            <div class="card border-bottom-0 mb-2">
 
-                                <div class="panel-heading" role="tab" id="heading_{{ offer_proposition_g }}">
-                                    <h4 class="panel-title">
+                                <div class="card-header" role="tab" id="heading_{{ offer_proposition_g }}">
+                                    <h3 class="card-title fs-5 m-0">
                                         <a id="test_{{ offer_proposition_g }}"
-                                           class="collapse_{{ offer_proposition_g }}" role="button"
+                                           class="text-dark collapse_{{ offer_proposition_g }}" role="button"
                                            onclick="display_hide_div_child('collapse_{{ offer_proposition_g }}','statut_bouton_{{ offer_proposition_g }}');">
-                                            {{ offer_proposition_g }} <span class="glyphicon glyphicon-menu-left"
-                                                                            aria-hidden="true"></span> </label>
+                                            {{ offer_proposition_g }}
+                                            <i class="fa-solid fa-chevron-left"
+                                            aria-hidden="true"></i> </label>
                                         </a>
                                         <input type="hidden" id="statut_bouton_{{ offer_proposition_g }}"
                                                name="statut_bouton_{{ offer_proposition_g }}" value="OK">
-                                    </h4>
+                                    </h3>
                                 </div>
 
-                                <div id="collapse_{{ offer_proposition_g }}" class="panel-collapse collapse in"
-                                     role="tabpanel" aria-labelledby="heading_{{ offer_proposition_g }}"
-                                     style="display:none;">
+                                <div id="collapse_{{ offer_proposition_g }}" class="panel-collapse collapse show"
+                                     role="tabpanel" aria-labelledby="heading_{{ offer_proposition_g }}" style="display: none;">
                                     {% for offer_proposition in offer_propositions %}
                                         {% if offer_proposition.offer_proposition_group == offer_proposition_g %}
 
-                                            <div class="list-group">                                                &nbsp;
+                                            <div class="pt-2 border-bottom">
+                                                &nbsp;
                                                 <input id="txt_checkbox_{{ offer_proposition.id }}"
                                                        name="txt_checkbox_{{ offer_proposition.id }}"
                                                        type="checkbox"
@@ -116,7 +117,7 @@
                         {% endfor %}
                     </div>
                 </div>
-                <div style="text-align: right;">
+                <div class="text-end">
                     <button type="submit" class="save btn btn-primary">
                         {% trans 'Save' %}
                     </button>
@@ -127,8 +128,7 @@
     </div>
 {% endblock %}
 {% block script %}
-    <script type="text/javascript" src="{% static "js/dissertation.js" %} ">
-
+    <script type="text/javascript" src="{% static 'js/dissertation.js' %} ">
     </script>
 {% endblock %}
 

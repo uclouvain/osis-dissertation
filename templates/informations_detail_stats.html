@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "bootstrap5/layout.html" %}
 {% load static %}
 {% load i18n %}
 
@@ -27,35 +27,35 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
-    <li id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
-    <li><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
-    <li class="active">{% trans 'My informations' %}</li>
+    <li class="breadcrumb-item"><a href="{% url 'studies' %}" id="lnk_studies">{% trans "Students' path" %}</a></li>
+    <li class="breadcrumb-item" id="lnk_cohorts_management"><a href="{% url 'cohorts_management' %}">{% trans "Cohorts management" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'dissertations' %}" id="lnk_dissertations">{% trans 'Dissertations' %}</a></li>
+    <li class="breadcrumb-item active">{% trans 'My informations' %}</li>
 {% endblock %}
 {% block content %}
   <div class="page-header">
     <h2>{% trans 'My informations' %} - {{ adviser.person.last_name }}, {{ adviser.person.first_name }}</h2>
   </div>
   <ul class="nav nav-tabs">
-    <li><a href="{% url 'informations' %}">{% trans 'My profile' %}</a></li>
-    <li class="active"><a href="#">{% trans 'My stats' %}</a></li>
+    <li class="nav-item"><a href="{% url 'informations' %}" class="nav-link">{% trans 'My profile' %}</a></li>
+    <li class="nav-item"><a href="#" class="nav-link active">{% trans 'My stats' %}</a></li>
   </ul>
-  <div class="panel panel-default">
-    <div class="panel-body">
+  <div class="card border-top-0">
+    <div class="card-body">
       <div class="row">
-          <div class="col-md-12">
-              <div class="panel panel-default">
-                  <div class="panel-heading">
-                    <h3 class="panel-title">{% trans 'Stats' %}</h3>
+          <div class="col-lg-12">
+              <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title fs-5 m-0">{% trans 'Stats' %}</h3>
                   </div>
-                  <div class="panel-body">
+                  <div class="card-body">
                       <div class="row">
-                        <div class="col-md-6" style="text-align: right">
+                        <div class="col-lg-6 text-end">
                             <label>{% trans 'Dissertations quantity needing answer' %}</label>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             {% if count_advisers_pro_request > 0 %}
-                                <span style="color: red">
+                                <span class="text-danger">
                             {% else %}
                                 <span>
                             {% endif %}
@@ -64,10 +64,10 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6" style="text-align: right">
+                        <div class="col-lg-6 text-end">
                             <label>{% trans 'Dissertations quantity as promotor' %}</label>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             {{ count_advisers_pro }}
                             {% for key,value in tab_offer_count.items %}
                                 <br>
@@ -76,40 +76,40 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6" style="text-align: right">
+                        <div class="col-lg-6 text-end">
                             <label>{% trans 'Dissertations quantity as copromotor' %}</label>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             {{ count_advisers_copro }}
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6" style="text-align: right">
+                    <div class="row mb-4">
+                        <div class="col-lg-6 text-end">
                             <label>{% trans 'Dissertations quantity as reader' %}</label>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             {{ count_advisers_reader }}
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4">
-                            <h4 class="panel-title">{% trans 'Chart as promotor'  %}</h4>
+                        <div class="col-lg-4">
+                            <h4 class="card-title fs-5">{% trans 'Chart as promotor'  %}</h4>
                           {% if count_advisers_pro > 0 %}
                               <canvas id="pie_chart_pro" width="100" height="100"></canvas>
                           {% else %}
                               <label>{% trans 'No data' %}</label>
                           {% endif %}
                         </div>
-                        <div class="col-md-4">
-                          <h4 class="panel-title">{% trans 'Chart as copromotor'  %}</h4>
+                        <div class="col-lg-4">
+                          <h4 class="card-title fs-5">{% trans 'Chart as copromotor'  %}</h4>
                           {% if count_advisers_copro > 0 %}
                           <canvas id="pie_chart_copro" width="100" height="100"></canvas>
                           {% else %}
                               <label>{% trans 'No data' %}</label>
                           {% endif %}
                         </div>
-                        <div class="col-md-4">
-                            <h4 class="panel-title">{% trans 'Chart as reader'  %}</h4>
+                        <div class="col-lg-4">
+                            <h4 class="card-title fs-5">{% trans 'Chart as reader'  %}</h4>
                           {% if count_advisers_reader > 0 %}
                           <canvas id="pie_chart_read" width="100" height="100"></canvas>
                           {% else %}
