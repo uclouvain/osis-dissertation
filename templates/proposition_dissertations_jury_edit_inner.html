@@ -1,9 +1,11 @@
 {% load static %}
-{% load bootstrap3 i18n %}
+{% load django_bootstrap5 i18n %}
 
-<div class="page-header col-md-offset-3">
-  <h2>{% trans 'Add/Edit dissertation' %}</h2>
+<div class="modal-header">
+    <h4 class="modal-title">{% trans 'Add/Edit dissertation' %}</h4>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Close' %}"></button>
 </div>
+
 <div class="modal-body" id="form-modal-body">
   <form method="POST" id="form-modal" class="post-form" action="{{ request.get_full_path }}">
       {% csrf_token %}
@@ -13,7 +15,7 @@
           {% bootstrap_field form.adviser %}
       </div>
       <div class="row">
-          <div class="col-md-8 col-md-offset-1">
+          <div class="col-lg-8 offset-lg-1">
               {% if manager %}
                   {% trans 'If the concerned teacher is not in the list, you can' %}
                   <a href="{% url 'manager_informations_add' %}" id="lnk_informations_add"
@@ -29,6 +31,7 @@
   {{ form.media }}
 </div>
 
-<div class="modal-footer" style="text-align:right">
+<div class="modal-footer text-end">
+    <button type="button" class="btn btn-default border border-dark-subtle" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
    <button type="submit" class="save btn btn-primary" onclick="$('#form-modal').submit();">{% trans 'Save' %}</button>
 </div>
