@@ -347,7 +347,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Adviser'
+                $ref: '#/components/schemas/DissertationLocationList'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -377,7 +377,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PropositionDissertationDetail'
+                $ref: '#/components/schemas/Adviser'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1322,7 +1322,7 @@ components:
         results:
           type: array
           items:
-            $ref: '#/components/schemas/Adviser'
+            $ref: '#/components/schemas/Adviser''#/components/schemas/Adviser'
     Adviser:
       type: object
       properties:
