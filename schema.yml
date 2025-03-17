@@ -11,7 +11,7 @@ servers:
  - url: https://osis.uclouvain.be/api/v1/dissertation/
    description: 'Production server'
 info:
-  version: '1.02'
+  version: '1.03'
   title: 'Dissertation Service'
   description: |-
     A set of API endpoints that allow you to get information about dissertation
