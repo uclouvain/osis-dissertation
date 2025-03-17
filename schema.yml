@@ -355,7 +355,7 @@ paths:
       tags:
         - dissertation_location
 
-  /adviser/:
+  /adviser/{uuid}/:
     get:
       description: "Return adviser"
       operationId: adviser
