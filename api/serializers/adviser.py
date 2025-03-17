@@ -30,3 +30,8 @@ from rest_framework import serializers
 class AdvisersListSerializer(serializers.Serializer):
     uuid = serializers.CharField(read_only=True)
     name = serializers.CharField(read_only=True, source='person')
+
+
+class AdvisersFindSerializer(serializers.Serializer):
+    uuid = serializers.CharField(read_only=True)
+    name = serializers.CharField(read_only=True, source='person')
