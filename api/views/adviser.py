@@ -44,4 +44,4 @@ class AdviserGetView(generics.RetrieveAPIView):
     serializer_class = AdvisersGetSerializer
 
     def get_object(self):
-        return Adviser.objects.get(person__uuid=self.kwargs['uuid'])
+        return Adviser.objects.filter(person__uuid=self.kwargs['uuid']).only('uuid', 'person',).first()
