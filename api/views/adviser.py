@@ -25,7 +25,7 @@
 ##############################################################################
 from rest_framework import generics
 
-from dissertation.api.serializers.adviser import AdvisersListSerializer, AdvisersFindSerializer
+from dissertation.api.serializers.adviser import AdvisersListSerializer, AdvisersGetSerializer
 from dissertation.models.adviser import Adviser
 
 
@@ -39,11 +39,9 @@ class AdvisersListView(generics.ListAPIView):
         return qs.only('uuid', 'person',)
 
 
-class AdvisersFindView(generics.ListAPIView):
+class AdviserGetView(generics.RetrieveAPIView):
     name = 'adviser'
-    serializer_class = AdvisersFindSerializer
-    search_fields = ('person__first_name', 'person__middle_name', 'person__last_name',)
+    serializer_class = AdvisersGetSerializer
 
-    def get_queryset(self):
-        qs = Adviser.objects.filter(person__user=self.request.user)
-        return qs.only('uuid', 'person',)
+    def get_object(self):
+        return Adviser.objects.get(person__uuid=self.kwargs['uuid'])

@@ -355,10 +355,10 @@ paths:
       tags:
         - dissertation_location
 
-  /adviser/{uuid}/:
+  /advisers/{uuid}/:
     get:
       description: "Return adviser"
-      operationId: adviser
+      operationId: adviser_detail
       parameters:
         - in: path
           name: uuid
@@ -1322,7 +1322,7 @@ components:
         results:
           type: array
           items:
-            $ref: '#/components/schemas/Adviser''#/components/schemas/Adviser'
+            $ref: '#/components/schemas/Adviser'
     Adviser:
       type: object
       properties:

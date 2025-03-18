@@ -32,6 +32,6 @@ class AdvisersListSerializer(serializers.Serializer):
     name = serializers.CharField(read_only=True, source='person')
 
 
-class AdvisersFindSerializer(serializers.Serializer):
+class AdvisersGetSerializer(serializers.Serializer):
     uuid = serializers.CharField(read_only=True)
     name = serializers.CharField(read_only=True, source='person')
