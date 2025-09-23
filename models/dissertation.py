@@ -25,7 +25,7 @@
 ##############################################################################
 
 
-from osis_document.contrib import FileField
+from osis_document_components.fields import FileField
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import Q
