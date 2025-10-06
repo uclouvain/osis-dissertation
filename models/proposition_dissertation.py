@@ -28,7 +28,7 @@ from django.db import models
 from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
-from osis_document.contrib import FileUploadField, FileField
+from osis_document_components.fields import FileUploadField, FileField
 
 from dissertation.models import proposition_offer
 from dissertation.models.offer_proposition import OfferProposition
