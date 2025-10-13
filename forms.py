@@ -28,8 +28,8 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
-from osis_document.contrib import FileUploadField, FileField
-from osis_document.utils import save_raw_content_remotely
+from osis_document_components.fields import FileUploadField, FileField
+from osis_document_components.services import save_raw_content_remotely
 
 from backoffice.settings import base as settings_base
 from base import models as mdl
