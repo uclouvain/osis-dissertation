@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib.auth.decorators import login_required
 from django.http import *
 from django.shortcuts import redirect, get_object_or_404
 from django.views.decorators.http import require_http_methods
@@ -40,7 +39,6 @@ from osis_common import models as mdl_osis_common
 from osis_common.models.enum import storage_duration
 
 
-@login_required
 def download(request, proposition_pk):
     proposition = mdl.proposition_dissertation.find_by_id(proposition_pk)
     proposition_document = mdl.proposition_document_file.find_by_proposition(proposition).first()
@@ -81,7 +79,7 @@ class DeletePropositionFileView(AjaxTemplateMixin, DeleteView):
         return self._ajax_response() or HttpResponseRedirect(self.get_error_url())
 
 
-@login_required
+
 @require_http_methods(["POST"])
 def save_uploaded_file(request):
     data = request.POST

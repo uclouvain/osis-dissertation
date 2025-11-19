@@ -27,7 +27,7 @@ import json
 import time
 
 from dal import autocomplete
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db.models import Q, F
 from django.http import HttpResponse, JsonResponse
@@ -84,7 +84,7 @@ def new_status_display(dissert, opperation):
 #########################
 
 
-@login_required
+
 def dissertations(request):
     person = get_object_or_404(Person.objects.select_related('adviser'), pk=request.user.person.pk)
 
@@ -128,7 +128,7 @@ def dissertations(request):
 #      MANAGER VIEWS      #
 ###########################
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 @check_for_dissert(autorized_dissert_promotor_or_manager)
 def manager_dissertations_detail(request, pk):
@@ -224,7 +224,7 @@ def manager_dissertations_detail(request, pk):
                   })
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 @check_for_dissert(autorized_dissert_promotor_or_manager)
 def manager_dissertations_detail_updates(request, pk):
@@ -236,7 +236,7 @@ def manager_dissertations_detail_updates(request, pk):
                    'dissertation_updates': dissertation_updates})
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 @check_for_dissert(autorized_dissert_promotor_or_manager)
 def manager_dissertations_edit(request, pk):
@@ -252,7 +252,7 @@ def manager_dissertations_edit(request, pk):
                    'dissert': dissert})
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 @check_for_dissert(autorized_dissert_promotor_or_manager)
 def manager_dissertations_jury_edit(request, pk):
@@ -270,7 +270,7 @@ def manager_dissertations_jury_edit(request, pk):
 
 
 @require_http_methods(["POST"])
-@login_required
+
 @user_passes_test(adviser.is_manager)
 def manager_dissertations_jury_new_ajax(request):
     pk_dissert = request.POST.get("pk_dissertation", '')
@@ -295,7 +295,7 @@ def manager_dissertations_jury_new_ajax(request):
             return HttpResponse(status=status.HTTP_403_FORBIDDEN)
 
 
-@login_required
+
 @cache_filter()
 @user_passes_test(adviser.is_manager)
 def manager_dissertations_list(request):
@@ -385,7 +385,7 @@ def get_ordered_roles(dissert):
     return roles
 
 
-@login_required
+
 @cache_filter()
 @user_passes_test(adviser.is_manager)
 def manager_dissertations_search(request):
@@ -450,7 +450,7 @@ def manager_dissertations_search(request):
                        })
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 @check_for_dissert(autorized_dissert_promotor_or_manager)
 def manager_dissertations_delete(request, pk):
@@ -460,7 +460,7 @@ def manager_dissertations_delete(request, pk):
     return redirect('manager_dissertations_list')
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 def manager_dissertations_role_delete(request, pk):
     dissert_role = dissertation_role.find_by_id(pk)
@@ -486,7 +486,7 @@ def _justification_dissert_role_delete_change(request, dissert, dissert_role, in
         return False
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 def manager_dissertations_role_delete_by_ajax(request, pk):
     dissert_role = get_object_or_404(DissertationRole.objects.select_related('dissertation'), pk=pk)
@@ -499,7 +499,7 @@ def manager_dissertations_role_delete_by_ajax(request, pk):
         return redirect('manager_dissertations_list')
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 @check_for_dissert(autorized_dissert_promotor_or_manager)
 def manager_dissertations_to_dir_submit(request, pk):
@@ -522,7 +522,7 @@ def manager_dissertations_to_dir_submit(request, pk):
                   {'form': form, 'dissert': dissert, 'new_status_display': new_status_display_str})
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 @check_for_dissert(autorized_dissert_promotor_or_manager)
 def manager_dissertations_to_dir_submit_list(request, pk):
@@ -535,7 +535,7 @@ def manager_dissertations_to_dir_submit_list(request, pk):
     return redirect('manager_dissertations_wait_recep_list')
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 @check_for_dissert(autorized_dissert_promotor_or_manager)
 def manager_dissertations_to_dir_ok(request, pk):
@@ -557,7 +557,7 @@ def manager_dissertations_to_dir_ok(request, pk):
                   {'form': form, 'dissert': dissert, 'new_status_display': new_status_display_result})
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 @check_for_dissert(autorized_dissert_promotor_or_manager)
 def manager_dissertations_accept_comm_list(request, pk):
@@ -570,7 +570,7 @@ def manager_dissertations_accept_comm_list(request, pk):
     return redirect('manager_dissertations_wait_comm_list')
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 @check_for_dissert(autorized_dissert_promotor_or_manager)
 def manager_dissertations_accept_eval_list(request, pk):
@@ -583,7 +583,7 @@ def manager_dissertations_accept_eval_list(request, pk):
     return redirect('manager_dissertations_wait_eval_list')
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 @check_for_dissert(autorized_dissert_promotor_or_manager)
 def manager_dissertations_go_forward_from_list(request, pk, choice):
@@ -599,7 +599,7 @@ def manager_dissertations_go_forward_from_list(request, pk, choice):
     return redirect('manager_dissertations_search')
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 @check_for_dissert(autorized_dissert_promotor_or_manager)
 def manager_dissertations_to_dir_ko(request, pk):
@@ -620,7 +620,7 @@ def manager_dissertations_to_dir_ko(request, pk):
                   {'form': form, 'dissert': dissert, 'new_status_display': new_status_display_result})
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 def manager_dissertations_wait_list(request):
     offer_props = OfferProposition.objects.filter(
@@ -639,7 +639,7 @@ def manager_dissertations_wait_list(request):
                    'show_evaluation_first_year': show_evaluation_first_year})
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 def manager_dissertations_wait_comm_list(request):
     offer_props = OfferProposition.objects.filter(
@@ -654,7 +654,7 @@ def manager_dissertations_wait_comm_list(request):
                    'all_advisers_array': all_advisers_array})
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 def manager_dissertations_wait_comm_jsonlist(request):
     disserts = Dissertation.objects.filter(
@@ -679,7 +679,7 @@ def manager_dissertations_wait_comm_jsonlist(request):
     return JsonResponse(dissert_waiting_list_json, safe=False)
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 def manager_dissertation_role_list_json(request, pk):
     dissert = get_object_or_404(Dissertation.objects.prefetch_related('dissertationrole_set__adviser__person'), pk=pk)
@@ -696,7 +696,7 @@ def manager_dissertation_role_list_json(request, pk):
     return HttpResponse(json_list, content_type='application/json')
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 def manager_dissertations_wait_eval_list(request):
     education_groups = EducationGroup.objects.filter(facultyadviser__adviser__person__user=request.user)
@@ -716,7 +716,7 @@ def manager_dissertations_wait_eval_list(request):
                    'show_evaluation_first_year': show_evaluation_first_year})
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 def manager_dissertations_wait_recep_list(request):
     offer_props = OfferProposition.objects.filter(education_group__facultyadviser__adviser__person__user=request.user). \
@@ -735,7 +735,7 @@ def manager_dissertations_wait_recep_list(request):
                    'show_evaluation_first_year': show_evaluation_first_year})
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 def manager_students_list(request):
     student_with_enrollement_in_education_groups = Student.objects.filter(
@@ -754,7 +754,7 @@ def manager_students_list(request):
 #      TEACHER VIEWS      #
 ###########################
 
-@login_required
+
 @user_passes_test(adviser.is_teacher)
 def dissertations_list(request):
     adv = request.user.person.adviser
@@ -798,7 +798,7 @@ def teacher_is_promotor(adv, dissert):
     return dissertation_role.count_by_status_adviser_dissertation('PROMOTEUR', adv, dissert) > 0
 
 
-@login_required
+
 @check_for_dissert(adviser_is_in_jury)
 def dissertations_detail(request, pk):
     dissert = get_object_or_404(Dissertation.objects.select_related(
@@ -844,7 +844,7 @@ def dissertations_detail(request, pk):
         return redirect('dissertations_list')
 
 
-@login_required
+
 @check_for_dissert(adviser_is_in_jury)
 def dissertations_detail_updates(request, pk):
     dissert = get_object_or_404(Dissertation.objects.prefetch_related('dissertationupdate_set'), pk=pk)
@@ -858,7 +858,7 @@ def dissertations_detail_updates(request, pk):
                   )
 
 
-@login_required
+
 @user_passes_test(adviser.is_teacher)
 @check_for_dissert(autorized_dissert_promotor_or_manager)
 def dissertations_to_dir_ok(request, pk):
@@ -886,7 +886,7 @@ def dissertations_to_dir_ok(request, pk):
     )
 
 
-@login_required
+
 @user_passes_test(adviser.is_teacher)
 @check_for_dissert(autorized_dissert_promotor_or_manager)
 def dissertations_to_dir_ko(request, pk):
@@ -914,7 +914,7 @@ def dissertations_to_dir_ko(request, pk):
     )
 
 
-@login_required
+
 @user_passes_test(adviser.is_teacher)
 def dissertations_wait_list(request):
     adv = request.user.person.adviser
@@ -931,7 +931,7 @@ def dissertations_wait_list(request):
     return render(request, 'dissertations_wait_list.html', {'disserts': disserts})
 
 
-@login_required
+
 @user_passes_test(adviser.is_teacher)
 def dissertations_role_delete(request, pk):
     dissert_role = dissertation_role.find_by_id(pk)

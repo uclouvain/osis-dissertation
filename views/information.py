@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.db import models
 from django.db.models import Q
@@ -51,7 +50,7 @@ from dissertation.models.faculty_adviser import FacultyAdviser
 ###########################
 
 
-@login_required
+
 @user_passes_test(adviser.is_teacher)
 def informations(request):
     person = mdl.person.find_by_user(request.user)
@@ -63,7 +62,7 @@ def informations(request):
     })
 
 
-@login_required
+
 @user_passes_test(adviser.is_teacher)
 def informations_detail_stats(request):
     person = mdl.person.find_by_user(request.user)
@@ -95,7 +94,7 @@ def informations_detail_stats(request):
                   })
 
 
-@login_required
+
 @user_passes_test(adviser.is_teacher)
 def informations_edit(request):
     person = mdl.person.find_by_user(request.user)
@@ -118,7 +117,7 @@ def informations_edit(request):
     })
 
 
-@login_required
+
 @user_passes_test(adviser.is_teacher)
 def informations_add(request):
     if request.method == "POST":
@@ -197,7 +196,7 @@ def _get_rendering_data(form, manager, template, template_prefix):
 ###########################
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 def manager_informations(request):
     dissert_status_exclued = (dissertation_status.DRAFT,
@@ -289,7 +288,7 @@ def manager_informations(request):
     return render(request, 'manager_informations_list.html', {'advisers': advisers})
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 def manager_informations_add(request):
     if request.method == "POST":
@@ -309,7 +308,7 @@ def manager_informations_add(request):
         return render(request, 'manager_informations_add_search.html', {'form': form})
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 def manager_informations_add_person(request):
     if request.method == "POST":
@@ -327,7 +326,7 @@ def manager_informations_add_person(request):
     return render(request, 'manager_information_add_person.html', {'form': form})
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 def manager_informations_detail(request, pk):
     adv = adviser.get_by_id(pk)
@@ -341,7 +340,7 @@ def manager_informations_detail(request, pk):
                   })
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 def manager_informations_edit(request, pk):
     adv = adviser.get_by_id(pk)
@@ -367,7 +366,7 @@ def manager_informations_edit(request, pk):
                   })
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 def manager_informations_list_request(request):
     educ_groups_of_fac_manager = FacultyAdviser.objects.filter(adviser=request.user.person.adviser).values_list(
@@ -396,7 +395,7 @@ def manager_informations_list_request(request):
                   {'advisers_need_request': advisers_need_request})
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 def manager_informations_detail_list(request, pk):
     person = mdl.person.find_by_user(request.user)
@@ -440,7 +439,7 @@ def manager_informations_detail_list(request, pk):
     return render(request, "manager_informations_detail_list.html", locals())
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 def manager_informations_detail_list_wait(request, pk):
     education_groups = request.user.person.adviser.education_groups.all()
@@ -456,7 +455,7 @@ def manager_informations_detail_list_wait(request, pk):
                   {'disserts_role': disserts_role, 'adviser': adv})
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 def manager_informations_detail_stats(request, pk):
     adv = adviser.get_by_id(pk)
