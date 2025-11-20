@@ -23,7 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import user_passes_test
 from django.http import *
 from django.shortcuts import redirect, get_object_or_404
 from django.utils.translation import gettext_lazy as _
@@ -40,7 +40,6 @@ from osis_common import models as mdl_osis_common
 from osis_common.models.enum import storage_duration
 
 
-@login_required
 def download(request, dissertation_pk):
     dissertation = mdl.dissertation.find_by_id(dissertation_pk)
     dissertation_document = mdl.dissertation_document_file.find_by_dissertation(dissertation).first()
@@ -89,7 +88,7 @@ class DeleteDissertationFileView(AjaxTemplateMixin, DeleteView):
         return self._ajax_response() or HttpResponseRedirect(self.get_error_url())
 
 
-@login_required
+
 @require_http_methods(["POST"])
 @user_passes_test(adviser.is_manager)
 def save_uploaded_file(request):

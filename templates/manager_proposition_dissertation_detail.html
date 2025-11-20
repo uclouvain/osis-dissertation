@@ -37,10 +37,10 @@
     <h2>{{ proposition_dissertation.title }}</h2>
     </div>
     <div class="text-end mb-2">
-        <a class="btn btn-default btn-primary bg-primary text-white"
+        <a class="btn btn-primary bg-primary text-white"
            href="{% url 'manager_proposition_dissertation_edit' pk=proposition_dissertation.pk %}">
             <i class="fa-regular fa-pen-to-square"></i></a>
-        <a class="btn btn-default btn-warning bg-warning text-white"
+        <a class="btn btn-warning bg-warning text-white"
            href="{% url 'manager_proposition_dissertation_delete' pk=proposition_dissertation.pk %}"
            onclick="return confirm('{% trans 'You are ready to definitely delete this dissertation subject.  Are you sure you want to continue ?' %}')">
             <i class="fa-solid fa-xmark"></i></a>
