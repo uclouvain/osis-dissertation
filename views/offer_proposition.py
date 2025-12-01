@@ -24,7 +24,6 @@
 #
 ##############################################################################
 
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import redirect, get_list_or_404, render
 
@@ -40,7 +39,6 @@ from dissertation.models import offer_proposition
 from dissertation.models.offer_proposition import OfferProposition
 
 
-@login_required
 @user_passes_test(adviser.is_manager)
 def manager_offer_parameters(request):
     person = mdl.person.find_by_user(request.user)
@@ -50,7 +48,7 @@ def manager_offer_parameters(request):
     return render(request, 'manager_offer_parameters.html', {'offer_propositions': offer_props})
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 def manager_offer_parameters_edit(request):
     list_offer_prop = get_list_or_404(OfferProposition, pk__in=request.GET.getlist('pk'))

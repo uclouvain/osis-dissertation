@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -35,7 +34,7 @@ from dissertation.models import adviser
 MAX_RETURN = 50
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 def get_students_list_in_education_group_year(request, education_group_year_id):
     education_group_year = get_object_or_404(EducationGroupYear, pk=education_group_year_id)
@@ -54,7 +53,7 @@ def get_students_list_in_education_group_year(request, education_group_year_id):
     return JsonResponse({'res': data})
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 def find_adviser_list_json(request):
     term_search = request.GET.get('term')

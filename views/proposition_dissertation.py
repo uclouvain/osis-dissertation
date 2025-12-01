@@ -26,7 +26,6 @@
 import re
 import time
 
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db import models
@@ -121,7 +120,7 @@ def _append_dissertations_count(prop):
     return prop
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 def manager_proposition_dissertation_delete(request, pk):
     proposition = proposition_dissertation.find_by_id(pk)
@@ -131,7 +130,7 @@ def manager_proposition_dissertation_delete(request, pk):
     return redirect('manager_proposition_dissertations')
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 def manager_proposition_dissertation_detail(request, pk):
     prefetch_propositions = return_prefetch_propositions()
@@ -174,7 +173,7 @@ def manager_proposition_dissertation_detail(request, pk):
                   })
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 def manage_proposition_dissertation_edit(request, pk):
     proposition = get_object_or_404(PropositionDissertation.objects.select_related('author__person', 'creator').
@@ -206,7 +205,7 @@ def manage_proposition_dissertation_edit(request, pk):
                    'proposition_offers': proposition_offers})
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 def manager_proposition_dissertations_jury_edit(request, pk):
     prop_role = proposition_role.get_by_id(pk)
@@ -249,7 +248,7 @@ class PropositionDissertationJuryNewView(AjaxTemplateMixin, UserPassesTestMixin,
         return None
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 def manager_proposition_dissertations_role_delete(request, pk):
     prop_role = proposition_role.get_by_id(pk)
@@ -260,7 +259,7 @@ def manager_proposition_dissertations_role_delete(request, pk):
     return redirect('manager_proposition_dissertation_detail', pk=proposition.pk)
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 def manager_proposition_dissertation_new(request):
     offer_propositions = OfferProposition.objects.exclude(
@@ -289,7 +288,7 @@ def manager_proposition_dissertation_new(request):
                    'offer_proposition_group': offer_propositions_group})
 
 
-@login_required
+
 @user_passes_test(adviser.is_manager)
 def manager_proposition_dissertations(request):
     current_academic_year = academic_year.current_academic_year()
@@ -400,7 +399,7 @@ def get_current_adviser(request):
     return adviser.search_by_person(person)
 
 
-@login_required
+
 @user_passes_test(adviser.is_teacher)
 def proposition_dissertations(request):
     prefetch_propositions = return_prefetch_propositions()
@@ -413,7 +412,7 @@ def proposition_dissertations(request):
                   )
 
 
-@login_required
+
 @user_passes_test(adviser.is_teacher)
 def proposition_dissertation_delete(request, pk):
     proposition = proposition_dissertation.find_by_id(pk)
@@ -423,7 +422,7 @@ def proposition_dissertation_delete(request, pk):
     return redirect('proposition_dissertations')
 
 
-@login_required
+
 @user_passes_test(adviser.is_teacher)
 def proposition_dissertation_detail(request, pk):
     current_academic_year = academic_year.current_academic_year()
@@ -487,7 +486,7 @@ def proposition_dissertation_detail(request, pk):
     )
 
 
-@login_required
+
 @user_passes_test(adviser.is_teacher)
 def proposition_dissertation_edit(request, pk):
     proposition = proposition_dissertation.find_by_id(pk)
@@ -524,7 +523,7 @@ def proposition_dissertation_edit(request, pk):
         return redirect('proposition_dissertation_detail', pk=proposition.pk)
 
 
-@login_required
+
 @user_passes_test(adviser.is_teacher)
 def my_dissertation_propositions(request):
     prefetch_propositions = return_prefetch_propositions()
@@ -550,7 +549,7 @@ def my_dissertation_propositions(request):
                   {'propositions_dissertations': propositions_dissertations})
 
 
-@login_required
+
 @user_passes_test(adviser.is_teacher)
 def proposition_dissertations_created(request):
     propositions_dissertations = proposition_dissertation.get_created_for_teacher(get_current_adviser(request))
@@ -558,7 +557,7 @@ def proposition_dissertations_created(request):
                   {'propositions_dissertations': propositions_dissertations})
 
 
-@login_required
+
 @user_passes_test(adviser.is_teacher)
 def proposition_dissertation_new(request):
     current_ac_year = academic_year.current_academic_year()
@@ -590,7 +589,7 @@ def proposition_dissertation_new(request):
                    'offer_proposition_group': offer_propositions_group})
 
 
-@login_required
+
 @user_passes_test(adviser.is_teacher)
 def proposition_dissertations_search(request):
     prefetch_propositions = return_prefetch_propositions()
@@ -602,7 +601,7 @@ def proposition_dissertations_search(request):
                   {'propositions_dissertations': propositions_dissertations})
 
 
-@login_required
+
 @user_passes_test(adviser.is_teacher)
 def proposition_dissertations_jury_edit(request, pk):
     prop_role = proposition_role.get_by_id(pk)
@@ -612,7 +611,7 @@ def proposition_dissertations_jury_edit(request, pk):
     return redirect('proposition_dissertation_detail', pk=proposition.pk)
 
 
-@login_required
+
 @user_passes_test(adviser.is_teacher)
 def proposition_dissertations_role_delete(request, pk):
     prop_role = proposition_role.get_by_id(pk)
